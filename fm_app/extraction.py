@@ -58,6 +58,40 @@ def main():
             squad.write_json(args.output / "squad_full.json")
             squad.write_csv(args.output / "squad_full.csv")
             loaned_out.write_json(args.output / "loaned_out.json")
+            try:
+                stats_table = career.player_season_stats()
+                loans_json_path = args.output / "loaned_out.json"
+                loans_data = json.loads(loans_json_path.read_text(encoding="utf-8"))
+                for item in loans_data:
+                    uid = item.get("uid")
+                    st_rows = list(stats_table.filter(lambda st: st.player_uid == uid))
+                    overall = [r for r in st_rows if r.kind.name == "OVERALL"]
+                    league = [r for r in st_rows if r.kind.name == "LEAGUE"]
+                    chosen = overall[0] if overall else (league[0] if league else (st_rows[0] if st_rows else None))
+                    if chosen:
+                        item["loan_stats"] = {
+                            "appearances": (chosen.starts or 0) + (chosen.substitute_appearances or 0),
+                            "starts": chosen.starts or 0,
+                            "substitutes": chosen.substitute_appearances or 0,
+                            "goals": chosen.goals or 0,
+                            "assists": chosen.assists or 0,
+                            "minutes": chosen.minutes or 0,
+                            "average_rating": round(chosen.average_rating, 2) if chosen.average_rating else None,
+                            "clean_sheets": chosen.clean_sheets or 0,
+                            "club_name": chosen.club_name or item.get("club_name"),
+                            "loan_end": str(item.get("loan_end") or ""),
+                            "loan_start": str(item.get("loan_start") or "")
+                        }
+                    else:
+                        item["loan_stats"] = {
+                            "appearances": 0, "starts": 0, "substitutes": 0, "goals": 0, "assists": 0, "minutes": 0,
+                            "average_rating": None, "clean_sheets": 0, "club_name": item.get("club_name"),
+                            "loan_end": str(item.get("loan_end") or ""),
+                            "loan_start": str(item.get("loan_start") or "")
+                        }
+                loans_json_path.write_text(json.dumps(loans_data, ensure_ascii=False, indent=2), encoding="utf-8")
+            except Exception as e:
+                print(f"Warning: could not extract season stats for loaned players: {e}", flush=True)
             errors = []
             missing = Counter()
             all_club_players = list(squad) + list(loaned_out)

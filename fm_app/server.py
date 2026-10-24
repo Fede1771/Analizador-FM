@@ -30,7 +30,7 @@ def load_dataset(folder):
     if report.get('sanity_errors') or report.get('missing_required_fields'):
         raise ValueError('La extracción no superó los controles de consistencia.')
     def clean(p):
-        return {**{k:p.get(k) for k in ('uid','name','age','birth_date','height_cm','team_slot','natural_positions','accomplished_positions','positions','left_foot','right_foot','on_loan','loan_parent_club_name','club_name')},
+        return {**{k:p.get(k) for k in ('uid','name','age','birth_date','height_cm','team_slot','natural_positions','accomplished_positions','positions','left_foot','right_foot','on_loan','loan_parent_club_name','club_name','loan_end','loan_start','loan_stats')},
                 'attributes':{k:p['attributes'][k] for k in ATTRS}}
     # Compatibility with earlier, genuinely imported snapshots; new imports use generic names.
     squad_file=folder/('squad_full.json' if (folder/'squad_full.json').exists() else 'brighton_full.json')
