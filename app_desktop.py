@@ -75,7 +75,9 @@ def main():
     server_thread.start()
 
     app_url = f'http://127.0.0.1:{port}/'
-    icon_path = str(ROOT / 'web' / 'app_icon.ico')
+    icon_path = str(ROOT / 'web' / 'touchline.ico')
+    if not os.path.exists(icon_path):
+        icon_path = str(ROOT / 'web' / 'app_icon.ico')
 
     def cleanup():
         logger.info("Cerrando servidor y servicios en segundo plano...")

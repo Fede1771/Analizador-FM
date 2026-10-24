@@ -218,7 +218,7 @@ class Handler(BaseHTTPRequestHandler):
             with self.server.state.lock:
                 job=self.server.state.jobs.get(path.rsplit('/',1)[1])
             return self.reply(200 if job else 404,job or {'error':'Importación no encontrada.'})
-        resources={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/favicon.ico':'app_icon.ico','/app_icon.ico':'app_icon.ico'}
+        resources={'/':'index.html','/app.js':'app.js','/style.css':'style.css','/favicon.ico':'touchline.ico','/app_icon.ico':'touchline.ico','/touchline.ico':'touchline.ico'}
         if path not in resources:
             return self.reply(404,{'error':'No encontrado.'})
         file=STATIC/resources[path]
