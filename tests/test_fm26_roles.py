@@ -7,17 +7,18 @@ from fm_app.fm26 import ROLES, PI, TI, ENGINE_VERSION, LOCALE, instruction
 from fm_app.recommendations import choose, profile
 from fm_app.server import ROOT, load_dataset
 from test_analysis import player
+from fixtures import dataset as fixture_dataset
 
 
 class FM26RoleTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.data=load_dataset(ROOT/'data/output')
+        cls.data=fixture_dataset()
 
     def test_all_real_players_have_two_explained_phases_in_every_style(self):
         for style in STYLES:
             result=analyze(self.data,style)
-            self.assertEqual(len(result['profiles']),86)
+            self.assertEqual(len(result['profiles']),len(self.data['players'])+len(self.data['loans']))
             for p in self.data['players']+self.data['loans']:
                 prof=result['profiles'][p['uid']]
                 for key,phase in [('in_possession','in_possession'),('out_of_possession','out_of_possession')]:
@@ -142,7 +143,7 @@ class FM26RoleTests(unittest.TestCase):
         self.assertEqual(len(result['tactics']), 3)
         for t in result['tactics']:
             self.assertIn(t['rank'], (1, 2, 3))
-            self.assertIn(t['id'], ('433', '4231', '442'))
+            self.assertIn(t['id'], {f['id'] for f in self.data['formations_catalog']})
             for l in t['lineup']:
                 self.assertTrue(l['natural_role'])
                 self.assertIn(l['role_matches_natural'], (True, False))

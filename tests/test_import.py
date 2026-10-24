@@ -1,107 +1,111 @@
-import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import json
 import unittest
 from unittest.mock import patch
-from types import SimpleNamespace
 
-from fm_app.analysis import STYLES
-from fm_app.server import AppState, ROOT, load_dataset
+from fm_app.jobs import AppState
+from fm_app.contracts import cache_key
+from fm_app.fm26 import ENGINE_VERSION
+from fm_app.tactics import STYLES
+from fixtures import write_snapshot, fake_save
 
 
 class ImportTests(unittest.TestCase):
-    def snapshot(self, output):
-        output.mkdir(parents=True,exist_ok=True)
-        report=json.loads((ROOT/'data/output/validation.json').read_text(encoding='utf-8'))
-        report['club']['name']='Club de prueba'
-        report['managed_clubs'][0]['club_name']='Club de prueba'
-        report['managed_clubs'][0]['manager_name']='Entrenador de prueba'
-        report['save_sha256']='a'*64
-        rows=json.loads((ROOT/'data/output/brighton_full.json').read_text(encoding='utf-8'))
-        rows=[p for p in rows if p['team_slot']==0][:12]+[p for p in rows if p['team_slot']!=0][:3]
-        for p in rows:
-            p['club_name']='Club de prueba'
-        (output/'squad_full.json').write_text(json.dumps(rows),encoding='utf-8')
-        (output/'loaned_out.json').write_text('[]',encoding='utf-8')
-        (output/'validation.json').write_text(json.dumps(report),encoding='utf-8')
+    def state(self,temp):
+        state=AppState(Path(temp)/'imports');self.addCleanup(state.close);return state
 
-    def test_fresh_install_needs_only_uploaded_save_not_brighton_exports(self):
-        with TemporaryDirectory(dir=ROOT/'.tmp') as tmp:
-            state=AppState(Path(tmp))
-            self.assertIsNone(state.dataset)
-            self.assertEqual(state.cache,{})
-            state.executor.shutdown()
+    def test_fresh_install_needs_no_existing_exports(self):
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp)
+            self.assertIsNone(state.dataset);self.assertEqual(state.cache,{})
 
-    def test_generic_snapshot_has_its_own_club_and_roster(self):
-        with TemporaryDirectory(dir=ROOT/'.tmp') as tmp:
-            output=Path(tmp)/'output'
-            self.snapshot(output)
-            dataset=load_dataset(output)
-            self.assertEqual(dataset['club'],'Club de prueba')
-            self.assertEqual(dataset['manager'],'Entrenador de prueba')
-            self.assertEqual(len(dataset['players']),15)
-            self.assertEqual(len(dataset['loans']),0)
-            self.assertIn('slot_labels',dataset)
-            self.assertEqual(dataset['slot_labels'][0],'Primer equipo')
+    def test_generic_snapshot_and_stable_career_identity(self):
+        with TemporaryDirectory() as tmp:
+            a=write_snapshot(Path(tmp)/'a');b=write_snapshot(Path(tmp)/'b','b'*64)
+            self.assertEqual(a['club'],'Club de prueba')
+            self.assertNotEqual(a['id'],b['id']);self.assertEqual(a['career_id'],b['career_id'])
 
-    def test_import_computes_all_styles_before_done_and_restores_them(self):
-        with TemporaryDirectory(dir=ROOT/'.tmp') as tmp:
-            storage=Path(tmp)
-            state=AppState(storage)
-            job='b'*32
-            folder=storage/job
-            folder.mkdir()
-            self.snapshot(folder/'output')
-            with patch('fm_app.server.subprocess.run',return_value=SimpleNamespace(returncode=0,stdout='',stderr='')):
+    def test_import_precomputes_and_restores_the_exact_cache_keys(self):
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp);job='b'*32;folder=state.store.folder(job)
+            write_snapshot(folder/'output')
+            with patch.object(state,'_extract'):
                 state.import_save(job,folder/'save.fm',folder)
             self.assertEqual(state.jobs[job]['status'],'done')
             self.assertEqual(len(state.cache),len(STYLES))
-            bundle=json.loads((folder/'output/analysis_bundle.json').read_text(encoding='utf-8'))
-            self.assertEqual(set(bundle['styles']),set(STYLES))
-            for result in bundle['styles'].values():
-                self.assertEqual(len(result['academy']),3)
-                self.assertEqual(len(result['profiles']),15)
-                self.assertEqual(len(result['tactics']),3)
-            restored=AppState(storage)
-            self.assertEqual(restored.dataset['club'],'Club de prueba')
-            self.assertEqual(len(restored.cache),len(STYLES))
-            state.executor.shutdown()
-            restored.executor.shutdown()
+            for style in STYLES:
+                result=state.cache[cache_key(state.dataset['id'],style,0)]
+                self.assertEqual(result['evaluated_formations'],10)
+            restored=AppState(state.storage);self.addCleanup(restored.close)
+            self.assertEqual(restored.cache,state.cache)
 
     def test_failed_import_preserves_current_data(self):
-        with TemporaryDirectory(dir=ROOT/'.tmp') as tmp:
-            state=AppState(Path(tmp))
-            previous={'id':'previous','club':'Anterior'}
-            state.dataset=previous
-            folder=Path(tmp)/('c'*32)
-            folder.mkdir()
-            with patch('fm_app.server.subprocess.run',return_value=SimpleNamespace(returncode=1,stdout='',stderr='Invalid save')):
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp);previous={'id':'previous','club':'Anterior'};state.dataset=previous
+            folder=state.store.folder('c'*32);folder.mkdir(parents=True)
+            with patch.object(state,'_extract',side_effect=ValueError('incompatible')):
                 state.import_save('c'*32,folder/'save.fm',folder)
-            self.assertIs(state.dataset,previous)
-            self.assertEqual(state.jobs['c'*32]['status'],'error')
-            self.assertFalse((Path(tmp)/'current.json').exists())
-            state.executor.shutdown()
+            self.assertIs(state.dataset,previous);self.assertEqual(state.jobs['c'*32]['status'],'error')
+            self.assertFalse((state.storage/'current.json').exists())
 
     def test_engine_update_replaces_outdated_explanations(self):
-        with TemporaryDirectory(dir=ROOT/'.tmp') as tmp:
-            storage=Path(tmp); name='d'*32; output=storage/name/'output'
-            self.snapshot(output)
-            (storage/'current.json').write_text(json.dumps({'folder':name}),encoding='utf-8')
-            (output/'analysis_bundle.json').write_text(json.dumps({'engine_version':1,'dataset_id':'a'*16,'styles':{'possession':{'outdated':True}}}),encoding='utf-8')
-            state=AppState(storage)
-            result=state.cache[('a'*16,'possession',0,())]
-            self.assertNotIn('outdated',result)
-            self.assertIn('in_possession',next(iter(result['profiles'].values())))
-            state.executor.shutdown()
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)/'imports';output=root/('d'*32)/'output';write_snapshot(output)
+            root.joinpath('current.json').write_text(json.dumps({'folder':'d'*32}))
+            (output/'analysis_bundle.json').write_text(json.dumps({'engine_version':1,'dataset_id':'a'*16,'styles':{'possession':{'outdated':True}}}))
+            state=AppState(root);self.addCleanup(state.close)
+            self.assertNotIn('outdated',state.cache[cache_key('a'*16,'possession',0)])
 
-    def test_corrupt_last_snapshot_does_not_prevent_loading_screen(self):
-        with TemporaryDirectory(dir=ROOT/'.tmp') as tmp:
-            (Path(tmp)/'current.json').write_text('{broken',encoding='utf-8')
-            state=AppState(Path(tmp))
-            self.assertIsNone(state.dataset)
-            self.assertIsNotNone(state.restore_error)
-            state.executor.shutdown()
+    def test_corrupt_snapshot_keeps_loading_available(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'current.json').write_text('{broken')
+            state=AppState(root);self.addCleanup(state.close)
+            self.assertIsNone(state.dataset);self.assertIsNotNone(state.restore_error)
 
+    def test_copy_failure_ends_job_and_allows_retry(self):
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp);save=fake_save(Path(tmp)/'games/test.fm')
+            with patch('fm_app.jobs.shutil.copy2',side_effect=PermissionError('copy failed')):
+                job=state.import_local_save(save)
+                state.executor.submit(lambda:None).result(timeout=5)
+            self.assertEqual(state.jobs[job]['status'],'error');self.assertFalse(state.busy())
+            with patch.object(state,'import_save',side_effect=lambda j,*args:state.progress(j,'done','ok',100)):
+                retry=state.import_local_save(save);state.executor.submit(lambda:None).result(timeout=5)
+            self.assertEqual(state.jobs[retry]['status'],'done')
 
-if __name__=='__main__':
-    unittest.main()
+    def test_mutating_save_is_not_published(self):
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp);save=fake_save(Path(tmp)/'test.fm')
+            with patch.object(state,'signature',side_effect=[['file',1,2006],['file',2,2006]]):
+                job=state.import_local_save(save);state.executor.submit(lambda:None).result(timeout=5)
+            self.assertEqual(state.jobs[job]['status'],'error');self.assertIsNone(state.dataset)
+
+    def test_shutdown_cancels_active_work(self):
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp);job=state.reserve('reading','test')
+            state.close();self.assertEqual(state.jobs[job]['status'],'cancelled')
+            with self.assertRaises(ValueError):state.reserve('reading','test')
+
+    def test_shutdown_terminates_the_extraction_child(self):
+        import subprocess
+        import sys
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp);job=state.reserve('reading','active child')
+            process=subprocess.Popen([sys.executable,'-B','-c','import time; time.sleep(60)'],
+                stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,
+                creationflags=subprocess.CREATE_NO_WINDOW if sys.platform=='win32' else 0)
+            self.addCleanup(lambda: process.kill() if process.poll() is None else None)
+            state.process=process
+            state.close()
+            self.assertIsNotNone(process.poll())
+            self.assertEqual(state.jobs[job]['status'],'cancelled')
+
+    def test_invalid_bundle_shape_is_rebuilt(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)/'imports';output=root/('e'*32)/'output';write_snapshot(output)
+            root.joinpath('current.json').write_text(json.dumps({'folder':'e'*32}))
+            (output/'analysis_bundle.json').write_text('[]')
+            state=AppState(root);self.addCleanup(state.close)
+            self.assertIsNotNone(state.dataset)
+            self.assertEqual(len(state.cache),4)

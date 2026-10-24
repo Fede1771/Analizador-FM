@@ -1,120 +1,89 @@
-"""End-to-end API test for server endpoints, static files, and sync APIs."""
 import json
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import threading
-import time
 import unittest
 import urllib.request
 import urllib.error
-
-from fm_app.server import create_app_server, ROOT
+from unittest.mock import patch
+from fm_app.server import create_app_server
+from fm_app.contracts import cache_key
+from fixtures import dataset, fake_save
 
 
 class ServerEndpointsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.port = 8789
-        cls.server = create_app_server(port=cls.port, enable_watcher=True)
-        cls.thread = threading.Thread(target=cls.server.serve_forever, daemon=True)
-        cls.thread.start()
-        time.sleep(0.5)
+        cls.temp=TemporaryDirectory();root=Path(cls.temp.name)
+        cls.server=create_app_server(port=0,storage=root/'imports',config_file=root/'sync.json',start_watcher=False)
+        cls.server.state.dataset=dataset();cls.data=cls.server.state.dataset
+        cls.server.watcher.configure(folder=str(root/'games'),enabled=False)
+        cls.thread=threading.Thread(target=cls.server.serve_forever,daemon=True);cls.thread.start()
+        cls.base=f'http://127.0.0.1:{cls.server.server_port}'
 
     @classmethod
     def tearDownClass(cls):
-        if hasattr(cls.server, 'watcher') and cls.server.watcher:
-            cls.server.watcher.stop()
-        cls.server.shutdown()
-        cls.server.server_close()
-        cls.server.state.executor.shutdown(wait=False)
+        cls.server.watcher.stop();cls.server.shutdown();cls.server.state.close();cls.server.server_close();cls.thread.join(3);cls.temp.cleanup()
 
-    def get(self, path):
-        req = urllib.request.Request(
-            f'http://127.0.0.1:{self.port}{path}',
-            headers={'Host': f'127.0.0.1:{self.port}'}
-        )
-        with urllib.request.urlopen(req, timeout=3.0) as resp:
-            return resp.status, resp.headers.get('Content-Type'), resp.read()
+    def request(self,path,body=None,headers=None,method=None):
+        raw=None if body is None else json.dumps(body).encode()
+        req=urllib.request.Request(self.base+path,data=raw,headers={'Content-Type':'application/json','X-FM-App':'1',**(headers or {})},method=method)
+        try:
+            with urllib.request.urlopen(req,timeout=30) as response:
+                result=response.read();return response.status,result,response.headers
+        except urllib.error.HTTPError as error:
+            try:
+                return error.code,error.read(),error.headers
+            finally:
+                error.close()
 
-    def post(self, path, payload):
-        raw = json.dumps(payload).encode('utf-8')
-        req = urllib.request.Request(
-            f'http://127.0.0.1:{self.port}{path}',
-            data=raw,
-            headers={
-                'Host': f'127.0.0.1:{self.port}',
-                'Content-Type': 'application/json',
-                'X-FM-App': '1'
-            },
-            method='POST'
-        )
-        with urllib.request.urlopen(req, timeout=3.0) as resp:
-            return resp.status, json.loads(resp.read().decode('utf-8'))
+    def payload(self,**kwargs):return {'dataset_id':self.data['id'],**kwargs}
 
-    def test_static_files_served(self):
-        status, ctype, body = self.get('/')
-        self.assertEqual(status, 200)
-        self.assertIn('text/html', ctype)
-        self.assertIn(b'Touchline', body)
+    def test_static_modules_served_and_paths_contained(self):
+        for path in ('/','/app.js','/api.js','/views.js','/session.js','/style.css','/favicon.ico'):
+            with self.subTest(path=path):self.assertEqual(self.request(path)[0],200)
+        self.assertEqual(self.request('/%2e%2e/fm_app/server.py')[0],404)
 
-        status, ctype, body = self.get('/app.js')
-        self.assertEqual(status, 200)
-        self.assertIn('javascript', ctype)
+    def test_status_reports_identity_and_sync(self):
+        status,body,_=self.request('/api/status');body=json.loads(body)
+        self.assertEqual(status,200);self.assertEqual(body['application'],'Touchline')
+        self.assertEqual(body['sync']['state'],'paused')
 
-        status, ctype, body = self.get('/style.css')
-        self.assertEqual(status, 200)
-        self.assertIn('text/css', ctype)
+    def test_analysis_uses_precomputed_cache(self):
+        marker={'style':'possession','cached':True}
+        self.server.state.cache[cache_key(self.data['id'],'possession',0)]=marker
+        with patch('fm_app.server.analyze',side_effect=AssertionError('must use cache')):
+            status,body,_=self.request('/api/analyze',self.payload())
+        self.assertEqual(status,200);self.assertTrue(json.loads(body)['cached'])
+        self.server.state.cache.clear()
 
-        status, ctype, body = self.get('/favicon.ico')
-        self.assertEqual(status, 200)
-        self.assertTrue(len(body) > 100)
+    def test_simulates_catalog_and_rejects_unknown_input(self):
+        status,body,_=self.request('/api/simulate',self.payload(formation='352'))
+        self.assertEqual(status,200);self.assertEqual(len(json.loads(body)['lineup']),11)
+        for values in ({'formation':'bad'},{'style':'bad'},{'prompt':{}},{'excluded':[999999]},{'primary_slot':True},{'overrides':{'tempo':'invalid'}}):
+            with self.subTest(values=values):self.assertEqual(self.request('/api/simulate',self.payload(**values))[0],400)
+        self.assertEqual(self.request('/api/analyze',[])[0],400)
+        self.assertEqual(self.request('/api/analyze',{'dataset_id':'old'})[0],409)
 
-    def test_api_status_includes_sync(self):
-        status, ctype, body = self.get('/api/status')
-        self.assertEqual(status, 200)
-        data = json.loads(body.decode('utf-8'))
-        self.assertIn('has_dataset', data)
-        self.assertIn('sync', data)
-        self.assertIsNotNone(data['sync'])
-        self.assertIn('watch_folder', data['sync'])
-        self.assertIn('state', data['sync'])
+    def test_origin_and_application_header_are_enforced(self):
+        self.assertEqual(self.request('/api/status',headers={'Origin':'https://other.example'})[0],403)
+        self.assertEqual(self.request('/api/analyze',self.payload(),headers={'X-FM-App':'0'})[0],403)
 
-    def test_api_sync_endpoints(self):
-        status, ctype, body = self.get('/api/sync/status')
-        self.assertEqual(status, 200)
-        data = json.loads(body.decode('utf-8'))
-        self.assertIn('enabled', data)
-        self.assertIn('watch_folder', data)
+    def test_preferences_and_retention_persist_in_temporary_storage(self):
+        prefs={'career_id':self.data['career_id'],'primary_slot':0,'style':'wide','excluded':[],'labels':{'0':'Titulares'},'formation':'352'}
+        self.assertEqual(self.request('/api/preferences',prefs)[0],200)
+        self.assertEqual(json.loads(self.request('/api/preferences')[1])['style'],'wide')
+        self.assertEqual(self.request('/api/retention',{'max_snapshots':3,'max_total_mb':1024})[0],200)
+        self.assertEqual(self.request('/api/retention',{'max_snapshots':0,'max_total_mb':1})[0],400)
 
-        # Update sync config
-        status, res = self.post('/api/sync/config', {
-            'enabled': True,
-            'target_save': 'auto'
-        })
-        self.assertEqual(status, 200)
-        self.assertTrue(res['enabled'])
-        self.assertIsNone(res['target_save'])
+    def test_parallel_status_and_configuration_do_not_deadlock(self):
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            futures=[executor.submit(self.request,'/api/status') if i%2 else executor.submit(self.request,'/api/sync/config',{'enabled':False,'target_save':'auto'}) for i in range(12)]
+            self.assertTrue(all(f.result(timeout=10)[0]==200 for f in futures))
 
-    def test_api_simulate_formation_352(self):
-        status, ctype, body = self.get('/api/status')
-        data = json.loads(body.decode('utf-8'))
-        dataset_id = data.get('dataset_id')
-        if not dataset_id:
-            return  # skip if no dataset loaded
-
-        status, res = self.post('/api/simulate', {
-            'dataset_id': dataset_id,
-            'formation': '352',
-            'style': 'possession'
-        })
-        self.assertEqual(status, 200)
-        self.assertEqual(res['formation']['name'], '3-5-2')
-        self.assertEqual(len(res['lineup']), 11)
-        self.assertIn('reinforcements', res)
-        self.assertIn('fit_summary', res)
-        # Check loan recall evaluation exists
-        has_recalls = any(len(r.get('loan_recalls', [])) > 0 for r in res['reinforcements'])
-        self.assertTrue(has_recalls)
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_invalid_upload_ends_job_and_preserves_dataset(self):
+        req=urllib.request.Request(self.base+'/api/import',data=b'bad'*1000,headers={'X-FM-App':'1','X-FM-Filename':'test.fm'},method='PUT')
+        with self.assertRaises(urllib.error.HTTPError) as caught:urllib.request.urlopen(req,timeout=5)
+        self.assertEqual(caught.exception.code,400);caught.exception.close()
+        self.assertFalse(self.server.state.busy());self.assertIs(self.server.state.dataset,self.data)

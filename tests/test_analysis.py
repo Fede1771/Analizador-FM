@@ -6,6 +6,7 @@ import unittest
 from fm_app.analysis import ATTRS, ROLES, analyze, assignment, role_score
 from fm_app.recommendations import simulate_formation
 from fm_app.server import load_dataset, ROOT
+from fixtures import dataset as fixture_dataset
 
 
 def player(uid, position, value=12, slot=0, age=20):
@@ -45,17 +46,17 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(result['senior_count'],10)
 
     def test_hidden_data_is_not_exposed_to_frontend(self):
-        dataset=load_dataset(ROOT/'data'/'output')
+        dataset=fixture_dataset()
         for p in dataset['players']+dataset['loans']:
             self.assertNotIn('ability',p)
             self.assertNotIn('personality',p)
             self.assertNotIn('consistency',p['attributes'])
             self.assertEqual(set(p['attributes']),set(ATTRS))
-        self.assertEqual(len(dataset['players']),63)
-        self.assertEqual(len(dataset['loans']),23)
+        self.assertEqual(len(dataset['players']),26)
+        self.assertEqual(len(dataset['loans']),3)
 
     def test_actual_brighton_lineups_and_all_academy_groups(self):
-        dataset=load_dataset(ROOT/'data'/'output')
+        dataset=fixture_dataset()
         excluded=dataset['players'][0]['uid']
         result=analyze(dataset,excluded=[excluded])
         self.assertEqual(len(result['tactics']),3)
@@ -67,7 +68,7 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual({a['uid'] for a in result['academy']},{p['uid'] for p in dataset['players'] if p['team_slot']!=0})
 
     def test_custom_formation_simulation_and_loan_recalls(self):
-        dataset = load_dataset(ROOT/'data'/'output')
+        dataset = fixture_dataset()
         sim = simulate_formation(dataset, formation_id='352', style='possession')
         self.assertEqual(sim['formation']['name'], '3-5-2')
         self.assertEqual(sim['formation']['defensive'], '5-3-2')

@@ -54,18 +54,6 @@ def slot(role, ip, oop, defend=None):
     return {'role':role, 'ip':ip, 'oop':oop, 'defend':defend or role}
 
 
-FORMATIONS = [
- {'id':'433','name':'4-3-3','defensive':'4-1-4-1','idea':'Un pivote fija la base; los interiores conectan con extremos abiertos.', 'slots':[
- slot('gk',[50,91],[50,91]),slot('lb',[13,66],[15,71]),slot('bpd',[37,74],[38,75]),slot('cb',[63,74],[62,75]),slot('rb',[87,66],[85,71]),
- slot('dm',[50,58],[50,58]),slot('am',[34,42],[35,43],'cm'),slot('cm',[66,42],[65,43]),slot('lw',[15,25],[14,42]),slot('st',[50,19],[50,23]),slot('rw',[85,25],[86,42])]},
- {'id':'4231','name':'4-2-3-1','defensive':'4-4-1-1','idea':'Doble base para cubrir la espalda del creador y conectar con tres atacantes.', 'slots':[
- slot('gk',[50,91],[50,91]),slot('lb',[13,66],[15,73]),slot('bpd',[37,74],[38,76]),slot('cb',[63,74],[62,76]),slot('rb',[87,66],[85,73]),
- slot('dm',[38,55],[38,53],'cm'),slot('d play',[62,55],[62,53],'cm'),slot('am',[50,36],[50,35]),slot('lw',[15,29],[14,51]),slot('st',[50,17],[50,20]),slot('rw',[85,29],[86,51])]},
- {'id':'442','name':'4-4-2','defensive':'4-4-2','idea':'Dos referencias de ataque y dos líneas de cuatro; exige trabajo de los jugadores de banda.', 'slots':[
- slot('gk',[50,91],[50,91]),slot('lb',[13,68],[15,74]),slot('bpd',[37,75],[38,77]),slot('cb',[63,75],[62,77]),slot('rb',[87,68],[85,74]),
- slot('d play',[38,51],[38,52],'cm'),slot('cm',[62,51],[62,52]),slot('lw',[14,44],[14,51]),slot('rw',[86,44],[86,51]),slot('st',[37,21],[37,25]),slot('target',[63,21],[63,25])]},
-]
-
 FORMATION_CATALOG = [
  {'id':'352','name':'3-5-2','defensive':'5-3-2','category':'Línea de 3 / 5','idea':'Tres centrales sólidos, carrileros para toda la banda, trivote en el medio y dos puntas fijando a los zagueros rivales.', 'slots':[
  slot('gk',[50,91],[50,91]),slot('bpd',[27,75],[28,76]),slot('cb',[50,76],[50,78]),slot('cb',[73,75],[72,76]),
@@ -105,219 +93,118 @@ FORMATION_CATALOG = [
  slot('wb',[12,54],[14,72]),slot('cm',[38,54],[38,56]),slot('cm',[62,54],[62,56]),slot('wb',[88,54],[86,72]),
  slot('lw',[18,28],[16,48]),slot('rw',[82,28],[84,48]),slot('st',[50,18],[50,22])]},
 ]
+# Each slot owns both phases. Index order is player identity, never a sort by line.
+_POSITIONS = {
+ '433': (['GK','DL','DC','DC','DR','DM','MC','MC','AML','STC','AMR'], ['GK','DL','DC','DC','DR','DM','MC','MC','ML','STC','MR']),
+ '4231': (['GK','DL','DC','DC','DR','DM','DM','AMC','AML','STC','AMR'], ['GK','DL','DC','DC','DR','MC','MC','AMC','ML','STC','MR']),
+ '442': (['GK','DL','DC','DC','DR','MC','MC','ML','MR','STC','STC'], ['GK','DL','DC','DC','DR','MC','MC','ML','MR','STC','STC']),
+ '352': (['GK','DC','DC','DC','WBL','DM','MC','MC','WBR','STC','STC'], ['GK','DC','DC','DC','WBL','DM','MC','MC','WBR','STC','STC']),
+ '343': (['GK','DC','DC','DC','WBL','MC','MC','WBR','AML','AMR','STC'], ['GK','DC','DC','DC','WBL','MC','MC','WBR','ML','MR','STC']),
+ '532': (['GK','DL','DC','DC','DC','DR','DM','MC','MC','STC','STC'], ['GK','DL','DC','DC','DC','DR','DM','MC','MC','STC','STC']),
+ '41212': (['GK','DL','DC','DC','DR','DM','MC','MC','AMC','STC','STC'], ['GK','DL','DC','DC','DR','MC','MC','MC','AMC','STC','STC']),
+ '3412': (['GK','DC','DC','DC','WBL','MC','MC','WBR','AMC','STC','STC'], ['GK','DC','DC','DC','WBL','MC','MC','WBR','AMC','STC','STC']),
+ '424': (['GK','DL','DC','DC','DR','MC','MC','AML','AMR','STC','STC'], ['GK','DL','DC','DC','DR','MC','MC','ML','MR','STC','STC']),
+ '523': (['GK','DC','DC','DC','WBL','MC','MC','WBR','AML','AMR','STC'], ['GK','DC','DC','DC','WBL','MC','MC','WBR','ML','MR','STC']),
+}
+for _form in FORMATION_CATALOG:
+    _ip, _oop = _POSITIONS[_form['id']]
+    for _index, _slot in enumerate(_form['slots']):
+        _slot.update(id=f"{_form['id']}:{_index}", ip_position=_ip[_index], oop_position=_oop[_index])
+    if _form['id'] == '41212':
+        _form['slots'][5]['oop'] = [50, 48]
+FORMATIONS = FORMATION_CATALOG
 FORMATIONS_BY_ID = {f['id']: f for f in FORMATION_CATALOG}
+del _POSITIONS
 
-
-import re
-import unicodedata
 
 def normalize(text):
-    text = unicodedata.normalize('NFD', text.lower())
-    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
-    return text
+    return ''.join(c for c in unicodedata.normalize('NFD', text.lower()) if unicodedata.category(c) != 'Mn')
+
+
+INTENTS = {
+ 'possession': (r'\b(?:posesion|pelota|balon|control\w*|toques?|pases? cortos?|salir jugando|paciencia|elaborar|asociar|tiki.?taka|circular)\b', 'Control y circulación', '+Posesión'),
+ 'chances': (r'\b(?:chances?|cahcnes?|ocasiones?|goles?|gol|llegadas?|atacar|ataque|remates?|rematar|peligro|profundidad|crear)\b', 'Generar ocasiones', '+Ocasiones'),
+ 'defense': (r'(?:evitar.{0,30}remat|no.{0,20}(?:rematen|pateen|lleguen|encajar|recibir goles)|arco en cero|valla invicta|solidez|defensa|cerrar espacios|compact\w*|ordenad\w*|proteger)', 'Proteger el arco', '+Solidez defensiva'),
+ 'press': (r'\b(?:presion alta|presionar arriba|asfixiar|ahogar|intensidad|gegenpress|contrapresion|recuperar rapido)\b', 'Presionar arriba', '+Presión'),
+ 'counter': (r'\b(?:contraataques?|contragolpes?|transiciones?|juego directo|pases? directos?|vertical(?:es)?|al espacio)\b', 'Transiciones verticales', '+Transición'),
+ 'wide': (r'\b(?:bandas?|centros?|centrar|desborde|juego aereo|cabecear|extremos abiertos)\b', 'Amplitud y centros', '+Bandas'),
+}
+
 
 def parse_tactical_prompt(text):
+    """Deterministic rules with clause-local negation and explicit conflict resolution."""
     if not text or not text.strip():
         return None
     raw = text.strip()
     norm = normalize(raw)
-    
-    pillars = []
-    style_votes = {'possession': 0, 'press': 0, 'counter': 0, 'wide': 0}
-    team_overrides = {}
-    player_instructions_guide = []
-    
-    # Pillar 1: Posesión / Dominio / Salir jugando
-    possession_matches = re.findall(r'(posesion|pelota|balon|control|toque|pases? cortos?|salir jugando|paciencia|elabora|asociar|tiki.?taka|circular)', norm)
-    if possession_matches:
-        style_votes['possession'] += len(possession_matches) * 2
-        team_overrides['passing_directness'] = 'Shorter'
-        team_overrides['tempo'] = 'Lower'
-        team_overrides['build_up_strategy_ip'] = 'Play Through Press'
-        team_overrides['pass_reception_ip'] = 'Pass to Feet'
-        pillars.append({
-            'id': 'possession',
-            'title': 'Control y circulación con posesión',
-            'badge': '+Posesión',
-            'color': '#38bdf8',
-            'summary': 'Progresión limpia desde el fondo con pases cortos y ritmo pausado para desgastar al rival.',
-            'fm26_instruction': 'Con balón: Pases más cortos, Ritmo más bajo, Salir jugando ante la presión y Pases al pie.'
-        })
-        player_instructions_guide.append({
-            'line': 'Salida limpia desde el fondo y apoyos',
-            'tip': 'Priorizá Portero con salida y Central con salida para no rifar el balón. Con laterales, podés usar Lateral interior para formar línea de 3 en salida, o Extremo invertido para sumar creación asociativa por dentro.',
-            'guide_ref': 'Guía capturas: el lateral interior cierra a la línea de centrales; el extremo invertido asume una función creativa interior.'
-        })
-        
-    # Pillar 2: Ocasiones de gol / Ataque / Remates
-    chances_matches = re.findall(r'(chances?|cahcnes?|ocasion|ocasiones|goles?|gol|llegadas?|atacar?|ataque|remates?|rematar|peligro|ofensiv|profundidad|definir|crear|arco rival)', norm)
-    if chances_matches:
-        style_votes['press'] += 1
-        style_votes['possession'] += 1
-        team_overrides['attacking_transition_ip'] = 'Counter-Attack' if 'contra' in norm else 'Hold Shape'
-        pillars.append({
-            'id': 'chances',
-            'title': 'Generación de ocasiones y finalización',
-            'badge': '+Ocasiones',
-            'color': '#34d399',
-            'summary': 'Desmarques continuos hacia el área, habilitaciones al espacio y presencia de varios hombres en zona de remate.',
-            'fm26_instruction': 'Transición ofensiva: Atacar espacios libres y dar libertad de llegada a extremos y delanteros.'
-        })
-        player_instructions_guide.append({
-            'line': 'Extremos y atacantes con llegada y gol',
-            'tip': 'Asigná Delantero interior (Inside Forward) si querés que tus extremos ataquen el área buscando el gol directo, o Delantero entre líneas (Channel Forward) para atacar los canales entre central y lateral.',
-            'guide_ref': 'Guía capturas: el Delantero interior busca el gol y remate directo (a diferencia del Extremo invertido asociativo); el Channel Forward rompe en el intervalo central-lateral.'
-        })
-        
-    # Pillar 3: Evitar remates / Solidez defensiva / No encajar
-    defense_matches = re.findall(r'(evitar.*remat|no.*rematen|pocos.*remates|no.*pateen|no.*lleguen|arco en cero|valla invicta|no encajar|solidez|defensa|cerrar espacios|compact|ordenad|sin goles|proteger)', norm)
-    if defense_matches:
-        style_votes['possession'] += 1
-        style_votes['counter'] += 1
-        team_overrides['line_of_engagement_oop'] = 'Mid Block'
-        team_overrides['defensive_line_oop'] = 'Standard'
-        team_overrides['trigger_press_oop'] = 'More Often'
-        team_overrides['defensive_transition_oop'] = 'Counter-Press' if ('posesion' in norm or 'recuperar' in norm) else 'Regroup'
-        pillars.append({
-            'id': 'defense',
-            'title': 'Protección del arco y reducción de remates rivales',
-            'badge': '+Solidez defensiva',
-            'color': '#f472b6',
-            'summary': 'Bloque medio compacto sin huecos entre líneas, pivote defensivo que tapa la frontal del área (Zona 14) y entradas limpias.',
-            'fm26_instruction': 'Sin balón: Bloque medio, Línea estándar y pivote como pantalla en zona de remate.'
-        })
-        player_instructions_guide.append({
-            'line': 'Pantalla en Zona 14 y coberturas defensivas',
-            'tip': 'Configurá Mediocentro fijo (Screening DM) o Mediocampista fijo para proteger el espacio delante de los centrales y tapar disparos lejanos. En la zaga, Defensa central de cobertura para no saltar en falso.',
-            'guide_ref': 'Guía capturas: el rol fijo/screening se planta en la medialuna para bloquear remates frontales y cortar balones sueltos.'
-        })
-
-    # Pillar 4: Presión alta
-    press_matches = re.findall(r'(presi[oó]n alta|presionar arriba|asfixiar|ahogar|intensidad|gegenpress|recuperar r[aá]pido)', norm)
-    if press_matches:
-        style_votes['press'] += len(press_matches) * 2
-        team_overrides['line_of_engagement_oop'] = 'High Press'
-        team_overrides['trigger_press_oop'] = 'More Often'
-        team_overrides['defensive_line_oop'] = 'Higher'
-        team_overrides['defensive_transition_oop'] = 'Counter-Press'
-        pillars.append({
-            'id': 'press',
-            'title': 'Presión alta y contrapresión inmediata',
-            'badge': '+Presión',
-            'color': '#f59e0b',
-            'summary': 'Acoso continuo a los centrales rivales y salto coordinado del bloque.',
-            'fm26_instruction': 'Sin balón: Bloque alto, Línea defensiva más alta y Contrapresión tras pérdida.'
-        })
-        player_instructions_guide.append({
-            'line': 'Salto coordinado de presión alta',
-            'tip': 'Usá Lateral presionante, Mediocentro presionante y Delantero centro con retroceso para acosar la salida rival en su propio campo.',
-            'guide_ref': 'Guía capturas: los roles presionantes adelantan su intervención para disputar la pelota de inmediato.'
-        })
-
-    # Pillar 5: Contraataque / Transición rápida
-    counter_matches = re.findall(r'(contraataque|contra|transici[oó]n|r[aá]pid|direct|velocidad|espacios?|v[eé]rtigo)', norm)
-    if counter_matches:
-        style_votes['counter'] += len(counter_matches) * 2
-        team_overrides['attacking_transition_ip'] = 'Counter-Attack'
-        team_overrides['passing_directness'] = 'More Direct'
-        team_overrides['tempo'] = 'Higher'
-        team_overrides['defensive_transition_oop'] = 'Regroup'
-        pillars.append({
-            'id': 'counter',
-            'title': 'Transiciones verticales al espacio',
-            'badge': '+Transición',
-            'color': '#a78bfa',
-            'summary': 'Salidas vertiginosas apenas se recupera el balón atacando la espalda de la defensa contraria.',
-            'fm26_instruction': 'Transición: Contraataque tras recuperar; Pases más directos hacia los atacantes.'
-        })
-        player_instructions_guide.append({
-            'line': 'Vías de escape en ataque (Roles Outlet)',
-            'tip': 'Asigná Delantero centro estacionario o Extremo estacionario para que no retrocedan en repliegue y queden como vía de escape inmediata.',
-            'guide_ref': 'Guía capturas: los roles estacionarios (outlets) reducen el retroceso y quedan preparados para lanzar la contra.'
-        })
-
-    # Pillar 6: Bandas y centros
-    wide_matches = re.findall(r'(bandas?|centros?|centrar|desborde|a[eé]re|cabez|extremos abiertos)', norm)
-    if wide_matches:
-        style_votes['wide'] += len(wide_matches) * 2
-        pillars.append({
-            'id': 'wide',
-            'title': 'Juego por bandas y centros al área',
-            'badge': '+Bandas',
-            'color': '#38bdf8',
-            'summary': 'Amplitud con extremos y laterales con centros dirigidos a las referencias en el área.',
-            'fm26_instruction': 'Con balón: Abrir el campo y buscar centros a las referencias de área.'
-        })
-        player_instructions_guide.append({
-            'line': 'Amplitud exterior y remate aéreo',
-            'tip': 'Combiná Extremo o Carrilero con Delantero torre (Target Forward) para ganar juego aéreo y segundas pelotas.',
-            'guide_ref': 'Guía capturas: el Delantero torre sirve de referencia física y aérea adelantada.'
-        })
-
-    # Formación solicitada (ej. 3-5-2, 343, 5-3-2, etc.)
-    requested_formation = None
-    form_patterns = [
-        (r'\b(3[- ]?5[- ]?2)\b', '352'),
-        (r'\b(3[- ]?4[- ]?3)\b', '343'),
-        (r'\b(5[- ]?3[- ]?2)\b', '532'),
-        (r'\b(4[- ]?1[- ]?2[- ]?1[- ]?2|rombo|diamante)\b', '41212'),
-        (r'\b(3[- ]?4[- ]?1[- ]?2)\b', '3412'),
-        (r'\b(4[- ]?2[- ]?4)\b', '424'),
-        (r'\b(5[- ]?2[- ]?3)\b', '523'),
-        (r'\b(4[- ]?3[- ]?3)\b', '433'),
-        (r'\b(4[- ]?2[- ]?3[- ]?1)\b', '4231'),
-        (r'\b(4[- ]?4[- ]?2)\b', '442'),
-    ]
-    for pattern, fid in form_patterns:
-        if re.search(pattern, norm):
-            requested_formation = fid
+    active, denied, last = {}, {}, {}
+    warnings = []
+    for key, (pattern, title, badge) in INTENTS.items():
+        for match in re.finditer(pattern, norm):
+            prefix = re.split(r'[,;.!?]|\b(?:pero|aunque|y)\b', norm[:match.start()])[-1]
+            negated = key != 'defense' and bool(re.search(r'\b(?:no|sin|evitar|evita|nunca)\b(?:\s+\w+){0,6}\s*$', prefix))
+            # A defensive request such as "evitar remates" is not an attacking request.
+            if key == 'chances' and re.search(r'(?:evitar|no|pocos).{0,35}$', prefix):
+                continue
+            active[key] = not negated
+            denied[key] = negated
+            last[key] = match.start()
+    votes = {k: 0 for k in STYLES}
+    for key in ('possession','press','counter','wide'):
+        if active.get(key):
+            votes[key] += 3
+    if active.get('chances') or active.get('defense'):
+        votes['possession'] += 1
+    best = max(votes, key=lambda k: (votes[k], last.get(k, -1))) if any(votes.values()) else 'possession'
+    overrides = {}
+    if active.get('possession'):
+        overrides.update(passing_directness='Shorter', tempo='Lower', build_up_strategy_ip='Play Through Press', pass_reception_ip='Pass to Feet')
+    if active.get('chances'):
+        overrides['attacking_transition_ip'] = 'Hold Shape'
+    if active.get('defense'):
+        overrides.update(line_of_engagement_oop='Mid Block', defensive_line_oop='Standard', trigger_press_oop='More Often', defensive_transition_oop='Counter-Press' if active.get('possession') else 'Regroup')
+    if active.get('counter'):
+        overrides['attacking_transition_ip'] = 'Counter-Attack'
+        if not active.get('possession') or last['counter'] > last['possession']:
+            overrides.update(passing_directness='More Direct', tempo='Higher')
+        overrides['defensive_transition_oop'] = 'Regroup'
+    if active.get('press'):
+        overrides.update(line_of_engagement_oop='High Press', defensive_line_oop='Higher', trigger_press_oop='More Often', defensive_transition_oop='Counter-Press')
+    if denied.get('press'):
+        overrides.update(line_of_engagement_oop='Mid Block', defensive_line_oop='Standard', trigger_press_oop='Standard', defensive_transition_oop='Regroup')
+    if denied.get('counter'):
+        overrides['attacking_transition_ip'] = 'Hold Shape'
+    if denied.get('possession'):
+        overrides.update(passing_directness='More Direct', build_up_strategy_ip='Balanced')
+    if active.get('possession') and active.get('counter'):
+        warnings.append('Pediste control y transiciones: se conserva el contraataque tras recuperar; el último pedido determina pases y ritmo.')
+    if active.get('press') and active.get('defense'):
+        warnings.append('La presión alta tiene prioridad sobre el bloque medio; revisá el espacio a la espalda de la defensa.')
+    if denied.get('wide'):
+        overrides['progress_through_ip'] = 'Balanced'
+        warnings.append('Se evitó elegir el estilo de bandas. La amplitud concreta depende de la formación y de los roles.')
+    requested = None
+    for form in sorted(FORMATION_CATALOG, key=lambda f: -len(f['id'])):
+        digits = r'[- ]?'.join(form['id'])
+        match = re.search(r'\b' + digits + r'\b', norm)
+        if match and not re.search(r'\b(?:no|sin|evitar)\b.{0,25}$', norm[:match.start()]):
+            requested = form['id']
             break
-    if requested_formation and requested_formation in FORMATIONS_BY_ID:
-        target_f = FORMATIONS_BY_ID[requested_formation]
-        pillars.insert(0, {
-            'id': 'formation_' + requested_formation,
-            'title': f'Alineación solicitada: {target_f["name"]}',
-            'badge': f'Formación {target_f["name"]}',
-            'color': '#10b981',
-            'summary': f'Optimizado específicamente para el dibujo {target_f["name"]} ({target_f["defensive"]} sin balón). {target_f["idea"]}',
-            'fm26_instruction': f'Estructura con posesión {target_f["name"]} y repliegue en {target_f["defensive"]}.'
-        })
-
-    best_style = max(style_votes.items(), key=lambda x: x[1])[0] if any(style_votes.values()) else 'possession'
-    
-    if not pillars:
-        pillars.append({
-            'id': 'balanced',
-            'title': 'Planteo equilibrado',
-            'badge': 'Equilibrado',
-            'color': '#94a3b8',
-            'summary': 'Estructura equilibrada basada en los mejores atributos de tu plantilla.',
-            'fm26_instruction': 'Mantener instrucciones estándar y ajustar según el rival.'
-        })
-
-    # Determine recommended mentality from the 7 FM26 official options:
-    # ['Muy defensiva', 'Defensivo', 'Cauta', 'Equilibrada', 'Positiva', 'Ofensivo', 'Muy ofensiva']
-    if re.search(r'(muy ofensiv|a por todo|con todo|arriesgar al maximo|a matar)', norm):
-        rec_mentality = 'Muy ofensiva'
-    elif re.search(r'(muy defensiv|autobus|colgarse del travesa|todos atras)', norm):
-        rec_mentality = 'Muy defensiva'
-    elif re.search(r'(defensiv|solidez extrema|no recibir goles|blindar|cerrar el arco)', norm) and 'posesion' not in norm:
-        rec_mentality = 'Defensivo'
-    elif re.search(r'(caut[ao]|precavid[ao]|esperar|cerrado)', norm):
-        rec_mentality = 'Cauta'
-    elif re.search(r'(equilibrad[ao]|balance)', norm):
-        rec_mentality = 'Equilibrada'
-    elif re.search(r'(ofensiv|muchos goles|atacar con todo|asfixiar|agresiv)', norm) and 'posesion' not in norm:
-        rec_mentality = 'Ofensivo'
-    else:
-        rec_mentality = STYLES[best_style].get('mentality', 'Positiva')
-
-    return {
-        'original_prompt': raw,
-        'pillars': pillars,
-        'recommended_style': best_style,
-        'recommended_mentality': rec_mentality,
-        'team_overrides': team_overrides,
-        'player_guides': player_instructions_guide,
-        'requested_formation': requested_formation,
-    }
+    if requested is None and re.search(r'\b(?:rombo|diamante)\b', norm) and not re.search(r'(?:no|sin|evitar).{0,20}(?:rombo|diamante)', norm):
+        requested = '41212'
+    if not any(active.values()) and not any(denied.values()) and requested is None:
+        warnings.append('No reconocimos una intención concreta. Se conserva una base de posesión; podés ajustar el estilo y las instrucciones.')
+    mentality = STYLES[best]['mentality']
+    for pattern, value in ((r'\bmuy ofensiv\w*', 'Muy ofensiva'), (r'\b(?:muy defensiv\w*|autobus)', 'Muy defensiva'), (r'\bdefensiv\w*', 'Defensivo'), (r'\bcaut[ao]\b', 'Cauta'), (r'\b(?:equilibrad[ao]|balance)\b', 'Equilibrada'), (r'\bofensiv\w*', 'Ofensivo')):
+        match = re.search(pattern, norm)
+        if match and not re.search(r'\b(?:no|sin|evitar)\b.{0,20}$', norm[:match.start()]):
+            mentality = value
+            break
+    pillars = [{'id': k, 'title': INTENTS[k][1], 'badge': INTENTS[k][2], 'color': '#38bdf8',
+                'summary': 'Pedido reconocido y aplicado mediante reglas explícitas.',
+                'fm26_instruction': 'Revisá los ajustes aplicados antes de llevarlos al juego.'} for k in INTENTS if active.get(k)]
+    return {'original_prompt': raw, 'pillars': pillars, 'recommended_style': best,
+            'recommended_mentality': mentality, 'team_overrides': overrides, 'player_guides': [],
+            'requested_formation': requested, 'warnings': warnings,
+            'recognized': [k for k in INTENTS if active.get(k)],
+            'avoided': [k for k in INTENTS if denied.get(k)]}

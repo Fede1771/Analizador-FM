@@ -1,64 +1,58 @@
 # Touchline · Analizador FM26
 
-> **Finalidad de la aplicación:**
-> *"Le pasás tu partida de Football Manager 26 y, mientras vas jugando y guardando con el software abierto, va leyendo automáticamente tu archivo de guardado en vivo. En base a los jugadores que tenés (titulares, suplentes, jóvenes prospectos e inferiores, y cedidos), te recomienda el mejor jugador para cada puesto en las mejores formaciones tanto con posesión como sin posesión. Y si le escribís con tus propias palabras pidiéndole jugar de otra forma, adapta todo el análisis, los roles y las 26 instrucciones de equipo al instante."*
+Aplicación local para leer una partida de Football Manager 26, analizar primer equipo, otros grupos y cedidos, y comparar diez estructuras con y sin posesión. Los índices y recomendaciones son propios de Touchline y deben probarse en FM.
 
----
+## Instalación en Windows
 
-Aplicación de escritorio local e instalable para Football Manager 26. Procesa todo en tu equipo, sin enviar tus datos a servidores externos y sin consolas abiertas.
+1. Instalá Python 3.12 o superior.
+2. Ejecutá `Instalar_Analizador_FM.bat`. El instalador crea `.venv` si hace falta, instala las versiones de `requirements-lock-windows.txt`, realiza un diagnóstico y crea el acceso directo.
+3. Abrí el acceso directo **Touchline - Analizador FM26** o `Touchline.bat`.
 
----
+La ventana nativa usa pywebview y el runtime WebView2 de Microsoft Edge. Si no puede abrirse, se usa el navegador. En ese modo, elegí **Cerrar Touchline** para detener también el servidor. Los errores de inicio se guardan en `data/logs/touchline.log` y se muestran en una ventana de diagnóstico.
 
-## 🚀 Inicio rápido (Aplicación de escritorio instalable)
+## Uso
 
-### 1. Crear el acceso directo en tu Escritorio
-Hacé doble clic en:
-**`Instalar_Analizador_FM.bat`**
+- Importá un archivo `.fm` de hasta 400 MB. Se conserva la partida original y se publica el nuevo análisis cuando termina correctamente.
+- Confirmá en **Grupos** cuál es el primer equipo y nombrá reservas y juveniles.
+- En **Tácticas**, compará las tres propuestas de mayor encaje entre diez esquemas o elegí uno específico. La misma lógica construye el once, el banco y la evaluación de refuerzos.
+- Podés describir una idea de juego. Se usan reglas explícitas con negaciones y prioridades, y se muestra la interpretación. Corregila con el estilo, la formación y los ajustes de equipo.
+- El puntaje del once combina 80 % función con posesión y 20 % función sin posesión. La cancha muestra el puntaje individual de la fase seleccionada.
+- Las estadísticas ausentes de cedidos se muestran como “—”, no como cero. Las propuestas de regreso requieren confirmar cláusulas, fechas, costos e inscripción en FM.
+- Las preferencias se conservan por club e identificador del manager; los autoguardados y las copias de la misma carrera comparten configuración. Los resultados se invalidan al cambiar datos o parámetros.
 
-Esto crea un acceso directo en tu Escritorio de Windows llamado:
-**`Touchline - Analizador FM26`** con su propio ícono táctico.
+## Sincronización y almacenamiento
 
-### 2. Iniciar la aplicación
-- Hacé **doble clic en el acceso directo de tu Escritorio** (o en `Touchline.bat` dentro de la carpeta).
-- La aplicación arranca de inmediato en una **ventana nativa de escritorio**.
-- **Sin consolas negras de fondo**: Se ejecuta limpiamente con `pythonw.exe`.
-- **Apagado automático al cerrar**: En el instante en que cerrás la ventana, la aplicación, el servidor local y el monitor de partidas se detienen y cierran por completo. No queda ningún proceso en segundo plano.
+El monitor se configura en pantalla. Por defecto busca `Documents/Sports Interactive/Football Manager 26/games` del usuario actual. Podés seguir el último archivo o fijar una partida.
 
----
+El monitor espera estabilidad antes de copiar. Una actualización se registra como exitosa al terminar la extracción y el análisis. Los errores conservan el informe anterior y permiten reintentar; los fallos automáticos tienen una espera antes del siguiente intento. Podés consultar el último informe durante la importación.
 
-## ⚡ Sincronización automática en vivo con FM26 (Auto-Sync)
+Después de cada importación exitosa se aplica una retención configurable: por defecto cinco copias y 2048 MB. La copia activa se conserva incluso si supera el límite. Solo se limpian carpetas de importación administradas por Touchline; las partidas originales quedan fuera de esa limpieza. Cambiar los límites no ejecuta una limpieza inmediata.
 
-La aplicación monitorea de forma nativa tu carpeta de guardados de FM26:
-`C:\Users\feder\Documents\Sports Interactive\Football Manager 26\games`
+## Desarrollo y verificación
 
-- **Mientras jugás a FM26 y guardás** (manual o autoguardado rotativo), la aplicación detecta el guardado finalizado, extrae tu plantilla y actualiza todos los informes, alineaciones y tácticas en tiempo real.
-- **Detección segura**: Espera a que FM26 complete la escritura del archivo para evitar bloqueos o lecturas corruptas.
-- **Configuración en pantalla**: Desde el botón de la barra superior (**🟢 FM26: En vivo**) podés:
-  - Ver el archivo monitoreado y la fecha del último guardado.
-  - Elegir el **Modo Automático** (detecta siempre la última partida guardada) o fijar una partida específica (ej. `Liverpool.fm`).
-  - Cambiar la ruta si tenés tus partidas en otra carpeta o disco.
-  - Forzar una sincronización manual con el botón **⚡ Sincronizar ahora**.
-
----
-
-## 🧠 Laboratorio Táctico Inteligente (FM26 Oficial)
-
-- **Planteo en lenguaje natural**: Escribí cómo querés que juegue tu equipo (ej.: *"Quiero jugar con mucha posesión e intentar tener muchas chances de gol y evitar que me rematen mucho al arco"*). El motor interpreta tu idea, asigna el estilo FM26 oficial y optimiza las instrucciones.
-- **Top 3 de mejores formaciones**: Comparación con y sin posesión (`4-3-3`, `4-2-3-1`, `4-4-2`, etc.), con puntuación de encaje sobre 100 y alineación titular óptima.
-- **Banco de suplentes y mejores recambios**: Debajo de la cancha táctica, indica para cada suplente a qué titular reemplaza con mejor nivel táctico y la diferencia de encaje.
-- **Roles actuales vs. recomendados**: Comparación de la función natural del jugador y la función táctica recomendada.
-- **Instrucciones completas de equipo**: 26 instrucciones oficiales divididas en Con posesión (Creación de oportunidades, Avance, Último tercio) y Sin posesión (Líneas y bloque, Presión y recuperación, Trampas y centros).
-- **Estilos y Mentalidades oficiales FM26**: Escala oficial de 7 mentalidades (*Muy defensiva*, *Defensivo*, *Cauta*, *Equilibrada*, *Positiva*, *Ofensivo*, *Muy ofensiva*) y 10 estilos tácticos.
-
----
-
-## 🛠️ Ejecución y Pruebas
-
-- **`Touchline.bat`**: Inicia la aplicación de escritorio directamente.
-- **`Instalar_Analizador_FM.bat`**: Crea el acceso directo en el Escritorio.
-
-### Validación y pruebas
 ```powershell
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-node --check web\app.js
+.\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
+node --test tests/frontend.test.mjs
+node tests/browser.test.mjs
+.\.venv\Scripts\python.exe -B scripts/diagnostico.py
 ```
+
+La prueba de navegador requiere Chrome, Edge o Chromium; podés indicar su ejecutable con `CHROME_BIN` y Python con `PYTHON_BIN`. Guarda capturas en `.tmp/browser-*` o en la carpeta indicada por `TOUCHLINE_TEST_ARTIFACTS`.
+
+Las pruebas usan clubes sintéticos, puertos dinámicos y directorios temporales. No necesitan partidas personales ni modifican la configuración de sincronización real.
+
+Inicio manual:
+
+```powershell
+.\.venv\Scripts\python.exe -B app_desktop.py
+.\.venv\Scripts\python.exe -B app_desktop.py --browser-only
+.\.venv\Scripts\python.exe -B -m fm_app.server --no-sync --port 8765
+```
+
+El servidor escucha únicamente en `127.0.0.1` y comprueba host, origen y cabecera de aplicación para las operaciones de escritura. El cierre cancela la extracción activa, finaliza los trabajos y detiene el monitor y el servidor.
+
+## Alcance
+
+El lector realiza controles de estructura y rangos; eso no certifica la coincidencia de cada dato con la ficha de FM. Se usan atributos visibles para recomendar, sin capacidad actual/potencial ni personalidad oculta. La selección no verifica lesiones, sanciones, inscripción, rival ni carga de partidos. Los grupos distintos del principal pueden incluir reservas adultos. No se exportan tácticas `.fmf`.
+
+La exportación general es JSON y el plan individual es texto. La arquitectura y los contratos se describen en [docs/arquitectura.md](docs/arquitectura.md).

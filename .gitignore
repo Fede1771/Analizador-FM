@@ -28,3 +28,6 @@ Desktop.ini
 # IDE configs
 .idea/
 .vscode/
+
+# Machine-specific save watcher settings
+/data/sync_config.json

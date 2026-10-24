@@ -64,12 +64,13 @@ def main():
                 loans_data = json.loads(loans_json_path.read_text(encoding="utf-8"))
                 for item in loans_data:
                     uid = item.get("uid")
-                    st_rows = list(stats_table.filter(lambda st: st.player_uid == uid))
+                    st_rows = list(stats_table.filter(lambda st: st.player_uid == uid and st.club_uid == item.get("club_uid")))
                     overall = [r for r in st_rows if r.kind.name == "OVERALL"]
                     league = [r for r in st_rows if r.kind.name == "LEAGUE"]
                     chosen = overall[0] if overall else (league[0] if league else (st_rows[0] if st_rows else None))
                     if chosen:
                         item["loan_stats"] = {
+                            "available": True,
                             "appearances": (chosen.starts or 0) + (chosen.substitute_appearances or 0),
                             "starts": chosen.starts or 0,
                             "substitutes": chosen.substitute_appearances or 0,
@@ -84,7 +85,7 @@ def main():
                         }
                     else:
                         item["loan_stats"] = {
-                            "appearances": 0, "starts": 0, "substitutes": 0, "goals": 0, "assists": 0, "minutes": 0,
+                            "available": False, "appearances": None, "starts": None, "substitutes": None, "goals": None, "assists": None, "minutes": None,
                             "average_rating": None, "clean_sheets": 0, "club_name": item.get("club_name"),
                             "loan_end": str(item.get("loan_end") or ""),
                             "loan_start": str(item.get("loan_start") or "")

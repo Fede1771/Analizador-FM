@@ -1,95 +1,92 @@
-"""Tests for live save watcher, local imports and sync configuration."""
-from datetime import datetime, timezone
-import json
-import os
 from pathlib import Path
-import shutil
 from tempfile import TemporaryDirectory
-import time
+from unittest.mock import patch
 import unittest
-from unittest.mock import patch, MagicMock
-
-from fm_app.server import AppState, ROOT, load_dataset
+from fm_app.jobs import AppState
 from fm_app.watcher import SaveWatcher
+from fixtures import fake_save
 
 
 class SyncTests(unittest.TestCase):
-    def fake_save(self, path, club_name="Club Test"):
-        path.parent.mkdir(parents=True, exist_ok=True)
-        # FM header b'\x02\x01fmf.' followed by padding
-        path.write_bytes(b'\x02\x01fmf.' + b'\x00' * 2000)
+    def setup_monitor(self,tmp):
+        root=Path(tmp);state=AppState(root/'imports');self.addCleanup(state.close)
+        games=root/'games';games.mkdir()
+        watcher=SaveWatcher(state,root/'sync.json');watcher.configure(folder=str(games))
+        return state,watcher,games
 
-    def test_watcher_status_and_configure(self):
-        with TemporaryDirectory(dir=ROOT / '.tmp') as tmp:
-            tmp_path = Path(tmp)
-            storage = tmp_path / 'storage'
-            games = tmp_path / 'games'
-            cfg_file = tmp_path / 'sync_config.json'
-            games.mkdir()
+    def test_status_and_configuration_are_isolated(self):
+        with TemporaryDirectory() as tmp:
+            state,watcher,games=self.setup_monitor(tmp)
+            self.assertEqual(watcher.get_status()['state'],'idle')
+            fake_save(games/'Career.fm')
+            self.assertEqual(watcher.get_status()['active_file'],'Career.fm')
+            watcher.configure(target_save='Career.fm',enabled=False)
+            self.assertEqual(watcher.get_status()['state'],'paused')
+            watcher.configure(target_save='auto');self.assertIsNone(watcher.config['target_save'])
 
-            state = AppState(storage=storage)
-            watcher = SaveWatcher(state, config_file=cfg_file)
-            
-            # Configure to point to our test folder
-            status = watcher.configure(folder=str(games), enabled=True, target_save='auto')
-            self.assertTrue(status['enabled'])
-            self.assertEqual(status['watch_folder'], str(games))
-            self.assertTrue(status['folder_exists'])
-            self.assertIsNone(status['target_save'])
-            self.assertEqual(status['available_saves'], [])
-            self.assertEqual(status['state'], 'idle')
+    def test_sync_is_acknowledged_only_after_success(self):
+        with TemporaryDirectory() as tmp:
+            state,watcher,games=self.setup_monitor(tmp);fake_save(games/'Career.fm')
+            with patch.object(state,'_copy_and_import'):
+                job=watcher.trigger_sync();state.executor.submit(lambda:None).result(timeout=5)
+            self.assertIsNone(watcher.last_imported_sig);self.assertIsNone(watcher.last_sync_time)
+            self.assertEqual(watcher.get_status()['state'],'syncing')
+            state.progress(job,'done','ok',100)
+            self.assertEqual(watcher.get_status()['state'],'watching')
+            self.assertIsNotNone(watcher.last_imported_sig);self.assertIsNotNone(watcher.last_sync_time)
 
-            # Create two fake saves
-            save1 = games / 'Career_1.fm'
-            self.fake_save(save1)
-            time.sleep(0.05)
-            save2 = games / 'Career_2.fm'
-            self.fake_save(save2)
+    def test_failed_extraction_can_be_retried(self):
+        with TemporaryDirectory() as tmp:
+            state,watcher,games=self.setup_monitor(tmp);fake_save(games/'Career.fm')
+            with patch.object(state,'_copy_and_import'):
+                job=watcher.trigger_sync();state.executor.submit(lambda:None).result(timeout=5)
+            state.progress(job,'error','incompatible')
+            self.assertEqual(watcher.get_status()['state'],'error')
+            self.assertIsNone(watcher.last_imported_sig)
+            with patch.object(state,'_copy_and_import'):
+                retry=watcher.trigger_sync();state.executor.submit(lambda:None).result(timeout=5)
+            self.assertNotEqual(job,retry)
 
-            saves = watcher.list_saves()
-            self.assertEqual(len(saves), 2)
-            self.assertEqual(saves[0]['filename'], 'Career_2.fm')  # Newest first
+    def test_busy_trigger_returns_an_error_without_sticking(self):
+        with TemporaryDirectory() as tmp:
+            state,watcher,games=self.setup_monitor(tmp);fake_save(games/'Career.fm')
+            job=state.reserve('reading','busy')
+            with self.assertRaises(ValueError):watcher.trigger_sync()
+            self.assertFalse(watcher.is_syncing)
+            state.progress(job,'error','done')
 
-            status2 = watcher.get_status()
-            self.assertEqual(status2['active_file'], 'Career_2.fm')
-            self.assertEqual(status2['state'], 'watching')
+    def test_rejects_path_escape_and_invalid_configuration(self):
+        with TemporaryDirectory() as tmp:
+            state,watcher,games=self.setup_monitor(tmp)
+            for name in ('../other.fm','C:\\other.fm','other.txt'):
+                with self.subTest(name=name),self.assertRaises(ValueError):watcher.trigger_sync(name)
+            for kwargs in ({'folder':'relative/path'},{'enabled':'false'},{'target_save':'../other.fm'}):
+                with self.subTest(kwargs=kwargs),self.assertRaises(ValueError):watcher.configure(**kwargs)
 
-            # Configure specific target save
-            watcher.configure(target_save='Career_1.fm')
-            self.assertEqual(watcher.get_active_save_path().name, 'Career_1.fm')
+    def test_restore_uses_saved_signature_instead_of_current_file_stat(self):
+        with TemporaryDirectory() as tmp:
+            state,watcher,games=self.setup_monitor(tmp);save=fake_save(games/'Career.fm')
+            from fm_app.storage import atomic_json
+            folder=state.store.folder('a'*32);folder.mkdir(parents=True)
+            old=['old-path',1,2006]
+            atomic_json(folder/'import.json',{'filename':save.name,'source_path':str(save),'source_signature':old,'imported_at':'2026-10-23T12:00:00Z'})
+            state.store.publish('a'*32)
+            restored=SaveWatcher(state,Path(tmp)/'sync.json')
+            self.assertEqual(restored.last_imported_sig,old)
+            self.assertNotEqual(restored.last_imported_sig,state.signature(save))
 
-            # Pause watcher
-            watcher.configure(enabled=False)
-            self.assertEqual(watcher.get_status()['state'], 'paused')
-
-            state.executor.shutdown()
-
-    def test_import_local_save_dispatches_pipeline(self):
-        with TemporaryDirectory(dir=ROOT / '.tmp') as tmp:
-            tmp_path = Path(tmp)
-            storage = tmp_path / 'storage'
-            games = tmp_path / 'games'
-            games.mkdir()
-            save_file = games / 'MyClub.fm'
-            self.fake_save(save_file)
-
-            state = AppState(storage=storage)
-            
-            with patch.object(state, 'import_save') as mock_import:
-                job_id = state.import_local_save(save_file)
-                self.assertIsNotNone(job_id)
-                self.assertIn(job_id, state.jobs)
-                self.assertEqual(state.jobs[job_id]['status'], 'reading')
-                
-                # Check imported folder
-                folder = storage / job_id
-                self.assertTrue((folder / 'save.fm').exists())
-                meta = json.loads((folder / 'import.json').read_text(encoding='utf-8'))
-                self.assertEqual(meta['filename'], 'MyClub.fm')
-                self.assertTrue(meta['auto_synced'])
-
-            state.executor.shutdown()
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_legacy_import_reuses_signature_only_when_full_hash_matches(self):
+        import hashlib
+        from fm_app.storage import atomic_json
+        with TemporaryDirectory() as tmp:
+            state,watcher,games=self.setup_monitor(tmp);save=fake_save(games/'Legacy.fm')
+            folder=state.store.folder('b'*32);(folder/'output').mkdir(parents=True)
+            digest=hashlib.sha256(save.read_bytes()).hexdigest()
+            atomic_json(folder/'import.json',{'filename':save.name,'source_path':str(save)})
+            atomic_json(folder/'output/validation.json',{'save_sha256':digest})
+            state.store.publish('b'*32)
+            restored=SaveWatcher(state,Path(tmp)/'sync.json')
+            self.assertEqual(restored.last_imported_sig,state.signature(save))
+            save.write_bytes(save.read_bytes()+b'changed')
+            changed=SaveWatcher(state,Path(tmp)/'sync.json')
+            self.assertIsNone(changed.last_imported_sig)

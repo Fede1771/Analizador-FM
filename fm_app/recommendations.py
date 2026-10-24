@@ -643,25 +643,8 @@ def profile(player,style):
 
 
 
-FORMATION_POSITIONS = {
-  '433': (['GK','DL','DC','DC','DR','DM','MC','MC','AML','STC','AMR'], ['GK','DL','DC','DC','DR','DM','MC','MC','ML','STC','MR']),
-  '4231': (['GK','DL','DC','DC','DR','DM','DM','AMC','AML','STC','AMR'], ['GK','DL','DC','DC','DR','MC','MC','AMC','ML','STC','MR']),
-  '442': (['GK','DL','DC','DC','DR','MC','MC','ML','MR','STC','STC'], ['GK','DL','DC','DC','DR','MC','MC','ML','MR','STC','STC']),
-  '352': (['GK','DC','DC','DC','WBL','DM','MC','MC','WBR','STC','STC'], ['GK','WBL','DC','DC','DC','WBR','MC','DM','MC','STC','STC']),
-  '343': (['GK','DC','DC','DC','WBL','MC','MC','WBR','AML','AMR','STC'], ['GK','WBL','DC','DC','DC','WBR','ML','MR','MC','MC','STC']),
-  '532': (['GK','DL','DC','DC','DC','DR','DM','MC','MC','STC','STC'], ['GK','DL','DC','DC','DC','DR','MC','DM','MC','STC','STC']),
-  '41212': (['GK','DL','DC','DC','DR','DM','MC','MC','AMC','STC','STC'], ['GK','DL','DC','DC','DR','MC','DM','MC','AMC','STC','STC']),
-  '3412': (['GK','DC','DC','DC','WBL','MC','MC','WBR','AMC','STC','STC'], ['GK','WBL','DC','DC','DC','WBR','MC','MC','AMC','STC','STC']),
-  '424': (['GK','DL','DC','DC','DR','MC','MC','AML','AMR','STC','STC'], ['GK','DL','DC','DC','DR','MC','MC','ML','MR','STC','STC']),
-  '523': (['GK','DC','DC','DC','WBL','MC','MC','WBR','AML','AMR','STC'], ['GK','WBL','DC','DC','DC','WBR','ML','MC','MC','MR','STC']),
-}
-
 def formation_slots(form):
-    ip, oop = FORMATION_POSITIONS.get(form['id'], FORMATION_POSITIONS['433'])
-    return [dict(s, ip_position=ip[i], oop_position=oop[i]) for i, s in enumerate(form['slots'])]
-
-
-
+    return form['slots']
 
 
 def slot_choices(player,spec,style):
@@ -684,7 +667,7 @@ def slot_choices(player,spec,style):
 
 
 
-def assignment(players,slots,style):
+def assignment(players,slots,style,evaluate=None):
 
     n=len(slots)
 
@@ -694,7 +677,7 @@ def assignment(players,slots,style):
 
     for p in players:
 
-        scores=[slot_choices(p,s,style)[2] for s in slots]
+        scores=[(evaluate(p,s) if evaluate else slot_choices(p,s,style))[2] for s in slots]
 
         updates={}
 
@@ -718,228 +701,15 @@ def assignment(players,slots,style):
 
 
 
-def analyze(dataset,style='possession',primary_slot=0,excluded=(),prompt=None):
-
-    parsed_prompt = parse_tactical_prompt(prompt) if prompt else None
-
-    if parsed_prompt:
-
-        style = parsed_prompt['recommended_style']
-
-        team_overrides = parsed_prompt['team_overrides']
-
-    else:
-
-        team_overrides = None
-
-    if style not in STYLES:raise ValueError('Estilo desconocido.')
-
-    excluded=set(excluded); players=dataset['players']
-
-    seniors=[p for p in players if p['team_slot']==primary_slot and p['uid'] not in excluded]
-
-    byid={p['uid']:p for p in players+dataset['loans']}
-
-    profiles={p['uid']:profile(p,style) for p in players+dataset['loans']}
-
-    tactics=[]
-
-    for form in FORMATIONS:
-
-        slots=formation_slots(form); solution=assignment(seniors,slots,style)
-
-        if solution is None:continue
-
-        total,picked=solution; lineup=[];risks=[]
-
-        for i,uid,score in sorted(picked):
-
-            p=byid[uid]; spec=slots[i]; ip,oop,_=slot_choices(p,spec,style)
-
-            ip_ex=explanation(p,ip,style);oop_ex=explanation(p,oop,style)
-
-            prof=profiles[uid]
-
-            familiarity=min(p['positions'].get(ip['position'].lower(),1),p['positions'].get(oop['position'].lower(),1))
-
-            lineup.append({'uid':uid,'role':ip_ex['name'],'role_id':ip['id'],'score':score,
-
-                           'ip':spec['ip'],'oop':spec['oop'],'in_possession':ip_ex,'out_of_possession':oop_ex,
-
-                           'without_ball':oop_ex['name'],'reason':ip_ex['comparison'],'familiarity':familiarity,
-
-                           'natural_role':prof['role_name'],'natural_role_id':prof['best_role'],
-
-                           'natural_position':prof['position'],'natural_score':prof['score'],
-
-                           'role_matches_natural':(ip['id']==prof['best_role']),
-
-                           'tactical_summary':ip_ex.get('tactical_summary',''),
-
-                           'tactical_badge':ip_ex.get('tactical_badge',''),
-
-                           'tactical_summary_oop':oop_ex.get('tactical_summary',''),
-
-                           'tactical_badge_oop':oop_ex.get('tactical_badge',''),
-
-                           'individual_instructions':[*ip_ex['instructions'],*oop_ex['instructions']]})
-
-            if familiarity<15:risks.append(f'{p["name"]}: familiaridad menor a 15 en una de las dos fases; revisar {ip["position"]} → {oop["position"]}.')
-
-        chosen_ids={l['uid'] for l in lineup}
-
-        bench=sorted((p for p in seniors if p['uid'] not in chosen_ids),key=lambda p:profiles[p['uid']]['score'],reverse=True)[:9]
-
-        pos_map = {
-
-            'GK': ['gk'], 'DL': ['dl', 'wbl'], 'DC': ['dc'], 'DR': ['dr', 'wbr'],
-
-            'DM': ['dm'], 'CM': ['mc'], 'AM': ['amc'], 'LW': ['aml', 'ml'],
-
-            'RW': ['amr', 'mr'], 'ST': ['stc'], 'STC': ['stc'], 'AML': ['aml', 'ml'], 'AMR': ['amr', 'mr'], 'MC': ['mc']
-
-        }
-
-        bench_replacements = []
-
-        for bp in bench:
-
-            bprof = profiles[bp['uid']]
-
-            best_target = None
-
-            best_eff = -999.0
-
-            best_gap = 0.0
-
-            for l in lineup:
-
-                pos = l['in_possession']['position'].upper()
-
-                mapped = pos_map.get(pos, [pos.lower()])
-
-                fam = max(bp['positions'].get(k, 1) for k in mapped)
-
-                eff = bprof['score'] * (0.25 + 0.75 * fam / 20.0)
-
-                gap = eff - l['score']
-
-                if fam >= 10 and eff > best_eff:
-
-                    best_eff = eff
-
-                    best_target = l
-
-                    best_gap = gap
-
-            target_p = byid[best_target['uid']] if best_target else None
-
-            quality = 'starter_level' if best_gap >= -1.5 else 'reliable' if best_gap >= -4.5 else 'rotation'
-
-            quality_label = 'Nivel titular directo' if best_gap >= -1.5 else 'Recambio de garantías' if best_gap >= -4.5 else 'Opción de rotación'
-
-            beaten = [
-
-                {'uid': l['uid'], 'name': byid[l['uid']]['name'], 'position': l['in_possession']['position'], 'position_es': POS_CODES_ES.get(l['in_possession']['position'].upper(), l['in_possession']['position']), 'score': l['score']}
-
-                for l in lineup if bprof['score'] > l['score']
-
-            ]
-
-            beaten.sort(key=lambda x: x['score'])
-
-            bench_replacements.append({
-
-                'uid': bp['uid'],
-
-                'name': bp['name'],
-
-                'age': bp.get('age'),
-
-                'natural_positions': bp.get('natural_positions', []),
-
-                'natural_positions_es': [POS_CODES_ES.get(np.upper(), np) for np in bp.get('natural_positions', [])],
-
-                'score': bprof['score'],
-
-                'role_name': bprof['role_name'],
-
-                'replaces_uid': best_target['uid'] if best_target else None,
-
-                'replaces_name': target_p['name'] if target_p else None,
-
-                'replaces_position': best_target['in_possession']['position'] if best_target else None,
-
-                'replaces_position_es': POS_CODES_ES.get(best_target['in_possession']['position'].upper(), best_target['in_possession']['position']) if best_target else None,
-
-                'replaces_role': best_target['role'] if best_target else None,
-
-                'replacement_score': round(best_eff, 1) if best_target else bprof['score'],
-
-                'gap': round(best_gap, 1) if best_target else 0.0,
-
-                'quality': quality,
-
-                'quality_label': quality_label,
-
-                'better_than_starters': beaten
-
-            })
-
-        tactics.append({'id':form['id'],'name':form['name'],'defensive':form['defensive'],'idea':form['idea'],
-
-                       'fm26_style':STYLES[style].get('fm26_style','Tiquitaca'),'fm26_style_alt':STYLES[style].get('fm26_style_alt','Control de la posesión'),'fm26_mentality':(parsed_prompt.get('recommended_mentality') if parsed_prompt else STYLES[style].get('mentality','Positiva')),
-
-                       'score':round(total/11,1),'lineup':lineup,'bench':[p['uid'] for p in bench],
-
-                       'bench_replacements':bench_replacements,
-
-                       'risks':risks+[STYLES[style]['risk']],
-
-                       'tactical_recommendations': [
-
-                           {
-
-                               'type': 'warning',
-
-                               'title': 'Salida del arquero vs Ritmo pausado',
-
-                               'detail': 'Con pases cortos y ritmo bajo, apurar al arquero a distribuir rápido puede forzar pérdidas si los laterales aún no se abrieron. Recomendamos "Ralentizar el juego" o distribución equilibrada para salir limpios.'
-
-                           },
-
-                           {
-
-                               'type': 'warning',
-
-                               'title': 'Coordinación entre Bloque y Contrapresión',
-
-                               'detail': 'Con bloque medio y contrapresión muy insistente, los atacantes van a asfixiar arriba pero la defensa espera en mitad de cancha, dejando un hueco entre líneas. Para dominar y presionar arriba, subí a "Bloque alto"; si preferís cuidar el fondo, moderá a "Reagruparse".'
-
-                           },
-
-                           {
-
-                               'type': 'tip',
-
-                               'title': 'Desdoblamientos por banda ante defensas replegadas',
-
-                               'detail': 'Al jugar con paciencia para entrar al área y centros rasos, los rivales suelen cerrar el centro. Activar "Doblar por fuera" en las carreras de apoyo permite que tus laterales desdoblen a los extremos y generen superioridad 2 vs 1 en las bandas.'
-
-                           }
-
-                       ],
-
-                       'instructions':team_instructions([byid[l['uid']] for l in lineup],style,team_overrides)})
-
-    tactics.sort(key=lambda t:t['score'],reverse=True)
-
-    for idx, t in enumerate(tactics):
-
-        t['rank'] = idx + 1
-
-        t['rank_badge'] = 'MEJOR ENCAJE' if idx == 0 else f'ALTERNATIVA #{idx + 1}'
-
+def analyze(dataset, style='possession', primary_slot=0, excluded=(), prompt=None, overrides=None):
+    context = AnalysisContext(dataset, style, primary_slot, excluded, prompt, overrides)
+    style = context.style
+    players, seniors, profiles = context.players, context.seniors, context.profiles
+    excluded = set(excluded)
+    tactics = [context.build(form) for form in FORMATION_CATALOG] if len(seniors) >= 11 else []
+    tactics.sort(key=lambda t: (-t['score'], t['id']))
+    for index, tactic in enumerate(tactics):
+        tactic.update(rank=index + 1, rank_badge='MEJOR ENCAJE' if index == 0 else f'ALTERNATIVA #{index + 1}')
     academy=[]
 
     for p in players:
@@ -972,21 +742,14 @@ def analyze(dataset,style='possession',primary_slot=0,excluded=(),prompt=None):
 
     academy.sort(key=lambda x:x['gap'] if x['gap'] is not None else -999,reverse=True)
 
-    formations_catalog = [{'id': f['id'], 'name': f['name'], 'category': f.get('category', 'Formación'), 'defensive': f['defensive'], 'idea': f['idea']} for f in FORMATION_CATALOG]
-    requested_tactic = None
-    if parsed_prompt and parsed_prompt.get('requested_formation'):
-        rf_id = parsed_prompt['requested_formation']
-        try:
-            requested_tactic = simulate_formation(dataset, formation_id=rf_id, style=style, primary_slot=primary_slot, excluded=excluded, prompt=prompt)
-        except Exception:
-            requested_tactic = None
-
-    return {'style':style,'profiles':profiles,'tactics':tactics,'academy':academy,'senior_count':len(seniors),
-            'excluded_count':len(excluded),'actions':dict(Counter(a['action'] for a in academy)),
-            'prompt_analysis':parsed_prompt,'custom_prompt':prompt or '',
-            'formations_catalog':formations_catalog, 'requested_tactic':requested_tactic}
-
-
+    requested = next((t for t in tactics if context.parsed and t['id'] == context.parsed.get('requested_formation')), None)
+    return {'style': style, 'profiles': profiles, 'tactics': tactics[:3],
+            'formation_rankings': [{'id': t['id'], 'name': t['name'], 'score': t['score'], 'defensive': t['defensive']} for t in tactics],
+            'evaluated_formations': len(tactics), 'academy': academy, 'senior_count': len(seniors),
+            'excluded_count': len(excluded), 'actions': dict(Counter(a['action'] for a in academy)),
+            'prompt_analysis': context.parsed, 'custom_prompt': prompt or '',
+            'formations_catalog': [{k: f[k] for k in ('id','name','category','defensive','idea')} for f in FORMATION_CATALOG],
+            'requested_tactic': requested, 'effective_overrides': context.overrides}
 
 
 def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profiles, byid=None):
@@ -1025,7 +788,9 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
         'STC': ['finishing', 'off_the_ball', 'composure', 'acceleration', 'pace', 'heading']
     }
 
+    slots = formation_slots(form)
     starter_uids = {l['uid'] for l in lineup}
+    relative_floor = sum(x['score'] for x in lineup) / len(lineup) - 8
     bench_seniors = [p for p in seniors if p['uid'] not in starter_uids]
 
     weak_positions = []
@@ -1042,7 +807,9 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
 
         backups = [
             bp for bp in bench_seniors
-            if any(bp['positions'].get(k, 1) >= 14 for k in mapped_keys)
+            if any(min(bp['positions'].get(slots[x['slot_index']]['ip_position'].lower(), 1),
+                       bp['positions'].get(slots[x['slot_index']]['oop_position'].lower(), 1)) >= 15
+                   for x in pos_starters)
         ]
 
         issues = []
@@ -1055,22 +822,22 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
 
         if worst_starter['familiarity'] < 15:
             issues.append(f"El titular {starter_name} adapta de puesto (familiaridad {worst_starter['familiarity']}/20 en {pos_es}).")
-        if worst_starter['score'] < 72.0:
-            issues.append(f"Puntuación baja de titular ({worst_starter['score']}/100 para {starter_name}) para la exigencia del esquema.")
+        if worst_starter['score'] < relative_floor:
+            issues.append(f"Puntuación baja de titular ({worst_starter['score']}/100 para {starter_name}) respecto del nivel del once.")
         if len(backups) < len(pos_starters):
             issues.append(f"Falta de recambio natural en el plantel ({len(backups)} suplente{'s' if len(backups)!=1 else ''} para {len(pos_starters)} puesto{'s' if len(pos_starters)!=1 else ''} en {pos_es}).")
 
         if issues:
-            urgency = 'Alta' if (worst_starter['score'] < 68.0 or worst_starter['familiarity'] < 14 or len(backups) == 0) else 'Media'
+            urgency = 'Alta' if (worst_starter['score'] < relative_floor - 4 or worst_starter['familiarity'] < 14 or len(backups) == 0) else 'Media'
 
             loan_candidates = []
             for lp in loans:
-                lfam = max((lp['positions'].get(k, 1) for k in mapped_keys), default=1)
-                is_nat = any(k.upper() in [np.upper() for np in lp.get('natural_positions', [])] for k in mapped_keys)
-                if lfam >= 14 or is_nat:
-                    lprof = profiles.get(lp['uid'], profile(lp, style))
+                spec = slots[worst_starter['slot_index']]
+                lfam = min(lp['positions'].get(spec['ip_position'].lower(), 1), lp['positions'].get(spec['oop_position'].lower(), 1))
+                if lfam >= 14:
+                    candidate_score = slot_choices(lp, spec, style)[2]
                     stats = lp.get('loan_stats', {})
-                    pj = (stats.get('starts', 0) or 0) + (stats.get('subs', 0) or 0)
+                    pj = stats.get('appearances')
                     loan_candidates.append({
                         'uid': lp['uid'],
                         'name': lp['name'],
@@ -1079,16 +846,16 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                         'natural_positions_es': [POS_CODES_ES.get(np.upper(), np) for np in lp.get('natural_positions', [])],
                         'club_name': lp.get('club_name') or 'Club cesión',
                         'loan_end': lp.get('loan_end'),
-                        'score': lprof['score'],
+                        'score': round(candidate_score, 1),
                         'familiarity': lfam,
                         'stats': stats,
-                        'rating': stats.get('rating'),
-                        'goals': stats.get('goals', 0),
-                        'assists': stats.get('assists', 0),
+                        'rating': stats.get('average_rating'),
+                        'goals': stats.get('goals'),
+                        'assists': stats.get('assists'),
                         'appearances': pj
                     })
 
-            loan_candidates.sort(key=lambda x: (x['familiarity'] >= 18, x['familiarity'], x['appearances'], x['score']), reverse=True)
+            loan_candidates.sort(key=lambda x: (x['familiarity'] >= 18, x['familiarity'], x['appearances'] or 0, x['score']), reverse=True)
 
             loan_recommendations = []
             for cand in loan_candidates[:2]:
@@ -1099,14 +866,14 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                 vence = cand['loan_end']
                 exp_date_str = format_date_es(vence)
 
-                perf_str = f"{pj} PJ"
-                if goles > 0: perf_str += f", {goles} goles"
+                perf_str = f"{pj} PJ" if pj is not None else "partidos sin verificar"
+                if goles is not None and goles > 0: perf_str += f", {goles} goles"
                 if media and media != '—': perf_str += f", media {media}"
 
                 reason = (
-                    f"Podés repescar a {cand['name']} (cedido en {cand['club_name']}, vence el {exp_date_str}). "
-                    f"Acumula rodaje oficial ({perf_str}) y encaja de forma natural como {pos_es} con índice {cand['score']}/100. "
-                    f"Cubre la posición de inmediato sin gastar presupuesto de fichajes."
+                    f"Evaluá el regreso de {cand['name']} (cedido en {cand['club_name']}, vence el {exp_date_str}). "
+                    f"{'Registra participaciones' if pj else 'Rodaje sin confirmar'} ({perf_str}) y tiene encaje estimado como {pos_es} con índice {cand['score']}/100. "
+                    f"Confirmá en FM la cláusula de repesca, las fechas, los costos y la inscripción. Es una alternativa para este puesto; no puede cubrir varios a la vez."
                 )
 
                 loan_recommendations.append({
@@ -1149,154 +916,141 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                 'starter_score': worst_starter['score'],
                 'issues': issues,
                 'has_loan_recall': len(loan_recommendations) > 0,
+                'recall_verified': False,
                 'loan_recalls': loan_recommendations,
                 'market_profile': market_profile
             })
 
     return weak_positions
 
-def simulate_formation(dataset, formation_id='352', style='possession', primary_slot=0, excluded=(), prompt=None):
-    """
-    Simulates a specific formation from the catalog (e.g. 3-5-2, 3-4-3, 5-3-2, etc.).
-    Returns the Starting 11, bench, instructions, and deep reinforcement/loan evaluation.
-    """
-    form = FORMATIONS_BY_ID.get(formation_id, FORMATION_CATALOG[0])
-    parsed_prompt = parse_tactical_prompt(prompt) if prompt else None
-    if parsed_prompt:
-        style = parsed_prompt['recommended_style']
-        team_overrides = parsed_prompt['team_overrides']
-    else:
-        team_overrides = None
+class AnalysisContext:
+    """One request-scoped set of profiles, slot evaluations and result construction."""
+    def __init__(self, dataset, style, primary_slot, excluded, prompt, overrides=None):
+        if style not in STYLES:
+            raise ValueError('Estilo desconocido.')
+        self.dataset = dataset
+        self.parsed = parse_tactical_prompt(prompt) if prompt else None
+        self.style = self.parsed['recommended_style'] if self.parsed else style
+        self.overrides = dict(self.parsed['team_overrides']) if self.parsed else {}
+        self.overrides.update(overrides or {})
+        self.players = dataset['players']
+        self.loans = dataset.get('loans', [])
+        self.seniors = [p for p in self.players if p['team_slot'] == primary_slot and p['uid'] not in excluded]
+        self.byid = {p['uid']: p for p in self.players + self.loans}
+        self.profiles = {uid: profile(p, self.style) for uid, p in self.byid.items()}
+        self.choices = {}
 
-    excluded = set(excluded)
-    players = dataset['players']
-    seniors = [p for p in players if p['team_slot'] == primary_slot and p['uid'] not in excluded]
-    byid = {p['uid']: p for p in players + dataset['loans']}
-    profiles = {p['uid']: profile(p, style) for p in players + dataset['loans']}
+    def evaluate(self, player, spec):
+        key = (player['uid'], spec['ip_position'], spec['oop_position'], spec['role'], spec['defend'])
+        if key not in self.choices:
+            self.choices[key] = slot_choices(player, spec, self.style)
+        return self.choices[key]
 
-    slots = formation_slots(form)
-    solution = assignment(seniors, slots, style)
-    if solution is None:
-        raise ValueError(f"No hay suficientes jugadores disponibles para completar el esquema {form['name']}.")
+    def build(self, form):
+        slots = formation_slots(form)
+        solution = assignment(self.seniors, slots, self.style, evaluate=self.evaluate)
+        if solution is None:
+            raise ValueError(f"No hay suficientes jugadores para completar {form['name']}.")
+        total, picked = solution
+        lineup, risks = [], []
+        for index, uid, _ in sorted(picked):
+            p, spec, prof = self.byid[uid], slots[index], self.profiles[uid]
+            ip, oop, value = self.evaluate(p, spec)
+            ip_ex, oop_ex = explanation(p, ip, self.style), explanation(p, oop, self.style)
+            fam = min(p['positions'].get(spec['ip_position'].lower(), 1), p['positions'].get(spec['oop_position'].lower(), 1))
+            lineup.append({'uid': uid, 'slot_id': spec['id'], 'slot_index': index,
+                'role': ip_ex['name'], 'role_id': ip['id'], 'score': round(value, 1),
+                'ip': spec['ip'], 'oop': spec['oop'], 'in_possession': ip_ex, 'out_of_possession': oop_ex,
+                'without_ball': oop_ex['name'], 'reason': ip_ex['comparison'], 'familiarity': fam,
+                'natural_role': prof['role_name'], 'natural_role_id': prof['best_role'],
+                'natural_position': prof['position'], 'natural_score': prof['score'],
+                'role_matches_natural': ip['id'] == prof['best_role'],
+                'tactical_summary': ip_ex['tactical_summary'], 'tactical_badge': ip_ex['tactical_badge'],
+                'tactical_summary_oop': oop_ex['tactical_summary'], 'tactical_badge_oop': oop_ex['tactical_badge'],
+                'individual_instructions': ip_ex['instructions'] + oop_ex['instructions']})
+            if fam < 15:
+                risks.append(f"{p['name']}: requiere adaptación ({spec['ip_position']} → {spec['oop_position']}, {fam}/20).")
+        bench, replacements = self.build_bench(lineup, slots)
+        reinforcements = evaluate_formation_reinforcements(lineup, self.seniors, self.loans, form, self.style, self.profiles, self.byid)
+        recalls = {c['player_uid'] for r in reinforcements for c in r['loan_recalls']}
+        natural = sum(x['familiarity'] >= 18 for x in lineup)
+        verdict = f"{form['name']}: {natural}/11 titulares con familiaridad alta. "
+        if reinforcements:
+            verdict += f"Hay {len(reinforcements)} posiciones que requieren atención. "
+            verdict += f"Se identificaron {len(recalls)} cedidos distintos como alternativas; verificá sus condiciones de regreso en FM." if recalls else 'Revisá el mercado o las inferiores para ampliar la cobertura.'
+        else:
+            verdict += 'No se detectaron carencias respecto del nivel de este plantel.'
+        instructions = team_instructions([self.byid[l['uid']] for l in lineup], self.style, self.overrides)
+        selected = {i['id']: i['value_en'] for i in instructions}
+        advice = []
+        if selected.get('defensive_line_oop') in ('Higher','Much Higher') and any(self.byid[x['uid']]['attributes']['pace'] < 13 for x in lineup if x['in_possession']['position'] == 'DC'):
+            advice.append({'type': 'warning', 'title': 'Espacio detrás de la defensa', 'detail': 'La línea alta expone a centrales con velocidad menor a 13. Probá bajar la línea y revisá el rival.'})
+        if selected.get('defensive_transition_oop') == 'Counter-Press' and sum(self.byid[x['uid']]['attributes']['stamina'] for x in lineup) / 11 < 12:
+            advice.append({'type': 'warning', 'title': 'Exigencia de la contrapresión', 'detail': 'La resistencia media es menor a 12. Considerá reagruparte o moderar la intensidad.'})
+        result = {'id': form['id'], 'name': form['name'], 'defensive': form['defensive'], 'idea': form['idea'],
+            'formation': {k: form[k] for k in ('id','name','defensive','category','idea')},
+            'style': self.style, 'fm26_style': STYLES[self.style]['fm26_style'],
+            'fm26_style_alt': STYLES[self.style]['fm26_style_alt'],
+            'fm26_mentality': self.parsed['recommended_mentality'] if self.parsed else STYLES[self.style]['mentality'],
+            'score': round(total / 11, 1), 'lineup': lineup, 'bench': [p['uid'] for p in bench],
+            'bench_replacements': replacements, 'risks': risks + [STYLES[self.style]['risk']],
+            'reinforcements': reinforcements, 'tactical_recommendations': advice, 'instructions': instructions,
+            'fit_summary': {'overall_score': round(total / 11, 1), 'natural_count': natural, 'adapted_count': 11 - natural,
+                            'weak_count': len(reinforcements), 'recalls_count': len(recalls), 'verdict': verdict}}
+        return result
 
-    total, picked = solution
-    lineup = []
-    risks = []
+    def build_bench(self, lineup, slots):
+        starters = {x['uid'] for x in lineup}
+        candidates = [p for p in self.seniors if p['uid'] not in starters]
+        coverage = {}
+        for p in candidates:
+            entries = []
+            for l in lineup:
+                spec = slots[l['slot_index']]
+                fam = min(p['positions'].get(spec['ip_position'].lower(), 1), p['positions'].get(spec['oop_position'].lower(), 1))
+                if fam >= 10:
+                    entries.append((l, self.evaluate(p, spec)[2], fam))
+            coverage[p['uid']] = entries
+        bench, covered = [], set()
+        # Reserve a goalkeeper place before greedily covering the remaining tactical slots.
+        keepers = [p for p in candidates if p['positions'].get('gk', 1) >= 15]
+        if keepers:
+            keeper = max(keepers, key=lambda p: (self.evaluate(p, slots[0])[2], -p['uid']))
+            bench.append(keeper); covered.add(0)
+        while len(bench) < min(9, len(candidates)):
+            remaining = [p for p in candidates if p not in bench]
+            def priority(p):
+                matches = coverage[p['uid']]
+                return (sum(1 for l, v, fam in matches if l['slot_index'] not in covered and fam >= 15),
+                        max((v for _, v, _ in matches), default=0), len(matches), -p['uid'])
+            chosen = max(remaining, key=priority)
+            bench.append(chosen)
+            covered.update(l['slot_index'] for l, _, fam in coverage[chosen['uid']] if fam >= 15)
+        replacements = []
+        for p in bench:
+            matches = coverage[p['uid']]
+            target = max(matches, key=lambda x: (x[1] - x[0]['score'], x[1])) if matches else None
+            l, effective, fam = target if target else (None, None, None)
+            gap = round(effective - l['score'], 1) if l else None
+            quality = 'unavailable' if l is None else 'starter_level' if gap >= -1.5 else 'reliable' if gap >= -4.5 else 'rotation'
+            label = {'unavailable': 'Sin reemplazo compatible', 'starter_level': 'Nivel titular en este puesto', 'reliable': 'Recambio de garantías', 'rotation': 'Opción de rotación'}[quality]
+            replacements.append({'uid': p['uid'], 'name': p['name'], 'age': p.get('age'),
+                'natural_positions': p.get('natural_positions', []),
+                'natural_positions_es': [POS_CODES_ES.get(x.upper(), x) for x in p.get('natural_positions', [])],
+                'score': self.profiles[p['uid']]['score'], 'role_name': self.profiles[p['uid']]['role_name'],
+                'replaces_uid': l['uid'] if l else None, 'replaces_name': self.byid[l['uid']]['name'] if l else None,
+                'replaces_position': l['in_possession']['position'] if l else None,
+                'replaces_position_es': POS_CODES_ES.get(l['in_possession']['position']) if l else None,
+                'replaces_role': l['role'] if l else None, 'replacement_score': round(effective, 1) if l else None,
+                'gap': gap, 'quality': quality, 'quality_label': label,
+                'coverage': [x['slot_id'] for x, _, _ in matches],
+                'better_than_starters': [{'uid': x['uid'], 'name': self.byid[x['uid']]['name'],
+                    'position': x['in_possession']['position'], 'position_es': POS_CODES_ES.get(x['in_possession']['position']),
+                    'score': x['score']} for x, v, _ in matches if v > x['score']]})
+        return bench, replacements
 
-    for i, uid, score in sorted(picked):
-        p = byid[uid]
-        spec = slots[i]
-        ip, oop, _ = slot_choices(p, spec, style)
-        ip_ex = explanation(p, ip, style)
-        oop_ex = explanation(p, oop, style)
-        prof = profiles[uid]
-        familiarity = min(p['positions'].get(ip['position'].lower(), 1), p['positions'].get(oop['position'].lower(), 1))
-        lineup.append({
-            'uid': uid, 'role': ip_ex['name'], 'role_id': ip['id'], 'score': score,
-            'ip': spec['ip'], 'oop': spec['oop'], 'in_possession': ip_ex, 'out_of_possession': oop_ex,
-            'without_ball': oop_ex['name'], 'reason': ip_ex['comparison'], 'familiarity': familiarity,
-            'natural_role': prof['role_name'], 'natural_role_id': prof['best_role'],
-            'natural_position': prof['position'], 'natural_score': prof['score'],
-            'role_matches_natural': (ip['id'] == prof['best_role']),
-            'tactical_summary': ip_ex.get('tactical_summary', ''),
-            'tactical_badge': ip_ex.get('tactical_badge', ''),
-            'tactical_summary_oop': oop_ex.get('tactical_summary', ''),
-            'tactical_badge_oop': oop_ex.get('tactical_badge', ''),
-            'individual_instructions': [*ip_ex['instructions'], *oop_ex['instructions']]
-        })
-        if familiarity < 15:
-            risks.append(f"{p['name']}: familiaridad menor a 15 en una de las dos fases ({ip['position']} → {oop['position']}).")
 
-    chosen_ids = {l['uid'] for l in lineup}
-    bench = sorted((p for p in seniors if p['uid'] not in chosen_ids), key=lambda p: profiles[p['uid']]['score'], reverse=True)[:9]
-
-    pos_map = {
-        'GK': ['gk'], 'DL': ['dl', 'wbl'], 'DC': ['dc'], 'DR': ['dr', 'wbr'],
-        'WBL': ['wbl', 'dl'], 'WBR': ['wbr', 'dr'],
-        'DM': ['dm', 'mc'], 'MC': ['mc'], 'AMC': ['amc'], 'AML': ['aml', 'ml'],
-        'AMR': ['amr', 'mr'], 'ML': ['ml', 'aml'], 'MR': ['mr', 'amr'],
-        'ST': ['stc'], 'STC': ['stc']
-    }
-    bench_replacements = []
-    for bp in bench:
-        bprof = profiles[bp['uid']]
-        best_target = None
-        best_eff = -999.0
-        best_gap = 0.0
-        for l in lineup:
-            pos = l['in_possession']['position'].upper()
-            mapped = pos_map.get(pos, [pos.lower()])
-            fam = max((bp['positions'].get(k, 1) for k in mapped), default=1)
-            eff = bprof['score'] * (0.25 + 0.75 * fam / 20.0)
-            gap = eff - l['score']
-            if fam >= 10 and eff > best_eff:
-                best_eff = eff
-                best_target = l
-                best_gap = gap
-        target_p = byid[best_target['uid']] if best_target else None
-        quality = 'starter_level' if best_gap >= -1.5 else 'reliable' if best_gap >= -4.5 else 'rotation'
-        quality_label = 'Nivel titular directo' if best_gap >= -1.5 else 'Recambio de garantías' if best_gap >= -4.5 else 'Opción de rotación'
-        beaten = [
-            {'uid': l['uid'], 'name': byid[l['uid']]['name'], 'position': l['in_possession']['position'], 'position_es': POS_CODES_ES.get(l['in_possession']['position'].upper(), l['in_possession']['position']), 'score': l['score']}
-            for l in lineup if bprof['score'] > l['score']
-        ]
-        beaten.sort(key=lambda x: x['score'])
-        bench_replacements.append({
-            'uid': bp['uid'],
-            'name': bp['name'],
-            'age': bp.get('age'),
-            'natural_positions': bp.get('natural_positions', []),
-            'natural_positions_es': [POS_CODES_ES.get(np.upper(), np) for np in bp.get('natural_positions', [])],
-            'score': bprof['score'],
-            'role_name': bprof['role_name'],
-            'replaces_uid': best_target['uid'] if best_target else None,
-            'replaces_name': target_p['name'] if target_p else None,
-            'replaces_position': best_target['in_possession']['position'] if best_target else None,
-            'replaces_position_es': POS_CODES_ES.get(best_target['in_possession']['position'].upper(), best_target['in_possession']['position']) if best_target else None,
-            'replaces_role': best_target['role'] if best_target else None,
-            'replacement_score': round(best_eff, 1) if best_target else bprof['score'],
-            'gap': round(best_gap, 1) if best_target else 0.0,
-            'quality': quality,
-            'quality_label': quality_label,
-            'better_than_starters': beaten
-        })
-
-    reinforcements = evaluate_formation_reinforcements(lineup, seniors, dataset['loans'], form, style, profiles, byid=byid)
-
-    natural_count = sum(1 for l in lineup if l['familiarity'] >= 18)
-    adapted_count = 11 - natural_count
-    recalls_count = sum(len(r['loan_recalls']) for r in reinforcements)
-    weak_count = len(reinforcements)
-
-    verdict = (
-        f"Esquema {form['name']} con {natural_count}/11 titulares naturales. "
-        f"{f'Se detectaron {weak_count} puestos a reforzar. Podés resolverlos repescando a {recalls_count} cedidos sin costo de traspaso.' if recalls_count else 'Plantel con cobertura equilibrada para este planteo.'}"
-    )
-
-    return {
-        'formation': {
-            'id': form['id'],
-            'name': form['name'],
-            'defensive': form['defensive'],
-            'category': form.get('category', 'Formación'),
-            'idea': form['idea']
-        },
-        'style': style,
-        'fm26_style': STYLES[style].get('fm26_style', 'Tiquitaca'),
-        'fm26_mentality': (parsed_prompt.get('recommended_mentality') if parsed_prompt else STYLES[style].get('mentality', 'Positiva')),
-        'score': round(total / 11, 1),
-        'lineup': lineup,
-        'bench': [p['uid'] for p in bench],
-        'bench_replacements': bench_replacements,
-        'risks': risks + [STYLES[style]['risk']],
-        'reinforcements': reinforcements,
-        'fit_summary': {
-            'overall_score': round(total / 11, 1),
-            'natural_count': natural_count,
-            'adapted_count': adapted_count,
-            'weak_count': weak_count,
-            'recalls_count': recalls_count,
-            'verdict': verdict
-        },
-        'instructions': team_instructions([byid[l['uid']] for l in lineup], style, team_overrides)
-    }
+def simulate_formation(dataset, formation_id='352', style='possession', primary_slot=0, excluded=(), prompt=None, overrides=None):
+    if formation_id not in FORMATIONS_BY_ID:
+        raise ValueError('Formación desconocida.')
+    return AnalysisContext(dataset, style, primary_slot, excluded, prompt, overrides).build(FORMATIONS_BY_ID[formation_id])

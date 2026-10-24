@@ -1,0 +1,85 @@
+import {esc, date, number, score, playerButton, groupName, pos} from './format.js';
+import {filteredPlayers} from './session.js';
+import {formationCards, tacticResult, rolePlan} from './tactics-view.js';
+
+export const navigation = {overview:'Centro del club',tactics:'Tácticas',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
+
+export function welcome(state) {
+  return `<section class="welcome"><span class="eyebrow">Tu partida, en tu equipo</span><h1>Conocé tu plantel.<br><em>Encontrá tu plan de juego.</em></h1><p>Analizá tu club de Football Manager 26, compará diez esquemas y decidí con explicaciones para cada jugador.</p><button class="upload-drop" data-action="import"><span aria-hidden="true">↥</span><strong>Elegí o arrastrá tu partida .fm</strong><small>Hasta 400 MB · Procesamiento local</small></button><div class="welcome-steps"><p><b>01</b> Cargá tu partida</p><p><b>02</b> Confirmá los grupos del club</p><p><b>03</b> Compará tu once y sus alternativas</p></div><p class="muted">La partida original se conserva. Touchline calcula un índice propio de encaje y no predice resultados de partidos.</p>${state.error?`<p class="notice warning">${esc(state.error)}</p><button class="button" data-action="reload">Reintentar conexión</button>`:''}<button class="text-button" data-action="sync">Configurar sincronización automática</button></section>`;
+}
+
+function stat(label,value,detail) { return `<article class="stat"><span>${label}</span><strong>${value}</strong><small>${detail}</small></article>`; }
+
+export function overview(state) {
+  const {data,analysis,prefs} = state;
+  const first = analysis?.tactics[0];
+  const senior = data.players.filter(p=>p.team_slot===prefs.primary_slot);
+  const youth = data.players.filter(p=>p.team_slot!==prefs.primary_slot);
+  return `<div class="page-heading"><div><span class="eyebrow">${esc(data.manager || 'Tu club')} · ${esc(date(data.date))}</span><h1>${esc(data.club)}</h1><p>Tu plantel, sus alternativas y las próximas decisiones.</p></div><button class="button primary" data-view="tactics">Ver propuesta táctica →</button></div>
+    <div class="stats-grid">${stat('Disponibles en el grupo principal',senior.filter(p=>!prefs.excluded.includes(p.uid)).length,`${senior.length} jugadores en ${esc(groupName(data,prefs,prefs.primary_slot))}`)}${stat('Mayor encaje del once',first?number(first.score):'—',first?`${esc(first.name)} · índice propio /100`:'Revisá el grupo principal')}${stat('Otros grupos',youth.length,'Reservas y juveniles, según tu configuración')}${stat('Cedidos',data.loans.length,'Alternativas para seguimiento')}</div>
+    <section class="panel"><div class="split"><div><h2>Tu siguiente decisión</h2><p>${first?esc(first.fit_summary.verdict):'Confirmá el grupo principal y que haya al menos once jugadores disponibles.'}</p></div><button class="button" data-action="groups">Revisar grupos</button></div>
+    ${analysis?.academy.filter(a=>a.action==='Probar con el primer equipo').length?`<p><button class="text-button" data-view="academy">${analysis.academy.filter(a=>a.action==='Probar con el primer equipo').length} jugadores de otros grupos merecen una prueba →</button></p>`:''}</section>
+    ${first?`<div class="section-heading"><h2>Las tres propuestas con mayor encaje</h2><span class="muted">Comparadas entre ${analysis.evaluated_formations} esquemas</span></div>${formationCards(analysis.tactics,null)}`:''}`;
+}
+
+export function tactics(state) {
+  const {data,prefs,analysis,simulation} = state;
+  const selected = prefs.formation==='auto' ? analysis?.requested_tactic || analysis?.tactics[0] : simulation;
+  const pa=analysis?.prompt_analysis;
+  return `<div class="page-heading"><div><span class="eyebrow">Idea, estructura y decisiones</span><h1>Tácticas</h1><p>Un espacio para comparar esquemas y ajustar tu propuesta.</p></div><button class="button" data-action="export">Exportar propuesta</button></div>
+    <section class="panel controls"><div class="control-grid"><label>Estilo aplicado<select id="style-select">${Object.entries(data.styles).map(([k,s])=>`<option value="${k}" ${prefs.style===k?'selected':''}>${esc(s.name)} · ${esc(s.fm26_style)}</option>`).join('')}</select></label><label>Formación<select id="formation-select"><option value="auto" ${prefs.formation==='auto'?'selected':''}>Recomendar entre los diez esquemas</option>${data.formations_catalog.map(f=>`<option value="${f.id}" ${prefs.formation===f.id?'selected':''}>${esc(f.name)} → ${esc(f.defensive)}</option>`).join('')}</select></label></div>
+    <details id="prompt-details"><summary>Describí tu idea de juego</summary><label for="prompt-input">Pedido táctico <small>Interpretación mediante reglas · Ctrl + Enter para aplicar</small></label><textarea id="prompt-input" maxlength="2000" rows="3" placeholder="Ej.: posesión, muchas ocasiones y evitar remates rivales">${esc(state.promptDraft)}</textarea><div class="actions"><button class="button primary" data-action="apply-prompt">Aplicar idea</button><button class="button" data-action="clear-prompt">Restablecer idea</button></div>
+    ${pa?`<div class="interpretation"><strong>Interpretación aplicada</strong><p>${esc(data.styles[pa.recommended_style].name)} · ${esc(pa.recommended_mentality)}${pa.avoided.length?' · Evitar: '+esc(pa.avoided.join(', ')):''}</p>${pa.warnings.map(x=>`<p class="notice warning">${esc(x)}</p>`).join('')}<p class="muted">Podés elegir otro estilo, formación y ajustar cada instrucción debajo de la propuesta.</p></div>`:''}</details></section>
+    ${analysis?.tactics.length?`<details class="ranking"><summary>Comparar las tres mejores · ${analysis.evaluated_formations} esquemas evaluados</summary>${formationCards(analysis.tactics,selected?.id)}</details>`:''}
+    ${state.error?`<div class="notice warning" role="alert">${esc(state.error)} <button class="text-button" data-action="retry">Reintentar</button></div>`:''}
+    ${selected?tacticResult(selected,state):state.busy?'<div class="panel skeleton" role="status">Calculando tu propuesta…</div>':'<section class="panel empty"><h2>No hay un once completo</h2><p>Necesitás al menos once jugadores disponibles en el grupo principal. Revisá tus exclusiones y la asignación de grupos.</p><button class="button" data-action="groups">Configurar grupos</button></section>'}`;
+}
+
+function toolbar(state, kind) {
+  const groups=kind==='loans'?[]:state.data.slots.filter(s=>kind!=='academy'||s!==state.prefs.primary_slot);
+  return `<div class="table-toolbar"><label class="search">Buscar jugador o posición<input id="search" type="search" value="${esc(state.filters.query)}" placeholder="Nombre o código de posición"></label><label>Grupo<select id="group-filter"><option value="all">Todos</option>${groups.map(s=>`<option value="${s}" ${state.filters.group===String(s)?'selected':''}>${esc(groupName(state.data,state.prefs,s))}</option>`).join('')}</select></label><label>Ordenar<select id="sort-order">${[['score','Mayor encaje'],['age','Menor edad'],['name','Nombre']].map(([k,v])=>`<option value="${k}" ${state.filters.order===k?'selected':''}>${v}</option>`).join('')}</select></label></div>`;
+}
+
+export function playerRows(state,kind) {
+  const {data,prefs,analysis} = state;
+  const profiles=analysis?.profiles||{};
+  const pool=kind==='loans'?data.loans:kind==='academy'?data.players.filter(p=>p.team_slot!==prefs.primary_slot):data.players;
+  const rows=filteredPlayers(pool,state.filters,profiles);
+  if (!rows.length) return '<p class="empty" role="status">No encontramos jugadores con esos filtros.</p>';
+  if(kind==='academy') return `<div class="academy-grid">${rows.map(p=>{const a=analysis?.academy.find(x=>x.uid===p.uid),prof=profiles[p.uid];return `<article class="academy-card">${playerButton(p)}<span class="tag">${esc(groupName(data,prefs,p.team_slot))}</span><div class="split"><h3>${esc(prof?.role_name)}</h3>${score(prof?.score)}</div><strong>${esc(a?.action)}</strong><p>${esc(a?.plan)}</p><small>${a?.gap==null?'Sin referencia':`${a.gap>0?'+':''}${number(a.gap)} puntos frente a la referencia del primer equipo`}</small><p class="muted">Entrenar: ${esc(prof?.focus.map(f=>`${f.name} (${f.value})`).join(', '))}</p></article>`;}).join('')}</div>`;
+  if(kind==='loans') return `<div class="table-scroll"><table><caption>${rows.length} cedidos · “—” indica datos no disponibles</caption><thead><tr>${['Jugador','Club','PJ','Goles','Asistencias','Minutos','Media','Fin del préstamo','Encaje'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(p=>{const s=p.loan_stats||{};return `<tr><td>${playerButton(p)}</td><td>${esc(s.club_name||p.club_name)}</td><td>${number(s.appearances,0)}</td><td>${number(s.goals,0)}</td><td>${number(s.assists,0)}</td><td>${number(s.minutes,0)}</td><td>${number(s.average_rating,2)}</td><td>${esc(date(s.loan_end||p.loan_end))}</td><td>${score(profiles[p.uid]?.score)}</td></tr>`;}).join('')}</tbody></table></div>`;
+  return `<div class="table-scroll"><table><caption>${rows.length} jugadores · Encaje individual en su mejor función</caption><thead><tr>${['Jugador','Grupo','Mejor función','Encaje','Pases','Técnica','Velocidad','Disponible'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(p=>`<tr class="${prefs.excluded.includes(p.uid)?'excluded':''}"><td>${playerButton(p)}</td><td>${esc(groupName(data,prefs,p.team_slot))}</td><td>${esc(profiles[p.uid]?.role_name)}</td><td>${score(profiles[p.uid]?.score)}</td><td>${p.attributes.passing}</td><td>${p.attributes.technique}</td><td>${p.attributes.pace}</td><td><input id="available-${p.uid}" type="checkbox" data-available="${p.uid}" ${prefs.excluded.includes(p.uid)?'':'checked'} aria-label="Incluir a ${esc(p.name)} en las propuestas"></td></tr>`).join('')}</tbody></table></div>`;
+}
+
+export function roster(state,kind) {
+  const texts={squad:['Plantilla','Marcá los jugadores disponibles para el once y el banco.'],academy:['Inferiores','Compará otros grupos con el primer equipo y elegí una prioridad de desarrollo.'],loans:['Cedidos','Seguí minutos y rendimiento. Las estadísticas ausentes se muestran sin estimar.']};
+  return `<div class="page-heading"><div><h1>${texts[kind][0]}</h1><p>${texts[kind][1]}</p></div><button class="button" data-action="export">Exportar análisis</button></div>${kind==='academy'?'<p class="notice">Se incluyen todos los grupos salvo el principal; pueden contener reservas adultos. El encaje actual no estima potencial.</p>':''}<section class="panel">${toolbar(state,kind)}<div id="results">${playerRows(state,kind)}</div></section>`;
+}
+
+export function methodology(state) {
+  const m=state.data.methodology;
+  return `<div class="page-heading"><div><h1>Cómo se calcula</h1><p>Las reglas, los datos y sus límites.</p></div></div><section class="panel prose"><h2>Índice propio de Touchline</h2><p>${esc(m.formula)}</p><p>El puntaje no es una probabilidad de victoria ni una calificación del motor de FM.</p><h3>Construcción del once y banco</h3><p>${esc(m.lineup)}</p><p>Las alertas de nivel comparan cada puesto con la media del once, con un margen de ocho puntos. La cobertura del banco usa familiaridad de ambas fases.</p><h3>Inferiores</h3><p>${esc(m.academy)}</p><h3>Lenguaje natural</h3><p>Se utilizan reglas de reconocimiento, negaciones y prioridades explícitas. La interpretación se muestra en Tácticas y puede corregirse mediante estilo, formación y ajustes de equipo.</p><h3>Datos y límites</h3><p>Se usan atributos visibles. La extracción realiza controles de estructura y rangos; eso no demuestra que cada dato coincida con la ficha del juego. La verificación de etiquetas se informa por rol.</p><p>Confirmá lesiones, sanciones, inscripción, familiaridad táctica, rival, carga de partidos y condiciones de repesca dentro de FM. No se exportan tácticas .fmf.</p><h3>Persistencia</h3><p>Las preferencias se conservan por club e identificador del manager; las copias de una misma carrera comparten configuración. Los resultados se invalidan con cada guardado y cambio de contexto.</p></section><details class="panel"><summary>Roles y atributos de referencia</summary>${Object.values(m.roles).map(r=>`<details><summary>${esc(r.name)} · ${r.phase==='in_possession'?'Con posesión':'Sin posesión'}</summary><p>${esc(r.english)} · ${esc(r.positions.map(pos).join(', '))}</p><p>${esc(Object.keys(r.weights).map(k=>state.data.attributes[k]).join(', '))}</p><a href="${esc(r.source)}" target="_blank" rel="noreferrer">Fuente del rol ↗</a></details>`).join('')}</details>`;
+}
+
+export function playerDialog(state,id) {
+  const p=state.byId.get(Number(id)), prof=state.analysis?.profiles[id];
+  if(!p||!prof) return '<h2>El jugador ya no está en este análisis</h2>';
+  const tactic=state.prefs.formation==='auto'?state.analysis.requested_tactic||state.analysis.tactics[0]:state.simulation;
+  const slot=state.view==='tactics'?tactic?.lineup.find(x=>x.uid===p.uid):null;
+  const a=state.analysis.academy.find(x=>x.uid===p.uid);
+  return `<div class="profile-heading"><span class="eyebrow">${slot?'En el once propuesto':'Mejor encaje individual'}</span><h2 id="dialog-title">${esc(p.name)}</h2><p>${p.age??'—'} años · ${esc(p.natural_positions.map(pos).join(' / '))} · ${esc(p.club_name||state.data.club)}</p></div>${rolePlan((slot||prof).in_possession)}${rolePlan((slot||prof).out_of_possession)}
+    ${a?`<section class="panel"><h3>${esc(a.action)}</h3><p>${esc(a.plan)}</p><p>${esc(a.development)}</p>${a.comparison.map(c=>`<div class="split"><span>${esc(c.name)}</span>${score(c.score)}</div>`).join('')}</section>`:''}
+    <details><summary>Atributos visibles y familiaridad</summary><div class="attribute-grid">${Object.entries(state.data.attributes).map(([k,label])=>`<div><span>${esc(label)}</span><b>${p.attributes[k]}</b></div>`).join('')}</div><p>${esc(Object.entries(p.positions).filter(([,v])=>v>=10).map(([k,v])=>`${pos(k)} ${v}/20`).join(' · '))}</p><p>Pie izquierdo ${p.left_foot??'—'}/20 · derecho ${p.right_foot??'—'}/20</p></details><button class="button" data-download-player="${p.uid}">Descargar plan del jugador</button>`;
+}
+
+export function groupDialog(state) {
+  const {data,prefs}=state;
+  return `<h2 id="dialog-title">Estructura del club</h2><p>Confirmá el primer equipo y los nombres de reservas y juveniles.</p><form id="groups-form"><label>Grupo del primer equipo<select name="primary_slot">${data.slots.map(s=>`<option value="${s}" ${prefs.primary_slot===s?'selected':''}>${esc(groupName(data,prefs,s))} · ${data.players.filter(p=>p.team_slot===s).length} jugadores</option>`).join('')}</select></label>${data.slots.map(s=>`<label>Nombre del grupo ${s}<input name="label-${s}" maxlength="40" value="${esc(groupName(data,prefs,s))}"><small>${esc(data.players.filter(p=>p.team_slot===s).slice(0,3).map(p=>p.name).join(', '))}</small></label>`).join('')}<button class="button primary" type="submit">Guardar y recalcular</button></form>`;
+}
+
+export function syncDialog(status, retention) {
+  const s=status||{};
+  return `<h2 id="dialog-title">Sincronización y almacenamiento</h2><p>El monitor espera a que el archivo se estabilice y conserva el análisis anterior hasta completar la actualización.</p><div class="notice"><strong>Última actualización exitosa:</strong> ${esc(s.last_sync_save||'Ninguna')} · ${esc(date(s.last_sync_time,true))}</div>${s.last_error?`<p class="notice warning" role="alert">${esc(s.last_error)}</p>`:''}
+  <form id="sync-form"><label class="check"><input name="enabled" type="checkbox" ${s.enabled!==false?'checked':''}> Activar sincronización automática</label><label>Carpeta de partidas<input name="watch_folder" value="${esc(s.watch_folder||'')}" required></label><label>Partida<select name="target_save"><option value="auto">Última partida guardada</option>${(s.available_saves||[]).map(x=>`<option value="${esc(x.filename)}" ${s.target_save===x.filename?'selected':''}>${esc(x.filename)} · ${esc(date(x.modified_at,true))}</option>`).join('')}${s.target_save&&!(s.available_saves||[]).some(x=>x.filename===s.target_save)?`<option selected value="${esc(s.target_save)}">${esc(s.target_save)} (no encontrada)</option>`:''}</select></label><div class="actions"><button class="button primary" type="submit">Guardar configuración</button><button class="button" type="button" data-action="force-sync">Sincronizar ahora</button></div></form>
+  <details><summary>Retención de copias locales</summary><p>Después de una importación exitosa se conservan las copias más recientes dentro de estos límites. La copia activa se conserva siempre. Las partidas originales de FM quedan fuera de esta limpieza.</p><form id="retention-form"><label>Máximo de copias<input name="max_snapshots" type="number" min="1" max="100" value="${retention.max_snapshots}" required></label><label>Espacio máximo en MB<input name="max_total_mb" type="number" min="400" max="102400" value="${retention.max_total_mb}" required></label><button class="button" type="submit">Guardar límites</button></form></details>`;
+}

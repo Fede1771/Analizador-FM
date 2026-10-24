@@ -1,13 +1,19 @@
 <!doctype html>
-<html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Touchline · Analizador FM</title><link rel="icon" type="image/x-icon" href="/app_icon.ico"><link rel="stylesheet" href="/style.css?v=fm26-4"></head>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark"><title>Touchline · Analizador FM26</title>
+  <link rel="icon" href="/touchline.ico"><link rel="stylesheet" href="/style.css?v=8">
+</head>
 <body>
-<div id="app"><div class="initial">Cargando tu club…</div></div>
-<div id="toast" role="status" aria-live="polite"></div>
-<dialog id="player-dialog" aria-label="Ficha del jugador"></dialog>
-<dialog id="settings-dialog" aria-label="Configuración de grupos"></dialog>
-<dialog id="sync-dialog" aria-label="Sincronización en vivo FM26"></dialog>
-<input id="save-file" type="file" accept=".fm" hidden>
-<script src="/app.js?v=fm26-4" defer></script>
+  <a class="skip-link" href="#content">Ir al contenido</a>
+  <aside id="sidebar" hidden><a class="brand" href="#overview"><span class="brand-mark" aria-hidden="true">T·</span><span>touchline<small>FOOTBALL INTELLIGENCE</small></span></a><p class="workspace-label">TU CLUB</p><nav id="nav" aria-label="Navegación principal"></nav><p class="local-badge">● Tu partida, en tu equipo<small>Procesamiento local · FM26</small></p><button class="text-button" data-action="shutdown">Cerrar Touchline</button></aside>
+  <div class="main-shell"><header class="topbar"><a class="mobile-brand" href="#overview">touchline</a><span id="source-label">Análisis local · FM26</span><div class="actions"><button class="button" id="sync-button" data-action="sync">Sincronización</button><button class="button" id="groups-button" data-action="groups" hidden>Grupos</button><button class="button primary" data-action="import">Importar partida</button><button class="button" data-action="shutdown" aria-label="Cerrar Touchline">Salir</button></div></header>
+  <div id="activity" class="activity" role="status" aria-live="polite" hidden><strong id="activity-text"></strong><progress id="activity-progress" max="100" aria-label="Progreso de la importación"></progress><small id="snapshot-note"></small></div>
+  <main id="content"><p class="empty" role="status">Preparando tu club…</p></main><footer>TOUCHLINE <span>Índice propio de encaje · Recomendaciones para probar en FM26</span></footer></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="dialog" aria-labelledby="dialog-title"><button id="dialog-close" class="dialog-close" aria-label="Cerrar ventana">×</button><div id="dialog-body"></div></dialog>
+  <input id="save-file" type="file" accept=".fm" hidden>
+  <script type="module" src="/app.js?v=8"></script>
 </body>
 </html>
