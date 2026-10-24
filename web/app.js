@@ -333,6 +333,69 @@ const groupName = slot => prefs.labels[slot] || data?.slot_labels?.[slot] || (sl
 
 const dateLabel = value => value?new Intl.DateTimeFormat('es-AR',{day:'numeric',month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(value+'T12:00:00Z')):'Fecha no disponible';
 
+const POS_ES = {
+  GK: { code: 'POR', short: 'Arquero', name: 'Arquero / Portero' },
+  DL: { code: 'LTI', short: 'Lateral izq.', name: 'Lateral izquierdo' },
+  DR: { code: 'LTD', short: 'Lateral der.', name: 'Lateral derecho' },
+  DC: { code: 'DFC', short: 'Defensa central', name: 'Defensa central' },
+  WBL: { code: 'CRI', short: 'Carrilero izq.', name: 'Carrilero izquierdo' },
+  WBR: { code: 'CRD', short: 'Carrilero der.', name: 'Carrilero derecho' },
+  DM: { code: 'MCD', short: 'Pivote defensivo', name: 'Pivote defensivo' },
+  MC: { code: 'MC', short: 'Mediocentro', name: 'Mediocentro' },
+  CM: { code: 'MC', short: 'Mediocentro', name: 'Mediocentro' },
+  ML: { code: 'MI', short: 'Volante izq.', name: 'Volante izquierdo' },
+  MR: { code: 'MD', short: 'Volante der.', name: 'Volante derecho' },
+  AML: { code: 'EXI', short: 'Extremo izq.', name: 'Extremo izquierdo' },
+  AMR: { code: 'EXD', short: 'Extremo der.', name: 'Extremo derecho' },
+  LW: { code: 'EXI', short: 'Extremo izq.', name: 'Extremo izquierdo' },
+  RW: { code: 'EXD', short: 'Extremo der.', name: 'Extremo derecho' },
+  AMC: { code: 'MP', short: 'Mediapunta', name: 'Mediapunta central' },
+  AM: { code: 'MP', short: 'Mediapunta', name: 'Mediapunta central' },
+  STC: { code: 'DLC', short: 'Delantero centro', name: 'Delantero centro' },
+  ST: { code: 'DLC', short: 'Delantero centro', name: 'Delantero centro' }
+};
+
+const posLabel = (pos, mode = 'code') => {
+  if (!pos) return '—';
+  const u = String(pos).trim().toUpperCase();
+  const entry = POS_ES[u];
+  if (!entry) return u;
+  if (mode === 'code') return entry.code;
+  if (mode === 'short') return entry.short;
+  if (mode === 'name') return entry.name;
+  if (mode === 'badge') return `${entry.code} · ${entry.short}`;
+  return entry.code;
+};
+
+const formatPositions = (positions, mode = 'code') => {
+  if (!positions) return '—';
+  if (Array.isArray(positions)) {
+    return positions.map(p => posLabel(p, mode)).join(' / ');
+  }
+  return posLabel(positions, mode);
+};
+
+const ROLE_ABBREV_ES = {
+  ball_playing_goalkeeper_ip: 'PCS', goalkeeper_ip: 'POR', no_nonsense_goalkeeper_ip: 'POR',
+  sweeper_keeper_oop: 'PCS', line_holding_keeper_oop: 'POL', goalkeeper_oop: 'POL',
+  ball_playing_centre_back_ip: 'CCS', centre_back_ip: 'DFC', no_nonsense_center_back_ip: 'DFC',
+  centre_back_oop: 'DFC', covering_centre_back_oop: 'DFC',
+  wing_back_ip: 'CR', wing_back_oop: 'CR', holding_wing_back_oop: 'CR', pressing_wing_back_oop: 'CR',
+  full_back_ip: 'LAT', full_back_oop: 'LAT', holding_full_back_oop: 'LAT', pressing_full_back_oop: 'LAT',
+  deep_lying_playmaker_ip: 'ORD', defensive_midfielder_ip: 'MD', defensive_midfielder_oop: 'MD',
+  screening_defensive_midfielder_oop: 'MD', midfield_playmaker_ip: 'MOR', advanced_playmaker_ip: 'OAD',
+  central_midfielder_ip: 'MC', central_midfielder_oop: 'MC', pressing_central_midfielder_oop: 'MC',
+  screening_central_midfielder_oop: 'MC', wide_covering_central_midfielder_oop: 'MC', channel_midfielder_ip: 'MC',
+  attacking_midfielder_ip: 'MP', attacking_midfielder_oop: 'MP', tracking_attacking_midfielder_oop: 'MP',
+  free_role_ip: 'MP', second_striker_ip: 'SD', inside_winger_ip: 'EXI', winger_ip: 'EXT',
+  winger_oop: 'EXT', tracking_winger_oop: 'EXT', playmaking_winger_ip: 'EXI', wide_forward_ip: 'MA',
+  inside_forward_ip: 'DLI', wide_midfielder_ip: 'MI', wide_midfielder_oop: 'MI',
+  tracking_wide_midfielder_oop: 'MI', centre_forward_ip: 'DLC', centre_forward_oop: 'DLC',
+  tracking_centre_forward_oop: 'DLC', central_outlet_centre_forward_oop: 'DLC',
+  channel_forward_ip: 'DDA', target_forward_ip: 'DT', deep_lying_forward_ip: 'DLA',
+  poacher_ip: 'ARI', false_nine_ip: 'FN'
+};
+
 
 
 function syncPill(){
@@ -371,7 +434,7 @@ function syncPill(){
 
 
 
-const playerName = p => `<button class="player-link" data-player="${p.uid}"><span class="avatar">${esc(initials(p.name))}</span><span>${esc(p.name)}<small>${p.age??'—'} años · ${esc(p.natural_positions.join(' / '))}</small></span></button>`;
+const playerName = p => `<button class="player-link" data-player="${p.uid}"><span class="avatar">${esc(initials(p.name))}</span><span>${esc(p.name)}<small>${p.age??'—'} años · ${esc(formatPositions(p.natural_positions, 'code'))}</small></span></button>`;
 
 function savePrefs(){localStorage.setItem('touchline:'+data.id,JSON.stringify({...prefs,excluded:[...excluded],style,prompt:tacticalPrompt}));}
 
@@ -481,7 +544,7 @@ function overview(){
 
 }
 
-function pitch(t,which,compact=false){return `<div class="pitch ${compact?'compact':''}" aria-label="Formación ${esc(which==='ip'?t.name:t.defensive)} ${which==='ip'?'con':'sin'} posesión"><div class="pitch-boundary"></div><div class="halfway"></div><div class="center-circle"></div><div class="penalty top"></div><div class="penalty bottom"></div><div class="goal top"></div><div class="goal bottom"></div><span class="pitch-direction">↑ DIRECCIÓN DE ATAQUE</span>${t.lineup.map((l,i)=>{const p=playerById(l.uid),[x,y]=l[which];return `<button class="pitch-player" data-player="${p.uid}" style="left:${x}%;top:${y}%" aria-label="Ver ${esc(p.name)}"><span class="shirt ${l.role_id==='gk'?'keeper':''}">${i+1}</span><strong>${esc(p.name.split(' ').slice(-1)[0])}</strong><small>${l.score.toFixed(0)}</small></button>`;}).join('')}</div>`;}
+function pitch(t,which,compact=false){return `<div class="pitch ${compact?'compact':''}" aria-label="Formación ${esc(which==='ip'?t.name:t.defensive)} ${which==='ip'?'con':'sin'} posesión"><div class="pitch-boundary"></div><div class="halfway"></div><div class="center-circle"></div><div class="penalty top"></div><div class="penalty bottom"></div><div class="goal top"></div><div class="goal bottom"></div><span class="pitch-direction">↑ DIRECCIÓN DE ATAQUE</span>${t.lineup.map((l,i)=>{const p=playerById(l.uid),[x,y]=l[which];const roleObj=(which==='ip'?l.in_possession:l.out_of_possession)||{};const roleAbbrev=roleObj.role_abbrev||ROLE_ABBREV_ES[roleObj.role_id||(which==='ip'?l.role_id:'')]||posLabel(l.natural_position,'code')||'JUG';return `<button class="pitch-player" data-player="${p.uid}" style="left:${x}%;top:${y}%" aria-label="Ver ${esc(p.name)}"><span class="pitch-role-badge">${esc(roleAbbrev)}</span><span class="shirt ${l.role_id==='gk'?'keeper':''}">${i+1}</span><strong>${esc(p.name.split(' ').slice(-1)[0])}</strong><small>${l.score.toFixed(0)}</small></button>`;}).join('')}</div>`;}
 
 function emptyTactics(){return `<div class="empty"><h3>Faltan jugadores para completar un once</h3><p>Hay ${analysis.senior_count} disponibles. Revisá las exclusiones o el grupo principal.</p><button class="button subtle" id="settings-inline">Configurar grupos</button></div>`;}
 
@@ -651,11 +714,11 @@ function benchPanel(t) {
 
     const pos = (b.replaces_position || '').toUpperCase();
 
-    if (pos === 'GK') lineStats.GK++;
+    if (pos === 'GK' || pos === 'POR') lineStats.GK++;
 
-    else if (['DL', 'DC', 'DR', 'WBL', 'WBR'].includes(pos)) lineStats.DEF++;
+    else if (['DL', 'DC', 'DR', 'WBL', 'WBR', 'LTI', 'LTD', 'DFC', 'CRI', 'CRD'].includes(pos)) lineStats.DEF++;
 
-    else if (['DM', 'CM', 'MC', 'AM', 'AMC'].includes(pos)) lineStats.MID++;
+    else if (['DM', 'CM', 'MC', 'AM', 'AMC', 'MCD', 'MP', 'MI', 'MD', 'ML', 'MR'].includes(pos)) lineStats.MID++;
 
     else lineStats.ATT++;
 
@@ -719,7 +782,7 @@ function benchPanel(t) {
 
                 <strong>${esc(b.name)}</strong>
 
-                <small>${b.age ?? '—'} años · ${esc((b.natural_positions || []).join(' / '))}</small>
+                <small>${b.age ?? '—'} años · ${esc(formatPositions(b.natural_positions, 'code'))}</small>
 
               </div>
 
@@ -749,7 +812,7 @@ function benchPanel(t) {
 
                   <strong>${esc(b.replaces_name)}</strong> 
 
-                  <small>(${esc(b.replaces_position)} · ${esc(b.replaces_role)})</small>
+                  <small>(${esc(posLabel(b.replaces_position, 'code'))} · ${esc(b.replaces_role)})</small>
 
                 </span>
 
@@ -763,7 +826,7 @@ function benchPanel(t) {
 
                   <strong>${esc(b.replaces_name)}</strong> 
 
-                  <small>(${esc(b.replaces_position)})</small>
+                  <small>(${esc(posLabel(b.replaces_position, 'code'))})</small>
 
                 </span>
 
@@ -777,7 +840,7 @@ function benchPanel(t) {
 
                   <strong>${esc(b.replaces_name || 'Rotación')}</strong> 
 
-                  <small>(${esc(b.replaces_position || 'Puesto')} · ${esc(b.replaces_role || '')})</small>
+                  <small>(${esc(posLabel(b.replaces_position, 'code'))} · ${esc(b.replaces_role || '')})</small>
 
                 </span>
 
@@ -797,7 +860,7 @@ function benchPanel(t) {
 
                 <span class="beaten-tag">⚡ Supera en valoración a ${b.better_than_starters.length} del Once Titular:</span>
 
-                <span class="beaten-list">${b.better_than_starters.map(s => `<b>${esc(s.name.split(' ').slice(-1)[0])}</b> (${s.score.toFixed(0)})`).join(' · ')}</span>
+                <span class="beaten-list">${b.better_than_starters.map(s => `<b>${esc(s.name.split(' ').slice(-1)[0])}</b> (${esc(posLabel(s.position, 'code'))} · ${s.score.toFixed(0)})`).join(' · ')}</span>
 
               </div>
 
@@ -1007,7 +1070,7 @@ function tactics(){
 
                     <span class="role-kind-label">ROL ACTUAL / NATURAL EN EL CLUB</span>
 
-                    <strong class="role-title">${esc(l.natural_role||l.role)} <small>(${esc(l.natural_position||'—')})</small></strong>
+                    <strong class="role-title">${esc(l.natural_role||l.role)} <small>(${esc(posLabel(l.natural_position, 'badge'))})</small></strong>
 
                     <span class="match-pill ${l.role_matches_natural?'green':'amber'}">
 
@@ -1327,7 +1390,7 @@ function loanPerformanceTable(rows){
 
           const rating = st.average_rating != null ? Number(st.average_rating).toFixed(2) : (p.rating != null ? Number(p.rating).toFixed(2) : '—');
 
-          const roleInClub = (p.natural_positions && p.natural_positions.length) ? p.natural_positions.join(' / ') : profile(p).role_name;
+          const roleInClub = (p.natural_positions && p.natural_positions.length) ? formatPositions(p.natural_positions, 'code') : profile(p).role_name;
 
           const loanEnd = st.loan_end || p.loan_end || '—';
 
@@ -1439,7 +1502,7 @@ function localeAliases(local){const names=[...new Set((local?.aliases||[]).map(a
 
 function fmInstructions(items){return items.length?`<div class="fm-instructions">${items.map(i=>`<article><div><strong>${esc(i.property)}: ${esc(i.value)}</strong><span class="instruction-origin ${i.origin}">${i.origin==='role'?'Indicada por el rol':i.origin==='standard'?'Mantener':'Ajustar'}</span></div><small>${esc(i.property_en)} → ${esc(i.value_en)}</small>${localeAliases(i.localization?.value)}<p>${esc(i.reason)}</p><a href="${esc(i.source)}" target="_blank" rel="noreferrer">Opción del catálogo ↗</a></article>`).join('')}</div>`:'<p class="muted">Conservar las instrucciones individuales por defecto para este rol. No se agregan ajustes no comprobados.</p>';}
 
-function fmRole(r){return `<section class="fm-role"><div class="fm-role-heading"><div><span class="eyebrow">${r.phase==='in_possession'?'CON POSESIÓN':'SIN POSESIÓN'} · ${esc(r.position)}</span><h3>${esc(r.name)}</h3><strong class="canonical-name">${esc(r.english)}</strong>${r.tactical_badge?`<span class="tactical-badge-pill">${esc(r.tactical_badge)}</span>`:''}</div>${score(r.score)}</div>${r.tactical_summary?`<div class="tactical-role-highlight"><strong>Función táctica clave:</strong> ${esc(r.tactical_summary)}</div>`:''}<p class="translation-note">${esc(r.spanish_status)}.${localeAliases(r.localization)}</p><h4>Por qué lo elige</h4><ul>${r.reasons.map(s=>`<li>${esc(s)}</li>`).join('')}</ul><p class="role-comparison">${esc(r.comparison)}</p>${r.warnings.length?`<div class="role-warning">${r.warnings.map(w=>`<p>${esc(w)}</p>`).join('')}</div>`:''}<details class="fm-settings" open><summary>Instrucciones individuales</summary>${fmInstructions(r.instructions)}${r.behaviours.length?`<p class="muted">Comportamientos indicados por la referencia del rol: ${esc(r.behaviours.join(' · '))}. No son todos controles independientes.</p>`:''}</details><a class="source-link" href="${esc(r.source)}" target="_blank" rel="noreferrer">Ver rol y posición en la fuente ↗</a></section>`;}
+function fmRole(r){return `<section class="fm-role"><div class="fm-role-heading"><div><span class="eyebrow">${r.phase==='in_possession'?'CON POSESIÓN':'SIN POSESIÓN'} · ${esc(posLabel(r.position, 'badge'))}</span><h3>${esc(r.name)}</h3><strong class="canonical-name">${esc(r.english)}</strong>${r.tactical_badge?`<span class="tactical-badge-pill">${esc(r.tactical_badge)}</span>`:''}</div>${score(r.score)}</div>${r.tactical_summary?`<div class="tactical-role-highlight"><strong>Función táctica clave:</strong> ${esc(r.tactical_summary)}</div>`:''}<p class="translation-note">${esc(r.spanish_status)}.${localeAliases(r.localization)}</p><h4>Por qué lo elige</h4><ul>${r.reasons.map(s=>`<li>${esc(s)}</li>`).join('')}</ul><p class="role-comparison">${esc(r.comparison)}</p>${r.warnings.length?`<div class="role-warning">${r.warnings.map(w=>`<p>${esc(w)}</p>`).join('')}</div>`:''}<details class="fm-settings" open><summary>Instrucciones individuales</summary>${fmInstructions(r.instructions)}${r.behaviours.length?`<p class="muted">Comportamientos indicados por la referencia del rol: ${esc(r.behaviours.join(' · '))}. No son todos controles independientes.</p>`:''}</details><a class="source-link" href="${esc(r.source)}" target="_blank" rel="noreferrer">Ver rol y posición en la fuente ↗</a></section>`;}
 
 function playerFM26(p,prof){const context=view==='tactics'?analysis.tactics[selectedTactic]?.lineup.find(l=>l.uid===p.uid):null;const recommendation=context||prof;return `<div class="fm26-player-plan"><span class="tag">PLAN FM26 · ${context?'EN EL ONCE PROPUESTO':'ENCAJE INDIVIDUAL'}</span><p class="muted">${context?'Estos son los roles asignados en la estructura seleccionada. Pueden diferir del mejor encaje individual.':'Roles e instrucciones para su posición actual, también aplicables a juveniles y cedidos.'}</p>${fmRole(recommendation.in_possession)}${fmRole(recommendation.out_of_possession)}<button class="button subtle" id="download-player-plan">↓ Descargar configuración FM26</button></div>`;}
 
@@ -1663,7 +1726,7 @@ function openPlayer(id){
 
  const p=playerById(id), prof=profile(p), a=analysis.academy.find(a=>a.uid===p.uid), d=$('#player-dialog');
 
- d.innerHTML=`<button class="dialog-close" aria-label="Cerrar ficha">×</button><div class="profile-hero"><span class="avatar big">${esc(initials(p.name))}</span><span class="eyebrow">${esc(p.club_name)}</span><h2>${esc(p.name)}</h2><p>${p.age??'—'} años · ${p.height_cm??'—'} cm · ${esc(p.natural_positions.join(' / '))}</p><span class="tag">${esc(data.players.some(q=>q.uid===p.uid)?groupName(p.team_slot):'Cedido fuera')}</span></div><div class="profile-body"><div class="profile-main-role"><div><small>MEJOR FUNCIÓN · ${esc(data.styles[style].name.toUpperCase())}</small><h3>${esc(prof.role_name)}</h3></div>${score(prof.score)}</div><div class="role-alternatives">${prof.roles.map(r=>`<div><span>${esc(r.name)}</span>${score(r.score)}</div>`).join('')}</div>${playerFM26(p,prof)}<h3>Lo que aporta</h3><div class="chips">${prof.strengths.map(s=>`<span>${esc(s.name)} <b>${s.value}</b></span>`).join('')}</div><h3>Focos de entrenamiento</h3><p class="muted">Atributos más bajos entre los importantes para esta función. Elegí una prioridad y revisá la respuesta en el juego.</p><div class="chips">${prof.focus.map(s=>`<span>${esc(s.name)} <b>${s.value}</b></span>`).join('')}</div>${a?`<div class="development-box"><span class="eyebrow">SIGUIENTE PASO</span><h3>${esc(a.action)}</h3><p>${esc(a.plan)}</p><strong>${gapLabel(a.gap)}</strong><h4>Opciones actuales del primer equipo</h4>${a.comparison.map(c=>`<div class="compare-row"><span>${esc(c.name)}</span>${score(c.score)}</div>`).join('')}</div>`:''}<h3>Atributos visibles</h3><div class="attributes-grid">${Object.entries(data.attributes).map(([key,label])=>`<div><span>${esc(label)}</span><b class="attr-value ${p.attributes[key]>=15?'high':''}">${p.attributes[key]}</b></div>`).join('')}</div><h3>Familiaridad posicional</h3><div class="chips">${Object.entries(p.positions).filter(([,v])=>v>=10).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span>${k.toUpperCase()} <b>${v}/20</b></span>`).join('')}</div><p class="muted">Pie izquierdo ${p.left_foot}/20 · Pie derecho ${p.right_foot}/20</p></div>`;
+ d.innerHTML=`<button class="dialog-close" aria-label="Cerrar ficha">×</button><div class="profile-hero"><span class="avatar big">${esc(initials(p.name))}</span><span class="eyebrow">${esc(p.club_name)}</span><h2>${esc(p.name)}</h2><p>${p.age??'—'} años · ${p.height_cm??'—'} cm · ${esc(formatPositions(p.natural_positions, 'code'))}</p><span class="tag">${esc(data.players.some(q=>q.uid===p.uid)?groupName(p.team_slot):'Cedido fuera')}</span></div><div class="profile-body"><div class="profile-main-role"><div><small>MEJOR FUNCIÓN · ${esc(data.styles[style].name.toUpperCase())}</small><h3>${esc(prof.role_name)}</h3></div>${score(prof.score)}</div><div class="role-alternatives">${prof.roles.map(r=>`<div><span>${esc(r.name)}</span>${score(r.score)}</div>`).join('')}</div>${playerFM26(p,prof)}<h3>Lo que aporta</h3><div class="chips">${prof.strengths.map(s=>`<span>${esc(s.name)} <b>${s.value}</b></span>`).join('')}</div><h3>Focos de entrenamiento</h3><p class="muted">Atributos más bajos entre los importantes para esta función. Elegí una prioridad y revisá la respuesta en el juego.</p><div class="chips">${prof.focus.map(s=>`<span>${esc(s.name)} <b>${s.value}</b></span>`).join('')}</div>${a?`<div class="development-box"><span class="eyebrow">SIGUIENTE PASO</span><h3>${esc(a.action)}</h3><p>${esc(a.plan)}</p><strong>${gapLabel(a.gap)}</strong><h4>Opciones actuales del primer equipo</h4>${a.comparison.map(c=>`<div class="compare-row"><span>${esc(c.name)}</span>${score(c.score)}</div>`).join('')}</div>`:''}<h3>Atributos visibles</h3><div class="attributes-grid">${Object.entries(data.attributes).map(([key,label])=>`<div><span>${esc(label)}</span><b class="attr-value ${p.attributes[key]>=15?'high':''}">${p.attributes[key]}</b></div>`).join('')}</div><h3>Familiaridad posicional</h3><div class="chips">${Object.entries(p.positions).filter(([,v])=>v>=10).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span>${posLabel(k, 'code')} <b>${v}/20</b></span>`).join('')}</div><p class="muted">Pie izquierdo ${p.left_foot}/20 · Pie derecho ${p.right_foot}/20</p></div>`;
 
  d.querySelector('.dialog-close').onclick=()=>d.close();d.querySelector('#download-player-plan').onclick=()=>downloadPlayerPlan(p,prof);d.showModal();
 
@@ -1865,7 +1928,7 @@ function renderSimResult(r) {
           <div class="reinforcement-card urgency-${rf.urgency.toLowerCase()}">
             <div class="rf-card-top">
               <div class="rf-pos-badge-col">
-                <span class="rf-position-badge">${esc(rf.position)}</span>
+                <span class="rf-position-badge">${esc(posLabel(rf.position_raw || rf.position, 'badge'))}</span>
                 <span class="rf-urgency-pill ${rf.urgency.toLowerCase()}">Urgencia: ${esc(rf.urgency)}</span>
               </div>
               <div class="rf-current-starter">
@@ -1905,7 +1968,7 @@ function renderSimResult(r) {
                         <span class="recall-fit-badge">Encaje: <b>${c.score}/100</b></span>
                       </div>
                       <div class="recall-stats-row">
-                        <span class="stat-pill">📅 Vence: <b>${esc(c.loan_end || 'Fin de temp.')}</b></span>
+                        <span class="stat-pill">📅 Vence: <b>${esc(c.loan_end_formatted || (c.loan_end ? dateLabel(c.loan_end) : 'Fin de temp.'))}</b></span>
                         <span class="stat-pill">🏟️ <b>${c.appearances} PJ</b> en cesión</span>
                         ${c.goals > 0 ? `<span class="stat-pill">⚽ <b>${c.goals} goles</b></span>` : ''}
                         ${c.assists > 0 ? `<span class="stat-pill">👟 <b>${c.assists} asist.</b></span>` : ''}
@@ -1927,8 +1990,8 @@ function renderSimResult(r) {
                 </div>
                 <div class="market-profile-body">
                   <div class="market-target-role">
-                    <span>Función buscada:</span>
-                    <strong>${esc(rf.market_profile.role_label)}</strong>
+                    <span>Puesto buscado:</span>
+                    <strong>${esc(rf.market_profile.role_label || posLabel(rf.market_profile.target_position, 'name'))}</strong>
                   </div>
                   <div class="market-attrs-row">
                     <span>Atributos clave a filtrar:</span>
@@ -1978,7 +2041,7 @@ function renderSimResult(r) {
                 <div class="roles-comparison">
                   <div class="role-box natural">
                     <span class="role-kind-label">ROL ACTUAL / NATURAL EN EL CLUB</span>
-                    <strong class="role-title">${esc(l.natural_role || l.role)} <small>(${esc(l.natural_position || '—')})</small></strong>
+                    <strong class="role-title">${esc(l.natural_role || l.role)} <small>(${esc(posLabel(l.natural_position, 'badge'))})</small></strong>
                     <span class="match-pill ${l.role_matches_natural ? 'green' : 'amber'}">
                       ${l.role_matches_natural ? '✓ Función natural coincide' : '⚡ Adaptado a este esquema'}
                     </span>

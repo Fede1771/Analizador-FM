@@ -6,7 +6,54 @@ from collections import Counter
 
 from fm_app.tactics import ATTRS, STYLES, FORMATIONS, FORMATION_CATALOG, FORMATIONS_BY_ID, parse_tactical_prompt
 
-from fm_app.fm26 import ROLES, IP_POOLS, OOP_POOLS, player_instructions, team_instructions
+POS_NAMES_ES = {
+    'GK': 'Arquero / Portero (POR)',
+    'DL': 'Lateral izquierdo (LTI)',
+    'DR': 'Lateral derecho (LTD)',
+    'DC': 'Defensa central (DFC)',
+    'WBL': 'Carrilero izquierdo (CRI)',
+    'WBR': 'Carrilero derecho (CRD)',
+    'DM': 'Pivote defensivo (MCD)',
+    'MC': 'Mediocentro (MC)',
+    'ML': 'Volante izquierdo (MI)',
+    'MR': 'Volante derecho (MD)',
+    'AMC': 'Mediapunta central (MP)',
+    'AML': 'Extremo izquierdo (EXI)',
+    'AMR': 'Extremo derecho (EXD)',
+    'STC': 'Delantero centro (DLC)',
+    'ST': 'Delantero centro (DLC)',
+}
+
+POS_CODES_ES = {
+    'GK': 'POR', 'DL': 'LTI', 'DR': 'LTD', 'DC': 'DFC',
+    'WBL': 'CRI', 'WBR': 'CRD', 'DM': 'MCD', 'MC': 'MC',
+    'ML': 'MI', 'MR': 'MD', 'AMC': 'MP', 'AML': 'EXI',
+    'AMR': 'EXD', 'STC': 'DLC', 'ST': 'DLC'
+}
+
+POS_SHORT_ES = {
+    'GK': 'Arquero', 'DL': 'Lateral izq.', 'DR': 'Lateral der.', 'DC': 'Defensa central',
+    'WBL': 'Carrilero izq.', 'WBR': 'Carrilero der.', 'DM': 'Pivote defensivo', 'MC': 'Mediocentro',
+    'ML': 'Volante izq.', 'MR': 'Volante der.', 'AMC': 'Mediapunta', 'AML': 'Extremo izq.',
+    'AMR': 'Extremo der.', 'STC': 'Delantero centro', 'ST': 'Delantero centro'
+}
+
+MONTHS_ES = ['', 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
+
+def format_date_es(date_str):
+    if not date_str:
+        return 'Fin de temporada'
+    try:
+        parts = str(date_str).split('-')
+        if len(parts) == 3:
+            y, m, d = parts
+            return f"{int(d)} {MONTHS_ES[int(m)]} {y}"
+    except Exception:
+        pass
+    return str(date_str)
+
+
+from fm_app.fm26 import ROLES, ROLE_ABBREV, IP_POOLS, OOP_POOLS, player_instructions, team_instructions
 
 
 
@@ -541,6 +588,8 @@ def explanation(player,choice,style):
             'menu_verified_es':r['menu_verified_es'],'spanish_source':r['spanish_source'],
 
             'localization':r['localization'],
+            'role_abbrev':ROLE_ABBREV.get(r['id'],'JUG'),
+            'position_es':POS_CODES_ES.get(position.upper(),position),
 
             'tactical_summary':TACTICAL_SUMMARY.get(r['id'],''),
 
@@ -791,7 +840,7 @@ def analyze(dataset,style='possession',primary_slot=0,excluded=(),prompt=None):
 
             beaten = [
 
-                {'uid': l['uid'], 'name': byid[l['uid']]['name'], 'position': l['in_possession']['position'], 'score': l['score']}
+                {'uid': l['uid'], 'name': byid[l['uid']]['name'], 'position': l['in_possession']['position'], 'position_es': POS_CODES_ES.get(l['in_possession']['position'].upper(), l['in_possession']['position']), 'score': l['score']}
 
                 for l in lineup if bprof['score'] > l['score']
 
@@ -809,6 +858,8 @@ def analyze(dataset,style='possession',primary_slot=0,excluded=(),prompt=None):
 
                 'natural_positions': bp.get('natural_positions', []),
 
+                'natural_positions_es': [POS_CODES_ES.get(np.upper(), np) for np in bp.get('natural_positions', [])],
+
                 'score': bprof['score'],
 
                 'role_name': bprof['role_name'],
@@ -818,6 +869,8 @@ def analyze(dataset,style='possession',primary_slot=0,excluded=(),prompt=None):
                 'replaces_name': target_p['name'] if target_p else None,
 
                 'replaces_position': best_target['in_possession']['position'] if best_target else None,
+
+                'replaces_position_es': POS_CODES_ES.get(best_target['in_possession']['position'].upper(), best_target['in_possession']['position']) if best_target else None,
 
                 'replaces_role': best_target['role'] if best_target else None,
 
@@ -936,13 +989,16 @@ def analyze(dataset,style='possession',primary_slot=0,excluded=(),prompt=None):
 
 
 
-def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profiles):
+def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profiles, byid=None):
     """
-    Evaluates squad depth and weaknesses for a specific formation.
+    Evaluates squad depth and weaknesses for a specific formation in Spanish.
     Identifies weak positions (low rating or adapting) and missing squad backups.
     Evaluates whether any loaned player can be recalled (repescar cesión) to fill
     the position without transfer fees, or outlines the target market scouting profile.
     """
+    if byid is None:
+        byid = {p['uid']: p for p in seniors + loans}
+
     pos_map = {
         'GK': ['gk'], 'DL': ['dl', 'wbl'], 'DC': ['dc'], 'DR': ['dr', 'wbr'],
         'WBL': ['wbl', 'dl'], 'WBR': ['wbr', 'dr'],
@@ -991,12 +1047,18 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
 
         issues = []
         worst_starter = min(pos_starters, key=lambda x: x['score'])
+        starter_p = byid.get(worst_starter['uid'])
+        starter_name = starter_p['name'] if starter_p else 'Titular del once'
+        pos_es = POS_NAMES_ES.get(pos, pos)
+        pos_code = POS_CODES_ES.get(pos, pos)
+        pos_short = POS_SHORT_ES.get(pos, pos)
+
         if worst_starter['familiarity'] < 15:
-            issues.append(f"El titular adapta de puesto (familiaridad {worst_starter['familiarity']}/20).")
+            issues.append(f"El titular {starter_name} adapta de puesto (familiaridad {worst_starter['familiarity']}/20 en {pos_es}).")
         if worst_starter['score'] < 72.0:
-            issues.append(f"Puntuación baja de titular ({worst_starter['score']}/100) para la exigencia del esquema.")
+            issues.append(f"Puntuación baja de titular ({worst_starter['score']}/100 para {starter_name}) para la exigencia del esquema.")
         if len(backups) < len(pos_starters):
-            issues.append(f"Falta de recambio natural en el plantel ({len(backups)} suplente{'s' if len(backups)!=1 else ''} para {len(pos_starters)} puesto{'s' if len(pos_starters)!=1 else ''}).")
+            issues.append(f"Falta de recambio natural en el plantel ({len(backups)} suplente{'s' if len(backups)!=1 else ''} para {len(pos_starters)} puesto{'s' if len(pos_starters)!=1 else ''} en {pos_es}).")
 
         if issues:
             urgency = 'Alta' if (worst_starter['score'] < 68.0 or worst_starter['familiarity'] < 14 or len(backups) == 0) else 'Media'
@@ -1014,6 +1076,7 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                         'name': lp['name'],
                         'age': lp.get('age'),
                         'natural_positions': lp.get('natural_positions', []),
+                        'natural_positions_es': [POS_CODES_ES.get(np.upper(), np) for np in lp.get('natural_positions', [])],
                         'club_name': lp.get('club_name') or 'Club cesión',
                         'loan_end': lp.get('loan_end'),
                         'score': lprof['score'],
@@ -1034,16 +1097,15 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                 goles = cand['goals']
                 media = cand['rating']
                 vence = cand['loan_end']
+                exp_date_str = format_date_es(vence)
 
                 perf_str = f"{pj} PJ"
                 if goles > 0: perf_str += f", {goles} goles"
                 if media and media != '—': perf_str += f", media {media}"
 
-                exp_date_str = vence if vence else "Fin de temporada"
-
                 reason = (
                     f"Podés repescar a {cand['name']} (cedido en {cand['club_name']}, vence el {exp_date_str}). "
-                    f"Acumula rodaje oficial ({perf_str}) y encaja de forma natural en {pos} con índice {cand['score']}/100. "
+                    f"Acumula rodaje oficial ({perf_str}) y encaja de forma natural como {pos_es} con índice {cand['score']}/100. "
                     f"Cubre la posición de inmediato sin gastar presupuesto de fichajes."
                 )
 
@@ -1053,11 +1115,14 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                     'age': cand['age'],
                     'club_name': cand['club_name'],
                     'loan_end': cand['loan_end'],
+                    'loan_end_formatted': exp_date_str,
                     'appearances': pj,
                     'goals': goles,
                     'assists': cand['assists'],
                     'rating': media,
                     'score': cand['score'],
+                    'position_es': pos_code,
+                    'position_label': pos_es,
                     'reason': reason
                 })
 
@@ -1066,18 +1131,21 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                 req_attrs = key_attrs_by_pos.get(pos, ['passing', 'work_rate', 'stamina', 'teamwork'])
                 attr_labels = [ATTRS.get(a, a) for a in req_attrs[:4]]
                 market_profile = {
-                    'target_position': pos,
-                    'role_label': f"Especialista en {pos} para {form['name']}",
+                    'target_position': pos_code,
+                    'target_position_label': pos_es,
+                    'role_label': f"Especialista en {pos_es} para {form['name']}",
                     'key_attributes': attr_labels,
-                    'scouting_note': f"Buscar en el mercado un jugador para {pos}. Atributos clave recomendados en FM26: {', '.join(attr_labels)}. Priorizar jugadores con sacrificio físico y comprensión táctica."
+                    'scouting_note': f"Buscar en el mercado de fichajes un futbolista para {pos_es}. Atributos clave recomendados en FM26: {', '.join(attr_labels)}. Priorizar jugadores con sacrificio físico y comprensión táctica."
                 }
 
             weak_positions.append({
-                'position': pos,
-                'position_label': f"Puesto: {pos}",
+                'position': pos_code,
+                'position_raw': pos,
+                'position_label': pos_es,
+                'position_short': pos_short,
                 'urgency': urgency,
                 'current_starter': worst_starter['uid'],
-                'current_starter_name': worst_starter['in_possession']['name'],
+                'current_starter_name': starter_name,
                 'starter_score': worst_starter['score'],
                 'issues': issues,
                 'has_loan_recall': len(loan_recommendations) > 0,
@@ -1086,7 +1154,6 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
             })
 
     return weak_positions
-
 
 def simulate_formation(dataset, formation_id='352', style='possession', primary_slot=0, excluded=(), prompt=None):
     """
@@ -1170,7 +1237,7 @@ def simulate_formation(dataset, formation_id='352', style='possession', primary_
         quality = 'starter_level' if best_gap >= -1.5 else 'reliable' if best_gap >= -4.5 else 'rotation'
         quality_label = 'Nivel titular directo' if best_gap >= -1.5 else 'Recambio de garantías' if best_gap >= -4.5 else 'Opción de rotación'
         beaten = [
-            {'uid': l['uid'], 'name': byid[l['uid']]['name'], 'position': l['in_possession']['position'], 'score': l['score']}
+            {'uid': l['uid'], 'name': byid[l['uid']]['name'], 'position': l['in_possession']['position'], 'position_es': POS_CODES_ES.get(l['in_possession']['position'].upper(), l['in_possession']['position']), 'score': l['score']}
             for l in lineup if bprof['score'] > l['score']
         ]
         beaten.sort(key=lambda x: x['score'])
@@ -1179,11 +1246,13 @@ def simulate_formation(dataset, formation_id='352', style='possession', primary_
             'name': bp['name'],
             'age': bp.get('age'),
             'natural_positions': bp.get('natural_positions', []),
+            'natural_positions_es': [POS_CODES_ES.get(np.upper(), np) for np in bp.get('natural_positions', [])],
             'score': bprof['score'],
             'role_name': bprof['role_name'],
             'replaces_uid': best_target['uid'] if best_target else None,
             'replaces_name': target_p['name'] if target_p else None,
             'replaces_position': best_target['in_possession']['position'] if best_target else None,
+            'replaces_position_es': POS_CODES_ES.get(best_target['in_possession']['position'].upper(), best_target['in_possession']['position']) if best_target else None,
             'replaces_role': best_target['role'] if best_target else None,
             'replacement_score': round(best_eff, 1) if best_target else bprof['score'],
             'gap': round(best_gap, 1) if best_target else 0.0,
@@ -1192,7 +1261,7 @@ def simulate_formation(dataset, formation_id='352', style='possession', primary_
             'better_than_starters': beaten
         })
 
-    reinforcements = evaluate_formation_reinforcements(lineup, seniors, dataset['loans'], form, style, profiles)
+    reinforcements = evaluate_formation_reinforcements(lineup, seniors, dataset['loans'], form, style, profiles, byid=byid)
 
     natural_count = sum(1 for l in lineup if l['familiarity'] >= 18)
     adapted_count = 11 - natural_count
