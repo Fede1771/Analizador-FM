@@ -1,7 +1,11 @@
 # Touchline · Analizador FM26
 
-Aplicación de escritorio local e instalable para Football Manager 26.
-Analiza tu club, primer equipo, juveniles y cedidos en tiempo real, genera automáticamente el Top 3 de formaciones (con posesión y sin posesión), optimiza roles con la escala oficial de 7 mentalidades y 10 estilos de FM26, y se **sincroniza automáticamente en vivo cada vez que guardás tu partida** en el juego.
+> **Finalidad de la aplicación:**
+> *"Le pasás tu partida de Football Manager 26 y, mientras vas jugando y guardando con el software abierto, va leyendo automáticamente tu archivo de guardado en vivo. En base a los jugadores que tenés (titulares, suplentes, jóvenes prospectos e inferiores, y cedidos), te recomienda el mejor jugador para cada puesto en las mejores formaciones tanto con posesión como sin posesión. Y si le escribís con tus propias palabras pidiéndole jugar de otra forma, adapta todo el análisis, los roles y las 26 instrucciones de equipo al instante."*
+
+---
+
+Aplicación de escritorio local e instalable para Football Manager 26. Procesa todo en tu equipo, sin enviar tus datos a servidores externos y sin consolas abiertas.
 
 ---
 
