@@ -79,12 +79,22 @@ def main():
 
     def cleanup():
         logger.info("Cerrando servidor y servicios en segundo plano...")
-        if hasattr(server, 'watcher') and server.watcher:
-            server.watcher.stop()
-        server.shutdown()
-        server.server_close()
-        server.state.executor.shutdown(wait=False)
-        logger.info("Analizador FM cerrado correctamente.")
+        try:
+            if hasattr(server, 'watcher') and server.watcher:
+                server.watcher.stop()
+        except Exception:
+            pass
+        try:
+            server.shutdown()
+            server.server_close()
+        except Exception:
+            pass
+        try:
+            server.state.executor.shutdown(wait=False)
+        except Exception:
+            pass
+        logger.info("Touchline cerrado correctamente.")
+        os._exit(0)
 
     if args.browser_only:
         webbrowser.open(app_url)
@@ -111,6 +121,7 @@ def main():
             text_select=True,
             confirm_close=False
         )
+        window.events.closed += cleanup
         
         # Start webview; this call blocks until the user closes the window
         webview.start(icon=icon_path if os.path.exists(icon_path) else None)
@@ -124,7 +135,6 @@ def main():
             pass
     finally:
         cleanup()
-        sys.exit(0)
 
 
 if __name__ == '__main__':

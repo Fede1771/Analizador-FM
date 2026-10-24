@@ -15,10 +15,10 @@ Esto crea un acceso directo en tu Escritorio de Windows llamado:
 **`Touchline - Analizador FM26`** con su propio ícono táctico.
 
 ### 2. Iniciar la aplicación
-- Hacé **doble clic en el acceso directo de tu Escritorio** (o en `Iniciar_Analizador_FM.bat`).
-- La aplicación se abre directamente como una **ventana nativa de escritorio de Windows**.
-- **Sin consolas negras de fondo**: Se ejecuta con `pythonw.exe`.
-- **Al cerrar la ventana**: La aplicación y todos sus servicios en segundo plano se detienen por completo. No queda nada consumiendo memoria ni procesador mientras no la estés usando.
+- Hacé **doble clic en el acceso directo de tu Escritorio** (o en `Touchline.bat` dentro de la carpeta).
+- La aplicación arranca de inmediato en una **ventana nativa de escritorio**.
+- **Sin consolas negras de fondo**: Se ejecuta limpiamente con `pythonw.exe`.
+- **Apagado automático al cerrar**: En el instante en que cerrás la ventana, la aplicación, el servidor local y el monitor de partidas se detienen y cierran por completo. No queda ningún proceso en segundo plano.
 
 ---
 
@@ -41,17 +41,17 @@ La aplicación monitorea de forma nativa tu carpeta de guardados de FM26:
 
 - **Planteo en lenguaje natural**: Escribí cómo querés que juegue tu equipo (ej.: *"Quiero jugar con mucha posesión e intentar tener muchas chances de gol y evitar que me rematen mucho al arco"*). El motor interpreta tu idea, asigna el estilo FM26 oficial y optimiza las instrucciones.
 - **Top 3 de mejores formaciones**: Comparación con y sin posesión (`4-3-3`, `4-2-3-1`, `4-4-2`, etc.), con puntuación de encaje sobre 100 y alineación titular óptima.
+- **Banco de suplentes y mejores recambios**: Debajo de la cancha táctica, indica para cada suplente a qué titular reemplaza con mejor nivel táctico y la diferencia de encaje.
 - **Roles actuales vs. recomendados**: Comparación de la función natural del jugador y la función táctica recomendada.
 - **Instrucciones completas de equipo**: 26 instrucciones oficiales divididas en Con posesión (Creación de oportunidades, Avance, Último tercio) y Sin posesión (Líneas y bloque, Presión y recuperación, Trampas y centros).
 - **Estilos y Mentalidades oficiales FM26**: Escala oficial de 7 mentalidades (*Muy defensiva*, *Defensivo*, *Cauta*, *Equilibrada*, *Positiva*, *Ofensivo*, *Muy ofensiva*) y 10 estilos tácticos.
 
 ---
 
-## 🛠️ Herramientas de control y comandos
+## 🛠️ Ejecución y Pruebas
 
-- **`Iniciar_Analizador_FM.bat`**: Inicia la aplicación de escritorio.
-- **`Detener_Analizador_FM.bat`**: Detiene cualquier proceso local en ejecución.
-- **`iniciar.cmd`**: Acceso directo de inicio en la carpeta raíz.
+- **`Touchline.bat`**: Inicia la aplicación de escritorio directamente.
+- **`Instalar_Analizador_FM.bat`**: Crea el acceso directo en el Escritorio.
 
 ### Validación y pruebas
 ```powershell
