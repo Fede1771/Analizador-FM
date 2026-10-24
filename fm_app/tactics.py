@@ -131,6 +131,25 @@ INTENTS = {
 }
 
 
+_NEGATION = re.compile(r'\b(?:no|sin|evitar|evita|nunca)\b(?P<scope>(?:\s+\w+){0,6})\s*$')
+_POSSESSION_LOSS = re.compile(
+    r'\b(?:perder|perdamos|pierda(?:s|n)?|perdidas?|rifar|regalar)\b'
+    r'(?:\s+(?:el|la|los|las|de|del|su|nuestra|nuestro|control|posesion|mucho|mas|tanto|nunca)){0,4}\s*$'
+)
+
+
+def _intent_is_negated(key, prefix):
+    if key == 'defense':
+        return False
+    negation = _NEGATION.search(prefix)
+    if not negation:
+        return False
+    # The negation targets losing the ball, rather than possession itself.
+    if key == 'possession' and _POSSESSION_LOSS.search(negation.group('scope')):
+        return False
+    return True
+
+
 def parse_tactical_prompt(text):
     """Deterministic rules with clause-local negation and explicit conflict resolution."""
     if not text or not text.strip():
@@ -142,7 +161,7 @@ def parse_tactical_prompt(text):
     for key, (pattern, title, badge) in INTENTS.items():
         for match in re.finditer(pattern, norm):
             prefix = re.split(r'[,;.!?]|\b(?:pero|aunque|y)\b', norm[:match.start()])[-1]
-            negated = key != 'defense' and bool(re.search(r'\b(?:no|sin|evitar|evita|nunca)\b(?:\s+\w+){0,6}\s*$', prefix))
+            negated = _intent_is_negated(key, prefix)
             # A defensive request such as "evitar remates" is not an attacking request.
             if key == 'chances' and re.search(r'(?:evitar|no|pocos).{0,35}$', prefix):
                 continue

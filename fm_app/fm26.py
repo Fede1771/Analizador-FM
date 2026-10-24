@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 
-ENGINE_VERSION=8
+ENGINE_VERSION=9
 
 CATALOG=json.loads((Path(__file__).parent/'data/fm26_catalog.json').read_text(encoding='utf-8'))
 

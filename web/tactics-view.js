@@ -18,9 +18,20 @@ export function formationCards(tactics, selectedId) {
   return `<div class="formation-grid">${tactics.map((t,index)=>`<button class="formation-card ${selectedId===t.id?'selected':''}" id="formation-${t.id}" data-formation="${t.id}" aria-pressed="${selectedId===t.id}"><span class="eyebrow">${index+1}. ${index===0?'Mayor encaje':'Alternativa'}</span><div class="split"><strong>${esc(t.name)}</strong>${score(t.score)}</div><small>${esc(t.defensive)} sin posesión</small><p>${esc(t.idea)}</p></button>`).join('')}</div>`;
 }
 
-export function instructions(tactic, data, prefs) {
+export function instructions(tactic, data, prefs, draft = {}) {
+  const pendingCount = Object.keys(draft).length;
+  const instruction = item => {
+    const applied = prefs.overrides[item.id] ?? item.value_en;
+    const selected = draft[item.id] ?? applied;
+    const origin = Object.hasOwn(draft, item.id) ? 'Cambio pendiente'
+      : prefs.overrides[item.id] ? 'Ajuste manual' : item.origin === 'prompt' ? 'Pedido aplicado' : 'Propuesta';
+    return `<article class="instruction"><label for="override-${item.id}">${esc(item.property)} <small>${origin}</small></label>
+      <select id="override-${item.id}" data-override="${item.id}" data-applied="${esc(applied)}">${(data.instruction_options[item.id] || []).map(option => `<option value="${esc(option.value)}" ${option.value === selected ? 'selected' : ''}>${esc(option.label)}</option>`).join('')}</select>
+      <p>${esc(item.reason)}</p></article>`;
+  };
   return `<details class="panel"><summary>Instrucciones de equipo · ${tactic.instructions.length} ajustes</summary><p class="muted">Las etiquetas proceden del catálogo FM26; las elecciones y el índice de encaje son recomendaciones de Touchline.</p>
-    <div class="instruction-grid">${['in_possession','out_of_possession'].map(phase=>`<section><h3>${phase==='in_possession'?'Con posesión':'Sin posesión'}</h3>${tactic.instructions.filter(i=>i.phase===phase).map(i=>`<article class="instruction"><label for="override-${i.id}">${esc(i.property)} <small>${prefs.overrides[i.id]?'Ajuste manual':i.origin==='prompt'?'Pedido aplicado':'Propuesta'}</small></label><select id="override-${i.id}" data-override="${i.id}">${(data.instruction_options[i.id]||[]).map(o=>`<option value="${esc(o.value)}" ${o.value===(prefs.overrides[i.id]??i.value_en)?'selected':''}>${esc(o.label)}</option>`).join('')}</select><p>${esc(i.reason)}</p></article>`).join('')}</section>`).join('')}</div>
+    ${pendingCount ? `<p class="notice" data-pending-overrides role="status">Tenés ${pendingCount} ${pendingCount === 1 ? 'cambio sin aplicar' : 'cambios sin aplicar'}. Revisá los valores y pulsá “Aplicar ajustes” para actualizar la propuesta.</p>` : ''}
+    <div class="instruction-grid">${['in_possession', 'out_of_possession'].map(phase => `<section><h3>${phase === 'in_possession' ? 'Con posesión' : 'Sin posesión'}</h3>${tactic.instructions.filter(item => item.phase === phase).map(instruction).join('')}</section>`).join('')}</div>
     <div class="actions"><button class="button primary" data-action="apply-overrides">Aplicar ajustes</button><button class="button" data-action="clear-overrides">Restablecer ajustes manuales</button></div></details>`;
 }
 
@@ -35,5 +46,5 @@ export function tacticResult(tactic, state) {
     ${tactic.reinforcements.map(r=>`<article class="reinforcement"><div class="split"><h4>${esc(r.position_label)}</h4><span class="tag">Prioridad ${esc(r.urgency.toLowerCase())}</span></div><p>${esc(r.issues.join(' '))}</p>${r.loan_recalls.length ? r.loan_recalls.map(c=>`<p><button class="text-button" data-player="${c.player_uid}">${esc(c.player_name)}</button> · ${number(c.score)} de encaje en este puesto. ${c.appearances == null ? 'Partidos sin verificar' : c.appearances+' PJ'} · media ${number(c.rating,2)}.</p>`).join('') + '<p class="muted">Alternativas sujetas a cláusulas, fechas, costos e inscripción en FM. Cada jugador puede cubrir un puesto a la vez.</p>' : `<p>${esc(r.market_profile?.scouting_note || 'Revisá las inferiores y el mercado.')}</p>`}</article>`).join('')}
     <details><summary>Riesgos y límites de la propuesta</summary><ul>${tactic.risks.map(r=>`<li>${esc(r)}</li>`).join('')}</ul><p>Confirmá lesiones, sanciones, inscripción, carga de partidos y el rival dentro de FM.</p></details></section>
     <section class="panel"><h3>Banco y cobertura</h3><p class="muted">Hasta nueve suplentes, priorizando arquero y cobertura del once. Las diferencias se calculan para el mismo puesto y ambas fases.</p><div class="table-scroll"><table><thead><tr><th scope="col">Jugador</th><th scope="col">Mejor reemplazo</th><th scope="col">Encaje en el puesto</th><th scope="col">Diferencia</th><th scope="col">Evaluación</th></tr></thead><tbody>${tactic.bench_replacements.map(b=>`<tr><td>${playerButton(byId.get(b.uid))}</td><td>${esc(b.replaces_name)}<small>${esc(b.replaces_role)}</small></td><td>${number(b.replacement_score)}</td><td>${b.gap==null?'—':`${b.gap>0?'+':''}${number(b.gap)}`}</td><td>${esc(b.quality_label)}</td></tr>`).join('')}</tbody></table></div></section>
-    ${instructions(tactic,data,prefs)}`;
+    ${instructions(tactic,data,prefs,state.overrideDraft)}`;
 }

@@ -76,6 +76,46 @@ class EngineRegressions(unittest.TestCase):
         self.assertEqual(parse_tactical_prompt('Presión alta, recuperar rápido')['team_overrides']['defensive_transition_oop'],'Counter-Press')
         self.assertEqual(parse_tactical_prompt('Control del balón sin contraataques')['team_overrides']['attacking_transition_ip'],'Hold Shape')
 
+    def test_avoiding_loss_means_keeping_possession(self):
+        prompts = (
+            'No quiero perder posesión',
+            'No quiero perder el balón',
+            'Quiero mantener la posesión sin perder el balón',
+            'Quiero evitar perder la pelota',
+            'Evitar la pérdida de posesión',
+            'Sin pérdidas de balón',
+            'No quiero que el equipo pierda el balón',
+            'Que no se nos pierda la pelota',
+            'No quiero perder el control del balón',
+        )
+        for prompt in prompts:
+            with self.subTest(prompt=prompt):
+                parsed = parse_tactical_prompt(prompt)
+                self.assertEqual(parsed['recommended_style'], 'possession')
+                self.assertIn('possession', parsed['recognized'])
+                self.assertNotIn('possession', parsed['avoided'])
+                self.assertEqual(parsed['team_overrides']['passing_directness'], 'Shorter')
+                self.assertEqual(parsed['team_overrides']['tempo'], 'Lower')
+
+    def test_possession_negations_remain_local_to_their_intent(self):
+        for prompt in ('No quiero posesión', 'Quiero evitar la posesión', 'Sin control del balón'):
+            with self.subTest(prompt=prompt):
+                parsed = parse_tactical_prompt(prompt)
+                self.assertIn('possession', parsed['avoided'])
+                self.assertEqual(parsed['team_overrides']['passing_directness'], 'More Direct')
+        parsed = parse_tactical_prompt('No quiero presión alta, quiero mantener posesión sin perder el balón')
+        self.assertIn('press', parsed['avoided'])
+        self.assertNotIn('possession', parsed['avoided'])
+        self.assertEqual(parsed['team_overrides']['passing_directness'], 'Shorter')
+        self.assertEqual(parsed['team_overrides']['line_of_engagement_oop'], 'Mid Block')
+
+    def test_keep_possession_request_reaches_team_instructions(self):
+        result = analyze(self.data, prompt='No quiero perder posesión')
+        for tactic in result['tactics']:
+            instructions = {i['id']: i['value_en'] for i in tactic['instructions']}
+            self.assertEqual(instructions['passing_directness'], 'Shorter')
+            self.assertEqual(instructions['tempo'], 'Lower')
+
     def test_unknown_stats_are_distinct_from_zero(self):
         self.assertIsNone(normalize_stats({})['goals'])
         self.assertEqual(normalize_stats({'goals':0})['goals'],0)

@@ -228,7 +228,11 @@ document.addEventListener('change',event=>{
   Promise.resolve().then(async()=>{
     if(input.id==='style-select') {state.prefs.style=input.value;state.prefs.prompt='';state.prefs.overrides={};await refresh();}
     if(input.id==='formation-select') {state.prefs.formation=input.value;await refresh();}
-    if(input.dataset.override)state.overrideDraft[input.dataset.override]=input.value;
+    if(input.dataset.override) {
+      if(input.value===input.dataset.applied)delete state.overrideDraft[input.dataset.override];
+      else state.overrideDraft[input.dataset.override]=input.value;
+      render();
+    }
     if(input.dataset.available) {const id=Number(input.dataset.available);state.prefs.excluded=input.checked?state.prefs.excluded.filter(x=>x!==id):[...new Set([...state.prefs.excluded,id])];await refresh();}
     if(input.id==='group-filter'||input.id==='sort-order') {state.filters[input.id==='group-filter'?'group':'order']=input.value;$('#results').innerHTML=playerRows(state,state.view);}
   }).catch(error=>toast(error.message,true));

@@ -67,6 +67,55 @@ try {
   await check('startup and overview',async()=>{await wait(`document.querySelector('h1')?.textContent==='Club de prueba' && document.querySelectorAll('.formation-card').length===3`,'overview');});
   await check('unified tactics and eleven players',async()=>{await navigate('tactics');await ready();assert.equal(await evaluate(`document.querySelectorAll('.pitch-player').length`),11);});
   await check('formation simulation and localized controls',async()=>{await set('#formation-select','352');await ready();assert.ok(await evaluate(`document.querySelector('.result-heading h2').textContent.includes('3-5-2')`));assert.ok(await evaluate(`document.querySelector('#override-tempo').options[0].textContent.includes('bajo')`));});
+  await check('pending instructions survive phase changes and navigation',async()=>{
+    await evaluate(`document.querySelector('#override-tempo').closest('details').open=true`);
+    const original=await evaluate(`document.querySelector('#override-tempo').value`);
+    const options=await evaluate(`Array.from(document.querySelector('#override-tempo').options).map(o=>o.value)`);
+    const chosen=options.find(o=>o!==original);
+    await set('#override-tempo',chosen);
+    for(const phase of ['oop','ip']) {
+      await evaluate(`document.querySelector('#phase-${phase}').click()`);
+      assert.equal(await evaluate(`document.querySelector('#override-tempo').value`),chosen);
+    }
+    await navigate('overview');await navigate('tactics');await ready();
+    assert.equal(await evaluate(`document.querySelector('#override-tempo').value`),chosen);
+    assert.equal(await evaluate(`document.querySelector('#override-tempo').closest('.instruction').querySelector('label small').textContent`),'Cambio pendiente');
+    assert.equal(await evaluate(`document.querySelector('[data-pending-overrides]').textContent.includes('1 cambio sin aplicar')`),true);
+    assert.notEqual(await evaluate(`fetch('/api/preferences').then(r=>r.json()).then(p=>p.overrides.tempo)`),chosen);
+    await evaluate(`document.querySelector('[data-action="apply-overrides"]').click()`);await ready();
+    assert.equal(await evaluate(`document.querySelector('#override-tempo').value`),chosen);
+    await wait(`fetch('/api/preferences').then(r=>r.json()).then(p=>p.overrides.tempo===${JSON.stringify(chosen)})`,'manual instruction persisted');
+    assert.equal(await evaluate(`document.querySelector('[data-pending-overrides]')===null`),true);
+  });
+  await check('returning to applied instruction removes pending change',async()=>{
+    await evaluate(`document.querySelector('#override-tempo').closest('details').open=true`);
+    const applied=await evaluate(`document.querySelector('#override-tempo').value`);
+    const other=await evaluate(`Array.from(document.querySelector('#override-tempo').options).map(o=>o.value).find(o=>o!==${JSON.stringify(applied)})`);
+    await set('#override-tempo',other);await set('#override-tempo',applied);
+    await evaluate(`document.querySelector('#phase-oop').click()`);
+    assert.equal(await evaluate(`document.querySelector('#override-tempo').value`),applied);
+    assert.equal(await evaluate(`document.querySelector('[data-pending-overrides]')===null`),true);
+  });
+  await check('reset manual instructions discards the pending draft',async()=>{
+    const applied=await evaluate(`document.querySelector('#override-tempo').value`);
+    const other=await evaluate(`Array.from(document.querySelector('#override-tempo').options).map(o=>o.value).find(o=>o!==${JSON.stringify(applied)})`);
+    await set('#override-tempo',other);
+    await evaluate(`document.querySelector('[data-action="clear-overrides"]').click()`);await ready();
+    await wait(`fetch('/api/preferences').then(r=>r.json()).then(p=>Object.keys(p.overrides).length===0)`,'manual instructions reset');
+    const reset=await evaluate(`document.querySelector('#override-tempo').value`);
+    await evaluate(`document.querySelector('#phase-ip').click()`);
+    assert.equal(await evaluate(`document.querySelector('#override-tempo').value`),reset);
+    assert.equal(await evaluate(`document.querySelector('[data-pending-overrides]')===null`),true);
+  });
+  await check('avoiding possession loss keeps short passing in the UI',async()=>{
+    await evaluate(`document.querySelector('#prompt-details').open=true`);
+    await set('#prompt-input','Quiero mantener la posesión sin perder el balón','input');
+    await evaluate(`document.querySelector('[data-action="apply-prompt"]').click()`);await ready();
+    assert.equal(await evaluate(`document.querySelector('#style-select').value`),'possession');
+    assert.equal(await evaluate(`document.querySelector('#override-passing_directness').value`),'Shorter');
+    assert.equal(await evaluate(`document.querySelector('#override-tempo').value`),'Lower');
+    assert.equal(await evaluate(`document.querySelector('.interpretation').textContent.includes('Evitar: possession')`),false);
+  });
   await check('negative pressure request',async()=>{await evaluate(`document.querySelector('#prompt-details').open=true`);await set('#prompt-input','No quiero presión alta','input');await evaluate(`document.querySelector('[data-action="apply-prompt"]').click()`);await ready();assert.equal(await evaluate(`document.querySelector('#style-select').value`),'possession');assert.notEqual(await evaluate(`document.querySelector('#override-line_of_engagement_oop').value`),'High Press');});
   await check('pressing request retains counterpress',async()=>{await set('#prompt-input','Presión alta, recuperar rápido','input');await evaluate(`document.querySelector('[data-action="apply-prompt"]').click()`);await ready();assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');assert.equal(await evaluate(`document.querySelector('#override-defensive_transition_oop').value`),'Counter-Press');});
   await check('player plan dialog',async()=>{await evaluate(`document.querySelector('.pitch-player').click()`);assert.ok(await evaluate(`document.querySelector('#dialog').open`));assert.equal(await evaluate(`document.querySelectorAll('.role-plan').length`),2);await evaluate(`document.querySelector('#dialog-close').click()`);});
