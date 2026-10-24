@@ -1,0 +1,1 @@
+"""Local Football Manager assistant."""

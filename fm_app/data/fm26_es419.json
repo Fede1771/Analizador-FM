@@ -1,0 +1,4382 @@
+{
+  "locale": "es-419",
+  "language": "Español latinoamericano",
+  "game_version": "26.3.2",
+  "steam_build": "23583635",
+  "source": "languages.fmf / spanish (latam).ltc",
+  "sha256": {
+    "archive": "b9d4cf27d6115cb9daffbd4038493e39693618c4c44bb4093fba34de33b69723",
+    "english": "9bf545147b2143a07d98ab90058cb136d55ab4840a3731fe64df9ab3a3a6b997",
+    "latam": "293ba893c8f9a4df25ef702dd6f09077257254ab129cfbd2578d5a03c25e9ae5",
+    "template": "5002d26e9af1df1de52147218d618156d7c714ebf14c69dad21ca6750de0ea6d"
+  },
+  "verification": "Resource strings and verified in-game screenshots of FM26 26.3.2 tactics menus (es-419).",
+  "roles": {
+    "goalkeeper": {
+      "key": 688068,
+      "token": 269123524,
+      "offset": 31566025,
+      "english": "Goalkeeper",
+      "text": "Portero",
+      "forms": [
+        "Portero",
+        "Portera"
+      ],
+      "raw_forms": [
+        "Portero[%male#1-hidden]",
+        "Portera[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Portero",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "ball_playing_goalkeeper": {
+      "key": 688113,
+      "token": 269123569,
+      "offset": 31569308,
+      "english": "Ball-Playing Goalkeeper",
+      "text": "Portero con salida",
+      "forms": [
+        "Portero jugador",
+        "Portera jugadora"
+      ],
+      "raw_forms": [
+        "Portero jugador[%male#1-hidden]",
+        "Portera jugadora[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696150,
+          "token": 269131606,
+          "offset": 32997688,
+          "english": "ball playing goalkeeper",
+          "text": "portero con juego de pies",
+          "forms": [
+            "portero con juego de pies",
+            "portera con juego de pies"
+          ],
+          "raw_forms": [
+            "portero con juego de pies[%male#1-hidden]",
+            "portera con juego de pies[%female#1-hidden]"
+          ],
+          "context": "AREA: tactics; NOTE: goalkeeper position role",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688113,
+          "text": "Portero jugador",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Portero jugador",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "no_nonsense_goalkeeper": {
+      "key": 688114,
+      "token": 269123570,
+      "offset": 31569382,
+      "english": "No Nonsense Goalkeeper",
+      "text": "Portero práctico",
+      "forms": [
+        "Portero práctico",
+        "Portera práctica"
+      ],
+      "raw_forms": [
+        "Portero práctico[%male#1-hidden]",
+        "Portera práctica[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696151,
+          "token": 269131607,
+          "offset": 32997781,
+          "english": "no nonsense goalkeeper",
+          "text": "portero con criterio",
+          "forms": [
+            "portero con criterio",
+            "portera con criterio"
+          ],
+          "raw_forms": [
+            "portero con criterio[%male#1-hidden][%male#1-hidden]",
+            "portera con criterio[%female#1-hidden][%female#1-hidden]"
+          ],
+          "context": "AREA: tactics; NOTE: goalkeeper position role",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Portero práctico",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "sweeper_keeper": {
+      "key": 688070,
+      "token": 269123526,
+      "offset": 31566159,
+      "english": "Sweeper Keeper",
+      "text": "Portero líbero",
+      "forms": [
+        "Portero líbero",
+        "Portera líbera"
+      ],
+      "raw_forms": [
+        "Portero líbero[%male#1-hidden]",
+        "Portera líbera[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696159,
+          "token": 269131615,
+          "offset": 32998316,
+          "english": "Sweeper Keeper",
+          "text": "Portero cierre",
+          "forms": [
+            "Portero cierre",
+            "Portera cierre"
+          ],
+          "raw_forms": [
+            "Portero cierre[%male#1-hidden]",
+            "Portera cierre[%female#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Portero líbero",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "line_holding_keeper": {
+      "key": 688069,
+      "token": 269123525,
+      "offset": 31566082,
+      "english": "Line-Holding Goalkeeper",
+      "text": "Portero entre palos",
+      "forms": [
+        "Portero de línea",
+        "Portera de línea"
+      ],
+      "raw_forms": [
+        "Portero de línea[%male#1-hidden]",
+        "Portera de línea[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696160,
+          "token": 269131616,
+          "offset": 32998387,
+          "english": "Line-Holding Keeper",
+          "text": "Portero que se queda bajo palos",
+          "forms": [
+            "Portero que se queda bajo palos",
+            "Portera que se queda bajo palos"
+          ],
+          "raw_forms": [
+            "Portero que se queda bajo palos[%male#1-hidden]",
+            "Portera que se queda bajo palos[%female#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688069,
+          "text": "Portero de línea",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Portero de línea",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "centre_back": {
+      "key": 688071,
+      "token": 269123527,
+      "offset": 31566232,
+      "english": "Centre-Back",
+      "text": "Central",
+      "forms": [
+        "Defensa central"
+      ],
+      "raw_forms": [
+        "Defensa central[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696145,
+          "token": 269131601,
+          "offset": 32997393,
+          "english": "Centre-Back",
+          "text": "Central",
+          "forms": [
+            "Central"
+          ],
+          "raw_forms": [
+            "Central[%male#1-hidden]"
+          ],
+          "context": "AREA: player type; NOTE: this was central defender",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688071,
+          "text": "Defensa central",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Defensa central",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "ball_playing_centre_back": {
+      "key": 688116,
+      "token": 269123572,
+      "offset": 31569552,
+      "english": "Ball-Playing Centre-Back",
+      "text": "Central con salida",
+      "forms": [
+        "Central jugador",
+        "Central jugadora"
+      ],
+      "raw_forms": [
+        "Central jugador[%male#1-hidden]",
+        "Central jugadora[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696153,
+          "token": 269131609,
+          "offset": 32997973,
+          "english": "ball-playing centre-back",
+          "text": "central con buen juego de pies",
+          "forms": [
+            "central con buen juego de pies"
+          ],
+          "raw_forms": [
+            "central con buen juego de pies[%male#1-hidden]"
+          ],
+          "context": "AREA: tactics; NOTE: this was ball playing defender",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688116,
+          "text": "Central jugador",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Central jugador",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "no_nonsense_center_back": {
+      "key": 688129,
+      "token": 269123585,
+      "offset": 31570477,
+      "english": "No-Nonsense Centre-Back",
+      "text": "Central práctico",
+      "forms": [
+        "Central práctico",
+        "Central práctica"
+      ],
+      "raw_forms": [
+        "Central práctico[%male#1-hidden]",
+        "Central práctica[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role, formerly 414500 Defensive Centre Back - this was changed so the role doesn't refer to mentality, and reflects a player who primarily deals with his defensive duties in a simple manner rather than trying to play beyond his capabilities",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Central práctico",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "covering_centre_back": {
+      "key": 688072,
+      "token": 269123528,
+      "offset": 31566268,
+      "english": "Covering Centre-Back",
+      "text": "Central de cobertura",
+      "forms": [
+        "Defensa central con cobertura"
+      ],
+      "raw_forms": [
+        "Defensa central con cobertura[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696162,
+          "token": 269131618,
+          "offset": 32998569,
+          "english": "Covering Centre-Back",
+          "text": "Central de cobertura",
+          "forms": [
+            "Central de cobertura"
+          ],
+          "raw_forms": [
+            "Central de cobertura[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688072,
+          "text": "Defensa central con cobertura",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Defensa central con cobertura",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "full_back": {
+      "key": 688077,
+      "token": 269123533,
+      "offset": 31566702,
+      "english": "Full-Back",
+      "text": "Lateral",
+      "forms": [
+        "Lateral"
+      ],
+      "raw_forms": [
+        "Lateral[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Lateral",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "pressing_full_back": {
+      "key": 688079,
+      "token": 269123535,
+      "offset": 31566773,
+      "english": "Pressing Full-Back",
+      "text": "Lateral presionante",
+      "forms": [
+        "Lateral presionador",
+        "Lateral presionadora"
+      ],
+      "raw_forms": [
+        "Lateral presionador[%male#1-hidden]",
+        "Lateral presionadora[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696165,
+          "token": 269131621,
+          "offset": 32998806,
+          "english": "Pressing Full-Back",
+          "text": "Lateral presionante",
+          "forms": [
+            "Lateral presionante"
+          ],
+          "raw_forms": [
+            "Lateral presionante[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688079,
+          "text": "Lateral presionador",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Lateral presionador",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "holding_full_back": {
+      "key": 688078,
+      "token": 269123534,
+      "offset": 31566730,
+      "english": "Holding Full-Back",
+      "text": "Lateral de contención",
+      "forms": [
+        "Lateral de contención"
+      ],
+      "raw_forms": [
+        "Lateral de contención[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696166,
+          "token": 269131622,
+          "offset": 32998846,
+          "english": "Holding Full-Back",
+          "text": "Lateral defensivo",
+          "forms": [
+            "Lateral defensivo",
+            "Lateral defensiva"
+          ],
+          "raw_forms": [
+            "Lateral defensivo[%male#1-hidden]",
+            "Lateral defensiva[%female#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Lateral de contención",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "wing_back": {
+      "key": 688080,
+      "token": 269123536,
+      "offset": 31566855,
+      "english": "Wing-Back",
+      "text": "Carrilero",
+      "forms": [
+        "Carrilero",
+        "Carrilera"
+      ],
+      "raw_forms": [
+        "Carrilero[%male#1-hidden]",
+        "Carrilera[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Carrilero",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "pressing_wing_back": {
+      "key": 688082,
+      "token": 269123538,
+      "offset": 31567015,
+      "english": "Pressing Wing-Back",
+      "text": "Carrilero presionante",
+      "forms": [
+        "Carrilero presionante",
+        "Carrilera presionante"
+      ],
+      "raw_forms": [
+        "Carrilero presionante[%female#1-hidden][%male#1-hidden]",
+        "Carrilera presionante[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696167,
+          "token": 269131623,
+          "offset": 32998923,
+          "english": "Pressing Wing-Back",
+          "text": "Carrilero presionante",
+          "forms": [
+            "Carrilero presionante",
+            "Carrilera presionante"
+          ],
+          "raw_forms": [
+            "Carrilero presionante[%male#1-hidden]",
+            "Carrilera presionante[%female#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Carrilero presionante",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "holding_wing_back": {
+      "key": 688081,
+      "token": 269123537,
+      "offset": 31566916,
+      "english": "Holding Wing-Back",
+      "text": "Carrilero de contención",
+      "forms": [
+        "Carrilero defensivo",
+        "Carrilera defensiva"
+      ],
+      "raw_forms": [
+        "Carrilero defensivo[%female#1-hidden][%male#1-hidden]",
+        "Carrilera defensiva[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688081,
+          "text": "Carrilero defensivo",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Carrilero defensivo",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "defensive_midfielder": {
+      "key": 688083,
+      "token": 269123539,
+      "offset": 31567118,
+      "english": "Defensive Midfielder",
+      "text": "Mediocampista defensivo",
+      "forms": [
+        "Mediocentro defensivo",
+        "Mediocentro defensiva"
+      ],
+      "raw_forms": [
+        "Mediocentro defensivo[%male#1-hidden]",
+        "Mediocentro defensiva[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688083,
+          "text": "Mediocentro defensivo",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Mediocentro defensivo",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "deep_lying_playmaker": {
+      "key": 688119,
+      "token": 269123575,
+      "offset": 31569796,
+      "english": "Deep Lying Playmaker",
+      "text": "Organizador defensivo",
+      "forms": [
+        "pivote organizador",
+        "pivote organizadora"
+      ],
+      "raw_forms": [
+        "pivote organizador[%male#1-hidden]",
+        "pivote organizadora[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688119,
+          "text": "pivote organizador",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "pivote organizador",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "screening_defensive_midfielder": {
+      "key": 688086,
+      "token": 269123542,
+      "offset": 31567338,
+      "english": "Screening Defensive Midfielder",
+      "text": "Mediocentro fijo",
+      "forms": [
+        "mediocentro de pantalla"
+      ],
+      "raw_forms": [
+        "mediocentro de pantalla[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696170,
+          "token": 269131626,
+          "offset": 32999170,
+          "english": "Screening Defensive Midfielder",
+          "text": "Mediocampista defensivo de contención",
+          "forms": [
+            "Mediocampista defensivo de contención"
+          ],
+          "raw_forms": [
+            "Mediocampista defensivo de contención[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688086,
+          "text": "mediocentro de pantalla",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "mediocentro de pantalla",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "central_midfielder": {
+      "key": 688088,
+      "token": 269123544,
+      "offset": 31567533,
+      "english": "Central Midfielder",
+      "text": "Mediocampista",
+      "forms": [
+        "Centrocampista"
+      ],
+      "raw_forms": [
+        "Centrocampista[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688088,
+          "text": "Centrocampista",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Centrocampista",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "midfield_playmaker": {
+      "key": 688146,
+      "token": 269123602,
+      "offset": 31571534,
+      "english": "Midfield Playmaker",
+      "text": "Mediocampista organizador",
+      "forms": [
+        "centrocampista organizador",
+        "centrocampista organizadora"
+      ],
+      "raw_forms": [
+        "centrocampista organizador[%male#1-hidden]",
+        "centrocampista organizadora[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688146,
+          "text": "centrocampista organizador",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "centrocampista organizador",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "pressing_central_midfielder": {
+      "key": 688089,
+      "token": 269123545,
+      "offset": 31567568,
+      "english": "Pressing Central Midfielder",
+      "text": "Mediocampista presionante",
+      "forms": [
+        "centrocampista presionador",
+        "centrocampista presionadora"
+      ],
+      "raw_forms": [
+        "centrocampista presionador[%male#1-hidden]",
+        "centrocampista presionadora[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696172,
+          "token": 269131628,
+          "offset": 32999295,
+          "english": "Pressing Central Midfielder",
+          "text": "Mediocampista presionante",
+          "forms": [
+            "Mediocampista presionante"
+          ],
+          "raw_forms": [
+            "Mediocampista presionante[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688089,
+          "text": "centrocampista presionador",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "centrocampista presionador",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "screening_central_midfielder": {
+      "key": 688090,
+      "token": 269123546,
+      "offset": 31567664,
+      "english": "Screening Central Midfielder",
+      "text": "Mediocampista fijo",
+      "forms": [
+        "centrocampista de pantalla"
+      ],
+      "raw_forms": [
+        "centrocampista de pantalla[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696173,
+          "token": 269131629,
+          "offset": 32999341,
+          "english": "Screening Central Midfielder",
+          "text": "Mediocampista de contención",
+          "forms": [
+            "Mediocampista de contención"
+          ],
+          "raw_forms": [
+            "Mediocampista de contención[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688090,
+          "text": "centrocampista de pantalla",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "centrocampista de pantalla",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "wide_covering_central_midfielder": {
+      "key": 688091,
+      "token": 269123547,
+      "offset": 31567711,
+      "english": "Wide Covering Central Midfielder",
+      "text": "Mediocampista de cobertura abierta",
+      "forms": [
+        "centrocampista de cobertura por banda"
+      ],
+      "raw_forms": [
+        "centrocampista de cobertura por banda[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696174,
+          "token": 269131630,
+          "offset": 32999390,
+          "english": "Wide Covering Central Midfielder",
+          "text": "Mediocentro escorado de cobertura",
+          "forms": [
+            "Mediocentro escorado de cobertura",
+            "Mediocentro escorada de cobertura"
+          ],
+          "raw_forms": [
+            "Mediocentro escorado de cobertura[%male#1-hidden]",
+            "Mediocentro escorada de cobertura[%female#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688091,
+          "text": "centrocampista de cobertura por banda",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "centrocampista de cobertura por banda",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "attacking_midfielder": {
+      "key": 688095,
+      "token": 269123551,
+      "offset": 31568107,
+      "english": "Attacking Midfielder",
+      "text": "Mediapunta",
+      "forms": [
+        "Mediapunta"
+      ],
+      "raw_forms": [
+        "Mediapunta[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Mediapunta",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "advanced_playmaker": {
+      "key": 688125,
+      "token": 269123581,
+      "offset": 31570204,
+      "english": "Advanced Playmaker",
+      "text": "Organizador adelantado",
+      "forms": [
+        "Organizador adelantado",
+        "Organizadora adelantada"
+      ],
+      "raw_forms": [
+        "Organizador adelantado[%male#1-hidden]",
+        "Organizadora adelantada[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Organizador adelantado",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "channel_midfielder": {
+      "key": 688111,
+      "token": 269123567,
+      "offset": 31569185,
+      "english": "Channel Midfielder",
+      "text": "Mediocampista entre líneas",
+      "forms": [
+        "centrocampista de canal"
+      ],
+      "raw_forms": [
+        "centrocampista de canal[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696148,
+          "token": 269131604,
+          "offset": 32997601,
+          "english": "channel midfielder",
+          "text": "mediocampista que cae a banda",
+          "forms": [
+            "mediocampista que cae a banda"
+          ],
+          "raw_forms": [
+            "mediocampista que cae a banda[%male#1-hidden]"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688111,
+          "text": "centrocampista de canal",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "centrocampista de canal",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "tracking_attacking_midfielder": {
+      "key": 688098,
+      "token": 269123554,
+      "offset": 31568313,
+      "english": "Tracking Attacking Midfielder",
+      "text": "Mediapunta con retroceso",
+      "forms": [
+        "Mediapunta itinerante"
+      ],
+      "raw_forms": [
+        "Mediapunta itinerante[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696175,
+          "token": 269131631,
+          "offset": 32999499,
+          "english": "Tracking Attacking Midfielder",
+          "text": "Mediapunta itinerante",
+          "forms": [
+            "Mediapunta itinerante"
+          ],
+          "raw_forms": [
+            "Mediapunta itinerante[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Mediapunta itinerante",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "free_role": {
+      "key": 688131,
+      "token": 269123587,
+      "offset": 31570592,
+      "english": "Free Role",
+      "text": "Mediapunta libre",
+      "forms": [
+        "Libertad de movimientos"
+      ],
+      "raw_forms": [
+        "Libertad de movimientos[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688131,
+          "text": "Libertad de movimientos",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Libertad de movimientos",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "second_striker": {
+      "key": 688140,
+      "token": 269123596,
+      "offset": 31571060,
+      "english": "Second Striker",
+      "text": "Segundo delantero",
+      "forms": [
+        "Segundo delantero"
+      ],
+      "raw_forms": [
+        "Segundo delantero[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Segundo delantero",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "winger": {
+      "key": 688102,
+      "token": 269123558,
+      "offset": 31568446,
+      "english": "Winger",
+      "text": "Extremo",
+      "forms": [
+        "extremo"
+      ],
+      "raw_forms": [
+        "extremo[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688102,
+          "text": "extremo",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "extremo",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "inside_winger": {
+      "key": 688110,
+      "token": 269123566,
+      "offset": 31569108,
+      "english": "Inside Winger",
+      "text": "Extremo invertido",
+      "forms": [
+        "extremo invertido",
+        "extremo invertida"
+      ],
+      "raw_forms": [
+        "extremo invertido[%male#1-hidden]",
+        "extremo invertida[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696158,
+          "token": 269131614,
+          "offset": 32998277,
+          "english": "Inside Winger",
+          "text": "Extremo por dentro",
+          "forms": [
+            "Extremo por dentro"
+          ],
+          "raw_forms": [
+            "Extremo por dentro[%male#1-hidden]"
+          ],
+          "context": "player_instructions; player role, this was inverted winger",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688110,
+          "text": "extremo invertido",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "extremo invertido",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "inside_forward": {
+      "key": 688109,
+      "token": 269123565,
+      "offset": 31569029,
+      "english": "Inside Forward",
+      "text": "Delantero interior",
+      "forms": [
+        "Delantero interior",
+        "Delantera interior"
+      ],
+      "raw_forms": [
+        "Delantero interior[%male#1-hidden]",
+        "Delantera interior[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696147,
+          "token": 269131603,
+          "offset": 32997518,
+          "english": "Inside forward",
+          "text": "Delantero por dentro",
+          "forms": [
+            "Delantero por dentro",
+            "Delantera por dentro"
+          ],
+          "raw_forms": [
+            "Delantero por dentro[%male#1-hidden]",
+            "Delantera por dentro[%female#1-hidden]"
+          ],
+          "context": "AREA: player type",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Delantero interior",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "playmaking_winger": {
+      "key": 688141,
+      "token": 269123597,
+      "offset": 31571098,
+      "english": "Playmaking Winger",
+      "text": "Extremo organizador",
+      "forms": [
+        "Extremo organizador",
+        "Extremo organizadora"
+      ],
+      "raw_forms": [
+        "Extremo organizador[%male#1-hidden]",
+        "Extremo organizadora[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Extremo organizador",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "wide_forward": {
+      "key": 696156,
+      "token": 269131612,
+      "offset": 32998108,
+      "english": "Wide Forward",
+      "text": "Delantero abierto",
+      "forms": [
+        "Delantero escorado",
+        "Delantera escorada"
+      ],
+      "raw_forms": [
+        "Delantero escorado[%male#1-hidden]",
+        "Delantera escorada[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696156,
+          "text": "Delantero escorado",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Delantero escorado",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "tracking_winger": {
+      "key": 688100,
+      "token": 269123556,
+      "offset": 31568355,
+      "english": "Tracking Winger",
+      "text": "Extremo con retroceso",
+      "forms": [
+        "extremo de seguimiento"
+      ],
+      "raw_forms": [
+        "extremo de seguimiento[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696180,
+          "token": 269131636,
+          "offset": 32999752,
+          "english": "Tracking Winger",
+          "text": "Extremo itinerante",
+          "forms": [
+            "Extremo itinerante",
+            "Extrema itinerante"
+          ],
+          "raw_forms": [
+            "Extremo itinerante[%male#1-hidden]",
+            "Extrema itinerante[%female#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688100,
+          "text": "extremo de seguimiento",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "extremo de seguimiento",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "wide_midfielder": {
+      "key": 688108,
+      "token": 269123564,
+      "offset": 31568943,
+      "english": "Wide Midfielder",
+      "text": "Mediocampista abierto",
+      "forms": [
+        "Mediocampista escorado",
+        "Mediocampista abierto"
+      ],
+      "raw_forms": [
+        "Mediocampista escorado[%male#1-hidden]",
+        "Mediocampista abierto[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688108,
+          "text": "Mediocampista escorado",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Mediocampista escorado",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "tracking_wide_midfielder": {
+      "key": 688092,
+      "token": 269123548,
+      "offset": 31567769,
+      "english": "Tracking Wide Midfielder",
+      "text": "Mediocampista abierto con retroceso",
+      "forms": [
+        "Mediocampista de banda itinerante",
+        "Mediocampista de banda itinerante"
+      ],
+      "raw_forms": [
+        "Mediocampista de banda itinerante[%female#1-hidden][%male#1-hidden]",
+        "Mediocampista de banda itinerante[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696178,
+          "token": 269131634,
+          "offset": 32999644,
+          "english": "Tracking Wide Midfielder",
+          "text": "Mediocampista de banda itinerante",
+          "forms": [
+            "Mediocampista de banda itinerante"
+          ],
+          "raw_forms": [
+            "Mediocampista de banda itinerante[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Mediocampista de banda itinerante",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "centre_forward": {
+      "key": 688103,
+      "token": 269123559,
+      "offset": 31568474,
+      "english": "Centre-Forward",
+      "text": "Delantero centro",
+      "forms": [
+        "Delantero centro",
+        "Delantera centro"
+      ],
+      "raw_forms": [
+        "Delantero centro[%male#1-hidden]",
+        "Delantera centro[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696149,
+          "token": 269131605,
+          "offset": 32997651,
+          "english": "centre forward",
+          "text": "delantero centro",
+          "forms": [
+            "delantero centro"
+          ],
+          "raw_forms": [
+            "delantero centro[%male#1-hidden]"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Delantero centro",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "tracking_centre_forward": {
+      "key": 688104,
+      "token": 269123560,
+      "offset": 31568549,
+      "english": "Tracking Centre-Forward",
+      "text": "Delantero centro con retroceso",
+      "forms": [
+        "delantero centro de seguimiento",
+        "delantera centro de seguimiento"
+      ],
+      "raw_forms": [
+        "delantero centro de seguimiento[%male#1-hidden]",
+        "delantera centro de seguimiento[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696183,
+          "token": 269131639,
+          "offset": 33000029,
+          "english": "Tracking Centre Forward",
+          "text": "Delantero centro itinerante",
+          "forms": [
+            "Delantero centro itinerante"
+          ],
+          "raw_forms": [
+            "Delantero centro itinerante[%male#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688104,
+          "text": "delantero centro de seguimiento",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "delantero centro de seguimiento",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "central_outlet_centre_forward": {
+      "key": 688105,
+      "token": 269123561,
+      "offset": 31568654,
+      "english": "Central Outlet Centre-Forward",
+      "text": "Delantero centro con salida",
+      "forms": [
+        "Delantero centro con salida",
+        "Delantera centro con salida"
+      ],
+      "raw_forms": [
+        "Delantero centro con salida[%female#1-hidden][%male#1-hidden]",
+        "Delantera centro con salida[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696184,
+          "token": 269131640,
+          "offset": 33000077,
+          "english": "Central Outlet Centre Forward",
+          "text": "Delantero centro con salida",
+          "forms": [
+            "Delantero centro con salida",
+            "Delantero centro con salida"
+          ],
+          "raw_forms": [
+            "Delantero centro con salida[%female#1-hidden][%male#1-hidden]",
+            "Delantero centro con salida[%female#1-hidden]"
+          ],
+          "context": "position type",
+          "resource_verified": true,
+          "runtime_verified": false
+        }
+      ],
+      "archive_text": "Delantero centro con salida",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "channel_forward": {
+      "key": 688635,
+      "token": 269124091,
+      "offset": 31634863,
+      "english": "Channel Forward",
+      "text": "Delantero entre líneas",
+      "forms": [
+        "delantero de canal",
+        "delantera de canal"
+      ],
+      "raw_forms": [
+        "delantero de canal[%male#1-hidden]",
+        "delantera de canal[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 696155,
+          "token": 269131611,
+          "offset": 32998062,
+          "english": "channel forward",
+          "text": "delantero que cae a banda",
+          "forms": [
+            "delantero que cae a banda"
+          ],
+          "raw_forms": [
+            "delantero que cae a banda[%male#1-hidden]"
+          ],
+          "context": "position type, leave in lower case",
+          "resource_verified": true,
+          "runtime_verified": false
+        },
+        {
+          "key": 688635,
+          "text": "delantero de canal",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "delantero de canal",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "target_forward": {
+      "key": 688126,
+      "token": 269123582,
+      "offset": 31570292,
+      "english": "Target Forward",
+      "text": "Delantero torre",
+      "forms": [
+        "Delantero objetivo",
+        "Delantera objetivo"
+      ],
+      "raw_forms": [
+        "Delantero objetivo[%male#1-hidden]",
+        "Delantera objetivo[%female#1-hidden]"
+      ],
+      "context": "AREA: player type; NOTE: used to be target man, made friendly for all modes of football",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688126,
+          "text": "Delantero objetivo",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "Delantero objetivo",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "deep_lying_forward": {
+      "key": 688112,
+      "token": 269123568,
+      "offset": 31569229,
+      "english": "Deep Lying Forward",
+      "text": "Delantero de apoyo",
+      "forms": [
+        "delantero sorpresa",
+        "delantera sorpresa"
+      ],
+      "raw_forms": [
+        "delantero sorpresa[%male#1-hidden]",
+        "delantera sorpresa[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [
+        {
+          "key": 688112,
+          "text": "delantero sorpresa",
+          "source": "spanish (latam).ltc archive raw string"
+        }
+      ],
+      "archive_text": "delantero sorpresa",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "false_nine": {
+      "key": 688139,
+      "token": 269123595,
+      "offset": 31570995,
+      "english": "False Nine",
+      "text": "Falso nueve",
+      "forms": [
+        "Falso nueve",
+        "Falsa nueve"
+      ],
+      "raw_forms": [
+        "Falso nueve[%male#1-hidden]",
+        "Falsa nueve[%female#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Falso nueve",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    },
+    "poacher": {
+      "key": 688127,
+      "token": 269123583,
+      "offset": 31570371,
+      "english": "Poacher",
+      "text": "Ariete",
+      "forms": [
+        "Ariete"
+      ],
+      "raw_forms": [
+        "Ariete[%male#1-hidden]"
+      ],
+      "context": "player_instructions; player role",
+      "resource_verified": true,
+      "runtime_verified": true,
+      "aliases": [],
+      "archive_text": "Ariete",
+      "menu_verified_es": true,
+      "verified_source": "Menú táctico FM26 26.3.2 (capturas de pantalla)"
+    }
+  },
+  "player": {
+    "passing_risk_ip": {
+      "property": {
+        "key": 703122,
+        "token": 269138578,
+        "offset": 34442989,
+        "english": "Passing Risk",
+        "text": "Riesgo en los pases",
+        "forms": [
+          "Riesgo en los pases"
+        ],
+        "raw_forms": [
+          "Riesgo en los pases"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE:Title of group of individual player instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 703116,
+          "token": 269138572,
+          "offset": 34442899,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE: Name of option  of group Passing Strategy individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Take More Risks": {
+          "key": 703148,
+          "token": 269138604,
+          "offset": 34444306,
+          "english": "Take More Risks",
+          "text": "Tomar más riesgos",
+          "forms": [
+            "Tomar más riesgos"
+          ],
+          "raw_forms": [
+            "Tomar más riesgos"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE: Name of option of group Passing Risk individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Take Fewer Risks": {
+          "key": 703147,
+          "token": 269138603,
+          "offset": 34444282,
+          "english": "Take Fewer Risks",
+          "text": "Tomar menos riesgos",
+          "forms": [
+            "Tomar menos riesgos"
+          ],
+          "raw_forms": [
+            "Tomar menos riesgos"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE: Name of option of group Passing Risk individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "dribbling_frequency_ip": {
+      "property": {
+        "key": 683124,
+        "token": 269118580,
+        "offset": 30879236,
+        "english": "Dribbling Frequency",
+        "text": "Frecuencia del regate",
+        "forms": [
+          "Frecuencia del regate"
+        ],
+        "raw_forms": [
+          "Frecuencia del regate"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Individual Player Instructions; FR-BN: XXXXXX; TONE: Formal; CHARLIMIT: None; REF-ID: XXXXXX; NOTE; Title of a group of individual player instructions",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 682178,
+          "token": 269117634,
+          "offset": 30844561,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": []
+        },
+        "Dribble More": {
+          "key": 343596,
+          "token": 268779052,
+          "offset": 3169001,
+          "english": "Dribble More",
+          "text": "Regatear más",
+          "forms": [
+            "Regatear más"
+          ],
+          "raw_forms": [
+            "Regatear más"
+          ],
+          "context": "game tactics; player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Dribble Less": {
+          "key": 343595,
+          "token": 268779051,
+          "offset": 3168982,
+          "english": "Dribble Less",
+          "text": "Regatear menos",
+          "forms": [
+            "Regatear menos"
+          ],
+          "raw_forms": [
+            "Regatear menos"
+          ],
+          "context": "game tactics; player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "shoot_ip": {
+      "property": {
+        "key": 703121,
+        "token": 269138577,
+        "offset": 34442976,
+        "english": "Shooting",
+        "text": "Disparos",
+        "forms": [
+          "Disparos"
+        ],
+        "raw_forms": [
+          "Disparos"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Title of group of individual player instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 682178,
+          "token": 269117634,
+          "offset": 30844561,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": []
+        },
+        "Shoot More Often": {
+          "key": 344809,
+          "token": 268780265,
+          "offset": 3198667,
+          "english": "Shoot More Often",
+          "text": "Disparar más a menudo",
+          "forms": [
+            "Disparar más a menudo"
+          ],
+          "raw_forms": [
+            "Disparar más a menudo"
+          ],
+          "context": "game tactics; player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Shoot Less Often": {
+          "key": 344808,
+          "token": 268780264,
+          "offset": 3198639,
+          "english": "Shoot Less Often",
+          "text": "Disparar menos a menudo",
+          "forms": [
+            "Disparar menos a menudo"
+          ],
+          "raw_forms": [
+            "Disparar menos a menudo"
+          ],
+          "context": "game tactics; player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "forward_runs_ip": {
+      "property": {
+        "key": 683125,
+        "token": 269118581,
+        "offset": 30879262,
+        "english": "Forward Runs",
+        "text": "Carreras hacia adelante",
+        "forms": [
+          "Carreras hacia adelante"
+        ],
+        "raw_forms": [
+          "Carreras hacia adelante"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Individual Player Instructions; FR-BN: XXXXXX; TONE: Formal; CHARLIMIT: None; REF-ID: XXXXXX; NOTE; Title of a group of individual player instructions",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 682178,
+          "token": 269117634,
+          "offset": 30844561,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": []
+        },
+        "Make More Runs": {
+          "key": 703135,
+          "token": 269138591,
+          "offset": 34443559,
+          "english": "Make More Runs",
+          "text": "Hacer más desmarques",
+          "forms": [
+            "Hacer más desmarques"
+          ],
+          "raw_forms": [
+            "Hacer más desmarques"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; FR-BN: FM-55176; TONE: Formal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; short string for Forward Runs - More Forward Runs",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Make Fewer Runs": {
+          "key": 683146,
+          "token": 269118602,
+          "offset": 30880296,
+          "english": "Make Fewer Runs",
+          "text": "Hacer menos carreras",
+          "forms": [
+            "Hacer menos carreras"
+          ],
+          "raw_forms": [
+            "Hacer menos carreras"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE; Name for option of Forward Runs player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "freedom_of_movement_ip": {
+      "property": {
+        "key": 683161,
+        "token": 269118617,
+        "offset": 30881001,
+        "english": "Freedom of Movement",
+        "text": "Libertad de movimientos",
+        "forms": [
+          "Libertad de movimientos"
+        ],
+        "raw_forms": [
+          "Libertad de movimientos"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE; Title of group of individual  player instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Follow Tactical Position": {
+          "key": 683162,
+          "token": 269118618,
+          "offset": 30881029,
+          "english": "Follow Tactical Position",
+          "text": "Sigue posición táctica",
+          "forms": [
+            "Sigue posición táctica"
+          ],
+          "raw_forms": [
+            "Sigue posición táctica"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE;Name for option of group Freedom of Movement individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Roam From Position": {
+          "key": 683147,
+          "token": 269118603,
+          "offset": 30880321,
+          "english": "Roam From Position",
+          "text": "Variar la posición",
+          "forms": [
+            "Variar la posición"
+          ],
+          "raw_forms": [
+            "Variar la posición"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE; Option of group Freedom of Movement individual  player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "hold_up_ball_ip": {
+      "property": {
+        "key": 683171,
+        "token": 269118627,
+        "offset": 30881799,
+        "english": "Hold Up Ball",
+        "text": "Aguantar el balón",
+        "forms": [
+          "Aguantar el balón"
+        ],
+        "raw_forms": [
+          "Aguantar el balón"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE: Title for group of  individual  player instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Yes": {
+          "key": 651226,
+          "token": 269086682,
+          "offset": 28176225,
+          "english": "Yes",
+          "text": "Sí",
+          "forms": [
+            "Sí"
+          ],
+          "raw_forms": [
+            "Sí"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE: option for group Hold Up Ball individual  player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": [
+            {
+              "key": 688217,
+              "token": 269123673,
+              "offset": 31576378,
+              "english": "Yes",
+              "text": "Sí",
+              "forms": [
+                "Sí"
+              ],
+              "raw_forms": [
+                "Sí"
+              ],
+              "context": "AREA: Load last game confirmation button; SUB-AREA: More Detailed Sub-Area; FR-BN: XXXXXX; TONE: Formal/Informal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; any other information the translator can make use of",
+              "resource_verified": true,
+              "runtime_verified": false
+            }
+          ]
+        },
+        "No": {
+          "key": 651227,
+          "token": 269086683,
+          "offset": 28176233,
+          "english": "No",
+          "text": "No",
+          "forms": [
+            "No"
+          ],
+          "raw_forms": [
+            "No"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; CHARLIMIT: None; NOTE: Option of Hold Up Ball individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": [
+            {
+              "key": 688216,
+              "token": 269123672,
+              "offset": 31576371,
+              "english": "No",
+              "text": "No",
+              "forms": [
+                "No"
+              ],
+              "raw_forms": [
+                "No"
+              ],
+              "context": "AREA: Load last game cancel button; SUB-AREA: More Detailed Sub-Area; FR-BN: XXXXXX; TONE: Formal/Informal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; any other information the translator can make use of",
+              "resource_verified": true,
+              "runtime_verified": false
+            }
+          ]
+        }
+      }
+    },
+    "pressing_oop": {
+      "property": {
+        "key": 702986,
+        "token": 269138442,
+        "offset": 34422967,
+        "english": "Trigger Press",
+        "text": "Activa la presión",
+        "forms": [
+          "Activa la presión"
+        ],
+        "raw_forms": [
+          "Activa la presión"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Title of group of individual player instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 703067,
+          "token": 269138523,
+          "offset": 34440227,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Name of Option of group Trigger Press individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "More Often": {
+          "key": 703069,
+          "token": 269138525,
+          "offset": 34440261,
+          "english": "More Often",
+          "text": "Más a menudo",
+          "forms": [
+            "Más a menudo"
+          ],
+          "raw_forms": [
+            "Más a menudo"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Name of Option of group Trigger Press individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Less Often": {
+          "key": 703070,
+          "token": 269138526,
+          "offset": 34440279,
+          "english": "Less Often",
+          "text": "Menos a menudo",
+          "forms": [
+            "Menos a menudo"
+          ],
+          "raw_forms": [
+            "Menos a menudo"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Name of Option of group Trigger Press individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "tackling_oop": {
+      "property": {
+        "key": 702988,
+        "token": 269138444,
+        "offset": 34423000,
+        "english": "Tackling",
+        "text": "Entradas",
+        "forms": [
+          "Entradas"
+        ],
+        "raw_forms": [
+          "Entradas"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Title of group ofindividual player instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 703065,
+          "token": 269138521,
+          "offset": 34440205,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Name for Option of Tackling individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Tackle Harder": {
+          "key": 703071,
+          "token": 269138527,
+          "offset": 34440298,
+          "english": "Tackle Harder",
+          "text": "Entrar más duro",
+          "forms": [
+            "Entrar más duro"
+          ],
+          "raw_forms": [
+            "Entrar más duro"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Name forOption of Tackling individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Ease Off Tackles": {
+          "key": 703072,
+          "token": 269138528,
+          "offset": 34440319,
+          "english": "Ease Off Tackles",
+          "text": "No entrar fuerte",
+          "forms": [
+            "No entrar fuerte"
+          ],
+          "raw_forms": [
+            "No entrar fuerte"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instructions; NOTE: Name for Option of Tackling individual player instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    }
+  },
+  "team": {
+    "passing_directness": {
+      "property": {
+        "key": 394530,
+        "token": 268829986,
+        "offset": 6139975,
+        "english": "Passing Directness",
+        "text": "Pases directos",
+        "forms": [
+          "Pases directos"
+        ],
+        "raw_forms": [
+          "Pases directos"
+        ],
+        "context": "FR 11046 - title for a section allowing the user to adjust directness",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 682178,
+          "token": 269117634,
+          "offset": 30844561,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": []
+        },
+        "Much Shorter": {
+          "key": 470495,
+          "token": 268905951,
+          "offset": 9932449,
+          "english": "Much Shorter",
+          "text": "Mucho más corto",
+          "forms": [
+            "Mucho más corto"
+          ],
+          "raw_forms": [
+            "Mucho más corto"
+          ],
+          "context": "game tactics; touchline shout option, extreme of ID 344810 Shorter Passing",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Shorter": {
+          "key": 470496,
+          "token": 268905952,
+          "offset": 9932470,
+          "english": "Shorter",
+          "text": "Más corto",
+          "forms": [
+            "Más corto"
+          ],
+          "raw_forms": [
+            "Más corto"
+          ],
+          "context": "game tactics; touchline shout option, short version of ID 344810 Shorter Passing",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "More Direct": {
+          "key": 470499,
+          "token": 268905955,
+          "offset": 9932527,
+          "english": "More Direct",
+          "text": "Más directo",
+          "forms": [
+            "Más directo"
+          ],
+          "raw_forms": [
+            "Más directo"
+          ],
+          "context": "game tactics; touchline shout option, short version of ID 344310 More Direct Passing",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Much More Direct": {
+          "key": 470501,
+          "token": 268905957,
+          "offset": 9932571,
+          "english": "Much More Direct",
+          "text": "Mucho más directo",
+          "forms": [
+            "Mucho más directo"
+          ],
+          "raw_forms": [
+            "Mucho más directo"
+          ],
+          "context": "game tactics; touchline shout option, short version of ID 468626 Much More Direct Passing",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "tempo": {
+      "property": {
+        "key": 230057,
+        "token": 268665513,
+        "offset": 23550,
+        "english": "Tempo",
+        "text": "Ritmo de juego",
+        "forms": [
+          "Ritmo de juego"
+        ],
+        "raw_forms": [
+          "Ritmo de juego"
+        ],
+        "context": "",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 682178,
+          "token": 269117634,
+          "offset": 30844561,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": []
+        },
+        "Much Lower": {
+          "key": 470752,
+          "token": 268906208,
+          "offset": 9937210,
+          "english": "Much Lower",
+          "text": "Mucho más bajo",
+          "forms": [
+            "Mucho más bajo"
+          ],
+          "raw_forms": [
+            "Mucho más bajo"
+          ],
+          "context": "FR 11046 - Much Lower Tempo, was ID 394498, but some languages needed a bespoke string",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Lower": {
+          "key": 682711,
+          "token": 269118167,
+          "offset": 30864096,
+          "english": "Lower",
+          "text": "Más bajo",
+          "forms": [
+            "Más bajo"
+          ],
+          "raw_forms": [
+            "Más bajo"
+          ],
+          "context": "AREA: Main Area of Game; SUB-AREA: More Detailed Sub-Area; FR-BN: XXXXXX; TONE: Formal/Informal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; any other information the translator can make use of",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Higher": {
+          "key": 470756,
+          "token": 268906212,
+          "offset": 9937284,
+          "english": "Higher",
+          "text": "Más alto",
+          "forms": [
+            "Más alto"
+          ],
+          "raw_forms": [
+            "Más alto"
+          ],
+          "context": "FR 11046 - Higher Tempo, was ID 394442, but some languages needed a bespoke string",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Much Higher": {
+          "key": 682724,
+          "token": 269118180,
+          "offset": 30864743,
+          "english": "Much Higher",
+          "text": "Mucho más alto",
+          "forms": [
+            "Mucho más alto"
+          ],
+          "raw_forms": [
+            "Mucho más alto"
+          ],
+          "context": "AREA: Main Area of Game; SUB-AREA: More Detailed Sub-Area; FR-BN: XXXXXX; TONE: Formal/Informal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; any other information the translator can make use of",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "build_up_strategy_ip": {
+      "property": {
+        "key": 683796,
+        "token": 269119252,
+        "offset": 30917765,
+        "english": "Build-Up Strategy",
+        "text": "Estrategia previa",
+        "forms": [
+          "Estrategia previa"
+        ],
+        "raw_forms": [
+          "Estrategia previa"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Team Instructions; NOTE: Name of Team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Play Through Press": {
+          "key": 683797,
+          "token": 269119253,
+          "offset": 30917787,
+          "english": "Play Through Press",
+          "text": "Jugar superando la presión",
+          "forms": [
+            "Jugar superando la presión"
+          ],
+          "raw_forms": [
+            "Jugar superando la presión"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Team Instructions; NOTE: Name of Team instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 683806,
+          "token": 269119262,
+          "offset": 30918864,
+          "english": "Balanced",
+          "text": "Equilibrada",
+          "forms": [
+            "Equilibrada"
+          ],
+          "raw_forms": [
+            "Equilibrada"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Team Instructions; NOTE: Name of Option of Build-Up Strategy Team instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Bypass Press": {
+          "key": 683807,
+          "token": 269119263,
+          "offset": 30918880,
+          "english": "Bypass Press",
+          "text": "Evitar la presión",
+          "forms": [
+            "Evitar la presión"
+          ],
+          "raw_forms": [
+            "Evitar la presión"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Team Instructions; NOTE: Name of option of Build-Up Strategy Team instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": [
+            {
+              "key": 688370,
+              "token": 269123826,
+              "offset": 31584138,
+              "english": "Bypass Press",
+              "text": "Saltarse la presión",
+              "forms": [
+                "Saltarse la presión"
+              ],
+              "raw_forms": [
+                "Saltarse la presión"
+              ],
+              "context": "AREA: Tactics; SUB-AREA: Team Instructions; FR-BN: FM-55048; TONE: Formal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; short string for bypass press build-up strategy",
+              "resource_verified": true,
+              "runtime_verified": false
+            }
+          ]
+        }
+      }
+    },
+    "pass_reception_ip": {
+      "property": {
+        "key": 682328,
+        "token": 269117784,
+        "offset": 30849417,
+        "english": "Pass Reception",
+        "text": "Recepción de pase",
+        "forms": [
+          "Recepción de pase"
+        ],
+        "raw_forms": [
+          "Recepción de pase"
+        ],
+        "context": "",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Balanced": {
+          "key": 682664,
+          "token": 269118120,
+          "offset": 30861969,
+          "english": "Balanced",
+          "text": "Equilibrada",
+          "forms": [
+            "Equilibrada"
+          ],
+          "raw_forms": [
+            "Equilibrada"
+          ],
+          "context": "AREA: Main Area of Game; SUB-AREA: More Detailed Sub-Area; FR-BN: XXXXXX; TONE: Formal/Informal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; any other information the translator can make use of",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": [
+            {
+              "key": 682315,
+              "token": 269117771,
+              "offset": 30849050,
+              "english": "Balanced",
+              "text": "Equilibrada",
+              "forms": [
+                "Equilibrada"
+              ],
+              "raw_forms": [
+                "Equilibrada"
+              ],
+              "context": "",
+              "resource_verified": true,
+              "runtime_verified": false
+            }
+          ]
+        },
+        "Pass to Feet": {
+          "key": 701791,
+          "token": 269137247,
+          "offset": 34400280,
+          "english": "Pass to Feet",
+          "text": "Pase al pie",
+          "forms": [
+            "Pase al pie"
+          ],
+          "raw_forms": [
+            "Pase al pie"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Team Instructions; FR-BN: XXXXXX; TONE: Formal/Informal; CHARLIMIT: None; REF-ID: XXXXXX; NOTE; Description for a team instruction that encourages players to pass to the feet of their teamates",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": [
+            {
+              "key": 683195,
+              "token": 269118651,
+              "offset": 30882795,
+              "english": "Pass Into Feet",
+              "text": "Pasar al pie",
+              "forms": [
+                "Pasar al pie"
+              ],
+              "raw_forms": [
+                "Pasar al pie"
+              ],
+              "context": "AREA: Tactics; SUB-AREA: Team Instructions; FR-BN: FM-64733; TONE: Formal; CHARLIMIT: If Applicable, else None; REF-ID: XXXXXX; NOTE; Team instruction to pass into feet",
+              "resource_verified": true,
+              "runtime_verified": false
+            }
+          ]
+        },
+        "Pass Into Space": {
+          "key": 297481,
+          "token": 268732937,
+          "offset": 1402396,
+          "english": "Pass Into Space",
+          "text": "Pasar al espacio",
+          "forms": [
+            "Pasar al espacio"
+          ],
+          "raw_forms": [
+            "Pasar al espacio"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "attacking_transition_ip": {
+      "property": {
+        "key": 683205,
+        "token": 269118661,
+        "offset": 30883515,
+        "english": "Attacking Transition",
+        "text": "Transición ofensiva",
+        "forms": [
+          "Transición ofensiva"
+        ],
+        "raw_forms": [
+          "Transición ofensiva"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Team Instructions; FR-BN: XXXXXX; TONE: Formal; CHARLIMIT: None; REF-ID: XXXXXX; NOTE; Name for team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 683426,
+          "token": 269118882,
+          "offset": 30891345,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Team Instructions; NOTE: Name of option of Attacking Transition Team instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Hold Shape": {
+          "key": 468709,
+          "token": 268904165,
+          "offset": 9869369,
+          "english": "Hold Shape",
+          "text": "Mantener dibujo",
+          "forms": [
+            "Mantener dibujo"
+          ],
+          "raw_forms": [
+            "Mantener dibujo"
+          ],
+          "context": "game tactics; hold shape option, team will seek to retain their formational shape upon winning possession",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Counter-Attack": {
+          "key": 683423,
+          "token": 269118879,
+          "offset": 30891240,
+          "english": "Counter-Attack",
+          "text": "Contraataque",
+          "forms": [
+            "Contraataque"
+          ],
+          "raw_forms": [
+            "Contraataque"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Team Instructions; NOTE: Name for option of Attacking Transition Team instruction",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "line_of_engagement_oop": {
+      "property": {
+        "key": 682322,
+        "token": 269117778,
+        "offset": 30849237,
+        "english": "Line of Engagement",
+        "text": "Línea de presión",
+        "forms": [
+          "Línea de presión"
+        ],
+        "raw_forms": [
+          "Línea de presión"
+        ],
+        "context": "",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "High Press": {
+          "key": 683182,
+          "token": 269118638,
+          "offset": 30882257,
+          "english": "High Press",
+          "text": "Presión adelantada",
+          "forms": [
+            "Presión adelantada"
+          ],
+          "raw_forms": [
+            "Presión adelantada"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Projected Positions; NOTE; Title for the high press phase",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Mid Block": {
+          "key": 683184,
+          "token": 269118640,
+          "offset": 30882297,
+          "english": "Mid Block",
+          "text": "Bloque medio",
+          "forms": [
+            "Bloque medio"
+          ],
+          "raw_forms": [
+            "Bloque medio"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Projected Positions; NOTE; Title for the mid block phase",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Low Block": {
+          "key": 683183,
+          "token": 269118639,
+          "offset": 30882281,
+          "english": "Low Block",
+          "text": "Bloque bajo",
+          "forms": [
+            "Bloque bajo"
+          ],
+          "raw_forms": [
+            "Bloque bajo"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Projected Positions; NOTE; Title for the low block phase",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "defensive_line_oop": {
+      "property": {
+        "key": 650479,
+        "token": 269085935,
+        "offset": 28156055,
+        "english": "Defensive Line",
+        "text": "Línea defensiva",
+        "forms": [
+          "Línea defensiva"
+        ],
+        "raw_forms": [
+          "Línea defensiva"
+        ],
+        "context": "DefensiveLine team instruction card",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 696019,
+          "token": 269131475,
+          "offset": 32915462,
+          "english": "Standard",
+          "text": "Estándar",
+          "forms": [
+            "Estándar"
+          ],
+          "raw_forms": [
+            "Estándar"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Defensive Line; NOTE: set a standard or normal defensive line position",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Much Lower": {
+          "key": 470753,
+          "token": 268906209,
+          "offset": 9937230,
+          "english": "Much Lower",
+          "text": "Mucho más baja",
+          "forms": [
+            "Mucho más baja"
+          ],
+          "raw_forms": [
+            "Mucho más baja"
+          ],
+          "context": "FR 11046 - Much Lower Defensive Line, was ID 394498, but some languages need a bespoke string",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Lower": {
+          "key": 470754,
+          "token": 268906210,
+          "offset": 9937250,
+          "english": "Lower",
+          "text": "Más baja",
+          "forms": [
+            "Más baja"
+          ],
+          "raw_forms": [
+            "Más baja"
+          ],
+          "context": "FR 11046 - Lower Defensive Line, was ID 394472, but some languages need a bespoke string",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Higher": {
+          "key": 394442,
+          "token": 268829898,
+          "offset": 6138642,
+          "english": "Higher",
+          "text": "Alto",
+          "forms": [
+            "Alto"
+          ],
+          "raw_forms": [
+            "Alto"
+          ],
+          "context": "FR 11046 - relative label to select a higher line to defend",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Much Higher": {
+          "key": 470755,
+          "token": 268906211,
+          "offset": 9937264,
+          "english": "Much Higher",
+          "text": "Mucho más alta",
+          "forms": [
+            "Mucho más alta"
+          ],
+          "raw_forms": [
+            "Mucho más alta"
+          ],
+          "context": "FR 11046 - Much Lower Defensive Line, was ID 394496, but some languages need a bespoke string",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "trigger_press_oop": {
+      "property": {
+        "key": 534818,
+        "token": 268970274,
+        "offset": 13494914,
+        "english": "Trigger Press",
+        "text": "Activar presión",
+        "forms": [
+          "Activar presión"
+        ],
+        "raw_forms": [
+          "Activar presión"
+        ],
+        "context": "AREA: Tactics; SUB-AREA: Team Instruction descriptions; FR-BN: 34854; TONE: Formal; CHARLIMIT: None; REF-ID: n/a; NOTE: renaming Pressing Intensity",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 682178,
+          "token": 269117634,
+          "offset": 30844561,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": []
+        },
+        "Much Less Often": {
+          "key": 526793,
+          "token": 268962249,
+          "offset": 13062975,
+          "english": "Much Less Often",
+          "text": "Mucho menos insistente",
+          "forms": [
+            "Mucho menos insistente"
+          ],
+          "raw_forms": [
+            "Mucho menos insistente"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instruction descriptions; FR-BN: 34854; TONE: Formal; CHARLIMIT: None; REF-ID: n/a; NOTE: tactical advice for PRESSING_INTENSITY",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Less Often": {
+          "key": 526794,
+          "token": 268962250,
+          "offset": 13063002,
+          "english": "Less Often",
+          "text": "Menos insistente",
+          "forms": [
+            "Menos insistente"
+          ],
+          "raw_forms": [
+            "Menos insistente"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instruction descriptions; FR-BN: 34854; TONE: Formal; CHARLIMIT: None; REF-ID: n/a; NOTE: tactical advice for PRESSING_INTENSITY",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "More Often": {
+          "key": 526795,
+          "token": 268962251,
+          "offset": 13063023,
+          "english": "More Often",
+          "text": "Más insistente",
+          "forms": [
+            "Más insistente"
+          ],
+          "raw_forms": [
+            "Más insistente"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instruction descriptions; FR-BN: 34854; TONE: Formal; CHARLIMIT: None; REF-ID: n/a; NOTE: tactical advice for PRESSING_INTENSITY",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Much More Often": {
+          "key": 526796,
+          "token": 268962252,
+          "offset": 13063043,
+          "english": "Much More Often",
+          "text": "Mucho más insistente",
+          "forms": [
+            "Mucho más insistente"
+          ],
+          "raw_forms": [
+            "Mucho más insistente"
+          ],
+          "context": "AREA: Tactics; SUB-AREA: Player Instruction descriptions; FR-BN: 34854; TONE: Formal; CHARLIMIT: None; REF-ID: n/a; NOTE: tactical advice for PRESSING_INTENSITY",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "defensive_transition_oop": {
+      "property": {
+        "key": 682317,
+        "token": 269117773,
+        "offset": 30849137,
+        "english": "Defensive Transition",
+        "text": "Transición defensiva",
+        "forms": [
+          "Transición defensiva"
+        ],
+        "raw_forms": [
+          "Transición defensiva"
+        ],
+        "context": "",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Standard": {
+          "key": 682178,
+          "token": 269117634,
+          "offset": 30844561,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "provisional",
+          "aliases": []
+        },
+        "Regroup": {
+          "key": 468710,
+          "token": 268904166,
+          "offset": 9869389,
+          "english": "Regroup",
+          "text": "Reagruparse",
+          "forms": [
+            "Reagruparse"
+          ],
+          "raw_forms": [
+            "Reagruparse"
+          ],
+          "context": "game tactics; regroup option, team will look to defensively regroup immediately after losing possessio rather than using the Counter-Press",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Counter-Press": {
+          "key": 465736,
+          "token": 268901192,
+          "offset": 9769778,
+          "english": "Counter-Press",
+          "text": "Contrapresión",
+          "forms": [
+            "Contrapresión"
+          ],
+          "raw_forms": [
+            "Contrapresión"
+          ],
+          "context": "game tactics; counter-press option, team will seek to press the opponent immediately after losing possession",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "time_wasting": {
+      "property": {
+        "key": 710001,
+        "token": 269145457,
+        "offset": 0,
+        "english": "Time Wasting",
+        "text": "Perder tiempo",
+        "forms": [
+          "Perder tiempo"
+        ],
+        "raw_forms": [
+          "Perder tiempo"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Less Often": {
+          "key": 710002,
+          "token": 269145458,
+          "offset": 0,
+          "english": "Less Often",
+          "text": "Menos a menudo",
+          "forms": [
+            "Menos a menudo"
+          ],
+          "raw_forms": [
+            "Menos a menudo"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Standard": {
+          "key": 710003,
+          "token": 269145459,
+          "offset": 0,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "More Often": {
+          "key": 710004,
+          "token": 269145460,
+          "offset": 0,
+          "english": "More Often",
+          "text": "Más a menudo",
+          "forms": [
+            "Más a menudo"
+          ],
+          "raw_forms": [
+            "Más a menudo"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "play_for_set_pieces_ip": {
+      "property": {
+        "key": 710010,
+        "token": 269145466,
+        "offset": 0,
+        "english": "Play for Set Pieces",
+        "text": "Jugar buscando el balón parado",
+        "forms": [
+          "Jugar buscando el balón parado"
+        ],
+        "raw_forms": [
+          "Jugar buscando el balón parado"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Keep Ball in Play": {
+          "key": 710011,
+          "token": 269145467,
+          "offset": 0,
+          "english": "Keep Ball in Play",
+          "text": "Mantener el balón en juego",
+          "forms": [
+            "Mantener el balón en juego"
+          ],
+          "raw_forms": [
+            "Mantener el balón en juego"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Play for Set Pieces": {
+          "key": 710012,
+          "token": 269145468,
+          "offset": 0,
+          "english": "Play for Set Pieces",
+          "text": "Buscar jugadas de balón parado",
+          "forms": [
+            "Buscar jugadas de balón parado"
+          ],
+          "raw_forms": [
+            "Buscar jugadas de balón parado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "creative_freedom_ip": {
+      "property": {
+        "key": 710020,
+        "token": 269145476,
+        "offset": 0,
+        "english": "Creative Freedom",
+        "text": "Libertad creativa",
+        "forms": [
+          "Libertad creativa"
+        ],
+        "raw_forms": [
+          "Libertad creativa"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "More Disciplined": {
+          "key": 710021,
+          "token": 269145477,
+          "offset": 0,
+          "english": "More Disciplined",
+          "text": "Más disciplinado",
+          "forms": [
+            "Más disciplinado"
+          ],
+          "raw_forms": [
+            "Más disciplinado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 710022,
+          "token": 269145478,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "More Expressive": {
+          "key": 710023,
+          "token": 269145479,
+          "offset": 0,
+          "english": "More Expressive",
+          "text": "Más expresivo",
+          "forms": [
+            "Más expresivo"
+          ],
+          "raw_forms": [
+            "Más expresivo"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "goal_kicks_ip": {
+      "property": {
+        "key": 710030,
+        "token": 269145486,
+        "offset": 0,
+        "english": "Goal Kicks",
+        "text": "Saques de meta",
+        "forms": [
+          "Saques de meta"
+        ],
+        "raw_forms": [
+          "Saques de meta"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Short": {
+          "key": 710031,
+          "token": 269145487,
+          "offset": 0,
+          "english": "Short",
+          "text": "En corto",
+          "forms": [
+            "En corto"
+          ],
+          "raw_forms": [
+            "En corto"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Mixed": {
+          "key": 710032,
+          "token": 269145488,
+          "offset": 0,
+          "english": "Mixed",
+          "text": "Mixto",
+          "forms": [
+            "Mixto"
+          ],
+          "raw_forms": [
+            "Mixto"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Long": {
+          "key": 710033,
+          "token": 269145489,
+          "offset": 0,
+          "english": "Long",
+          "text": "En largo",
+          "forms": [
+            "En largo"
+          ],
+          "raw_forms": [
+            "En largo"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "gk_distribution_ip": {
+      "property": {
+        "key": 710040,
+        "token": 269145496,
+        "offset": 0,
+        "english": "GK Distribution",
+        "text": "Distribución del portero",
+        "forms": [
+          "Distribución del portero"
+        ],
+        "raw_forms": [
+          "Distribución del portero"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Balanced": {
+          "key": 710041,
+          "token": 269145497,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Center-Backs": {
+          "key": 710042,
+          "token": 269145498,
+          "offset": 0,
+          "english": "Center-Backs",
+          "text": "A centrales",
+          "forms": [
+            "A centrales"
+          ],
+          "raw_forms": [
+            "A centrales"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Full-Backs": {
+          "key": 710043,
+          "token": 269145499,
+          "offset": 0,
+          "english": "Full-Backs",
+          "text": "A laterales",
+          "forms": [
+            "A laterales"
+          ],
+          "raw_forms": [
+            "A laterales"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Flanks": {
+          "key": 710044,
+          "token": 269145500,
+          "offset": 0,
+          "english": "Flanks",
+          "text": "A las bandas",
+          "forms": [
+            "A las bandas"
+          ],
+          "raw_forms": [
+            "A las bandas"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Playmaker": {
+          "key": 710045,
+          "token": 269145501,
+          "offset": 0,
+          "english": "Playmaker",
+          "text": "Al organizador",
+          "forms": [
+            "Al organizador"
+          ],
+          "raw_forms": [
+            "Al organizador"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Target Forward": {
+          "key": 710046,
+          "token": 269145502,
+          "offset": 0,
+          "english": "Target Forward",
+          "text": "Al delantero torre",
+          "forms": [
+            "Al delantero torre"
+          ],
+          "raw_forms": [
+            "Al delantero torre"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Over Opposition Defense": {
+          "key": 710047,
+          "token": 269145503,
+          "offset": 0,
+          "english": "Over Opposition Defense",
+          "text": "Superar la defensa rival",
+          "forms": [
+            "Superar la defensa rival"
+          ],
+          "raw_forms": [
+            "Superar la defensa rival"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "overlap_ip": {
+      "property": {
+        "key": 710050,
+        "token": 269145506,
+        "offset": 0,
+        "english": "Supporting Runs",
+        "text": "Carreras de apoyo (doblar por fuera)",
+        "forms": [
+          "Carreras de apoyo (doblar por fuera)"
+        ],
+        "raw_forms": [
+          "Carreras de apoyo (doblar por fuera)"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Overlap - Balanced": {
+          "key": 710051,
+          "token": 269145507,
+          "offset": 0,
+          "english": "Overlap - Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Overlap - Left": {
+          "key": 710052,
+          "token": 269145508,
+          "offset": 0,
+          "english": "Overlap - Left",
+          "text": "Izquierda",
+          "forms": [
+            "Izquierda"
+          ],
+          "raw_forms": [
+            "Izquierda"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Overlap - Right": {
+          "key": 710053,
+          "token": 269145509,
+          "offset": 0,
+          "english": "Overlap - Right",
+          "text": "Derecha",
+          "forms": [
+            "Derecha"
+          ],
+          "raw_forms": [
+            "Derecha"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Overlap - Both Flanks": {
+          "key": 710054,
+          "token": 269145510,
+          "offset": 0,
+          "english": "Overlap - Both Flanks",
+          "text": "Ambas bandas",
+          "forms": [
+            "Ambas bandas"
+          ],
+          "raw_forms": [
+            "Ambas bandas"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "underlap_ip": {
+      "property": {
+        "key": 710060,
+        "token": 269145516,
+        "offset": 0,
+        "english": "Supporting Runs",
+        "text": "Carreras de apoyo (doblar por dentro)",
+        "forms": [
+          "Carreras de apoyo (doblar por dentro)"
+        ],
+        "raw_forms": [
+          "Carreras de apoyo (doblar por dentro)"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Underlap - Balanced": {
+          "key": 710061,
+          "token": 269145517,
+          "offset": 0,
+          "english": "Underlap - Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Underlap - Left": {
+          "key": 710062,
+          "token": 269145518,
+          "offset": 0,
+          "english": "Underlap - Left",
+          "text": "Izquierda",
+          "forms": [
+            "Izquierda"
+          ],
+          "raw_forms": [
+            "Izquierda"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Underlap - Right": {
+          "key": 710063,
+          "token": 269145519,
+          "offset": 0,
+          "english": "Underlap - Right",
+          "text": "Derecha",
+          "forms": [
+            "Derecha"
+          ],
+          "raw_forms": [
+            "Derecha"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Underlap - Both Flanks": {
+          "key": 710064,
+          "token": 269145520,
+          "offset": 0,
+          "english": "Underlap - Both Flanks",
+          "text": "Ambas bandas",
+          "forms": [
+            "Ambas bandas"
+          ],
+          "raw_forms": [
+            "Ambas bandas"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "dribbling_ip": {
+      "property": {
+        "key": 710070,
+        "token": 269145526,
+        "offset": 0,
+        "english": "Dribbling",
+        "text": "Regate",
+        "forms": [
+          "Regate"
+        ],
+        "raw_forms": [
+          "Regate"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Discourage": {
+          "key": 710071,
+          "token": 269145527,
+          "offset": 0,
+          "english": "Discourage",
+          "text": "Desalentar",
+          "forms": [
+            "Desalentar"
+          ],
+          "raw_forms": [
+            "Desalentar"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 710072,
+          "token": 269145528,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Encourage": {
+          "key": 710073,
+          "token": 269145529,
+          "offset": 0,
+          "english": "Encourage",
+          "text": "Animar",
+          "forms": [
+            "Animar"
+          ],
+          "raw_forms": [
+            "Animar"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "progress_through_ip": {
+      "property": {
+        "key": 710080,
+        "token": 269145536,
+        "offset": 0,
+        "english": "Progress Through",
+        "text": "Avance",
+        "forms": [
+          "Avance"
+        ],
+        "raw_forms": [
+          "Avance"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Balanced": {
+          "key": 710081,
+          "token": 269145537,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Middle": {
+          "key": 710082,
+          "token": 269145538,
+          "offset": 0,
+          "english": "Middle",
+          "text": "Por el centro",
+          "forms": [
+            "Por el centro"
+          ],
+          "raw_forms": [
+            "Por el centro"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Left": {
+          "key": 710083,
+          "token": 269145539,
+          "offset": 0,
+          "english": "Left",
+          "text": "Izquierda",
+          "forms": [
+            "Izquierda"
+          ],
+          "raw_forms": [
+            "Izquierda"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Right": {
+          "key": 710084,
+          "token": 269145540,
+          "offset": 0,
+          "english": "Right",
+          "text": "Derecha",
+          "forms": [
+            "Derecha"
+          ],
+          "raw_forms": [
+            "Derecha"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Both Flanks": {
+          "key": 710085,
+          "token": 269145541,
+          "offset": 0,
+          "english": "Both Flanks",
+          "text": "Ambas bandas",
+          "forms": [
+            "Ambas bandas"
+          ],
+          "raw_forms": [
+            "Ambas bandas"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "patience_ip": {
+      "property": {
+        "key": 710090,
+        "token": 269145546,
+        "offset": 0,
+        "english": "Patience",
+        "text": "Paciencia",
+        "forms": [
+          "Paciencia"
+        ],
+        "raw_forms": [
+          "Paciencia"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Hit Early Crosses": {
+          "key": 710091,
+          "token": 269145547,
+          "offset": 0,
+          "english": "Hit Early Crosses",
+          "text": "Centros rápidos",
+          "forms": [
+            "Centros rápidos"
+          ],
+          "raw_forms": [
+            "Centros rápidos"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Standard": {
+          "key": 710092,
+          "token": 269145548,
+          "offset": 0,
+          "english": "Standard",
+          "text": "Normal",
+          "forms": [
+            "Normal"
+          ],
+          "raw_forms": [
+            "Normal"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Work Ball Into Box": {
+          "key": 710093,
+          "token": 269145549,
+          "offset": 0,
+          "english": "Work Ball Into Box",
+          "text": "Intentar llevar el balón hasta el área",
+          "forms": [
+            "Intentar llevar el balón hasta el área"
+          ],
+          "raw_forms": [
+            "Intentar llevar el balón hasta el área"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "shots_from_distance_ip": {
+      "property": {
+        "key": 710100,
+        "token": 269145556,
+        "offset": 0,
+        "english": "Shots from Distance",
+        "text": "Disparos lejanos",
+        "forms": [
+          "Disparos lejanos"
+        ],
+        "raw_forms": [
+          "Disparos lejanos"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Discourage": {
+          "key": 710101,
+          "token": 269145557,
+          "offset": 0,
+          "english": "Discourage",
+          "text": "Desalentar",
+          "forms": [
+            "Desalentar"
+          ],
+          "raw_forms": [
+            "Desalentar"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 710102,
+          "token": 269145558,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Encourage": {
+          "key": 710103,
+          "token": 269145559,
+          "offset": 0,
+          "english": "Encourage",
+          "text": "Alentar",
+          "forms": [
+            "Alentar"
+          ],
+          "raw_forms": [
+            "Alentar"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "crossing_style_ip": {
+      "property": {
+        "key": 710110,
+        "token": 269145566,
+        "offset": 0,
+        "english": "Crossing Style",
+        "text": "Estilo de centros",
+        "forms": [
+          "Estilo de centros"
+        ],
+        "raw_forms": [
+          "Estilo de centros"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Balanced": {
+          "key": 710111,
+          "token": 269145567,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Floated Crosses": {
+          "key": 710112,
+          "token": 269145568,
+          "offset": 0,
+          "english": "Floated Crosses",
+          "text": "Centros flotados",
+          "forms": [
+            "Centros flotados"
+          ],
+          "raw_forms": [
+            "Centros flotados"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Whipped Crosses": {
+          "key": 710113,
+          "token": 269145569,
+          "offset": 0,
+          "english": "Whipped Crosses",
+          "text": "Centros tensos",
+          "forms": [
+            "Centros tensos"
+          ],
+          "raw_forms": [
+            "Centros tensos"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Low Crosses": {
+          "key": 710114,
+          "token": 269145570,
+          "offset": 0,
+          "english": "Low Crosses",
+          "text": "Centros rasos",
+          "forms": [
+            "Centros rasos"
+          ],
+          "raw_forms": [
+            "Centros rasos"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "gk_distribution_speed_ip": {
+      "property": {
+        "key": 710120,
+        "token": 269145576,
+        "offset": 0,
+        "english": "GK Distribution (Speed)",
+        "text": "Distribución del portero (velocidad)",
+        "forms": [
+          "Distribución del portero (velocidad)"
+        ],
+        "raw_forms": [
+          "Distribución del portero (velocidad)"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Slow Pace Down": {
+          "key": 710121,
+          "token": 269145577,
+          "offset": 0,
+          "english": "Slow Pace Down",
+          "text": "Bajar el ritmo",
+          "forms": [
+            "Bajar el ritmo"
+          ],
+          "raw_forms": [
+            "Bajar el ritmo"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 710122,
+          "token": 269145578,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Distribute Quickly": {
+          "key": 710123,
+          "token": 269145579,
+          "offset": 0,
+          "english": "Distribute Quickly",
+          "text": "Distribuir con rapidez",
+          "forms": [
+            "Distribuir con rapidez"
+          ],
+          "raw_forms": [
+            "Distribuir con rapidez"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "cross_engagement_oop": {
+      "property": {
+        "key": 710130,
+        "token": 269145586,
+        "offset": 0,
+        "english": "Cross Engagement",
+        "text": "Compromiso de centros",
+        "forms": [
+          "Compromiso de centros"
+        ],
+        "raw_forms": [
+          "Compromiso de centros"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Stop Crosses": {
+          "key": 710131,
+          "token": 269145587,
+          "offset": 0,
+          "english": "Stop Crosses",
+          "text": "Evitar centros",
+          "forms": [
+            "Evitar centros"
+          ],
+          "raw_forms": [
+            "Evitar centros"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 710132,
+          "token": 269145588,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Invite Crosses": {
+          "key": 710133,
+          "token": 269145589,
+          "offset": 0,
+          "english": "Invite Crosses",
+          "text": "Invitar a centrar",
+          "forms": [
+            "Invitar a centrar"
+          ],
+          "raw_forms": [
+            "Invitar a centrar"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "pressing_trap_oop": {
+      "property": {
+        "key": 710140,
+        "token": 269145596,
+        "offset": 0,
+        "english": "Pressing Trap",
+        "text": "Trampa de presión",
+        "forms": [
+          "Trampa de presión"
+        ],
+        "raw_forms": [
+          "Trampa de presión"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Trap Inside": {
+          "key": 710141,
+          "token": 269145597,
+          "offset": 0,
+          "english": "Trap Inside",
+          "text": "Hacia dentro",
+          "forms": [
+            "Hacia dentro"
+          ],
+          "raw_forms": [
+            "Hacia dentro"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 710142,
+          "token": 269145598,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Trap Outside": {
+          "key": 710143,
+          "token": 269145599,
+          "offset": 0,
+          "english": "Trap Outside",
+          "text": "Hacia fuera",
+          "forms": [
+            "Hacia fuera"
+          ],
+          "raw_forms": [
+            "Hacia fuera"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "short_goalkeeper_distribution_oop": {
+      "property": {
+        "key": 710150,
+        "token": 269145606,
+        "offset": 0,
+        "english": "Short Goalkeeper Distribution",
+        "text": "Distribución del portero en corto",
+        "forms": [
+          "Distribución del portero en corto"
+        ],
+        "raw_forms": [
+          "Distribución del portero en corto"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "No": {
+          "key": 710151,
+          "token": 269145607,
+          "offset": 0,
+          "english": "No",
+          "text": "No",
+          "forms": [
+            "No"
+          ],
+          "raw_forms": [
+            "No"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Yes": {
+          "key": 710152,
+          "token": 269145608,
+          "offset": 0,
+          "english": "Yes",
+          "text": "Sí",
+          "forms": [
+            "Sí"
+          ],
+          "raw_forms": [
+            "Sí"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    },
+    "defensive_line_behaviour_oop": {
+      "property": {
+        "key": 710160,
+        "token": 269145616,
+        "offset": 0,
+        "english": "Defensive Line Behaviour",
+        "text": "Comportamiento de la línea defensiva",
+        "forms": [
+          "Comportamiento de la línea defensiva"
+        ],
+        "raw_forms": [
+          "Comportamiento de la línea defensiva"
+        ],
+        "context": "team instruction",
+        "resource_verified": true,
+        "runtime_verified": false
+      },
+      "options": {
+        "Step Up More": {
+          "key": 710161,
+          "token": 269145617,
+          "offset": 0,
+          "english": "Step Up More",
+          "text": "Presionar más arriba",
+          "forms": [
+            "Presionar más arriba"
+          ],
+          "raw_forms": [
+            "Presionar más arriba"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Balanced": {
+          "key": 710162,
+          "token": 269145618,
+          "offset": 0,
+          "english": "Balanced",
+          "text": "Equilibrado",
+          "forms": [
+            "Equilibrado"
+          ],
+          "raw_forms": [
+            "Equilibrado"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        },
+        "Drop Off More": {
+          "key": 710163,
+          "token": 269145619,
+          "offset": 0,
+          "english": "Drop Off More",
+          "text": "Caer atrás",
+          "forms": [
+            "Caer atrás"
+          ],
+          "raw_forms": [
+            "Caer atrás"
+          ],
+          "context": "",
+          "resource_verified": true,
+          "runtime_verified": false,
+          "binding_status": "context_selected",
+          "aliases": []
+        }
+      }
+    }
+  }
+}

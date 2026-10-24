@@ -1,0 +1,1932 @@
+{
+  "edition": "FM26",
+  "checked_at": "2026-10-24",
+  "source": "https://fmsidekick.com/api/",
+  "roles": [
+    {
+      "role_name": "Deep-Lying Forward",
+      "position": "ST",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Finishing",
+        "Off The Ball",
+        "First Touch",
+        "Technique",
+        "Strength",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Hold Up Ball"
+      ],
+      "id": "deep_lying_forward_ip",
+      "label": "Deep-Lying Forward",
+      "source": "https://fmsidekick.com/api/roles/deep_lying_forward_ip"
+    },
+    {
+      "role_name": "Centre Forward",
+      "position": "ST",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Finishing",
+        "Heading",
+        "Off The Ball",
+        "First Touch",
+        "Technique",
+        "Acceleration",
+        "Strength",
+        "Composure"
+      ],
+      "player_instructions": [],
+      "id": "centre_forward_ip",
+      "label": "Centre Forward",
+      "source": "https://fmsidekick.com/api/roles/centre_forward_ip"
+    },
+    {
+      "role_name": "Target Forward",
+      "position": "ST",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Finishing",
+        "Heading",
+        "Off The Ball",
+        "Strength",
+        "Jumping Reach",
+        "Balance",
+        "Bravery",
+        "Aggression"
+      ],
+      "player_instructions": [
+        "Hold Position"
+      ],
+      "id": "target_forward_ip",
+      "label": "Target Forward",
+      "source": "https://fmsidekick.com/api/roles/target_forward_ip"
+    },
+    {
+      "role_name": "Poacher",
+      "position": "ST",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Finishing",
+        "Heading",
+        "Off The Ball",
+        "Anticipation",
+        "Acceleration",
+        "Composure",
+        "Concentration"
+      ],
+      "player_instructions": [
+        "Hold Position"
+      ],
+      "id": "poacher_ip",
+      "label": "Poacher",
+      "source": "https://fmsidekick.com/api/roles/poacher_ip"
+    },
+    {
+      "role_name": "Channel Forward",
+      "position": "ST",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Dribbling",
+        "Finishing",
+        "Off The Ball",
+        "First Touch",
+        "Technique",
+        "Work Rate",
+        "Acceleration",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Move Into Channels"
+      ],
+      "id": "channel_forward_ip",
+      "label": "Channel Forward",
+      "source": "https://fmsidekick.com/api/roles/channel_forward_ip"
+    },
+    {
+      "role_name": "False Nine",
+      "position": "ST",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Dribbling",
+        "Off The Ball",
+        "Passing",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique",
+        "Teamwork"
+      ],
+      "player_instructions": [
+        "Roam From Position"
+      ],
+      "id": "false_nine_ip",
+      "label": "False Nine",
+      "source": "https://fmsidekick.com/api/roles/false_nine_ip"
+    },
+    {
+      "role_name": "Centre Forward",
+      "position": "ST",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Anticipation",
+        "Decisions",
+        "Work Rate"
+      ],
+      "player_instructions": [],
+      "id": "centre_forward_oop",
+      "label": "Centre Forward",
+      "source": "https://fmsidekick.com/api/roles/centre_forward_oop"
+    },
+    {
+      "role_name": "Tracking Centre Forward",
+      "position": "ST",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Stamina",
+        "Aggression"
+      ],
+      "player_instructions": [],
+      "id": "tracking_centre_forward_oop",
+      "label": "Tracking Centre Forward",
+      "source": "https://fmsidekick.com/api/roles/tracking_centre_forward_oop"
+    },
+    {
+      "role_name": "Central Outlet Centre Forward",
+      "position": "ST",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Balance",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "central_outlet_centre_forward_oop",
+      "label": "Central Outlet Centre Forward",
+      "source": "https://fmsidekick.com/api/roles/central_outlet_centre_forward_oop"
+    },
+    {
+      "role_name": "Winger",
+      "position": [
+        "AM(L/R)",
+        "M(L/R)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Crossing",
+        "Dribbling",
+        "Technique",
+        "Teamwork",
+        "Acceleration",
+        "Pace",
+        "Agility"
+      ],
+      "player_instructions": [],
+      "id": "winger_ip",
+      "label": "Winger (AM(L/R), M(L/R))",
+      "source": "https://fmsidekick.com/api/roles/winger_ip"
+    },
+    {
+      "role_name": "Inside Forward",
+      "position": "AM(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Dribbling",
+        "Off The Ball",
+        "Anticipation",
+        "First Touch",
+        "Technique",
+        "Acceleration",
+        "Agility",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Get Further Forward"
+      ],
+      "id": "inside_forward_ip",
+      "label": "Inside Forward",
+      "source": "https://fmsidekick.com/api/roles/inside_forward_ip"
+    },
+    {
+      "role_name": "Playmaking Winger",
+      "position": [
+        "AM(L/R)",
+        "M(L/R)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Crossing",
+        "Dribbling",
+        "Off The Ball",
+        "Passing",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique"
+      ],
+      "player_instructions": [
+        "Take More Risks"
+      ],
+      "id": "playmaking_winger_ip",
+      "label": "Playmaking Winger (AM(L/R), M(L/R))",
+      "source": "https://fmsidekick.com/api/roles/playmaking_winger_ip"
+    },
+    {
+      "role_name": "Wide Forward",
+      "position": "AM(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Dribbling",
+        "Off The Ball",
+        "Anticipation",
+        "First Touch",
+        "Technique",
+        "Acceleration",
+        "Pace",
+        "Agility"
+      ],
+      "player_instructions": [
+        "Get Further Forward"
+      ],
+      "id": "wide_forward_ip",
+      "label": "Wide Forward",
+      "source": "https://fmsidekick.com/api/roles/wide_forward_ip"
+    },
+    {
+      "role_name": "Inside Winger",
+      "position": [
+        "AM(L/R)",
+        "M(L/R)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Dribbling",
+        "First Touch",
+        "Technique",
+        "Teamwork",
+        "Acceleration",
+        "Agility",
+        "Composure"
+      ],
+      "player_instructions": [],
+      "id": "inside_winger_ip",
+      "label": "Inside Winger (AM(L/R), M(L/R))",
+      "source": "https://fmsidekick.com/api/roles/inside_winger_ip"
+    },
+    {
+      "role_name": "Winger",
+      "position": "AM(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration"
+      ],
+      "player_instructions": [],
+      "id": "winger_oop",
+      "label": "Winger",
+      "source": "https://fmsidekick.com/api/roles/winger_oop"
+    },
+    {
+      "role_name": "Tracking Winger",
+      "position": "AM(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration",
+        "Stamina",
+        "Aggression"
+      ],
+      "player_instructions": [],
+      "id": "tracking_winger_oop",
+      "label": "Tracking Winger",
+      "source": "https://fmsidekick.com/api/roles/tracking_winger_oop"
+    },
+    {
+      "role_name": "Inside Outlet Winger",
+      "position": "AM(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Balance",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "inside_outlet_winger_oop",
+      "label": "Inside Outlet Winger",
+      "source": "https://fmsidekick.com/api/roles/inside_outlet_winger_oop"
+    },
+    {
+      "role_name": "Wide Outlet Winger",
+      "position": "AM(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Pace",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "wide_outlet_winger_oop",
+      "label": "Wide Outlet Winger",
+      "source": "https://fmsidekick.com/api/roles/wide_outlet_winger_oop"
+    },
+    {
+      "role_name": "Splitting Outlet Centre Forward",
+      "position": "ST",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Pace",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "splitting_outlet_centre_forward_oop",
+      "label": "Splitting Outlet Centre Forward",
+      "source": "https://fmsidekick.com/api/roles/splitting_outlet_centre_forward_oop"
+    },
+    {
+      "role_name": "Attacking Midfielder",
+      "position": [
+        "AM(C)",
+        "M(C)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Long Shots",
+        "Off The Ball",
+        "Passing",
+        "First Touch",
+        "Technique",
+        "Flair",
+        "Composure"
+      ],
+      "player_instructions": [],
+      "id": "attacking_midfielder_ip",
+      "label": "Attacking Midfielder (AM(C), M(C))",
+      "source": "https://fmsidekick.com/api/roles/attacking_midfielder_ip"
+    },
+    {
+      "role_name": "Advanced Playmaker",
+      "position": [
+        "AM(C)",
+        "M(C)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Passing",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique",
+        "Teamwork",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Take More Risks"
+      ],
+      "id": "advanced_playmaker_ip",
+      "label": "Advanced Playmaker (AM(C), M(C))",
+      "source": "https://fmsidekick.com/api/roles/advanced_playmaker_ip"
+    },
+    {
+      "role_name": "Free Role",
+      "position": "AM(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Dribbling",
+        "Long Shots",
+        "Off The Ball",
+        "Passing",
+        "Vision",
+        "First Touch",
+        "Technique",
+        "Flair"
+      ],
+      "player_instructions": [
+        "Dribble More Often",
+        "Take More Risks"
+      ],
+      "id": "free_role_ip",
+      "label": "Free Role",
+      "source": "https://fmsidekick.com/api/roles/free_role_ip"
+    },
+    {
+      "role_name": "Second Striker",
+      "position": "AM(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Finishing",
+        "Off The Ball",
+        "Anticipation",
+        "First Touch",
+        "Acceleration",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Get Further Forward"
+      ],
+      "id": "second_striker_ip",
+      "label": "Second Striker",
+      "source": "https://fmsidekick.com/api/roles/second_striker_ip"
+    },
+    {
+      "role_name": "Channel Midfielder",
+      "position": [
+        "AM(C)",
+        "M(C)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Crossing",
+        "Off The Ball",
+        "Passing",
+        "First Touch",
+        "Technique",
+        "Work Rate",
+        "Acceleration",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Move Into Channels"
+      ],
+      "id": "channel_midfielder_ip",
+      "label": "Channel Midfielder (AM(C), M(C))",
+      "source": "https://fmsidekick.com/api/roles/channel_midfielder_ip"
+    },
+    {
+      "role_name": "Tracking Attacking Midfielder",
+      "position": "AM(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Stamina",
+        "Aggression"
+      ],
+      "player_instructions": [],
+      "id": "tracking_attacking_midfielder_oop",
+      "label": "Tracking Attacking Midfielder",
+      "source": "https://fmsidekick.com/api/roles/tracking_attacking_midfielder_oop"
+    },
+    {
+      "role_name": "Central Outlet Attacking Midfielder",
+      "position": "AM(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Balance",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "central_outlet_attacking_midfielder_oop",
+      "label": "Central Outlet Attacking Midfielder",
+      "source": "https://fmsidekick.com/api/roles/central_outlet_attacking_midfielder_oop"
+    },
+    {
+      "role_name": "Splitting Outlet Attacking Midfielder",
+      "position": "AM(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Pace",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "splitting_outlet_attacking_midfielder_oop",
+      "label": "Splitting Outlet Attacking Midfielder",
+      "source": "https://fmsidekick.com/api/roles/splitting_outlet_attacking_midfielder_oop"
+    },
+    {
+      "role_name": "Attacking Midfielder",
+      "position": "AM(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Anticipation",
+        "Decisions",
+        "Work Rate"
+      ],
+      "player_instructions": [],
+      "id": "attacking_midfielder_oop",
+      "label": "Attacking Midfielder",
+      "source": "https://fmsidekick.com/api/roles/attacking_midfielder_oop"
+    },
+    {
+      "role_name": "Wide Midfielder",
+      "position": "M(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Crossing",
+        "Passing",
+        "Decisions",
+        "Technique",
+        "Teamwork",
+        "Work Rate",
+        "Stamina",
+        "Pace"
+      ],
+      "player_instructions": [],
+      "id": "wide_midfielder_ip",
+      "label": "Wide Midfielder",
+      "source": "https://fmsidekick.com/api/roles/wide_midfielder_ip"
+    },
+    {
+      "role_name": "Wide Midfielder",
+      "position": "M(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration"
+      ],
+      "player_instructions": [],
+      "id": "wide_midfielder_oop",
+      "label": "Wide Midfielder (M(L/R))",
+      "source": "https://fmsidekick.com/api/roles/wide_midfielder_oop"
+    },
+    {
+      "role_name": "Tracking Wide Midfielder",
+      "position": "M(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration",
+        "Stamina",
+        "Aggression"
+      ],
+      "player_instructions": [],
+      "id": "tracking_wide_midfielder_oop",
+      "label": "Tracking Wide Midfielder (M(L/R))",
+      "source": "https://fmsidekick.com/api/roles/tracking_wide_midfielder_oop"
+    },
+    {
+      "role_name": "Wide Outlet Wide Midfielder",
+      "position": "M(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Pace",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "wide_outlet_wide_midfielder_oop",
+      "label": "Wide Outlet Wide Midfielder (M(L/R))",
+      "source": "https://fmsidekick.com/api/roles/wide_outlet_wide_midfielder_oop"
+    },
+    {
+      "role_name": "Central Midfielder",
+      "position": "M(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Passing",
+        "Tackling",
+        "Decisions",
+        "First Touch",
+        "Teamwork"
+      ],
+      "player_instructions": [],
+      "id": "central_midfielder_ip",
+      "label": "Central Midfielder (M(C))",
+      "source": "https://fmsidekick.com/api/roles/central_midfielder_ip"
+    },
+    {
+      "role_name": "Wide Central Midfielder",
+      "position": "M(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Passing",
+        "Tackling",
+        "Decisions",
+        "First Touch",
+        "Teamwork"
+      ],
+      "player_instructions": [
+        "Stay Wider"
+      ],
+      "id": "wide_central_midfielder_ip",
+      "label": "Wide Central Midfielder (M(C))",
+      "source": "https://fmsidekick.com/api/roles/wide_central_midfielder_ip"
+    },
+    {
+      "role_name": "Midfield Playmaker",
+      "position": "M(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Passing",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique",
+        "Teamwork",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Take More Risks"
+      ],
+      "id": "midfield_playmaker_ip",
+      "label": "Midfield Playmaker (M(C))",
+      "source": "https://fmsidekick.com/api/roles/midfield_playmaker_ip"
+    },
+    {
+      "role_name": "Central Midfielder",
+      "position": "M(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Tackling",
+        "Decisions",
+        "Teamwork",
+        "Work Rate"
+      ],
+      "player_instructions": [],
+      "id": "central_midfielder_oop",
+      "label": "Central Midfielder (M(C))",
+      "source": "https://fmsidekick.com/api/roles/central_midfielder_oop"
+    },
+    {
+      "role_name": "Pressing Central Midfielder",
+      "position": "M(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Stamina",
+        "Aggression"
+      ],
+      "player_instructions": [
+        "Trigger Press More Often"
+      ],
+      "id": "pressing_central_midfielder_oop",
+      "label": "Pressing Central Midfielder (M(C))",
+      "source": "https://fmsidekick.com/api/roles/pressing_central_midfielder_oop"
+    },
+    {
+      "role_name": "Screening Central Midfielder",
+      "position": "M(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Decisions",
+        "Positioning",
+        "Concentration"
+      ],
+      "player_instructions": [
+        "Trigger Press Less Often"
+      ],
+      "id": "screening_central_midfielder_oop",
+      "label": "Screening Central Midfielder (M(C))",
+      "source": "https://fmsidekick.com/api/roles/screening_central_midfielder_oop"
+    },
+    {
+      "role_name": "Wide Covering Central Midfielder",
+      "position": "M(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Decisions",
+        "Teamwork",
+        "Work Rate",
+        "Stamina",
+        "Agility"
+      ],
+      "player_instructions": [
+        "Defend Channels"
+      ],
+      "id": "wide_covering_central_midfielder_oop",
+      "label": "Wide Covering Central Midfielder (M(C))",
+      "source": "https://fmsidekick.com/api/roles/wide_covering_central_midfielder_oop"
+    },
+    {
+      "role_name": "Wing Back",
+      "position": [
+        "D(L/R)",
+        "WB(L/R)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Crossing",
+        "Marking",
+        "Tackling",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration",
+        "Stamina",
+        "Pace"
+      ],
+      "player_instructions": [
+        "Get Further Forward"
+      ],
+      "id": "wing_back_ip",
+      "label": "Wing Back (D(L/R), WB(L/R))",
+      "source": "https://fmsidekick.com/api/roles/wing_back_ip"
+    },
+    {
+      "role_name": "Advanced Wing-Back",
+      "position": "WB(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Crossing",
+        "Dribbling",
+        "Off The Ball",
+        "Technique",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration",
+        "Stamina"
+      ],
+      "player_instructions": [
+        "Get Further Forward"
+      ],
+      "id": "advanced_wing_back_ip",
+      "label": "Advanced Wing-Back (WB(L/R))",
+      "source": "https://fmsidekick.com/api/roles/advanced_wing_back_ip"
+    },
+    {
+      "role_name": "Inside Wing-Back",
+      "position": [
+        "D(L/R)",
+        "WB(L/R)"
+      ],
+      "phase": "in_possession",
+      "key_attributes": [
+        "Passing",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Teamwork",
+        "Acceleration",
+        "Composure"
+      ],
+      "player_instructions": [],
+      "id": "inside_wing_back_ip",
+      "label": "Inside Wing-Back (D(L/R), WB(L/R))",
+      "source": "https://fmsidekick.com/api/roles/inside_wing_back_ip"
+    },
+    {
+      "role_name": "Playmaking Wing-Back",
+      "position": "WB(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Passing",
+        "Tackling",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique",
+        "Teamwork",
+        "Acceleration"
+      ],
+      "player_instructions": [
+        "Roam From Position"
+      ],
+      "id": "playmaking_wing_back_ip",
+      "label": "Playmaking Wing-Back (WB(L/R))",
+      "source": "https://fmsidekick.com/api/roles/playmaking_wing_back_ip"
+    },
+    {
+      "role_name": "Wing Back",
+      "position": "WB(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Teamwork",
+        "Acceleration",
+        "Stamina"
+      ],
+      "player_instructions": [],
+      "id": "wing_back_oop",
+      "label": "Wing Back (WB(L/R))",
+      "source": "https://fmsidekick.com/api/roles/wing_back_oop"
+    },
+    {
+      "role_name": "Pressing Wing-Back",
+      "position": "WB(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration",
+        "Stamina"
+      ],
+      "player_instructions": [
+        "Trigger Press More Often"
+      ],
+      "id": "pressing_wing_back_oop",
+      "label": "Pressing Wing-Back (WB(L/R))",
+      "source": "https://fmsidekick.com/api/roles/pressing_wing_back_oop"
+    },
+    {
+      "role_name": "Holding Wing-Back",
+      "position": "WB(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Acceleration",
+        "Concentration"
+      ],
+      "player_instructions": [
+        "Trigger Press Less Often"
+      ],
+      "id": "holding_wing_back_oop",
+      "label": "Holding Wing-Back (WB(L/R))",
+      "source": "https://fmsidekick.com/api/roles/holding_wing_back_oop"
+    },
+    {
+      "role_name": "Defensive Midfielder",
+      "position": "DM",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Teamwork",
+        "Concentration"
+      ],
+      "player_instructions": [
+        "Hold Position"
+      ],
+      "id": "defensive_midfielder_ip",
+      "label": "Defensive Midfielder (DM)",
+      "source": "https://fmsidekick.com/api/roles/defensive_midfielder_ip"
+    },
+    {
+      "role_name": "Deep-Lying Playmaker",
+      "position": "DM",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Passing",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique",
+        "Teamwork",
+        "Composure"
+      ],
+      "player_instructions": [
+        "Take More Risks"
+      ],
+      "id": "deep_lying_playmaker_ip",
+      "label": "Deep-Lying Playmaker (DM)",
+      "source": "https://fmsidekick.com/api/roles/deep_lying_playmaker_ip"
+    },
+    {
+      "role_name": "Box-To-Box Midfielder",
+      "position": "DM",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Passing",
+        "Tackling",
+        "Teamwork",
+        "Work Rate",
+        "Stamina"
+      ],
+      "player_instructions": [],
+      "id": "box_to_box_midfielder_ip",
+      "label": "Box-To-Box Midfielder (DM)",
+      "source": "https://fmsidekick.com/api/roles/box_to_box_midfielder_ip"
+    },
+    {
+      "role_name": "Half Back",
+      "position": "DM",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Teamwork",
+        "Strength",
+        "Jumping Reach"
+      ],
+      "player_instructions": [],
+      "id": "half_back_ip",
+      "label": "Half Back (DM)",
+      "source": "https://fmsidekick.com/api/roles/half_back_ip"
+    },
+    {
+      "role_name": "Box-To-Box Playmaker",
+      "position": "DM",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Off The Ball",
+        "Passing",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique",
+        "Teamwork",
+        "Work Rate"
+      ],
+      "player_instructions": [],
+      "id": "box_to_box_playmaker_ip",
+      "label": "Box-To-Box Playmaker (DM)",
+      "source": "https://fmsidekick.com/api/roles/box_to_box_playmaker_ip"
+    },
+    {
+      "role_name": "Defensive Midfielder",
+      "position": "DM",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Teamwork",
+        "Work Rate"
+      ],
+      "player_instructions": [],
+      "id": "defensive_midfielder_oop",
+      "label": "Defensive Midfielder (DM)",
+      "source": "https://fmsidekick.com/api/roles/defensive_midfielder_oop"
+    },
+    {
+      "role_name": "Dropping Defensive Midfielder",
+      "position": "DM",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Teamwork",
+        "Work Rate",
+        "Strength"
+      ],
+      "player_instructions": [],
+      "id": "dropping_defensive_midfielder_oop",
+      "label": "Dropping Defensive Midfielder (DM)",
+      "source": "https://fmsidekick.com/api/roles/dropping_defensive_midfielder_oop"
+    },
+    {
+      "role_name": "Screening Defensive Midfielder",
+      "position": "DM",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Concentration"
+      ],
+      "player_instructions": [
+        "Trigger Press Less Often"
+      ],
+      "id": "screening_defensive_midfielder_oop",
+      "label": "Screening Defensive Midfielder (DM)",
+      "source": "https://fmsidekick.com/api/roles/screening_defensive_midfielder_oop"
+    },
+    {
+      "role_name": "Wide Covering Defensive Midfielder",
+      "position": "DM",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Teamwork",
+        "Work Rate",
+        "Stamina"
+      ],
+      "player_instructions": [
+        "Defend Channels"
+      ],
+      "id": "wide_covering_defensive_midfielder_oop",
+      "label": "Wide Covering Defensive Midfielder (DM)",
+      "source": "https://fmsidekick.com/api/roles/wide_covering_defensive_midfielder_oop"
+    },
+    {
+      "role_name": "Full Back",
+      "position": "D(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Teamwork",
+        "Acceleration",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "full_back_ip",
+      "label": "Full Back (D(L/R))",
+      "source": "https://fmsidekick.com/api/roles/full_back_ip"
+    },
+    {
+      "role_name": "Inside Full-Back",
+      "position": "D(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Strength"
+      ],
+      "player_instructions": [],
+      "id": "inside_full_back_ip",
+      "label": "Inside Full-Back (D(L/R))",
+      "source": "https://fmsidekick.com/api/roles/inside_full_back_ip"
+    },
+    {
+      "role_name": "Playmaking Wing-Back",
+      "position": "D(L/R)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Passing",
+        "Tackling",
+        "Vision",
+        "Decisions",
+        "First Touch",
+        "Technique",
+        "Teamwork",
+        "Acceleration"
+      ],
+      "player_instructions": [
+        "Roam From Position"
+      ],
+      "id": "playmaking_wing_back_ip_d_l_r",
+      "label": "Playmaking Wing-Back (D(L/R))",
+      "source": "https://fmsidekick.com/api/roles/playmaking_wing_back_ip_d_l_r"
+    },
+    {
+      "role_name": "Full Back",
+      "position": "D(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Teamwork",
+        "Acceleration"
+      ],
+      "player_instructions": [],
+      "id": "full_back_oop",
+      "label": "Full Back (D(L/R))",
+      "source": "https://fmsidekick.com/api/roles/full_back_oop"
+    },
+    {
+      "role_name": "Pressing Full-Back",
+      "position": "D(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Teamwork",
+        "Work Rate",
+        "Acceleration",
+        "Aggression"
+      ],
+      "player_instructions": [
+        "Trigger Press More Often"
+      ],
+      "id": "pressing_full_back_oop",
+      "label": "Pressing Full-Back (D(L/R))",
+      "source": "https://fmsidekick.com/api/roles/pressing_full_back_oop"
+    },
+    {
+      "role_name": "Holding Full-Back",
+      "position": "D(L/R)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Acceleration",
+        "Concentration"
+      ],
+      "player_instructions": [
+        "Trigger Press Less Often"
+      ],
+      "id": "holding_full_back_oop",
+      "label": "Holding Full-Back (D(L/R))",
+      "source": "https://fmsidekick.com/api/roles/holding_full_back_oop"
+    },
+    {
+      "role_name": "Centre-Back",
+      "position": "D(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Strength",
+        "Jumping Reach"
+      ],
+      "player_instructions": [
+        "Hold Position"
+      ],
+      "id": "centre_back_ip",
+      "label": "Centre-Back (D(C))",
+      "source": "https://fmsidekick.com/api/roles/centre_back_ip"
+    },
+    {
+      "role_name": "Advanced Centre-Back",
+      "position": "D(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Passing",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Technique"
+      ],
+      "player_instructions": [],
+      "id": "advanced_centre_back_ip",
+      "label": "Advanced Centre-Back (D(C))",
+      "source": "https://fmsidekick.com/api/roles/advanced_centre_back_ip"
+    },
+    {
+      "role_name": "Ball-Playing Centre-Back",
+      "position": "D(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Passing",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Strength",
+        "Jumping Reach"
+      ],
+      "player_instructions": [
+        "Hold Position",
+        "Take More Risks"
+      ],
+      "id": "ball_playing_centre_back_ip",
+      "label": "Ball-Playing Centre-Back (D(C))",
+      "source": "https://fmsidekick.com/api/roles/ball_playing_centre_back_ip"
+    },
+    {
+      "role_name": "No-Nonsense Centre-Back",
+      "position": "D(C)",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Strength",
+        "Jumping Reach"
+      ],
+      "player_instructions": [
+        "Take Fewer Risks",
+        "Dribble less often.",
+        "Hold Position"
+      ],
+      "id": "no_nonsense_center_back_ip",
+      "label": "No-Nonsense Center-Back (D(C))",
+      "source": "https://fmsidekick.com/api/roles/no_nonsense_center_back_ip"
+    },
+    {
+      "role_name": "Centre-Back",
+      "position": "D(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Strength",
+        "Jumping Reach"
+      ],
+      "player_instructions": [],
+      "id": "centre_back_oop",
+      "label": "Centre-Back (D(C))",
+      "source": "https://fmsidekick.com/api/roles/centre_back_oop"
+    },
+    {
+      "role_name": "Stopping Centre-Back",
+      "position": "D(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Positioning",
+        "Strength",
+        "Jumping Reach",
+        "Bravery"
+      ],
+      "player_instructions": [
+        "Trigger Press Less Often"
+      ],
+      "id": "stopping_centre_back_oop",
+      "label": "Stopping Centre-Back (D(C))",
+      "source": "https://fmsidekick.com/api/roles/stopping_centre_back_oop"
+    },
+    {
+      "role_name": "Covering Centre-Back",
+      "position": "D(C)",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Heading",
+        "Marking",
+        "Tackling",
+        "Anticipation",
+        "Decisions",
+        "Positioning",
+        "Strength",
+        "Pace"
+      ],
+      "player_instructions": [
+        "Trigger Press Less Often"
+      ],
+      "id": "covering_centre_back_oop",
+      "label": "Covering Centre-Back (D(C))",
+      "source": "https://fmsidekick.com/api/roles/covering_centre_back_oop"
+    },
+    {
+      "role_name": "No-Nonsense Goalkeeper",
+      "position": "GK",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Handling",
+        "Aerial Reach",
+        "Command Of Area",
+        "Communication",
+        "Positioning",
+        "Reflexes",
+        "Agility",
+        "Concentration"
+      ],
+      "player_instructions": [
+        "Take Fewer Risks",
+        "Dribble less often."
+      ],
+      "id": "no_nonsense_goalkeeper_ip",
+      "label": "No-Nonsense Goalkeeper (GK)",
+      "source": "https://fmsidekick.com/api/roles/no_nonsense_goalkeeper_ip"
+    },
+    {
+      "role_name": "Ball-Playing Goalkeeper",
+      "position": "GK",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Handling",
+        "Aerial Reach",
+        "Command Of Area",
+        "Communication",
+        "Kicking",
+        "Positioning",
+        "Reflexes",
+        "Agility"
+      ],
+      "player_instructions": [
+        "Take More Risks"
+      ],
+      "id": "ball_playing_goalkeeper_ip",
+      "label": "Ball-Playing Goalkeeper (GK)",
+      "source": "https://fmsidekick.com/api/roles/ball_playing_goalkeeper_ip"
+    },
+    {
+      "role_name": "Goalkeeper",
+      "position": "GK",
+      "phase": "in_possession",
+      "key_attributes": [
+        "Handling",
+        "Aerial Reach",
+        "Command Of Area",
+        "Communication",
+        "Positioning",
+        "Reflexes",
+        "Agility",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "goalkeeper_ip",
+      "label": "Goalkeeper (GK)",
+      "source": "https://fmsidekick.com/api/roles/goalkeeper_ip"
+    },
+    {
+      "role_name": "Goalkeeper",
+      "position": "GK",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Handling",
+        "Aerial Reach",
+        "Command Of Area",
+        "Communication",
+        "Positioning",
+        "Reflexes",
+        "Agility",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "goalkeeper_oop",
+      "label": "Goalkeeper (GK)",
+      "source": "https://fmsidekick.com/api/roles/goalkeeper_oop"
+    },
+    {
+      "role_name": "Sweeper Keeper",
+      "position": "GK",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Handling",
+        "Aerial Reach",
+        "Command Of Area",
+        "Communication",
+        "Anticipation",
+        "Decisions",
+        "One On Ones",
+        "Reflexes"
+      ],
+      "player_instructions": [],
+      "id": "sweeper_keeper_oop",
+      "label": "Sweeper Keeper (GK)",
+      "source": "https://fmsidekick.com/api/roles/sweeper_keeper_oop"
+    },
+    {
+      "role_name": "Line-Holding Keeper",
+      "position": "GK",
+      "phase": "out_of_possession",
+      "key_attributes": [
+        "Handling",
+        "Aerial Reach",
+        "Command Of Area",
+        "Communication",
+        "Positioning",
+        "Reflexes",
+        "Agility",
+        "Concentration"
+      ],
+      "player_instructions": [],
+      "id": "line_holding_keeper_oop",
+      "label": "Line-Holding Keeper (GK)",
+      "source": "https://fmsidekick.com/api/roles/line_holding_keeper_oop"
+    }
+  ],
+  "player_instructions": [
+    {
+      "instruction_property": "Attacking Width",
+      "phase": "in_possession",
+      "options": [
+        "Stay Wider",
+        "Sit Narrower",
+        "Move Into Channels",
+        "Standard"
+      ],
+      "id": "attacking_width_ip",
+      "label": "Attacking Width",
+      "source": "https://fmsidekick.com/api/player_instructions/attacking_width_ip"
+    },
+    {
+      "instruction_property": "Tackling",
+      "phase": "out_of_possession",
+      "options": [
+        "Ease Off Tackles",
+        "Standard",
+        "Tackle Harder"
+      ],
+      "id": "tackling_oop",
+      "label": "Tackling",
+      "source": "https://fmsidekick.com/api/player_instructions/tackling_oop"
+    },
+    {
+      "instruction_property": "Dribbling Direction",
+      "phase": "in_possession",
+      "options": [
+        "Standard",
+        "Cut Inside With Ball",
+        "Run Wide With Ball"
+      ],
+      "id": "dribbling_direction_ip",
+      "label": "Dribbling Direction",
+      "source": "https://fmsidekick.com/api/player_instructions/dribbling_direction_ip"
+    },
+    {
+      "instruction_property": "Dribbling Frequency",
+      "phase": "in_possession",
+      "options": [
+        "Dribble Less",
+        "Standard",
+        "Dribble More"
+      ],
+      "id": "dribbling_frequency_ip",
+      "label": "Dribbling Frequency",
+      "source": "https://fmsidekick.com/api/player_instructions/dribbling_frequency_ip"
+    },
+    {
+      "instruction_property": "Forward Runs",
+      "phase": "in_possession",
+      "options": [
+        "Make More Runs",
+        "Standard",
+        "Make Fewer Runs"
+      ],
+      "id": "forward_runs_ip",
+      "label": "Forward Runs",
+      "source": "https://fmsidekick.com/api/player_instructions/forward_runs_ip"
+    },
+    {
+      "instruction_property": "Freedom of Movement",
+      "phase": "in_possession",
+      "options": [
+        "Follow Tactical Position",
+        "Roam From Position"
+      ],
+      "id": "freedom_of_movement_ip",
+      "label": "Freedom of Movement",
+      "source": "https://fmsidekick.com/api/player_instructions/freedom_of_movement_ip"
+    },
+    {
+      "instruction_property": "Hold Up Ball",
+      "phase": "in_possession",
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "id": "hold_up_ball_ip",
+      "label": "Hold Up Ball",
+      "source": "https://fmsidekick.com/api/player_instructions/hold_up_ball_ip"
+    },
+    {
+      "instruction_property": "Shoot",
+      "phase": "in_possession",
+      "options": [
+        "Shoot Less Often",
+        "Standard",
+        "Shoot More Often"
+      ],
+      "id": "shoot_ip",
+      "label": "Shoot",
+      "source": "https://fmsidekick.com/api/player_instructions/shoot_ip"
+    },
+    {
+      "instruction_property": "Passing Risk",
+      "phase": "in_possession",
+      "options": [
+        "Take Fewer Risks",
+        "Standard",
+        "Take More Risks"
+      ],
+      "id": "passing_risk_ip",
+      "label": "Passing Risk",
+      "source": "https://fmsidekick.com/api/player_instructions/passing_risk_ip"
+    },
+    {
+      "instruction_property": "Cross From",
+      "phase": "in_possession",
+      "options": [
+        "Byline",
+        "Standard",
+        "Cross From Deep"
+      ],
+      "id": "cross_from_ip",
+      "label": "Cross From",
+      "source": "https://fmsidekick.com/api/player_instructions/cross_from_ip"
+    },
+    {
+      "instruction_property": "Crossing Strategy",
+      "phase": "in_possession",
+      "options": [
+        "Standard",
+        "Target Forward",
+        "Near Post",
+        "Centre",
+        "Far Post"
+      ],
+      "id": "crossing_strategy_ip",
+      "label": "Crossing Strategy",
+      "source": "https://fmsidekick.com/api/player_instructions/crossing_strategy_ip"
+    },
+    {
+      "instruction_property": "Pressing",
+      "phase": "out_of_possession",
+      "options": [
+        "Less Often",
+        "Standard",
+        "More Often"
+      ],
+      "id": "pressing_oop",
+      "label": "Pressing",
+      "source": "https://fmsidekick.com/api/player_instructions/pressing_oop"
+    },
+    {
+      "instruction_property": "Marking",
+      "phase": "out_of_possession",
+      "options": [
+        "Mark Tighter",
+        "Standard"
+      ],
+      "id": "marking_oop",
+      "label": "Marking",
+      "source": "https://fmsidekick.com/api/player_instructions/marking_oop"
+    },
+    {
+      "instruction_property": "Marking Target",
+      "phase": "out_of_possession",
+      "options": [
+        "Standard",
+        "Mark Position",
+        "Mark Specific"
+      ],
+      "id": "marking_target_oop",
+      "label": "Marking Target",
+      "source": "https://fmsidekick.com/api/player_instructions/marking_target_oop"
+    }
+  ],
+  "team_instructions": [
+    {
+      "instruction_property": "Passing Directness",
+      "category": "in_possession",
+      "options": [
+        "Much Shorter",
+        "Shorter",
+        "Standard",
+        "More Direct",
+        "Much More Direct"
+      ],
+      "id": "passing_directness",
+      "label": "Passing Directness",
+      "source": "https://fmsidekick.com/api/team_instructions/passing_directness"
+    },
+    {
+      "instruction_property": "Tempo",
+      "category": "in_possession",
+      "options": [
+        "Much Lower",
+        "Lower",
+        "Standard",
+        "Higher",
+        "Much Higher"
+      ],
+      "id": "tempo",
+      "label": "Tempo",
+      "source": "https://fmsidekick.com/api/team_instructions/tempo"
+    },
+    {
+      "instruction_property": "Time Wasting",
+      "category": "in_possession",
+      "options": [
+        "Less Often",
+        "Standard",
+        "More Often"
+      ],
+      "id": "time_wasting",
+      "label": "Time Wasting",
+      "source": "https://fmsidekick.com/api/team_instructions/time_wasting"
+    },
+    {
+      "instruction_property": "Attacking Transition",
+      "category": "in_possession",
+      "options": [
+        "Hold Shape",
+        "Standard",
+        "Counter-Attack"
+      ],
+      "id": "attacking_transition_ip",
+      "label": "Attacking Transition",
+      "source": "https://fmsidekick.com/api/team_instructions/attacking_transition_ip"
+    },
+    {
+      "instruction_property": "Play for Set Pieces",
+      "category": "in_possession",
+      "options": [
+        "Keep Ball in Play",
+        "Play for Set Pieces"
+      ],
+      "id": "play_for_set_pieces_ip",
+      "label": "Play for Set Pieces",
+      "source": "https://fmsidekick.com/api/team_instructions/play_for_set_pieces_ip"
+    },
+    {
+      "instruction_property": "Creative Freedom",
+      "category": "in_possession",
+      "options": [
+        "More Disciplined",
+        "Balanced",
+        "More Expressive"
+      ],
+      "id": "creative_freedom_ip",
+      "label": "Creative Freedom",
+      "source": "https://fmsidekick.com/api/team_instructions/creative_freedom_ip"
+    },
+    {
+      "instruction_property": "Build-Up Strategy",
+      "category": "in_possession",
+      "options": [
+        "Play Through Press",
+        "Balanced",
+        "Bypass Press"
+      ],
+      "id": "build_up_strategy_ip",
+      "label": "Build-Up Strategy",
+      "source": "https://fmsidekick.com/api/team_instructions/build_up_strategy_ip"
+    },
+    {
+      "instruction_property": "Goal Kicks",
+      "category": "in_possession",
+      "options": [
+        "Short",
+        "Mixed",
+        "Long"
+      ],
+      "id": "goal_kicks_ip",
+      "label": "Goal Kicks",
+      "source": "https://fmsidekick.com/api/team_instructions/goal_kicks_ip"
+    },
+    {
+      "instruction_property": "GK Distribution",
+      "category": "in_possession",
+      "options": [
+        "Balanced",
+        "Center-Backs",
+        "Full-Backs",
+        "Flanks",
+        "Playmaker",
+        "Target Forward",
+        "Over Opposition Defense"
+      ],
+      "id": "gk_distribution_ip",
+      "label": "GK Distribution",
+      "source": "https://fmsidekick.com/api/team_instructions/gk_distribution_ip"
+    },
+    {
+      "instruction_property": "Supporting Runs",
+      "category": "in_possession",
+      "options": [
+        "Overlap - Balanced",
+        "Overlap - Left",
+        "Overlap - Right",
+        "Overlap - Both Flanks"
+      ],
+      "id": "overlap_ip",
+      "label": "Supporting Runs",
+      "source": "https://fmsidekick.com/api/team_instructions/overlap_ip"
+    },
+    {
+      "instruction_property": "Supporting Runs",
+      "category": "in_possession",
+      "options": [
+        "Underlap - Balanced",
+        "Underlap - Left",
+        "Underlap - Right",
+        "Underlap - Both Flanks"
+      ],
+      "id": "underlap_ip",
+      "label": "Supporting Runs",
+      "source": "https://fmsidekick.com/api/team_instructions/underlap_ip"
+    },
+    {
+      "instruction_property": "Dribbling",
+      "category": "in_possession",
+      "options": [
+        "Discourage",
+        "Balanced",
+        "Encourage"
+      ],
+      "id": "dribbling_ip",
+      "label": "Dribbling",
+      "source": "https://fmsidekick.com/api/team_instructions/dribbling_ip"
+    },
+    {
+      "instruction_property": "Progress Through",
+      "category": "in_possession",
+      "options": [
+        "Balanced",
+        "Middle",
+        "Left",
+        "Right",
+        "Both Flanks"
+      ],
+      "id": "progress_through_ip",
+      "label": "Progress Through",
+      "source": "https://fmsidekick.com/api/team_instructions/progress_through_ip"
+    },
+    {
+      "instruction_property": "Pass Reception",
+      "category": "in_possession",
+      "options": [
+        "Pass to Feet",
+        "Balanced",
+        "Pass Into Space"
+      ],
+      "id": "pass_reception_ip",
+      "label": "Pass Reception",
+      "source": "https://fmsidekick.com/api/team_instructions/pass_reception_ip"
+    },
+    {
+      "instruction_property": "Patience",
+      "category": "in_possession",
+      "options": [
+        "Hit Early Crosses",
+        "Standard",
+        "Work Ball Into Box"
+      ],
+      "id": "patience_ip",
+      "label": "Patience",
+      "source": "https://fmsidekick.com/api/team_instructions/patience_ip"
+    },
+    {
+      "instruction_property": "Shots from Distance",
+      "category": "in_possession",
+      "options": [
+        "Discourage",
+        "Balanced",
+        "Encourage"
+      ],
+      "id": "shots_from_distance_ip",
+      "label": "Shots from Distance",
+      "source": "https://fmsidekick.com/api/team_instructions/shots_from_distance_ip"
+    },
+    {
+      "instruction_property": "Crossing Style",
+      "category": "in_possession",
+      "options": [
+        "Balanced",
+        "Floated Crosses",
+        "Whipped Crosses",
+        "Low Crosses"
+      ],
+      "id": "crossing_style_ip",
+      "label": "Crossing Style",
+      "source": "https://fmsidekick.com/api/team_instructions/crossing_style_ip"
+    },
+    {
+      "instruction_property": "GK Distribution (Speed)",
+      "category": "in_possession",
+      "options": [
+        "Slow Pace Down",
+        "Balanced",
+        "Distribute Quickly"
+      ],
+      "id": "gk_distribution_speed_ip",
+      "label": "GK Distribution (Speed)",
+      "source": "https://fmsidekick.com/api/team_instructions/gk_distribution_speed_ip"
+    },
+    {
+      "instruction_property": "Line of Engagement",
+      "category": "out_of_possession",
+      "options": [
+        "Low Block",
+        "Mid Block",
+        "High Press"
+      ],
+      "id": "line_of_engagement_oop",
+      "label": "Line of Engagement",
+      "source": "https://fmsidekick.com/api/team_instructions/line_of_engagement_oop"
+    },
+    {
+      "instruction_property": "Defensive Line",
+      "category": "out_of_possession",
+      "options": [
+        "Much Lower",
+        "Lower",
+        "Standard",
+        "Higher",
+        "Much Higher"
+      ],
+      "id": "defensive_line_oop",
+      "label": "Defensive Line",
+      "source": "https://fmsidekick.com/api/team_instructions/defensive_line_oop"
+    },
+    {
+      "instruction_property": "Trigger Press",
+      "category": "out_of_possession",
+      "options": [
+        "Much Less Often",
+        "Less Often",
+        "Standard",
+        "More Often",
+        "Much More Often"
+      ],
+      "id": "trigger_press_oop",
+      "label": "Trigger Press",
+      "source": "https://fmsidekick.com/api/team_instructions/trigger_press_oop"
+    },
+    {
+      "instruction_property": "Defensive Transition",
+      "category": "out_of_possession",
+      "options": [
+        "Regroup",
+        "Standard",
+        "Counter-Press"
+      ],
+      "id": "defensive_transition_oop",
+      "label": "Defensive Transition",
+      "source": "https://fmsidekick.com/api/team_instructions/defensive_transition_oop"
+    },
+    {
+      "instruction_property": "Cross Engagement",
+      "category": "out_of_possession",
+      "options": [
+        "Stop Crosses",
+        "Balanced",
+        "Invite Crosses"
+      ],
+      "id": "cross_engagement_oop",
+      "label": "Cross Engagement",
+      "source": "https://fmsidekick.com/api/team_instructions/cross_engagement_oop"
+    },
+    {
+      "instruction_property": "Pressing Trap",
+      "category": "out_of_possession",
+      "options": [
+        "Trap Inside",
+        "Balanced",
+        "Trap Outside"
+      ],
+      "id": "pressing_trap_oop",
+      "label": "Pressing Trap",
+      "source": "https://fmsidekick.com/api/team_instructions/pressing_trap_oop"
+    },
+    {
+      "instruction_property": "Short Goalkeeper Distribution",
+      "category": "out_of_possession",
+      "options": [
+        "No",
+        "Yes"
+      ],
+      "id": "short_goalkeeper_distribution_oop",
+      "label": "Short Goalkeeper Distribution",
+      "source": "https://fmsidekick.com/api/team_instructions/short_goalkeeper_distribution_oop"
+    },
+    {
+      "instruction_property": "Defensive Line Behaviour",
+      "category": "out_of_possession",
+      "options": [
+        "Step Up More",
+        "Balanced",
+        "Drop Off More"
+      ],
+      "id": "defensive_line_behaviour_oop",
+      "label": "Defensive Line Behaviour",
+      "source": "https://fmsidekick.com/api/team_instructions/defensive_line_behaviour_oop"
+    }
+  ]
+}
