@@ -66,6 +66,47 @@ FORMATIONS = [
  slot('d play',[38,51],[38,52],'cm'),slot('cm',[62,51],[62,52]),slot('lw',[14,44],[14,51]),slot('rw',[86,44],[86,51]),slot('st',[37,21],[37,25]),slot('target',[63,21],[63,25])]},
 ]
 
+FORMATION_CATALOG = [
+ {'id':'352','name':'3-5-2','defensive':'5-3-2','category':'Línea de 3 / 5','idea':'Tres centrales sólidos, carrileros para toda la banda, trivote en el medio y dos puntas fijando a los zagueros rivales.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('bpd',[27,75],[28,76]),slot('cb',[50,76],[50,78]),slot('cb',[73,75],[72,76]),
+ slot('wb',[12,54],[14,72]),slot('dm',[50,58],[50,58]),slot('cm',[35,43],[35,46]),slot('cm',[65,43],[65,46]),
+ slot('wb',[88,54],[86,72]),slot('st',[38,20],[38,24]),slot('target',[62,20],[62,24])]},
+ {'id':'433','name':'4-3-3','defensive':'4-1-4-1','category':'Línea de 4','idea':'Un pivote fija la base; los interiores conectan con extremos abiertos.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('lb',[13,66],[15,71]),slot('bpd',[37,74],[38,75]),slot('cb',[63,74],[62,75]),slot('rb',[87,66],[85,71]),
+ slot('dm',[50,58],[50,58]),slot('am',[34,42],[35,43],'cm'),slot('cm',[66,42],[65,43]),slot('lw',[15,25],[14,42]),slot('st',[50,19],[50,23]),slot('rw',[85,25],[86,42])]},
+ {'id':'4231','name':'4-2-3-1','defensive':'4-4-1-1','category':'Línea de 4','idea':'Doble base para cubrir la espalda del creador y conectar con tres atacantes.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('lb',[13,66],[15,73]),slot('bpd',[37,74],[38,76]),slot('cb',[63,74],[62,76]),slot('rb',[87,66],[85,73]),
+ slot('dm',[38,55],[38,53],'cm'),slot('d play',[62,55],[62,53],'cm'),slot('am',[50,36],[50,35]),slot('lw',[15,29],[14,51]),slot('st',[50,17],[50,20]),slot('rw',[85,29],[86,51])]},
+ {'id':'442','name':'4-4-2','defensive':'4-4-2','category':'Línea de 4','idea':'Dos referencias de ataque y dos líneas de cuatro; exige trabajo de los jugadores de banda.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('lb',[13,68],[15,74]),slot('bpd',[37,75],[38,77]),slot('cb',[63,75],[62,77]),slot('rb',[87,68],[85,74]),
+ slot('d play',[38,51],[38,52],'cm'),slot('cm',[62,51],[62,52]),slot('lw',[14,44],[14,51]),slot('rw',[86,44],[86,51]),slot('st',[37,21],[37,25]),slot('target',[63,21],[63,25])]},
+ {'id':'343','name':'3-4-3','defensive':'5-4-1','category':'Línea de 3 / 5','idea':'Línea de 3 con carrileros adelantados, doble pivote de equilibrio y dos extremos acompañando al delantero.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('bpd',[27,75],[28,76]),slot('cb',[50,76],[50,78]),slot('cb',[73,75],[72,76]),
+ slot('wb',[12,54],[14,72]),slot('cm',[38,52],[38,55]),slot('cm',[62,52],[62,55]),slot('wb',[88,54],[86,72]),
+ slot('lw',[22,30],[20,48]),slot('rw',[78,30],[80,48]),slot('st',[50,18],[50,22])]},
+ {'id':'532','name':'5-3-2','defensive':'5-3-2','category':'Línea de 3 / 5','idea':'Bloque ultracompacto con 5 defensas, 3 volantes de lucha y salidas directas con dos puntas veloces.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('lb',[13,70],[14,74]),slot('bpd',[32,76],[32,77]),slot('cb',[50,77],[50,79]),
+ slot('cb',[68,76],[68,77]),slot('rb',[87,70],[86,74]),slot('dm',[50,57],[50,57]),slot('cm',[34,45],[34,48]),
+ slot('cm',[66,45],[66,48]),slot('st',[38,20],[38,24]),slot('target',[62,20],[62,24])]},
+ {'id':'41212','name':'4-1-2-1-2 Rombo','defensive':'4-3-1-2','category':'Línea de 4','idea':'Rombo en mediocampo con enganche y pivote; domina la zona interior y da libertad a dos delanteros.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('lb',[13,64],[15,72]),slot('bpd',[37,74],[38,76]),slot('cb',[63,74],[62,76]),
+ slot('rb',[87,64],[85,72]),slot('dm',[50,60],[50,60]),slot('cm',[33,45],[33,48]),slot('cm',[67,45],[67,48]),
+ slot('am',[50,33],[50,35]),slot('st',[38,19],[38,23]),slot('target',[62,19],[62,23])]},
+ {'id':'3412','name':'3-4-1-2','defensive':'5-2-1-2','category':'Línea de 3 / 5','idea':'Carrileros largos, doble pivote de contención, enganche creador entre líneas y dos delanteros centros.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('bpd',[27,75],[28,76]),slot('cb',[50,76],[50,78]),slot('cb',[73,75],[72,76]),
+ slot('wb',[12,54],[14,72]),slot('cm',[38,54],[38,56]),slot('cm',[62,54],[62,56]),slot('wb',[88,54],[86,72]),
+ slot('am',[50,34],[50,36]),slot('st',[38,20],[38,24]),slot('target',[62,20],[62,24])]},
+ {'id':'424','name':'4-2-4','defensive':'4-4-2','category':'Línea de 4','idea':'Ataque agresivo con dos extremos abiertos y dos centrodelanteros presionando en el área contraria.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('lb',[13,67],[15,73]),slot('bpd',[37,74],[38,76]),slot('cb',[63,74],[62,76]),
+ slot('rb',[87,67],[85,73]),slot('d play',[38,52],[38,54],'cm'),slot('cm',[62,52],[62,54]),slot('lw',[15,26],[14,50]),
+ slot('rw',[85,26],[86,50]),slot('st',[38,19],[38,23]),slot('target',[62,19],[62,23])]},
+ {'id':'523','name':'5-2-3','defensive':'5-4-1','category':'Línea de 3 / 5','idea':'Estructura rocosa de tres centrales y carrileros, dos mediocentros de apoyo y tridente veloz en ataque.', 'slots':[
+ slot('gk',[50,91],[50,91]),slot('bpd',[27,75],[28,76]),slot('cb',[50,76],[50,78]),slot('cb',[73,75],[72,76]),
+ slot('wb',[12,54],[14,72]),slot('cm',[38,54],[38,56]),slot('cm',[62,54],[62,56]),slot('wb',[88,54],[86,72]),
+ slot('lw',[18,28],[16,48]),slot('rw',[82,28],[84,48]),slot('st',[50,18],[50,22])]},
+]
+FORMATIONS_BY_ID = {f['id']: f for f in FORMATION_CATALOG}
+
 
 import re
 import unicodedata
@@ -213,6 +254,35 @@ def parse_tactical_prompt(text):
             'guide_ref': 'Guía capturas: el Delantero torre sirve de referencia física y aérea adelantada.'
         })
 
+    # Formación solicitada (ej. 3-5-2, 343, 5-3-2, etc.)
+    requested_formation = None
+    form_patterns = [
+        (r'\b(3[- ]?5[- ]?2)\b', '352'),
+        (r'\b(3[- ]?4[- ]?3)\b', '343'),
+        (r'\b(5[- ]?3[- ]?2)\b', '532'),
+        (r'\b(4[- ]?1[- ]?2[- ]?1[- ]?2|rombo|diamante)\b', '41212'),
+        (r'\b(3[- ]?4[- ]?1[- ]?2)\b', '3412'),
+        (r'\b(4[- ]?2[- ]?4)\b', '424'),
+        (r'\b(5[- ]?2[- ]?3)\b', '523'),
+        (r'\b(4[- ]?3[- ]?3)\b', '433'),
+        (r'\b(4[- ]?2[- ]?3[- ]?1)\b', '4231'),
+        (r'\b(4[- ]?4[- ]?2)\b', '442'),
+    ]
+    for pattern, fid in form_patterns:
+        if re.search(pattern, norm):
+            requested_formation = fid
+            break
+    if requested_formation and requested_formation in FORMATIONS_BY_ID:
+        target_f = FORMATIONS_BY_ID[requested_formation]
+        pillars.insert(0, {
+            'id': 'formation_' + requested_formation,
+            'title': f'Alineación solicitada: {target_f["name"]}',
+            'badge': f'Formación {target_f["name"]}',
+            'color': '#10b981',
+            'summary': f'Optimizado específicamente para el dibujo {target_f["name"]} ({target_f["defensive"]} sin balón). {target_f["idea"]}',
+            'fm26_instruction': f'Estructura con posesión {target_f["name"]} y repliegue en {target_f["defensive"]}.'
+        })
+
     best_style = max(style_votes.items(), key=lambda x: x[1])[0] if any(style_votes.values()) else 'possession'
     
     if not pillars:
@@ -249,4 +319,5 @@ def parse_tactical_prompt(text):
         'recommended_mentality': rec_mentality,
         'team_overrides': team_overrides,
         'player_guides': player_instructions_guide,
+        'requested_formation': requested_formation,
     }

@@ -94,6 +94,27 @@ class ServerEndpointsTest(unittest.TestCase):
         self.assertTrue(res['enabled'])
         self.assertIsNone(res['target_save'])
 
+    def test_api_simulate_formation_352(self):
+        status, ctype, body = self.get('/api/status')
+        data = json.loads(body.decode('utf-8'))
+        dataset_id = data.get('dataset_id')
+        if not dataset_id:
+            return  # skip if no dataset loaded
+
+        status, res = self.post('/api/simulate', {
+            'dataset_id': dataset_id,
+            'formation': '352',
+            'style': 'possession'
+        })
+        self.assertEqual(status, 200)
+        self.assertEqual(res['formation']['name'], '3-5-2')
+        self.assertEqual(len(res['lineup']), 11)
+        self.assertIn('reinforcements', res)
+        self.assertIn('fit_summary', res)
+        # Check loan recall evaluation exists
+        has_recalls = any(len(r.get('loan_recalls', [])) > 0 for r in res['reinforcements'])
+        self.assertTrue(has_recalls)
+
 
 if __name__ == '__main__':
     unittest.main()

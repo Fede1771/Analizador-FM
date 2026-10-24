@@ -4,6 +4,7 @@ from pathlib import Path
 import unittest
 
 from fm_app.analysis import ATTRS, ROLES, analyze, assignment, role_score
+from fm_app.recommendations import simulate_formation
 from fm_app.server import load_dataset, ROOT
 
 
@@ -64,6 +65,28 @@ class AnalysisTests(unittest.TestCase):
             self.assertNotIn(excluded,ids)
             self.assertTrue(all(0<=l['score']<=100 for l in tactic['lineup']))
         self.assertEqual({a['uid'] for a in result['academy']},{p['uid'] for p in dataset['players'] if p['team_slot']!=0})
+
+    def test_custom_formation_simulation_and_loan_recalls(self):
+        dataset = load_dataset(ROOT/'data'/'output')
+        sim = simulate_formation(dataset, formation_id='352', style='possession')
+        self.assertEqual(sim['formation']['name'], '3-5-2')
+        self.assertEqual(sim['formation']['defensive'], '5-3-2')
+        self.assertEqual(len(sim['lineup']), 11)
+        self.assertGreater(sim['score'], 60.0)
+        self.assertIn('fit_summary', sim)
+        self.assertIn('reinforcements', sim)
+        self.assertTrue(len(sim['reinforcements']) > 0)
+        # Check loan recall recommendations
+        recalls = [c for r in sim['reinforcements'] for c in r.get('loan_recalls', [])]
+        self.assertTrue(len(recalls) > 0)
+        first_recall = recalls[0]
+        self.assertTrue(first_recall['player_name'])
+        self.assertTrue(first_recall['club_name'])
+        self.assertIn('reason', first_recall)
+        # Verify other custom formations can also simulate cleanly
+        for fid in ('343', '532', '41212', '424'):
+            res = simulate_formation(dataset, formation_id=fid)
+            self.assertEqual(len(res['lineup']), 11)
 
 
 if __name__=='__main__':
