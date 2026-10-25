@@ -1,5 +1,6 @@
 """Extract the managed club from a local FM26 save with auditable checks."""
 import argparse
+from collections.abc import Mapping
 import csv
 from collections import Counter
 from dataclasses import asdict, fields
@@ -14,6 +15,8 @@ import fmsave
 
 
 def serial(value):
+    if isinstance(value, Mapping):
+        return dict(value)
     if isinstance(value, (date, datetime)):
         return value.isoformat()
     return str(value)
@@ -55,6 +58,14 @@ def main():
             players = career.players()
             squad = players.where(club_uid=club.uid)
             loaned_out = players.filter(lambda p: p.loan_parent_club_uid == club.uid and p.club_uid != club.uid)
+            from fm_app.current_tactic import extract_stored_tactics
+            try:
+                stored_tactics = extract_stored_tactics(career, club.uid)
+            except Exception as error:
+                # An unsupported tactic block must not discard a readable squad.
+                stored_tactics = {'available':False,'records':[], 'error':str(error),
+                    'limitations':'No se pudo interpretar el bloque táctico; podés confirmar tu táctica manualmente.'}
+            (args.output/'tactics.json').write_text(json.dumps(stored_tactics, ensure_ascii=False, default=serial), encoding='utf-8')
             squad.write_json(args.output / "squad_full.json")
             squad.write_csv(args.output / "squad_full.csv")
             loaned_out.write_json(args.output / "loaned_out.json")

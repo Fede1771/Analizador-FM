@@ -1,10 +1,12 @@
 import {esc, number, score, playerButton, pos} from './format.js';
+import {zoneMap} from './zones-view.js';
 
 export function rolePlan(role) {
   return `<section class="role-plan"><div class="split"><div><span class="eyebrow">${role.phase === 'in_possession' ? 'Con posesión' : 'Sin posesión'} · ${esc(pos(role.position))}</span><h3>${esc(role.name)}</h3><small>${esc(role.english)}</small></div>${score(role.score)}</div>
     <p>${esc(role.tactical_summary || role.reasons.at(-1))}</p><ul>${role.reasons.slice(0,3).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
     ${role.warnings.length ? `<p class="notice warning">${esc(role.warnings.join(' '))}</p>` : ''}
-    <details><summary>Instrucciones individuales y alternativas</summary>${role.instructions.map(i=>`<article class="instruction"><strong>${esc(i.property)}: ${esc(i.value)}</strong><p>${esc(i.reason)}</p></article>`).join('')}
+    <details><summary>Instrucciones individuales y alternativas</summary>${role.instructions.map(i=>`<article class="instruction"><strong>${esc(i.property)}: ${esc(i.value)} ${i.locked ? '· Bloqueada por el rol' : ''}</strong><p>${esc(i.reason)}</p><small>${esc(i.availability_source || '')}</small></article>`).join('')}
+    ${role.unconfirmed_instructions?`<p class="muted">${role.unconfirmed_instructions} instrucciones de esta fase sin confirmar. Las que se muestran proceden de tu carga o de bloqueos comprobados del rol.</p>`:''}
     <p>${esc(role.comparison)}</p><p class="muted">${esc(role.spanish_status)}</p><a href="${esc(role.source)}" target="_blank" rel="noreferrer">Referencia del rol ↗</a></details></section>`;
 }
 
@@ -42,6 +44,7 @@ export function tacticResult(tactic, state) {
     <div class="decision-strip"><span><strong>${fit.natural_count}/11</strong> con familiaridad alta</span><span><strong>${fit.weak_count}</strong> posiciones a revisar</span><span><strong>${fit.recalls_count}</strong> ${fit.recalls_count===1?'cedido como alternativa':'cedidos distintos como alternativas'}</span></div>
     <div class="tactical-layout"><section class="panel pitch-panel"><div class="split"><h3>Once propuesto</h3><div class="segmented" role="group" aria-label="Fase de juego"><button id="phase-ip" data-phase="ip" aria-pressed="${phase==='ip'}">Con posesión</button><button id="phase-oop" data-phase="oop" aria-pressed="${phase==='oop'}">Sin posesión</button></div></div>${pitch(tactic,phase,byId)}</section>
     <section class="panel"><h3>Jugador y función por puesto</h3><p class="muted">El puntaje del once combina 80 % con posesión y 20 % sin posesión. En la cancha se muestra el encaje de la fase elegida.</p><ol class="lineup">${tactic.lineup.map(l=>`<li><div>${playerButton(byId.get(l.uid))}<small>${esc(l[phase==='ip'?'in_possession':'out_of_possession'].name)} · familiaridad ${l.familiarity}/20</small></div>${score(l.score)}</li>`).join('')}</ol></section></div>
+    ${zoneMap(tactic.coverage,phase)}
     <section class="panel"><h3>Decisiones para revisar</h3><p>${esc(fit.verdict)}</p>${tactic.tactical_recommendations.map(a=>`<p class="notice warning"><strong>${esc(a.title)}.</strong> ${esc(a.detail)}</p>`).join('')}
     ${tactic.reinforcements.map(r=>`<article class="reinforcement"><div class="split"><h4>${esc(r.position_label)}</h4><span class="tag">Prioridad ${esc(r.urgency.toLowerCase())}</span></div><p>${esc(r.issues.join(' '))}</p>${r.loan_recalls.length ? r.loan_recalls.map(c=>`<p><button class="text-button" data-player="${c.player_uid}">${esc(c.player_name)}</button> · ${number(c.score)} de encaje en este puesto. ${c.appearances == null ? 'Partidos sin verificar' : c.appearances+' PJ'} · media ${number(c.rating,2)}.</p>`).join('') + '<p class="muted">Alternativas sujetas a cláusulas, fechas, costos e inscripción en FM. Cada jugador puede cubrir un puesto a la vez.</p>' : `<p>${esc(r.market_profile?.scouting_note || 'Revisá las inferiores y el mercado.')}</p>`}</article>`).join('')}
     <details><summary>Riesgos y límites de la propuesta</summary><ul>${tactic.risks.map(r=>`<li>${esc(r)}</li>`).join('')}</ul><p>Confirmá lesiones, sanciones, inscripción, carga de partidos y el rival dentro de FM.</p></details></section>

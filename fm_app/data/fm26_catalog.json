@@ -1598,6 +1598,16 @@
       "id": "marking_target_oop",
       "label": "Marking Target",
       "source": "https://fmsidekick.com/api/player_instructions/marking_target_oop"
+    },
+    {
+      "id": "passing_directness_ip",
+      "label": "Passing Directness",
+      "phase": "in_possession",
+      "options": [
+        "Standard",
+        "Shorter"
+      ],
+      "source": "docs/screenshots/Captura de pantalla 2026-10-24 204111.png"
     }
   ],
   "team_instructions": [

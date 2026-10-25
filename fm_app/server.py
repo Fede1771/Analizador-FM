@@ -11,6 +11,7 @@ import webbrowser
 
 from fm_app.analysis import STYLES, analyze
 from fm_app.recommendations import simulate_formation
+from fm_app.current_tactic import audit_tactic
 from fm_app.contracts import ACTIVE_STATES, MAX_SAVE, analysis_parameters, cache_key, validate_preferences
 from fm_app.dataset import load_dataset
 from fm_app.jobs import AppState
@@ -116,6 +117,11 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(403, {'error': 'Origen no permitido.'})
         try:
             params, state = self.body(), self.server.state
+            if self.path == '/api/activate':
+                activated = self.server.request_activate is not None
+                if activated:
+                    self.server.request_activate()
+                return self.reply(200, {'activated': activated})
             if self.path == '/api/shutdown':
                 self.reply(200, {'status': 'closing'})
                 threading.Thread(target=self.server.request_shutdown, daemon=True).start()
@@ -144,6 +150,10 @@ class Handler(BaseHTTPRequestHandler):
                     saved[data['career_id']] = value
                     atomic_json(state.storage/'preferences.json', saved)
                 return self.reply(200, value)
+            if self.path == '/api/current-tactic':
+                if params.get('dataset_id') != data['id']:
+                    return self.reply(409, {'error':'La partida cambió. Revisá y confirmá tu táctica nuevamente.'})
+                return self.reply(200, audit_tactic(data, params))
             if self.path not in ('/api/analyze','/api/simulate'):
                 return self.reply(404, {'error': 'No encontrado.'})
             if params.get('dataset_id') != data['id']:
@@ -214,6 +224,7 @@ def create_app_server(port=8765, enable_watcher=True, storage=STORAGE, config_fi
     server.daemon_threads = True
     server.state = state
     server.request_shutdown = server.shutdown
+    server.request_activate = None
     server.watcher = SaveWatcher(state, config_file) if enable_watcher else None
     if server.watcher and start_watcher:
         server.watcher.start()

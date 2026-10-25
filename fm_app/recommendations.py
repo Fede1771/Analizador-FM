@@ -1,6 +1,7 @@
 """Position-valid FM26 role pairing, assignment, instructions and player explanations."""
 
 from collections import Counter
+from fm_app.spatial import coverage
 
 
 
@@ -567,7 +568,7 @@ def explanation(player,choice,style):
 
     if position in ('AML','AMR'):reasons.append('El estilo limita los roles de banda candidatos para mantener coherencia con el ataque.')
 
-    if r['id'].startswith('pressing_'):reasons.append('Cumple el umbral propio de sacrificio y resistencia de al menos 13 para salir a presionar.')
+    if r['id'].startswith('pressing_'):reasons.append('Cumple el umbral propio de sacrificio y resistencia de al menos 13 para salir a presionar.' if min(a['work_rate'],a['stamina'])>=13 else 'El rol sale a presionar; sacrificio o resistencia está por debajo de 13, por lo que conviene revisar la carga de esfuerzo.')
 
     other=choice['alternatives'][0] if choice['alternatives'] else None
 
@@ -997,6 +998,7 @@ class AnalysisContext:
             'reinforcements': reinforcements, 'tactical_recommendations': advice, 'instructions': instructions,
             'fit_summary': {'overall_score': round(total / 11, 1), 'natural_count': natural, 'adapted_count': 11 - natural,
                             'weak_count': len(reinforcements), 'recalls_count': len(recalls), 'verdict': verdict}}
+        result['coverage'] = coverage(lineup, self.byid, selected)
         return result
 
     def build_bench(self, lineup, slots):

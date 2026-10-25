@@ -2,7 +2,7 @@ import {esc, date, number, score, playerButton, groupName, pos} from './format.j
 import {filteredPlayers} from './session.js';
 import {formationCards, tacticResult, rolePlan} from './tactics-view.js';
 
-export const navigation = {overview:'Centro del club',tactics:'Tácticas',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
+export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
 
 export function welcome(state) {
   return `<section class="welcome"><span class="eyebrow">Tu partida, en tu equipo</span><h1>Conocé tu plantel.<br><em>Encontrá tu plan de juego.</em></h1><p>Analizá tu club de Football Manager 26, compará diez esquemas y decidí con explicaciones para cada jugador.</p><button class="upload-drop" data-action="import"><span aria-hidden="true">↥</span><strong>Elegí o arrastrá tu partida .fm</strong><small>Hasta 400 MB · Procesamiento local</small></button><div class="welcome-steps"><p><b>01</b> Cargá tu partida</p><p><b>02</b> Confirmá los grupos del club</p><p><b>03</b> Compará tu once y sus alternativas</p></div><p class="muted">La partida original se conserva. Touchline calcula un índice propio de encaje y no predice resultados de partidos.</p>${state.error?`<p class="notice warning">${esc(state.error)}</p><button class="button" data-action="reload">Reintentar conexión</button>`:''}<button class="text-button" data-action="sync">Configurar sincronización automática</button></section>`;
@@ -65,9 +65,9 @@ export function playerDialog(state,id) {
   const p=state.byId.get(Number(id)), prof=state.analysis?.profiles[id];
   if(!p||!prof) return '<h2>El jugador ya no está en este análisis</h2>';
   const tactic=state.prefs.formation==='auto'?state.analysis.requested_tactic||state.analysis.tactics[0]:state.simulation;
-  const slot=state.view==='tactics'?tactic?.lineup.find(x=>x.uid===p.uid):null;
+  const slot=state.view==='current'?state.currentResult?.lineup.find(x=>x.uid===p.uid):state.view==='tactics'?tactic?.lineup.find(x=>x.uid===p.uid):null;
   const a=state.analysis.academy.find(x=>x.uid===p.uid);
-  return `<div class="profile-heading"><span class="eyebrow">${slot?'En el once propuesto':'Mejor encaje individual'}</span><h2 id="dialog-title">${esc(p.name)}</h2><p>${p.age??'—'} años · ${esc(p.natural_positions.map(pos).join(' / '))} · ${esc(p.club_name||state.data.club)}</p></div>${rolePlan((slot||prof).in_possession)}${rolePlan((slot||prof).out_of_possession)}
+  return `<div class="profile-heading"><span class="eyebrow">${slot?(state.view==='current'?'En tu once confirmado':'En el once propuesto'):'Mejor encaje individual'}</span><h2 id="dialog-title">${esc(p.name)}</h2><p>${p.age??'—'} años · ${esc(p.natural_positions.map(pos).join(' / '))} · ${esc(p.club_name||state.data.club)}</p></div>${rolePlan((slot||prof).in_possession)}${rolePlan((slot||prof).out_of_possession)}
     ${a?`<section class="panel"><h3>${esc(a.action)}</h3><p>${esc(a.plan)}</p><p>${esc(a.development)}</p>${a.comparison.map(c=>`<div class="split"><span>${esc(c.name)}</span>${score(c.score)}</div>`).join('')}</section>`:''}
     <details><summary>Atributos visibles y familiaridad</summary><div class="attribute-grid">${Object.entries(state.data.attributes).map(([k,label])=>`<div><span>${esc(label)}</span><b>${p.attributes[k]}</b></div>`).join('')}</div><p>${esc(Object.entries(p.positions).filter(([,v])=>v>=10).map(([k,v])=>`${pos(k)} ${v}/20`).join(' · '))}</p><p>Pie izquierdo ${p.left_foot??'—'}/20 · derecho ${p.right_foot??'—'}/20</p></details><button class="button" data-download-player="${p.uid}">Descargar plan del jugador</button>`;
 }

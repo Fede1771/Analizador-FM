@@ -1,4 +1,5 @@
 import {api, upload, RequestGate} from './api.js';
+import {currentView, freshDraft, referenceDraft, reconcileCurrentDraft} from './current-view.js';
 import {reconcile, preferenceKey, contextKey} from './session.js';
 import {esc, date} from './format.js';
 import {navigation, welcome, overview, tactics, roster, methodology, playerRows, playerDialog, groupDialog, syncDialog} from './views.js';
@@ -7,7 +8,7 @@ const $ = selector => document.querySelector(selector);
 const gate = new RequestGate();
 const state = {data:null, analysis:null, simulation:null, byId:new Map(), prefs:null,
   view:'overview', phase:'ip', busy:false, uploadBusy:false, pendingUpload:false, error:'', connectionError:'',
-  promptDraft:'', overrideDraft:{}, filters:{query:'',group:'all',order:'score'}, job:null, sync:null};
+  currentDraft:null, currentResult:null, currentBusy:false, currentError:'', currentVersion:0, promptDraft:'', overrideDraft:{}, filters:{query:'',group:'all',order:'score'}, job:null, sync:null};
 let trackedJob=null, loadVersion=0, saveQueue=Promise.resolve(), stopped=false;
 const handledJobs=new Set();
 
@@ -37,7 +38,7 @@ function render({focusHeading=false}={}) {
   const content=$('#content');
   const active=document.activeElement;
   const focus=content.contains(active)&&active.id?{id:active.id,start:active.selectionStart,end:active.selectionEnd}:null;
-  const open=new Map([...content.querySelectorAll('details')].map(d=>[d.querySelector('summary')?.textContent,d.open]));
+  const open=new Map([...content.querySelectorAll('details')].map(d=>[d.id||d.querySelector('summary')?.textContent,d.open]));
   $('#sidebar').hidden=!state.data;
   document.body.classList.toggle('has-dataset',!!state.data);
   $('#nav').innerHTML=Object.entries(navigation).map(([key,label])=>`<a href="#${key}" ${key===state.view?'aria-current="page"':''}>${label}</a>`).join('');
@@ -46,6 +47,7 @@ function render({focusHeading=false}={}) {
   let html;
   if(!state.data) html=welcome(state);
   else if(state.view==='overview') html=overview(state);
+  else if(state.view==='current') html=currentView(state);
   else if(state.view==='tactics') html=tactics(state);
   else if(state.view==='method') html=methodology(state);
   else html=roster(state,state.view);
@@ -56,7 +58,7 @@ function render({focusHeading=false}={}) {
     warning.innerHTML=`<summary>${state.data.warnings.length} advertencias de lectura</summary><ul>${state.data.warnings.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
     content.prepend(warning);
   }
-  for(const d of content.querySelectorAll('details')) {const key=d.querySelector('summary')?.textContent;if(open.has(key))d.open=open.get(key);}
+  for(const d of content.querySelectorAll('details')) {const key=d.id||d.querySelector('summary')?.textContent;if(open.has(key))d.open=open.get(key);}
   if(focus) {
     const target=document.getElementById(focus.id);
     target?.focus({preventScroll:true});
@@ -107,6 +109,12 @@ async function loadDataset(provided) {
     if(!saved) {try {saved=JSON.parse(localStorage.getItem(preferenceKey(data))||localStorage.getItem('touchline:'+data.id)||'null');}catch{}}
   }
   if(version!==loadVersion) return;
+  state.currentVersion++;state.currentResult=null;state.currentBusy=false;
+  if(!sameCareer) {
+    try {state.currentDraft=JSON.parse(localStorage.getItem('touchline:current:'+data.career_id)||'null');}catch {state.currentDraft=null;}
+  }
+  state.currentDraft=reconcileCurrentDraft(data,state.currentDraft);
+  state.currentDraft.confirmed=false;
   state.data=data;state.byId=new Map([...data.players,...data.loans].map(p=>[p.uid,p]));
   state.prefs=reconcile(data,saved);state.promptDraft=state.prefs.prompt;
   state.analysis=null;state.simulation=null;state.overrideDraft={};state.filters.group='all';
@@ -168,7 +176,26 @@ function navigate(view) {
   state.view=navigation[view]?view:'overview';state.filters={query:'',group:'all',order:'score'};state.error='';render({focusHeading:true});
 }
 
+function saveCurrentDraft() {
+  state.currentResult=null;state.currentError='';state.currentDraft.confirmed=false;state.currentVersion++;
+  try {localStorage.setItem('touchline:current:'+state.data.career_id,JSON.stringify(state.currentDraft));}catch{}
+}
+
+async function auditCurrent() {
+  if(state.currentBusy)return;
+  const version=state.currentVersion, id=state.data.id;
+  state.currentBusy=true;state.currentError='';render();
+  try {
+    const result=await api('/api/current-tactic',{method:'POST',body:{...state.currentDraft,dataset_id:id}});
+    if(version===state.currentVersion&&id===state.data?.id)state.currentResult=result;
+  } catch(error) {if(version===state.currentVersion)state.currentError=error.message;}
+  finally {state.currentBusy=false;render();if(state.currentResult&&state.view==='current'){const result=$('#current-result');result?.scrollIntoView({block:'start'});result?.querySelector('h2')?.focus({preventScroll:true});}}
+}
+
 async function action(name, button) {
+  if(name==='audit-current')return auditCurrent();
+  if(name==='reference-current') {state.currentDraft=referenceDraft(state.data);saveCurrentDraft();render();return;}
+  if(name==='export-current') {if(state.currentResult)download('touchline-mi-tactica.json',{draft:state.currentDraft,result:state.currentResult});return;}
   if(name==='shutdown') { await api('/api/shutdown',{method:'POST',body:{}}); stopped=true;gate.invalidate();$('#content').innerHTML='<h1>Touchline se cerró</h1><p>Podés cerrar esta pestaña.</p>';return; }
   if(name==='import')return $('#save-file').click();
   if(name==='reload')return bootstrap();
@@ -210,7 +237,7 @@ document.addEventListener('click',event=>{
     if(button.dataset.downloadPlayer) {
       const p=state.byId.get(Number(button.dataset.downloadPlayer));
       const tactic=state.prefs.formation==='auto'?state.analysis.requested_tactic||state.analysis.tactics[0]:state.simulation;
-      const plan=state.view==='tactics'?tactic?.lineup.find(x=>x.uid===p.uid)||state.analysis.profiles[p.uid]:state.analysis.profiles[p.uid];
+      const plan=state.view==='current'?state.currentResult?.lineup.find(x=>x.uid===p.uid)||state.analysis.profiles[p.uid]:state.view==='tactics'?tactic?.lineup.find(x=>x.uid===p.uid)||state.analysis.profiles[p.uid]:state.analysis.profiles[p.uid];
       const text=[p.name,state.data.club,date(state.data.date),...['in_possession','out_of_possession'].flatMap(key=>{const r=plan[key];return ['',r.phase==='in_possession'?'CON POSESIÓN':'SIN POSESIÓN',r.name,...r.reasons,...r.instructions.map(i=>i.property+': '+i.value),r.source];})].join('\n');
       download('Touchline-'+p.uid+'.txt',text,'text/plain;charset=utf-8');
     }
@@ -226,6 +253,29 @@ document.addEventListener('input',event=>{
 document.addEventListener('change',event=>{
   const input=event.target;
   Promise.resolve().then(async()=>{
+    if(input.dataset.current) {
+      const draft=state.currentDraft, field=input.dataset.current;
+      if(field==='confirmed'){draft.confirmed=input.checked;return;}
+      if(field==='formation') {
+        const before=draft.lineup;const fresh=freshDraft(state.data,input.value);
+        fresh.lineup.forEach((row,i)=>row.uid=before[i]?.uid||'');state.currentDraft={...fresh,name:draft.name,stored_id:draft.stored_id};
+      } else if(field==='stored_id') {
+        draft.stored_id=input.value;
+        const selected=state.data.stored_tactics.records.find(t=>t.id===input.value);if(selected)draft.name=selected.name;
+      } else if(input.dataset.row!==undefined) {
+        const row=draft.lineup[Number(input.dataset.row)];
+        if(input.dataset.pi){if(input.value)row.instructions[input.dataset.pi]=input.value;else delete row.instructions[input.dataset.pi];}
+        else {row[field]=field==='uid'?Number(input.value)||'':input.value;
+          if(field.endsWith('_position'))row[field.replace('_position','_role')]='';
+          if(field.endsWith('_role')) {
+            const phase=field==='ip_role'?'in_possession':'out_of_possession';
+            for(const key of Object.keys(row.instructions))if(state.data.tactic_editor.player_options[key]?.phase===phase)delete row.instructions[key];
+          }
+        }
+      } else if(input.dataset.team) {if(input.value)draft.team[input.dataset.team]=input.value;else delete draft.team[input.dataset.team];}
+      else draft[field]=input.value;
+      saveCurrentDraft();render();return;
+    }
     if(input.id==='style-select') {state.prefs.style=input.value;state.prefs.prompt='';state.prefs.overrides={};await refresh();}
     if(input.id==='formation-select') {state.prefs.formation=input.value;await refresh();}
     if(input.dataset.override) {

@@ -49,6 +49,19 @@ class ServerEndpointsTest(unittest.TestCase):
         self.assertEqual(status,200);self.assertEqual(body['application'],'Touchline')
         self.assertEqual(body['sync']['state'],'paused')
 
+    def test_activation_is_local_and_invokes_window_callback(self):
+        from unittest.mock import Mock
+        activate=Mock();self.server.request_activate=activate
+        try:
+            self.assertTrue(json.loads(self.request('/api/activate',{})[1])['activated'])
+            activate.assert_called_once()
+            self.assertEqual(self.request('/api/activate',{},headers={'X-FM-App':'0'})[0],403)
+        finally:self.server.request_activate=None
+
+    def test_current_tactic_requires_current_dataset_and_confirmed_plan(self):
+        self.assertEqual(self.request('/api/current-tactic',{'dataset_id':'old'})[0],409)
+        self.assertEqual(self.request('/api/current-tactic',self.payload())[0],400)
+
     def test_analysis_uses_precomputed_cache(self):
         marker={'style':'possession','cached':True}
         self.server.state.cache[cache_key(self.data['id'],'possession',0)]=marker

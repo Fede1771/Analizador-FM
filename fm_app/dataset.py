@@ -2,8 +2,12 @@
 import hashlib
 import json
 from fm_app.tactics import ATTRS, STYLES, FORMATION_CATALOG
-from fm_app.fm26 import ROLES, CATALOG, LOCALE, TI, instruction
+from fm_app.fm26 import ROLES, CATALOG, LOCALE, TI, PI, PLAYER_MENU, SCREENSHOT_LOCKS, instruction
 from fm_app.contracts import clean_player
+from pathlib import Path
+from fm_app.current_tactic import POSITIONS
+
+LIVERPOOL_REF = json.loads((Path(__file__).parent / 'data/liverpool_reference.json').read_text(encoding='utf-8'))
 
 
 def load_dataset(folder):
@@ -56,6 +60,14 @@ def load_dataset(folder):
                               'spanish_note':'Etiquetas extraídas de Español latinoamericano de FM26 26.3.2. Se conservan variantes por contexto; las vinculaciones con cada vista del menú no están todas comprobadas visualmente.',
                               'localization':{k:LOCALE[k] for k in ('locale','language','game_version','steam_build','source','sha256','verification')},
                               'sources':['https://fmsidekick.com/database/roles','https://fmsidekick.com/database/player_instructions','https://fmsidekick.com/database/team_instructions','https://fm.guidetofootball.com/fm26/roles/']},
+            'stored_tactics':json.loads((folder/'tactics.json').read_text(encoding='utf-8')) if (folder/'tactics.json').exists() else {'available':False,'records':[],'limitations':'Esta importación todavía no contiene la lectura táctica. Volvé a sincronizar el guardado para recuperarla. Podés confirmar tu táctica manualmente.'},
+            'liverpool_reference': LIVERPOOL_REF if report['club']['name'] == 'Liverpool' else None,
+            'tactic_editor':{'positions':list(POSITIONS),
+                'formations':FORMATION_CATALOG,'locks':SCREENSHOT_LOCKS,
+                'roles':{key:{'name':r['name'],'phase':r['phase'],'positions':r['positions']} for key,r in ROLES.items()},
+                'team_properties':{k:instruction('team',k,v['options'][0],'')['property'] for k,v in TI.items()},
+                'player_options':{k:{'label':instruction('player',k,v['options'][0],'')['property'],
+                    'phase':v['phase'],'options':[{'value':o,'label':instruction('player',k,o,'')['value']} for o in v['options']]} for k,v in PI.items()}},
             'instruction_options':{k:[{'value':o,'label':instruction('team',k,o,'')['value']} for o in v['options']] for k,v in TI.items()},
             'formations_catalog': [{'id': f['id'], 'name': f['name'], 'category': f.get('category', 'Formación'), 'defensive': f['defensive'], 'idea': f['idea']} for f in FORMATION_CATALOG],
             'methodology':{'formula':'80% atributos de la función + 20% atributos del estilo, multiplicado por (0,25 + 0,75 × familiaridad/20). Ambos promedios se llevan a escala 0–100.',

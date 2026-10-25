@@ -123,7 +123,52 @@ try {
   await check('preferences survive a new save',async()=>{await change({id:'save-next'});await wait(`document.querySelector('#source-label') && !document.querySelector('#activity').hidden`,'dataset refresh');await wait(`document.querySelector('#activity').hidden`,'refresh finished');await navigate('tactics');await ready();assert.equal(await evaluate(`document.querySelector('#formation-select').value`),'352');assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');});
   await check('desktop layout',async()=>{await evaluate(`document.querySelectorAll('details').forEach(d=>d.open=false);window.scrollTo(0,0)`);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-desktop.png'),Buffer.from(shot.data,'base64'));});
   await check('responsive layout and keyboard focus',async()=>{await send('Emulation.setDeviceMetricsOverride',{width:760,height:1000,deviceScaleFactor:1,mobile:false});await sleep(200);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));await evaluate(`document.querySelector('#formation-select').focus()`);assert.equal(await evaluate(`document.activeElement.id`),'formation-select');const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-responsive.png'),Buffer.from(shot.data,'base64'));});
-  await check('insufficient squad stops without retry loop',async()=>{await change({id:'short-save',short:true});await wait(`document.querySelector('[role="alert"]')?.textContent.includes('suficientes')`,'insufficient squad');const before=await (await fetch(url+'/__test/counts')).json();await sleep(5500);const after=await (await fetch(url+'/__test/counts')).json();assert.equal(after['/api/simulate'],before['/api/simulate']);});
+  await check('current tactic keeps chosen lineup and evaluates both phases',async()=>{
+    await navigate('current');await wait(`document.querySelector('#current-player-0')`,'current editor');
+    const data=await (await fetch(url+'/api/data')).json();
+    const proposal=await (await fetch(url+'/api/simulate',{method:'POST',headers:{'Content-Type':'application/json','X-FM-App':'1'},body:JSON.stringify({dataset_id:data.id,formation:'433'})})).json();
+    for(let i=0;i<11;i++) {
+      const row=proposal.lineup[i];await set('#current-player-'+i,row.uid);
+      for(const [phase,key] of [['ip','in_possession'],['oop','out_of_possession']]) {
+        await set(`#current-${phase}-position-${i}`,row[key].position);
+        await set(`#current-${phase}-role-${i}`,row[key].id);
+      }
+    }
+    await evaluate(`document.querySelector('#current-confirm').click();document.querySelector('[data-action="audit-current"]').click()`);
+    await wait(`document.querySelector('#current-result')`,'current result');
+    assert.equal(await evaluate(`document.querySelectorAll('.pitch-player').length`),11);
+    assert.deepEqual(await evaluate(`Array.from(document.querySelectorAll('.pitch-player')).map(p=>Number(p.dataset.player))`),proposal.lineup.map(p=>p.uid));
+    assert.equal(await evaluate(`document.querySelectorAll('.zone-cell').length`),25);
+    await evaluate(`document.querySelector('[data-phase="oop"]').click()`);
+    assert.equal(await evaluate(`document.querySelectorAll('.zone-cell').length`),25);
+    assert.ok(await evaluate(`document.querySelector('.zone-section h3').textContent.includes('sin posesión')`));
+    await send('Emulation.setDeviceMetricsOverride',{width:760,height:1000,deviceScaleFactor:1,mobile:false});
+    assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));
+    const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-current.png'),Buffer.from(shot.data,'base64'));
+    const chosenRole=await evaluate(`document.querySelector('#current-ip-role-6').selectedOptions[0].textContent`);
+    await evaluate(`document.querySelectorAll('.pitch-player')[6].click()`);
+    assert.equal(await evaluate(`document.querySelector('#dialog .role-plan h3').textContent`),chosenRole);
+    assert.equal(await evaluate(`document.querySelector('#dialog .eyebrow').textContent`),'En tu once confirmado');
+    await evaluate(`document.querySelector('#dialog-close').click()`);
+    const uid=proposal.lineup[0].uid;
+    await set('#current-name','Mi táctica revisada');
+    assert.equal(await evaluate(`document.querySelector('#current-result')===null`),true);
+    assert.equal(await evaluate(`document.querySelector('#current-confirm').checked`),false);
+    await evaluate(`document.querySelector('#current-player-0').dataset.reloading='yes'`);
+    await send('Page.reload');await wait(`document.querySelector('#current-player-0') && !document.querySelector('#current-player-0').dataset.reloading`,'restored draft');
+    assert.equal(await evaluate(`document.querySelector('#current-player-0').value`),String(uid));
+    assert.equal(await evaluate(`document.querySelector('#current-confirm').checked`),false);
+    await navigate('tactics');await ready();
+  });
+  await check('proposal coverage has 25 zones in both phases',async()=>{
+    assert.equal(await evaluate(`document.querySelectorAll('.zone-cell').length`),25);
+    await evaluate(`document.querySelector('#phase-ip').click()`);
+    const before=await evaluate(`document.querySelector('.zone-grid').textContent`);
+    await evaluate(`document.querySelector('#phase-oop').click()`);
+    assert.equal(await evaluate(`document.querySelectorAll('.zone-cell').length`),25);
+    assert.notEqual(await evaluate(`document.querySelector('.zone-grid').textContent`),before);
+  });
+  await check('insufficient squad stops without retry loop' ,async()=>{await change({id:'short-save',short:true});await wait(`document.querySelector('[role="alert"]')?.textContent.includes('suficientes')`,'insufficient squad');const before=await (await fetch(url+'/__test/counts')).json();await sleep(5500);const after=await (await fetch(url+'/__test/counts')).json();assert.equal(after['/api/simulate'],before['/api/simulate']);});
   await check('welcome and synchronization settings',async()=>{await change({empty:true});await send('Page.reload');await wait(`document.querySelector('.upload-drop')`,'welcome');await evaluate(`document.querySelector('#sync-button').click()`);await wait(`document.querySelector('#sync-form')`,'sync dialog');assert.ok(await evaluate(`document.querySelector('#retention-form')`));await evaluate(`document.querySelector('#dialog-close').click()`);});
   await check('application can close from welcome',async()=>{
     await evaluate(`document.querySelector('.topbar [data-action="shutdown"]').click()`);

@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 
-ENGINE_VERSION=9
+ENGINE_VERSION=11
 
 CATALOG=json.loads((Path(__file__).parent/'data/fm26_catalog.json').read_text(encoding='utf-8'))
 
@@ -304,10 +304,40 @@ def player_instructions(player,role):
 
         add('tackling_oop','Ease Off Tackles' if ease else 'Standard',f'Entradas {a["tackling"]} y agresividad {a["aggression"]}: '+('evitar entradas precipitadas; no elimina el riesgo de faltas.' if ease else 'mantener la dureza normal; no sumar agresividad sin necesidad.'))
 
+    # Complete outfield and goalkeeper menu, including unchanged values and screenshot-verified locks.
+    known={i['id']:i for i in result}
+    for key in PLAYER_MENU[phase]:
+        if key not in known:
+            value = 'Follow Tactical Position' if key=='freedom_of_movement_ip' else 'No' if key=='hold_up_ball_ip' else 'Standard'
+            item=instruction('player',key,value,'Mantener el valor normal salvo que el plan colectivo requiera un cambio.','standard')
+            result.append(item)
+    locks=SCREENSHOT_LOCKS.get(role['id'],{})
+    for i in result:
+        key=i['id']
+        i['locked']=(key in locks) if role['id'] in SCREENSHOT_LOCKS else None
+        i['availability_source']='Capturas del menú FM26 del 24/10/2026' if role['id'] in SCREENSHOT_LOCKS else 'Disponibilidad no comprobada en las capturas de este rol'
+        if key in locks:
+            i.update(instruction('player',key,locks[key],'Valor bloqueado por el rol en las capturas: cambiar el rol para modificarlo.','role'))
+    result.sort(key=lambda i:PLAYER_MENU[phase].index(i['id']))
     return result
 
 
-
+PLAYER_MENU={
+ 'in_possession':['attacking_width_ip','dribbling_direction_ip','dribbling_frequency_ip','forward_runs_ip','freedom_of_movement_ip','hold_up_ball_ip','shoot_ip','passing_risk_ip','passing_directness_ip','cross_from_ip','crossing_strategy_ip'],
+ 'out_of_possession':['pressing_oop','marking_oop','tackling_oop','marking_target_oop']}
+# Only locks actually visible in the supplied screenshots are asserted here.
+SCREENSHOT_LOCKS={
+ 'centre_back_ip':{'dribbling_direction_ip':'Standard','forward_runs_ip':'Make Fewer Runs','freedom_of_movement_ip':'Follow Tactical Position','hold_up_ball_ip':'No','cross_from_ip':'Standard','crossing_strategy_ip':'Standard'},
+ 'ball_playing_centre_back_ip':{'dribbling_direction_ip':'Standard','forward_runs_ip':'Make Fewer Runs','freedom_of_movement_ip':'Follow Tactical Position','hold_up_ball_ip':'No','passing_risk_ip':'Take More Risks','cross_from_ip':'Standard','crossing_strategy_ip':'Standard'},
+ 'deep_lying_playmaker_ip':{'attacking_width_ip':'Standard','dribbling_direction_ip':'Standard','forward_runs_ip':'Make Fewer Runs','freedom_of_movement_ip':'Follow Tactical Position','hold_up_ball_ip':'No','passing_risk_ip':'Take More Risks','cross_from_ip':'Standard','crossing_strategy_ip':'Standard'},
+ 'advanced_playmaker_ip':{'hold_up_ball_ip':'No','passing_risk_ip':'Take More Risks','cross_from_ip':'Standard'},
+ 'midfield_playmaker_ip':{'hold_up_ball_ip':'No','passing_risk_ip':'Take More Risks','cross_from_ip':'Standard'},
+ 'inside_winger_ip':{},
+ 'deep_lying_forward_ip':{'dribbling_direction_ip':'Standard','hold_up_ball_ip':'Yes','cross_from_ip':'Standard','crossing_strategy_ip':'Standard'},
+ 'wing_back_ip':{'forward_runs_ip':'Make More Runs','freedom_of_movement_ip':'Follow Tactical Position','hold_up_ball_ip':'No'},
+ 'ball_playing_goalkeeper_ip':{'attacking_width_ip':'Standard','dribbling_direction_ip':'Standard','forward_runs_ip':'Standard','freedom_of_movement_ip':'Follow Tactical Position','hold_up_ball_ip':'No','shoot_ip':'Standard','passing_risk_ip':'Take More Risks','cross_from_ip':'Standard','crossing_strategy_ip':'Standard'},
+ 'centre_back_oop':{},'defensive_midfielder_oop':{},'attacking_midfielder_oop':{},'wide_midfielder_oop':{},'centre_forward_oop':{},'full_back_oop':{},
+ 'sweeper_keeper_oop':{'pressing_oop':'Standard','marking_oop':'Standard','marking_target_oop':'Standard'}}
 
 
 TEAM_PLANS={
@@ -755,9 +785,9 @@ ROLE_ABBREV = {
     'ball_playing_goalkeeper_ip': 'PCS',
     'goalkeeper_ip': 'POR',
     'no_nonsense_goalkeeper_ip': 'POR',
-    'sweeper_keeper_oop': 'PCS',
-    'line_holding_keeper_oop': 'POL',
-    'goalkeeper_oop': 'POL',
+    'sweeper_keeper_oop': 'POL',
+    'line_holding_keeper_oop': 'PEP',
+    'goalkeeper_oop': 'POR',
     'ball_playing_centre_back_ip': 'CCS',
     'centre_back_ip': 'DFC',
     'no_nonsense_center_back_ip': 'DFC',
@@ -796,7 +826,7 @@ ROLE_ABBREV = {
     'wide_forward_ip': 'MA',
     'inside_forward_ip': 'DLI',
     'wide_midfielder_ip': 'MI',
-    'wide_midfielder_oop': 'MI',
+    'wide_midfielder_oop': 'MA',
     'tracking_wide_midfielder_oop': 'MI',
     'centre_forward_ip': 'DLC',
     'centre_forward_oop': 'DLC',

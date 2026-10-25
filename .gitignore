@@ -31,3 +31,6 @@ Desktop.ini
 
 # Machine-specific save watcher settings
 /data/sync_config.json
+
+# Native app profile: local tactic drafts and WebView cache
+/data/webview/

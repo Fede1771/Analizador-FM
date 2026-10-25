@@ -56,3 +56,5 @@ El servidor escucha únicamente en `127.0.0.1` y comprueba host, origen y cabece
 El lector realiza controles de estructura y rangos; eso no certifica la coincidencia de cada dato con la ficha de FM. Se usan atributos visibles para recomendar, sin capacidad actual/potencial ni personalidad oculta. La selección no verifica lesiones, sanciones, inscripción, rival ni carga de partidos. Los grupos distintos del principal pueden incluir reservas adultos. No se exportan tácticas `.fmf`.
 
 La exportación general es JSON y el plan individual es texto. La arquitectura y los contratos se describen en [docs/arquitectura.md](docs/arquitectura.md).
+
+La vista **Mi táctica** permite revisar tu once y los roles de ambas fases, con instrucciones confirmadas y alternativas sin reemplazar el sistema completo. Las propuestas y la táctica actual incluyen un mapa por zonas estimado. Alcance, capturas relevadas y límites: [Táctica actual y zonas](docs/tactica-actual-y-zonas.md).

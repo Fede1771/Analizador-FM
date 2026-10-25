@@ -1,0 +1,8 @@
+import {esc,number} from './format.js';
+
+export function zoneMap(map,phase='ip') {
+  if(!map?.phases?.[phase])return '';
+  return `<section class="panel zone-section"><h3>Mapa de cobertura estimada · ${phase==='ip'?'con posesión':'sin posesión'}</h3><p>↑ Dirección de ataque · Apoyos posibles según el once, sus posiciones y sus funciones. Los índices son propios de Touchline.</p>
+    <div class="zone-grid" aria-label="25 zonas de cobertura estimada">${map.phases[phase].map(cell=>`<details class="zone-cell ${cell.level}"><summary aria-label="Zona ${cell.row+1}, ${cell.col+1}; influencia ${number(cell.strength)}"><span class="zone-number">${cell.row+1}.${cell.col+1} · ${number(cell.strength,0)}</span>${cell.players.map((p,i)=>`<span class="zone-name">${esc(p.name.split(' ').slice(-1)[0])}${i===0?' · '+number(p.score,0):''}</span>`).join('')}</summary><div class="zone-explanation">${cell.players.map(p=>`<p>${esc(p.name)}: ${number(p.score)} · distancia ${number(p.distance)}.</p>`).join('')}</div></details>`).join('')}</div>
+    <p class="zone-legend"><span class="high">Verde ≥50</span> · <span class="medium">Amarillo ≥25</span> · <span class="low">Rojo &lt;25</span> · Tocá una zona para ver sus apoyos.</p><details><summary>Cómo se calcula y qué falta</summary><p>${esc(map.method)}</p><p>Es una aproximación estática: no incluye posición del balón, rival, fatiga, rasgos ni decisiones del motor de FM. Las órdenes de tiro, entradas y pase no se convierten en desplazamientos inventados. La altura de línea y del bloque ajustan las anclas cuando esas órdenes están confirmadas. La mentalidad tampoco modifica este mapa.</p></details></section>`;
+}

@@ -2130,6 +2130,263 @@
           "aliases": []
         }
       }
+    },
+    "passing_directness_ip": {
+      "property": {
+        "text": "Estrategia de pase",
+        "resource_verified": false,
+        "runtime_verified": false,
+        "binding_status": "screenshot_verified",
+        "source": "docs/screenshots/Captura de pantalla 2026-10-24 204111.png"
+      },
+      "options": {
+        "Standard": {
+          "text": "Normal",
+          "resource_verified": false,
+          "runtime_verified": false,
+          "binding_status": "screenshot_verified",
+          "source": "docs/screenshots/Captura de pantalla 2026-10-24 204111.png"
+        },
+        "Shorter": {
+          "text": "Más corto",
+          "resource_verified": false,
+          "runtime_verified": false,
+          "binding_status": "screenshot_verified",
+          "source": "docs/screenshots/Captura de pantalla 2026-10-24 204111.png"
+        }
+      }
+    },
+    "attacking_width_ip": {
+      "property": {
+        "text": "Amplitud del ataque",
+        "runtime_verified": false,
+        "resource_verified": false,
+        "binding_status": "screenshot_property",
+        "source": "docs/screenshots (24/10/2026)",
+        "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+      },
+      "options": {
+        "Standard": {
+          "text": "Estándar",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Stay Wider": {
+          "text": "Abrirse más",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Sit Narrower": {
+          "text": "Cerrarse más",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Move Into Channels": {
+          "text": "Moverse entre líneas",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        }
+      }
+    },
+    "dribbling_direction_ip": {
+      "property": {
+        "text": "Dirección del regate",
+        "runtime_verified": false,
+        "resource_verified": false,
+        "binding_status": "screenshot_property",
+        "source": "docs/screenshots (24/10/2026)",
+        "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+      },
+      "options": {
+        "Standard": {
+          "text": "Estándar",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Cut Inside With Ball": {
+          "text": "Recortar hacia adentro con el balón",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Run Wide With Ball": {
+          "text": "Correr con el balón por la banda",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        }
+      }
+    },
+    "cross_from_ip": {
+      "property": {
+        "text": "Centro desde",
+        "runtime_verified": false,
+        "resource_verified": false,
+        "binding_status": "screenshot_property",
+        "source": "docs/screenshots (24/10/2026)",
+        "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+      },
+      "options": {
+        "Standard": {
+          "text": "Normal",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Byline": {
+          "text": "Línea de fondo",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Cross From Deep": {
+          "text": "Desde atrás",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        }
+      }
+    },
+    "crossing_strategy_ip": {
+      "property": {
+        "text": "Estrategia de centros",
+        "runtime_verified": false,
+        "resource_verified": false,
+        "binding_status": "screenshot_property",
+        "source": "docs/screenshots (24/10/2026)",
+        "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+      },
+      "options": {
+        "Standard": {
+          "text": "Normal",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Target Forward": {
+          "text": "Delantero objetivo",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Near Post": {
+          "text": "Primer palo",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Centre": {
+          "text": "Centro",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Far Post": {
+          "text": "Segundo palo",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        }
+      }
+    },
+    "marking_oop": {
+      "property": {
+        "text": "Marca",
+        "runtime_verified": false,
+        "resource_verified": false,
+        "binding_status": "screenshot_property",
+        "source": "docs/screenshots (24/10/2026)",
+        "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+      },
+      "options": {
+        "Standard": {
+          "text": "Normal",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Mark Tighter": {
+          "text": "Marca más férrea",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        }
+      }
+    },
+    "marking_target_oop": {
+      "property": {
+        "text": "Objetivo de marca",
+        "runtime_verified": false,
+        "resource_verified": false,
+        "binding_status": "screenshot_property",
+        "source": "docs/screenshots (24/10/2026)",
+        "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+      },
+      "options": {
+        "Standard": {
+          "text": "Normal",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Mark Position": {
+          "text": "Marcar posición",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        },
+        "Mark Specific": {
+          "text": "Marcar jugador específico",
+          "runtime_verified": false,
+          "resource_verified": false,
+          "binding_status": "provisional_translation",
+          "source": "docs/screenshots (24/10/2026)",
+          "note": "El nombre de la propiedad está visible; las opciones no desplegadas conservan traducción provisional."
+        }
+      }
     }
   },
   "team": {
@@ -2788,7 +3045,9 @@
           "resource_verified": true,
           "runtime_verified": false,
           "binding_status": "context_selected",
-          "aliases": []
+          "aliases": [
+            "Más adelantada"
+          ]
         },
         "Much Higher": {
           "key": 470755,
@@ -2806,7 +3065,9 @@
           "resource_verified": true,
           "runtime_verified": false,
           "binding_status": "context_selected",
-          "aliases": []
+          "aliases": [
+            "Mucho más adelantada"
+          ]
         }
       }
     },
@@ -4379,4 +4640,4 @@
       }
     }
   }
-}
+}
