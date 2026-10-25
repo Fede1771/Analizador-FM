@@ -6,6 +6,7 @@ from fm_app.spatial import coverage
 
 
 from fm_app.tactics import ATTRS, STYLES, FORMATIONS, FORMATION_CATALOG, FORMATIONS_BY_ID, parse_tactical_prompt
+from fm_app.contracts import get_transfer_window_status
 
 POS_NAMES_ES = {
     'GK': 'Arquero / Portero (POR)',
@@ -753,7 +754,7 @@ def analyze(dataset, style='possession', primary_slot=0, excluded=(), prompt=Non
             'requested_tactic': requested, 'effective_overrides': context.overrides}
 
 
-def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profiles, byid=None):
+def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profiles, byid=None, dataset=None):
     """
     Evaluates squad depth and weaknesses for a specific formation in Spanish.
     Identifies weak positions (low rating or adapting) and missing squad backups.
@@ -866,6 +867,7 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                 media = cand['rating']
                 vence = cand['loan_end']
                 exp_date_str = format_date_es(vence)
+                cand_win = get_transfer_window_status(dataset.get('date') if dataset else None, vence)
 
                 perf_str = f"{pj} PJ" if pj is not None else "partidos sin verificar"
                 if goles is not None and goles > 0: perf_str += f", {goles} goles"
@@ -874,7 +876,7 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                 reason = (
                     f"Evaluá el regreso de {cand['name']} (cedido en {cand['club_name']}, vence el {exp_date_str}). "
                     f"{'Registra participaciones' if pj else 'Rodaje sin confirmar'} ({perf_str}) y tiene encaje estimado como {pos_es} con índice {cand['score']}/100. "
-                    f"Confirmá en FM la cláusula de repesca, las fechas, los costos y la inscripción. Es una alternativa para este puesto; no puede cubrir varios a la vez."
+                    f"{cand_win['badge']}. {cand_win['status_text']} Atajo en FM: Perfil del jugador ➔ Menú 'Contrato' ➔ 'Repescar de cesión'."
                 )
 
                 loan_recommendations.append({
@@ -891,7 +893,8 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                     'score': cand['score'],
                     'position_es': pos_code,
                     'position_label': pos_es,
-                    'reason': reason
+                    'reason': reason,
+                    'window': cand_win
                 })
 
             market_profile = None
@@ -906,6 +909,23 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                     'scouting_note': f"Buscar en el mercado de fichajes un futbolista para {pos_es}. Atributos clave recomendados en FM26: {', '.join(attr_labels)}. Priorizar jugadores con sacrificio físico y comprensión táctica."
                 }
 
+            matching_scouts = []
+            if dataset and dataset.get('scouting'):
+                for sc in dataset['scouting']:
+                    if sc.get('position_primary') == pos_code or pos_code in sc.get('natural_positions', []):
+                        matching_scouts.append({
+                            'name': sc['name'],
+                            'club_name': sc['club_name'],
+                            'age': sc.get('age'),
+                            'score': sc['score'],
+                            'best_role': sc['best_role'],
+                            'transfer_value': sc.get('transfer_value'),
+                            'wage': sc.get('wage'),
+                            'contract_end': sc.get('contract_end')
+                        })
+                        if len(matching_scouts) >= 3:
+                            break
+
             weak_positions.append({
                 'position': pos_code,
                 'position_raw': pos,
@@ -919,6 +939,7 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
                 'has_loan_recall': len(loan_recommendations) > 0,
                 'recall_verified': False,
                 'loan_recalls': loan_recommendations,
+                'scout_targets': matching_scouts,
                 'market_profile': market_profile
             })
 
@@ -972,7 +993,7 @@ class AnalysisContext:
             if fam < 15:
                 risks.append(f"{p['name']}: requiere adaptación ({spec['ip_position']} → {spec['oop_position']}, {fam}/20).")
         bench, replacements = self.build_bench(lineup, slots)
-        reinforcements = evaluate_formation_reinforcements(lineup, self.seniors, self.loans, form, self.style, self.profiles, self.byid)
+        reinforcements = evaluate_formation_reinforcements(lineup, self.seniors, self.loans, form, self.style, self.profiles, self.byid, dataset=self.dataset)
         recalls = {c['player_uid'] for r in reinforcements for c in r['loan_recalls']}
         natural = sum(x['familiarity'] >= 18 for x in lineup)
         verdict = f"{form['name']}: {natural}/11 titulares con familiaridad alta. "

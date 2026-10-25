@@ -2,7 +2,7 @@ import {esc, date, number, score, playerButton, groupName, pos} from './format.j
 import {filteredPlayers} from './session.js';
 import {formationCards, tacticResult, rolePlan} from './tactics-view.js';
 
-export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
+export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',contracts:'Contratos',scouting:'Ojeo',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
 
 export function welcome(state) {
   return `<section class="welcome"><span class="eyebrow">Tu partida, en tu equipo</span><h1>Conocé tu plantel.<br><em>Encontrá tu plan de juego.</em></h1><p>Analizá tu club de Football Manager 26, compará diez esquemas y decidí con explicaciones para cada jugador.</p><button class="upload-drop" data-action="import"><span aria-hidden="true">↥</span><strong>Elegí o arrastrá tu partida .fm</strong><small>Hasta 400 MB · Procesamiento local</small></button><div class="welcome-steps"><p><b>01</b> Cargá tu partida</p><p><b>02</b> Confirmá los grupos del club</p><p><b>03</b> Compará tu once y sus alternativas</p></div><p class="muted">La partida original se conserva. Touchline calcula un índice propio de encaje y no predice resultados de partidos.</p>${state.error?`<p class="notice warning">${esc(state.error)}</p><button class="button" data-action="reload">Reintentar conexión</button>`:''}<button class="text-button" data-action="sync">Configurar sincronización automática</button></section>`;
@@ -15,7 +15,7 @@ export function overview(state) {
   const first = analysis?.tactics[0];
   const senior = data.players.filter(p=>p.team_slot===prefs.primary_slot);
   const youth = data.players.filter(p=>p.team_slot!==prefs.primary_slot);
-  return `<div class="page-heading"><div><span class="eyebrow">${esc(data.manager || 'Tu club')} · ${esc(date(data.date))}</span><h1>${esc(data.club)}</h1><p>Tu plantel, sus alternativas y las próximas decisiones.</p></div><button class="button primary" data-view="tactics">Ver propuesta táctica →</button></div>
+  return `<div class="page-heading"><div><span class="eyebrow">${esc(data.manager || 'Tu club')} · ${esc(date(data.date))}</span><h1>${esc(data.club)}</h1><p>Tu plantel, sus alternativas y las próximas decisiones.</p></div><div class="actions"><button class="button" data-view="current">Ver mi táctica actual →</button><button class="button primary" data-view="tactics">Ver propuesta táctica →</button></div></div>
     <div class="stats-grid">${stat('Disponibles en el grupo principal',senior.filter(p=>!prefs.excluded.includes(p.uid)).length,`${senior.length} jugadores en ${esc(groupName(data,prefs,prefs.primary_slot))}`)}${stat('Mayor encaje del once',first?number(first.score):'—',first?`${esc(first.name)} · índice propio /100`:'Revisá el grupo principal')}${stat('Otros grupos',youth.length,'Reservas y juveniles, según tu configuración')}${stat('Cedidos',data.loans.length,'Alternativas para seguimiento')}</div>
     <section class="panel"><div class="split"><div><h2>Tu siguiente decisión</h2><p>${first?esc(first.fit_summary.verdict):'Confirmá el grupo principal y que haya al menos once jugadores disponibles.'}</p></div><button class="button" data-action="groups">Revisar grupos</button></div>
     ${analysis?.academy.filter(a=>a.action==='Probar con el primer equipo').length?`<p><button class="text-button" data-view="academy">${analysis.academy.filter(a=>a.action==='Probar con el primer equipo').length} jugadores de otros grupos merecen una prueba →</button></p>`:''}</section>
@@ -26,9 +26,34 @@ export function tactics(state) {
   const {data,prefs,analysis,simulation} = state;
   const selected = prefs.formation==='auto' ? analysis?.requested_tactic || analysis?.tactics[0] : simulation;
   const pa=analysis?.prompt_analysis;
+  const quickList = [
+    {id:'433',label:'4-3-3'},
+    {id:'352',label:'3-5-2'},
+    {id:'4231',label:'4-2-3-1'},
+    {id:'532',label:'5-3-2'},
+    {id:'442',label:'4-4-2'},
+    {id:'424',label:'4-2-4'},
+    {id:'343',label:'3-4-3'},
+    {id:'5212',label:'5-2-1-2'},
+    {id:'auto',label:'★ Recomendada'}
+  ];
   return `<div class="page-heading"><div><span class="eyebrow">Idea, estructura y decisiones</span><h1>Tácticas</h1><p>Un espacio para comparar esquemas y ajustar tu propuesta.</p></div><button class="button" data-action="export">Exportar propuesta</button></div>
+    <section class="panel quick-panel">
+      <div class="quick-tactics-bar">
+        <div class="quick-formations-wrapper">
+          <span class="quick-label">⚡ Probar formación en 1 clic:</span>
+          <div class="formation-pills" role="group" aria-label="Esquemas rápidos">
+            ${quickList.map(f=>`<button type="button" class="formation-pill ${prefs.formation===f.id?'active':''}" data-formation="${f.id}">${f.label}</button>`).join('')}
+          </div>
+        </div>
+        <div class="quick-prompt-row">
+          <input type="text" id="quick-prompt-input" class="quick-prompt-input" placeholder="💬 Escribí tu idea de juego o formación (ej: 3-5-2 posesión, 4-4-2 contragolpe)..." value="${esc(state.promptDraft)}">
+          <button type="button" class="button primary" data-action="apply-quick-prompt">Probar idea</button>
+        </div>
+      </div>
+    </section>
     <section class="panel controls"><div class="control-grid"><label>Estilo aplicado<select id="style-select">${Object.entries(data.styles).map(([k,s])=>`<option value="${k}" ${prefs.style===k?'selected':''}>${esc(s.name)} · ${esc(s.fm26_style)}</option>`).join('')}</select></label><label>Formación<select id="formation-select"><option value="auto" ${prefs.formation==='auto'?'selected':''}>Recomendar entre los diez esquemas</option>${data.formations_catalog.map(f=>`<option value="${f.id}" ${prefs.formation===f.id?'selected':''}>${esc(f.name)} → ${esc(f.defensive)}</option>`).join('')}</select></label></div>
-    <details id="prompt-details"><summary>Describí tu idea de juego</summary><label for="prompt-input">Pedido táctico <small>Interpretación mediante reglas · Ctrl + Enter para aplicar</small></label><textarea id="prompt-input" maxlength="2000" rows="3" placeholder="Ej.: posesión, muchas ocasiones y evitar remates rivales">${esc(state.promptDraft)}</textarea><div class="actions"><button class="button primary" data-action="apply-prompt">Aplicar idea</button><button class="button" data-action="clear-prompt">Restablecer idea</button></div>
+    <details id="prompt-details"><summary>Ajustes avanzados de la idea de juego</summary><label for="prompt-input">Pedido táctico <small>Interpretación mediante reglas · Ctrl + Enter para aplicar</small></label><textarea id="prompt-input" maxlength="2000" rows="3" placeholder="Ej.: posesión, muchas ocasiones y evitar remates rivales">${esc(state.promptDraft)}</textarea><div class="actions"><button class="button primary" data-action="apply-prompt">Aplicar idea</button><button class="button" data-action="clear-prompt">Restablecer idea</button></div>
     ${pa?`<div class="interpretation"><strong>Interpretación aplicada</strong><p>${esc(data.styles[pa.recommended_style].name)} · ${esc(pa.recommended_mentality)}${pa.avoided.length?' · Evitar: '+esc(pa.avoided.join(', ')):''}</p>${pa.warnings.map(x=>`<p class="notice warning">${esc(x)}</p>`).join('')}<p class="muted">Podés elegir otro estilo, formación y ajustar cada instrucción debajo de la propuesta.</p></div>`:''}</details></section>
     ${analysis?.tactics.length?`<details class="ranking"><summary>Comparar las tres mejores · ${analysis.evaluated_formations} esquemas evaluados</summary>${formationCards(analysis.tactics,selected?.id)}</details>`:''}
     ${state.error?`<div class="notice warning" role="alert">${esc(state.error)} <button class="text-button" data-action="retry">Reintentar</button></div>`:''}
@@ -47,7 +72,40 @@ export function playerRows(state,kind) {
   const rows=filteredPlayers(pool,state.filters,profiles);
   if (!rows.length) return '<p class="empty" role="status">No encontramos jugadores con esos filtros.</p>';
   if(kind==='academy') return `<div class="academy-grid">${rows.map(p=>{const a=analysis?.academy.find(x=>x.uid===p.uid),prof=profiles[p.uid];return `<article class="academy-card">${playerButton(p)}<span class="tag">${esc(groupName(data,prefs,p.team_slot))}</span><div class="split"><h3>${esc(prof?.role_name)}</h3>${score(prof?.score)}</div><strong>${esc(a?.action)}</strong><p>${esc(a?.plan)}</p><small>${a?.gap==null?'Sin referencia':`${a.gap>0?'+':''}${number(a.gap)} puntos frente a la referencia del primer equipo`}</small><p class="muted">Entrenar: ${esc(prof?.focus.map(f=>`${f.name} (${f.value})`).join(', '))}</p></article>`;}).join('')}</div>`;
-  if(kind==='loans') return `<div class="table-scroll"><table><caption>${rows.length} cedidos · “—” indica datos no disponibles</caption><thead><tr>${['Jugador','Club','PJ','Goles','Asistencias','Minutos','Media','Fin del préstamo','Encaje'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(p=>{const s=p.loan_stats||{};return `<tr><td>${playerButton(p)}</td><td>${esc(s.club_name||p.club_name)}</td><td>${number(s.appearances,0)}</td><td>${number(s.goals,0)}</td><td>${number(s.assists,0)}</td><td>${number(s.minutes,0)}</td><td>${number(s.average_rating,2)}</td><td>${esc(date(s.loan_end||p.loan_end))}</td><td>${score(profiles[p.uid]?.score)}</td></tr>`;}).join('')}</tbody></table></div>`;
+  if(kind==='loans') {
+    const activeWithMins = rows.filter(p=>(p.loan_stats?.minutes||0)>0);
+    const topScorer = [...rows].filter(p=>(p.loan_stats?.goals||0)>0).sort((a,b)=>(b.loan_stats?.goals||0)-(a.loan_stats?.goals||0))[0];
+    const topRated = [...rows].filter(p=>(p.loan_stats?.appearances||0)>=2&&(p.loan_stats?.average_rating||0)>0).sort((a,b)=>(b.loan_stats?.average_rating||0)-(a.loan_stats?.average_rating||0))[0];
+    const winSample = pool[0]?.loan_window || {};
+    return `
+      <div class="loan-summary-strip">
+        <div class="loan-summary-pill"><span class="loan-pill-title">Total cedidos</span><strong>${rows.length}</strong></div>
+        <div class="loan-summary-pill"><span class="loan-pill-title">Con rodaje</span><strong>${activeWithMins.length}</strong><small>${rows.length - activeWithMins.length} sin minutos</small></div>
+        <div class="loan-summary-pill ${winSample.is_open ? 'urgency-stable' : 'urgency-warning'}"><span class="loan-pill-title">Ventana repescas FM</span><strong>${winSample.is_open ? '🟢 Abierta' : '🔒 Cerrada'}</strong><small>${esc(winSample.next_open || 'Ver calendario FM')}</small></div>
+        ${topScorer ? `<div class="loan-summary-pill"><span class="loan-pill-title">Goleador cedido</span><strong>${esc(topScorer.name)}</strong><small>${topScorer.loan_stats.goals} goles · ${topScorer.loan_stats.appearances} PJ</small></div>` : ''}
+        ${topRated ? `<div class="loan-summary-pill"><span class="loan-pill-title">Mejor calificación</span><strong>${esc(topRated.name)}</strong><small>Media ${number(topRated.loan_stats.average_rating, 2)} (${topRated.loan_stats.appearances} PJ)</small></div>` : ''}
+      </div>
+      <div class="table-scroll"><table><caption>${rows.length} cedidos · “—” indica datos no disponibles</caption><thead><tr>${['Jugador','Club','Rol / Función','PJ','Goles','Asistencias','Minutos','Media','Fin del préstamo','Estado de repesca','Encaje'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(p=>{
+        const s=p.loan_stats||{};
+        const prof=profiles[p.uid];
+        const roleName=prof?.role_name || (p.natural_positions?.[0] ? pos(p.natural_positions[0]) : '—');
+        const isHighlight = (s.average_rating||0) >= 7.0;
+        const win = p.loan_window || {};
+        return `<tr>
+          <td>${playerButton(p)}</td>
+          <td>${esc(s.club_name||p.club_name)}</td>
+          <td><span class="role-badge-subtle">${esc(roleName)}</span></td>
+          <td>${number(s.appearances,0)}</td>
+          <td>${number(s.goals,0)}</td>
+          <td>${number(s.assists,0)}</td>
+          <td>${number(s.minutes,0)}</td>
+          <td>${isHighlight ? `<span class="rating-highlight">${number(s.average_rating,2)} ⭐</span>` : number(s.average_rating,2)}</td>
+          <td>${esc(date(s.loan_end||p.loan_end))}${win.months_remaining != null ? `<br><small class="muted">(${win.months_remaining} meses)</small>` : ''}</td>
+          <td><span class="window-pill ${win.is_open ? 'window-open' : 'window-closed'}">${esc(win.badge || '—')}</span></td>
+          <td>${score(prof?.score)}</td>
+        </tr>`;
+      }).join('')}</tbody></table></div>`;
+  }
   return `<div class="table-scroll"><table><caption>${rows.length} jugadores · Encaje individual en su mejor función</caption><thead><tr>${['Jugador','Grupo','Mejor función','Encaje','Pases','Técnica','Velocidad','Disponible'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(p=>`<tr class="${prefs.excluded.includes(p.uid)?'excluded':''}"><td>${playerButton(p)}</td><td>${esc(groupName(data,prefs,p.team_slot))}</td><td>${esc(profiles[p.uid]?.role_name)}</td><td>${score(profiles[p.uid]?.score)}</td><td>${p.attributes.passing}</td><td>${p.attributes.technique}</td><td>${p.attributes.pace}</td><td><input id="available-${p.uid}" type="checkbox" data-available="${p.uid}" ${prefs.excluded.includes(p.uid)?'':'checked'} aria-label="Incluir a ${esc(p.name)} en las propuestas"></td></tr>`).join('')}</tbody></table></div>`;
 }
 
@@ -82,4 +140,344 @@ export function syncDialog(status, retention) {
   return `<h2 id="dialog-title">Sincronización y almacenamiento</h2><p>El monitor espera a que el archivo se estabilice y conserva el análisis anterior hasta completar la actualización.</p><div class="notice"><strong>Última actualización exitosa:</strong> ${esc(s.last_sync_save||'Ninguna')} · ${esc(date(s.last_sync_time,true))}</div>${s.last_error?`<p class="notice warning" role="alert">${esc(s.last_error)}</p>`:''}
   <form id="sync-form"><label class="check"><input name="enabled" type="checkbox" ${s.enabled!==false?'checked':''}> Activar sincronización automática</label><label>Carpeta de partidas<input name="watch_folder" value="${esc(s.watch_folder||'')}" required></label><label>Partida<select name="target_save"><option value="auto">Última partida guardada</option>${(s.available_saves||[]).map(x=>`<option value="${esc(x.filename)}" ${s.target_save===x.filename?'selected':''}>${esc(x.filename)} · ${esc(date(x.modified_at,true))}</option>`).join('')}${s.target_save&&!(s.available_saves||[]).some(x=>x.filename===s.target_save)?`<option selected value="${esc(s.target_save)}">${esc(s.target_save)} (no encontrada)</option>`:''}</select></label><div class="actions"><button class="button primary" type="submit">Guardar configuración</button><button class="button" type="button" data-action="force-sync">Sincronizar ahora</button></div></form>
   <details><summary>Retención de copias locales</summary><p>Después de una importación exitosa se conservan las copias más recientes dentro de estos límites. La copia activa se conserva siempre. Las partidas originales de FM quedan fuera de esta limpieza.</p><form id="retention-form"><label>Máximo de copias<input name="max_snapshots" type="number" min="1" max="100" value="${retention.max_snapshots}" required></label><label>Espacio máximo en MB<input name="max_total_mb" type="number" min="400" max="102400" value="${retention.max_total_mb}" required></label><button class="button" type="submit">Guardar límites</button></form></details>`;
+}
+
+
+export function contractsView(state) {
+  const {data, prefs, byId} = state;
+  const alerts = data.contract_alerts || [];
+  const cf = state.contractsFilter || {urgency: 'all', query: ''};
+
+  const danger = alerts.filter(a => a.urgency === 'danger');
+  const warning = alerts.filter(a => a.urgency === 'warning');
+  const withOption = alerts.filter(a => a.has_extension_option);
+
+  let filtered = alerts;
+  if (cf.urgency !== 'all') {
+    if (cf.urgency === 'option') filtered = filtered.filter(a => a.has_extension_option);
+    else filtered = filtered.filter(a => a.urgency === cf.urgency);
+  }
+  if (cf.query) {
+    const q = cf.query.toLowerCase();
+    filtered = filtered.filter(a => a.player_name.toLowerCase().includes(q));
+  }
+
+  return `<div class="page-heading">
+    <div>
+      <span class="eyebrow">Gestión de plantilla y patrimonio del club</span>
+      <h1>Contratos y Renovaciones</h1>
+      <p>Seguimiento de vencimientos, riesgo de fuga libre y opciones unilaterales del club.</p>
+    </div>
+    <button class="button" data-action="export">Exportar análisis</button>
+  </div>
+
+  <div class="contract-summary-strip">
+    <div class="contract-summary-pill urgency-danger">
+      <span class="loan-pill-title">🔴 Vencen en &lt; 10 meses</span>
+      <strong>${danger.length}</strong>
+      <small>Riesgo de firma libre en enero / julio</small>
+    </div>
+    <div class="contract-summary-pill urgency-warning">
+      <span class="loan-pill-title">🟡 Vencen en 1-2 años</span>
+      <strong>${warning.length}</strong>
+      <small>Ventana óptima para negociar renovación</small>
+    </div>
+    <div class="contract-summary-pill urgency-option">
+      <span class="loan-pill-title">🛡️ Opción unilateral del club</span>
+      <strong>${withOption.length}</strong>
+      <small>El club puede extender +1 año sin negociar</small>
+    </div>
+    <div class="contract-summary-pill urgency-stable">
+      <span class="loan-pill-title">🟢 En término (&gt; 2 años)</span>
+      <strong>${alerts.length - danger.length - warning.length}</strong>
+      <small>Situación contractual asegurada</small>
+    </div>
+  </div>
+
+  ${danger.length ? `
+    <section class="panel urgent-contracts-panel">
+      <div class="split">
+        <div>
+          <h2 class="alert-title-danger">⚠️ Atención inmediata: contratos en sus últimos meses</h2>
+          <p class="muted">Estos futbolistas podrán negociar libremente con otros clubes a partir del 1 de enero si no renovás su contrato.</p>
+        </div>
+      </div>
+      <div class="urgent-cards-grid">
+        ${danger.map(a => {
+          const p = byId.get(a.player_uid);
+          return `
+            <article class="urgent-contract-card">
+              <div class="urgent-card-top">
+                <div>
+                  <h3 class="urgent-player-name">${esc(a.player_name)}</h3>
+                  <span class="tag">${p ? esc(groupName(data, prefs, p.team_slot)) : 'Plantilla'}</span>
+                </div>
+                <span class="urgent-badge-pill">${a.months_remaining} meses</span>
+              </div>
+              <div class="urgent-card-meta">
+                <span><strong>Salario:</strong> ${a.wage ? '€' + number(a.wage) + '/sem' : '—'}</span>
+                <span><strong>Vence:</strong> ${esc(date(a.contract_end))}</span>
+                ${a.has_extension_option ? '<span class="extension-tag">🛡️ Opción +1 año</span>' : ''}
+              </div>
+              <div class="urgent-action-box">
+                <span class="urgent-action-icon">💡</span>
+                <p class="urgent-action-text">${esc(a.action)}</p>
+              </div>
+            </article>
+          `;
+        }).join('')}
+      </div>
+    </section>
+  ` : ''}
+
+  <section class="panel">
+    <div class="contracts-toolbar">
+      <label class="search">Buscar jugador<input id="contracts-search" type="search" value="${esc(cf.query)}" placeholder="Nombre de jugador..."></label>
+      <div class="formation-pills" role="group" aria-label="Filtro de urgencia">
+        <button type="button" class="formation-pill ${cf.urgency==='all'?'active':''}" data-contract-filter="all">Todos (${alerts.length})</button>
+        <button type="button" class="formation-pill ${cf.urgency==='danger'?'active':''}" data-contract-filter="danger">🔴 &lt; 10 meses (${danger.length})</button>
+        <button type="button" class="formation-pill ${cf.urgency==='warning'?'active':''}" data-contract-filter="warning">🟡 1-2 años (${warning.length})</button>
+        <button type="button" class="formation-pill ${cf.urgency==='option'?'active':''}" data-contract-filter="option">🛡️ Con opción club (${withOption.length})</button>
+      </div>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <caption>${filtered.length} jugadores · Control contractual de plantilla</caption>
+        <thead>
+          <tr>
+            <th scope="col">Jugador</th>
+            <th scope="col">Grupo</th>
+            <th scope="col">Vence</th>
+            <th scope="col">Tiempo restante</th>
+            <th scope="col">Salario semanal</th>
+            <th scope="col">Opción extensión</th>
+            <th scope="col">Estado y recomendación</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filtered.length ? filtered.map(a => {
+            const p = byId.get(a.player_uid);
+            return `
+              <tr class="row-${esc(a.urgency)}">
+                <td>${p ? playerButton(p) : `<strong>${esc(a.player_name)}</strong>`}</td>
+                <td>${p ? esc(groupName(data, prefs, p.team_slot)) : '—'}</td>
+                <td>${esc(date(a.contract_end))}</td>
+                <td><span class="badge-time badge-${esc(a.urgency)}">${a.months_remaining} meses</span></td>
+                <td>${a.wage ? '€' + number(a.wage) : '—'}</td>
+                <td>${a.has_extension_option ? '<span class="extension-tag">🛡️ +1 año (Club)</span>' : '<span class="muted">No</span>'}</td>
+                <td>
+                  <div class="contract-rec-cell">
+                    <span class="contract-status-badge badge-${esc(a.urgency)}">${esc(a.badge)}</span>
+                    <small class="contract-rec-desc">${esc(a.action)}</small>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('') : `<tr><td colspan="7" class="empty">No encontramos jugadores con los filtros seleccionados.</td></tr>`}
+        </tbody>
+      </table>
+    </div>
+  </section>`;
+}
+
+export function scoutingView(state) {
+  const {data} = state;
+  const scoutingList = data.scouting || [];
+  const sf = state.scoutingFilter || {position: 'all', query: '', sort: 'score'};
+
+  const positionsList = [
+    {id: 'all', label: 'Todos'},
+    {id: 'DFC', label: 'DFC'},
+    {id: 'DFI', label: 'DFI'},
+    {id: 'DFD', label: 'DFD'},
+    {id: 'MCD', label: 'MCD'},
+    {id: 'MC', label: 'MC'},
+    {id: 'MPC', label: 'MPC'},
+    {id: 'MPI', label: 'MPI'},
+    {id: 'MPD', label: 'MPD'},
+    {id: 'DLC', label: 'DLC'},
+    {id: 'POR', label: 'POR'}
+  ];
+
+  let filtered = scoutingList;
+  if (sf.position !== 'all') {
+    filtered = filtered.filter(p => p.position_primary === sf.position || (p.natural_positions && p.natural_positions.includes(sf.position)));
+  }
+  if (sf.query) {
+    const q = sf.query.toLowerCase();
+    filtered = filtered.filter(p => p.name.toLowerCase().includes(q) || (p.club_name && p.club_name.toLowerCase().includes(q)) || (p.best_role && p.best_role.toLowerCase().includes(q)));
+  }
+
+  filtered = [...filtered].sort((a, b) => {
+    if (sf.sort === 'age') return (a.age || 99) - (b.age || 99);
+    if (sf.sort === 'wage') return (a.wage || 9999999) - (b.wage || 9999999);
+    return (b.score || 0) - (a.score || 0);
+  });
+
+  return `<div class="page-heading">
+    <div>
+      <span class="eyebrow">Mercado de fichajes y Scouting FM26</span>
+      <h1>Ojeo de Mercado</h1>
+      <p>Futbolistas destacados de otros clubes en tu partida, analizados según su encaje táctico con tu idea de juego.</p>
+    </div>
+    <button class="button" data-action="export">Exportar análisis</button>
+  </div>
+
+  <div class="scouting-banner-strip">
+    <div class="scouting-status-badge">
+      <span class="scanner-icon">📡</span>
+      <div>
+        <strong>${scoutingList.length} jugadores escaneados desde tu archivo .fm</strong>
+        <small>Extracción directa de la partida guardada con atributos reales, contratos y roles FM26 calculados.</small>
+      </div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="scouting-toolbar">
+      <div class="scouting-search-row">
+        <label class="search" style="flex:1">Buscar jugador o club<input id="scouting-search" type="search" placeholder="Nombre de jugador, club o función..." value="${esc(sf.query)}"></label>
+        <label>Ordenar<select id="scouting-sort">
+          <option value="score" ${sf.sort==='score'?'selected':''}>Mayor encaje táctico</option>
+          <option value="age" ${sf.sort==='age'?'selected':''}>Menor edad</option>
+          <option value="wage" ${sf.sort==='wage'?'selected':''}>Menor salario</option>
+        </select></label>
+      </div>
+      <div class="formation-pills" role="group" aria-label="Filtrar por posición">
+        ${positionsList.map(p => `
+          <button type="button" class="formation-pill ${sf.position===p.id?'active':''}" data-scout-position="${p.id}">${p.label}</button>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="scouting-grid">
+      ${filtered.length ? filtered.map(p => {
+        const natPos = (p.natural_positions || [p.position_primary]).map(pos).join(' · ');
+        const topAttrs = Object.entries(p.attributes || {})
+          .filter(([k, v]) => typeof v === 'number')
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 4)
+          .map(([k, v]) => `${data.attributes?.[k] || k}: ${v}`);
+
+        return `
+          <article class="scout-card">
+            <div class="scout-card-top">
+              <div>
+                <h3 class="scout-card-name">${esc(p.name)}</h3>
+                <div class="scout-card-sub">${p.age ?? '—'} años · ${esc(p.club_name)}</div>
+              </div>
+              <div class="scout-card-score">
+                ${score(p.score)}
+              </div>
+            </div>
+
+            <div class="scout-card-tags">
+              <span class="pos-badge-primary">${esc(pos(p.position_primary))}</span>
+              <span class="role-badge-subtle">${esc(p.best_role)}</span>
+              <small class="muted">${esc(natPos)}</small>
+            </div>
+
+            <div class="scout-card-attrs">
+              <span class="attrs-label">Atributos destacados:</span>
+              <div class="attr-chips">
+                ${topAttrs.map(a => `<span class="attr-chip">${esc(a)}</span>`).join('')}
+              </div>
+            </div>
+
+            <div class="scout-card-financials">
+              <span><strong>Salario:</strong> ${p.wage ? '€' + number(p.wage) + '/sem' : '—'}</span>
+              <span><strong>Contrato:</strong> ${p.contract_end ? esc(date(p.contract_end)) : '—'}</span>
+            </div>
+
+            <div class="scout-card-verdict">
+              <span class="verdict-icon">⚡</span>
+              <span class="verdict-text">Recomendado para reforzar el puesto de <strong>${esc(pos(p.position_primary))}</strong> como <em>${esc(p.best_role)}</em>.</span>
+            </div>
+          </article>
+        `;
+      }).join('') : `
+        <div class="scouting-empty">
+          <p class="empty">No se encontraron futbolistas con los filtros seleccionados.</p>
+        </div>
+      `}
+    </div>
+  </section>`;
+}
+
+
+export function companionView(state) {
+  const {data, analysis, currentResult} = state;
+  const tactic = state.prefs?.formation === 'auto' ? analysis?.requested_tactic || analysis?.tactics?.[0] : state.simulation;
+  const club = data?.club || 'Tu club';
+  const formationName = tactic?.name || state.prefs?.formation || '4-3-3';
+  const styleName = data?.styles?.[state.prefs?.style]?.name || 'Posesión';
+
+  const actions = [];
+  if (state.currentResult?.tactical_advice) {
+    for (const a of state.currentResult.tactical_advice) {
+      if (a.action) actions.push({id: a.player_name || a.title, title: a.title, text: a.action, phase: a.phase_label});
+    }
+  } else if (tactic?.tactical_recommendations) {
+    for (const a of tactic.tactical_recommendations) {
+      if (a.action) actions.push({id: a.title, title: a.title, text: a.action, phase: 'Propuesta'});
+    }
+  }
+  if (!actions.length) {
+    actions.push({id: 'once', title: 'Confirmar once', text: 'Verificá el once titular en FM antes de iniciar.', phase: 'Pre-partido'});
+    actions.push({id: 'roles', title: 'Verificar roles', text: 'Revisá que los roles asignados coincidan con el plan táctico.', phase: 'Pre-partido'});
+  }
+
+  return `
+    <div class="companion-shell">
+      <div class="companion-header">
+        <div class="companion-title-row">
+          <span class="companion-brand">⚡ TOUCHLINE COMPANION</span>
+          <span class="companion-tag">MINI-HUD FM26</span>
+        </div>
+        <h2>${esc(club)}</h2>
+        <div class="companion-meta">
+          <span class="meta-pill">${esc(formationName)}</span>
+          <span class="meta-pill">${esc(styleName)}</span>
+          <span class="meta-pill">Mentalidad ${esc(tactic?.mentality || 'Positiva')}</span>
+        </div>
+      </div>
+
+      <div class="companion-body">
+        <section class="companion-section">
+          <div class="section-top">
+            <h3>📋 Ajustes para aplicar en FM</h3>
+            <span class="muted">${actions.length} acciones</span>
+          </div>
+          <div class="companion-checklist">
+            ${actions.map((act, i) => `
+              <label class="companion-check-item">
+                <input type="checkbox" data-companion-check="${act.id}">
+                <div class="check-content">
+                  <div class="check-title-row">
+                    <strong>${esc(act.title)}</strong>
+                    <span class="phase-mini-tag">${esc(act.phase || '')}</span>
+                  </div>
+                  <p>${esc(act.text)}</p>
+                </div>
+              </label>
+            `).join('')}
+          </div>
+        </section>
+
+        <section class="companion-section">
+          <h3>⚡ Acciones rápidas</h3>
+          <div class="companion-actions-grid">
+            <button class="button primary" data-action="copy-match-instructions">📋 Copiar ajustes al portapapeles</button>
+            <button class="button accent" data-action="export-tactic-fm">📥 Exportar táctica para FM (.fmf)</button>
+            <button class="button" data-action="popout-companion">↗ Abrir en ventana flotante independiente</button>
+          </div>
+        </section>
+
+        <div class="companion-hint">
+          <small>💡 Dejá este Mini-HUD abierto junto a Football Manager para marcar los cambios en tu táctica antes de cada partido.</small>
+        </div>
+      </div>
+    </div>
+  `;
 }

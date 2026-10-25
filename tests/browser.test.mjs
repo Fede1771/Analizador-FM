@@ -120,6 +120,27 @@ try {
   await check('pressing request retains counterpress',async()=>{await set('#prompt-input','Presión alta, recuperar rápido','input');await evaluate(`document.querySelector('[data-action="apply-prompt"]').click()`);await ready();assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');assert.equal(await evaluate(`document.querySelector('#override-defensive_transition_oop').value`),'Counter-Press');});
   await check('player plan dialog',async()=>{await evaluate(`document.querySelector('.pitch-player').click()`);assert.ok(await evaluate(`document.querySelector('#dialog').open`));assert.equal(await evaluate(`document.querySelectorAll('.role-plan').length`),2);await evaluate(`document.querySelector('#dialog-close').click()`);});
   await check('loan search and sort',async()=>{await navigate('loans');await wait(`document.querySelector('#search')`,'loans');await set('#search','200','input');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);await set('#sort-order','age');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);});
+  await check('contracts view displays alerts and filtering',async()=>{
+    await navigate('contracts');
+    await wait(`document.querySelector('.contract-summary-strip')`,'contracts strip');
+    assert.ok(await evaluate(`document.querySelector('h1').textContent.includes('Contratos')`));
+    assert.ok(await evaluate(`document.querySelectorAll('.contract-summary-pill').length >= 4`));
+    assert.ok(await evaluate(`document.querySelector('#contracts-search') !== null`));
+  });
+  await check('scouting view displays position pills and scouted targets',async()=>{
+    await navigate('scouting');
+    await wait(`document.querySelector('.scouting-banner-strip')`,'scouting strip');
+    assert.ok(await evaluate(`document.querySelector('h1').textContent.includes('Ojeo')`));
+    assert.ok(await evaluate(`document.querySelectorAll('[data-scout-position]').length >= 10`));
+    assert.ok(await evaluate(`document.querySelector('#scouting-search') !== null`));
+  });
+  await check('companion mini-hud dialog and tactic exporter',async()=>{
+    await evaluate(`document.querySelector('#companion-button').click()`);
+    await wait(`document.querySelector('#dialog').open && document.querySelector('.companion-shell')`,'companion shell');
+    assert.ok(await evaluate(`document.querySelector('.companion-checklist') !== null`));
+    assert.ok(await evaluate(`document.querySelector('[data-action="export-tactic-fm"]') !== null`));
+    await evaluate(`document.querySelector('#dialog-close').click()`);
+  });
   await check('preferences survive a new save',async()=>{await change({id:'save-next'});await wait(`document.querySelector('#source-label') && !document.querySelector('#activity').hidden`,'dataset refresh');await wait(`document.querySelector('#activity').hidden`,'refresh finished');await navigate('tactics');await ready();assert.equal(await evaluate(`document.querySelector('#formation-select').value`),'352');assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');});
   await check('desktop layout',async()=>{await evaluate(`document.querySelectorAll('details').forEach(d=>d.open=false);window.scrollTo(0,0)`);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-desktop.png'),Buffer.from(shot.data,'base64'));});
   await check('responsive layout and keyboard focus',async()=>{await send('Emulation.setDeviceMetricsOverride',{width:760,height:1000,deviceScaleFactor:1,mobile:false});await sleep(200);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));await evaluate(`document.querySelector('#formation-select').focus()`);assert.equal(await evaluate(`document.activeElement.id`),'formation-select');const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-responsive.png'),Buffer.from(shot.data,'base64'));});

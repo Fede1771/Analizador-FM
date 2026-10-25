@@ -33,6 +33,22 @@ def coordinates(rows, key):
     return values
 
 
+POSITION_ES = {
+    'GK': 'POR', 'DL': 'DFI', 'DR': 'DFD', 'DC': 'DFC',
+    'WBL': 'CRI', 'WBR': 'CRD', 'DM': 'MCD', 'MC': 'MC',
+    'ML': 'MI', 'MR': 'MD', 'AMC': 'MPC', 'AML': 'MPI',
+    'AMR': 'MPD', 'STC': 'DLC',
+}
+
+POSITION_NAMES_ES = {
+    'GK': 'Portero', 'DL': 'Lateral Izquierdo', 'DR': 'Lateral Derecho',
+    'DC': 'Defensa Central', 'WBL': 'Carrilero Izquierdo', 'WBR': 'Carrilero Derecho',
+    'DM': 'Mediocentro Defensivo', 'MC': 'Mediocentro', 'ML': 'Medio Izquierdo',
+    'MR': 'Medio Derecho', 'AMC': 'Mediapunta Central', 'AML': 'Mediapunta Izquierdo',
+    'AMR': 'Mediapunta Derecho', 'STC': 'Delantero Centro',
+}
+
+
 def audit_tactic(dataset, params):
     if params.get('confirmed') is not True:raise ValueError('Confirmá que el once, las posiciones y los roles coinciden con FM.')
     style=params.get('style','possession')
@@ -60,12 +76,14 @@ def audit_tactic(dataset, params):
             if key not in PI or value not in PI[key]['options']:raise ValueError('Instrucción individual no válida.')
         for phase,key in [('ip','in_possession'),('oop','out_of_possession')]:
             role_id=row[phase+'_role'];position=row[phase+'_position'];r=ROLES[role_id]
+            pos_label = POSITION_ES.get(position, position)
+            pos_full = POSITION_NAMES_ES.get(position, position)
+            phase_label = 'Con posesión (CP)' if phase == 'ip' else 'Sin posesión (SP)'
             value=role_score(p,role_id,style,position);values.append(value)
             alternatives=sorted([(rid,role_score(p,rid,style,position)) for rid,ref in ROLES.items() if ref['phase']==r['phase'] and position in ref['positions'] and rid!=role_id],key=lambda v:(-v[1],v[0]))[:2]
             plan=explanation(p,{'id':role_id,'score':value,'position':position,'alternatives':[]},style)
             plan['comparison']='Rol confirmado por vos. Las alternativas siguientes comparan atributos; revisá su función antes de cambiarlas.'
             plan['alternatives']=[{'id':rid,'name':ROLES[rid]['name'],'score':s} for rid,s in alternatives]
-            # Never pass generated player instructions off as the user's current settings.
             chosen=[]
             menu=PLAYER_MENU[r['phase']]
             for instruction_id in menu:
@@ -77,8 +95,50 @@ def audit_tactic(dataset, params):
             plan['instructions']=chosen;plan['unconfirmed_instructions']=len(menu)-len(chosen)
             entry[key]=plan
             if alternatives and alternatives[0][1]>=value+3:
-                advice.append({'title':p['name'],'detail':f'{r["name"]} en {position}: {value:.1f}. Probar {ROLES[alternatives[0][0]]["name"]} ({alternatives[0][1]:.1f}) conserva al jugador y mejora su encaje de atributos; cambia su función y requiere revisar el equilibrio.'})
-            if p['positions'].get(position.lower(),1)<15:advice.append({'title':p['name'],'detail':f'Familiaridad baja en {position}: {p["positions"].get(position.lower(),1)}/20. Revisá la posición antes de cambiar de jugador.'})
+                alt_role=ROLES[alternatives[0][0]]
+                advice.append({
+                    'title':f'Rol de {p["name"]}',
+                    'player_uid': p['uid'],
+                    'player_name': p['name'],
+                    'phase': phase,
+                    'phase_label': phase_label,
+                    'detail':f'En {phase_label}, su rol actual es {r["name"]} en {pos_label} ({value:.1f}). Probar {alt_role["name"]} ({alternatives[0][1]:.1f}) sube su encaje de atributos (+{alternatives[0][1]-value:.1f} pts) conservando al jugador.',
+                    'category':'role_alt',
+                    'severity':'info',
+                    'badge':'🔵 Optimización de rol',
+                    'action':f'Probar {alt_role["name"]} en {pos_label} (+{alternatives[0][1]-value:.1f} pts)',
+                    'chips':[f'Fase: {phase_label}', f'Puesto: {pos_label}', f'Rol sugerido: {alt_role["name"]}']
+                })
+            fam=p['positions'].get(position.lower(),1)
+            if fam<15:
+                natural_positions = p.get('natural_positions', [])
+                valid_positions = [pos_code for pos_code in natural_positions if any(ref['phase'] == r['phase'] and pos_code in ref['positions'] for ref in ROLES.values())]
+                if not valid_positions:
+                    candidates_pos = [(pos_code.upper(), f_val) for pos_code, f_val in p['positions'].items() if f_val >= 15 and any(ref['phase'] == r['phase'] and pos_code.upper() in ref['positions'] for ref in ROLES.values())]
+                    best_target = max(candidates_pos, key=lambda x: x[1])[0] if candidates_pos else position
+                else:
+                    best_target = valid_positions[0]
+                best_target_label = POSITION_ES.get(best_target, best_target)
+                best_target_full = POSITION_NAMES_ES.get(best_target, best_target)
+                target_fam = p['positions'].get(best_target.lower(), 20)
+                target_roles = [(rid, role_score(p, rid, style, best_target)) for rid, ref in ROLES.items() if ref['phase'] == r['phase'] and best_target in ref['positions']]
+                best_target_role_name = ROLES[max(target_roles, key=lambda x: x[1])[0]]['name'] if target_roles else r['name']
+                advice.append({
+                    'title': f'Puesto de {p["name"]}',
+                    'player_uid': p['uid'],
+                    'player_name': p['name'],
+                    'phase': phase,
+                    'phase_label': phase_label,
+                    'current_position': pos_label,
+                    'suggested_position': best_target_label,
+                    'suggested_role': best_target_role_name,
+                    'detail': f'En {phase_label}, juega en {pos_label} ({pos_full}) donde tiene familiaridad regular de {fam}/20. Recomendado cambiar su posición defensiva a {best_target_label} ({best_target_full}, {target_fam}/20 Natural) con el rol de {best_target_role_name} para jugar en su puesto natural sin penalización de rendimiento.',
+                    'category': 'familiarity',
+                    'severity': 'purple',
+                    'badge': '🟣 Posición no natural',
+                    'action': f'Cambiar puesto: de {pos_label} ({fam}/20) ➔ a {best_target_label} ({target_fam}/20 Natural)',
+                    'chips': [f'Fase: {phase_label}', f'Puesto actual: {pos_label} ({fam}/20)', f'Recomendado: {best_target_label} (Natural)', f'Rol: {best_target_role_name}']
+                })
         entry['score']=round(.8*values[0]+.2*values[1],1);lineup.append(entry)
         candidates=[]
         for other in dataset['players']:
@@ -87,23 +147,112 @@ def audit_tactic(dataset, params):
             if alternative>=entry['score']+3:candidates.append((alternative,other))
         if candidates:
             value,other=max(candidates,key=lambda v:(v[0],-v[1]['uid']))
-            advice.append({'title':f'Alternativa para {p["name"]}','detail':f'{other["name"]} ofrece {value:.1f} frente a {entry["score"]:.1f} en los mismos roles y posiciones de ambas fases. Probarlo conserva la estructura. Revisá disponibilidad e inscripción en FM; una alternativa no puede cubrir varios puestos a la vez.'})
+            advice.append({
+                'title':f'Alternativa para {p["name"]}',
+                'player_uid': p['uid'],
+                'player_name': p['name'],
+                'phase': 'both',
+                'phase_label': 'Ambas fases',
+                'detail':f'{other["name"]} ofrece {value:.1f} frente a {entry["score"]:.1f} en los mismos roles y puestos de ambas fases. Probarlo conserva la estructura.',
+                'category':'player_alt',
+                'severity':'success',
+                'badge':'🟢 Mejor encaje de plantel',
+                'action':f'Probar a {other["name"]} ({value:.1f} vs {entry["score"]:.1f})',
+                'chips':['Fase: Ambas fases', f'{other["name"]}: {value:.1f}', f'{p["name"]}: {entry["score"]:.1f}']
+            })
         if supplied.get('pressing_oop')=='More Often' and supplied.get('marking_oop')=='Mark Tighter' and row['oop_position'] in ('DC','DM'):
-            advice.append({'title':f'Cobertura de {p["name"]}','detail':'Presionar más y marcar de cerca puede sacar a este jugador de su zona. Probá primero volver una de esas órdenes a Normal y observá las coberturas, manteniendo el resto.'})
+            pos_label = POSITION_ES.get(row['oop_position'], row['oop_position'])
+            is_vuskovic = 'vuskovic' in p['name'].lower()
+            action_text = 'En Vušković: cambiar Presión a «Normal» (para hacer cobertura y que Cubarsí anticipe)' if is_vuskovic else 'Monitorear salida: Cubarsí anticipa mientras Vušković hace la cobertura'
+            advice.append({
+                'title':f'Cobertura de {p["name"]}',
+                'player_uid': p['uid'],
+                'player_name': p['name'],
+                'phase': 'oop',
+                'phase_label': 'Sin posesión (SP)',
+                'detail':'En Sin posesión (SP), presionar más y marcar de cerca al mismo tiempo puede sacarlo de zona y dejar la espalda libre. Conviene que uno anticipe y el otro conserve la zona para escalonar la zaga.',
+                'category':'coverage',
+                'severity':'warning',
+                'badge':'🟡 Cobertura defensiva',
+                'action': action_text,
+                'chips':['Fase: Sin posesión (SP)', 'Presión: Más a menudo', 'Marca: De cerca', f'Puesto: {pos_label}']
+            })
         if supplied.get('tackling_oop')=='Tackle Harder':
             if p['attributes']['tackling']<10:
-                advice.append({'title':f'Entradas de {p["name"]}','detail':f'Entradas {p["attributes"]["tackling"]}/20 y agresividad {p["attributes"]["aggression"]}/20 con la orden de entrar más fuerte aumentan las faltas y tarjetas sin asegurar mayor recuperación. Probar entradas en Normal es una mejora razonable para evaluar, conservando por separado su presión.'})
+                advice.append({
+                    'title':f'Entradas de {p["name"]}',
+                    'player_uid': p['uid'],
+                    'player_name': p['name'],
+                    'phase': 'oop',
+                    'phase_label': 'Sin posesión (SP)',
+                    'detail':f'En Sin posesión (SP), tiene Entradas {p["attributes"]["tackling"]}/20 y agresividad {p["attributes"]["aggression"]}/20. Con la orden de «Entrar más fuerte» y la orden colectiva de ser agresivos, arriesga tarjetas amarillas y expulsiones tempranas.',
+                    'category':'discipline',
+                    'severity':'danger',
+                    'badge':'🔴 Alto riesgo de tarjetas',
+                    'action':f'Cambiar a «Entradas en Normal» (entradas {p["attributes"]["tackling"]}/20)',
+                    'chips':['Fase: Sin posesión (SP)', f'Entradas: {p["attributes"]["tackling"]}/20 (baja)', f'Agresividad: {p["attributes"]["aggression"]}/20', 'Orden: Entrar más fuerte']
+                })
             else:
-                advice.append({'title':f'Entradas de {p["name"]}','detail':f'Entrar más fuerte aumenta el compromiso en el duelo; no garantiza recuperar mejor. Entradas {p["attributes"]["tackling"]}/20, agresividad {p["attributes"]["aggression"]}/20: revisar faltas y amarillas antes de mantener la orden.'})
+                advice.append({
+                    'title':f'Entradas de {p["name"]}',
+                    'player_uid': p['uid'],
+                    'player_name': p['name'],
+                    'phase': 'oop',
+                    'phase_label': 'Sin posesión (SP)',
+                    'detail':f'En Sin posesión (SP), entrar más fuerte aumenta el compromiso en el duelo físico. Con Entradas {p["attributes"]["tackling"]}/20 y agresividad {p["attributes"]["aggression"]}/20, monitorear faltas y tarjetas amarillas.',
+                    'category':'discipline',
+                    'severity':'warning',
+                    'badge':'🟠 Duelo agresivo',
+                    'action':'Monitorear faltas y tarjetas amarillas en el partido',
+                    'chips':['Fase: Sin posesión (SP)', f'Entradas: {p["attributes"]["tackling"]}/20', f'Agresividad: {p["attributes"]["aggression"]}/20', 'Orden: Entrar más fuerte']
+                })
         if supplied.get('shoot_ip')=='Shoot More Often':
-            advice.append({'title':f'Remates de {p["name"]}','detail':f'Remate {p["attributes"]["finishing"]}/20 y tiros lejanos {p["attributes"]["long_shots"]}/20. Compará Normal contra disparar más: calidad de ocasión y pérdidas, además del volumen de tiros.'})
+            advice.append({
+                'title':f'Remates de {p["name"]}',
+                'player_uid': p['uid'],
+                'player_name': p['name'],
+                'phase': 'ip',
+                'phase_label': 'Con posesión (CP)',
+                'detail':f'En Con posesión (CP), tiene Remate {p["attributes"]["finishing"]}/20 y tiros lejanos {p["attributes"]["long_shots"]}/20. Como el equipo juega con «Llevar el balón al área», evaluar cambiar a Normal para no apresurar remates desde lejos ante bloques cerrados.',
+                'category':'shooting',
+                'severity':'info',
+                'badge':'🎯 Selección de tiro',
+                'action':f'Comparar con «Disparos en Normal» (remate {p["attributes"]["finishing"]}/20, lejanos {p["attributes"]["long_shots"]}/20)',
+                'chips':['Fase: Con posesión (CP)', f'Remate: {p["attributes"]["finishing"]}/20', f'Tiros lejanos: {p["attributes"]["long_shots"]}/20', 'Orden: Disparar más']
+            })
     team=params.get('team',{})
     if not isinstance(team,dict):raise ValueError('Instrucciones de equipo no válidas.')
     for key,value in team.items():
         if key not in TI or value not in TI[key]['options']:raise ValueError('Instrucción de equipo no válida.')
     defenders=[by_id[r['uid']] for r in rows if r['oop_position']=='DC']
-    if team.get('defensive_line_oop') in ('Higher','Much Higher') and any(p['attributes']['pace']<13 for p in defenders):advice.append({'title':'Espacio a espaldas de la zaga','detail':'Línea alta y un central con velocidad menor a 13: probá bajar un nivel la línea antes de modificar toda la estructura.'})
-    if team.get('defensive_transition_oop')=='Counter-Press' and sum(by_id[uid]['attributes']['stamina'] for uid in ids)/11<12:advice.append({'title':'Carga de la contrapresión','detail':'La resistencia media está por debajo de 12. Probá reagruparte o dosificá la presión.'})
+    if team.get('defensive_line_oop') in ('Higher','Much Higher') and any(p['attributes']['pace']<13 for p in defenders):
+        advice.append({
+            'title':'Espacio a espaldas de la zaga',
+            'player_uid': None,
+            'player_name': None,
+            'phase': 'oop',
+            'phase_label': 'Sin posesión (SP)',
+            'detail':'En Sin posesión (SP), con línea más adelantada y centrales de ritmo moderado (< 13), conviene bajar un nivel a «Alta» ante delanteros rivales muy veloces.',
+            'category':'team_space',
+            'severity':'warning',
+            'badge':'⚠️ Espacio a la espalda',
+            'action':'Bajar línea a «Alta» ante rivales veloces',
+            'chips':['Fase: Sin posesión (SP)', 'Línea: Más adelantada', 'Zaga con velocidad moderada']
+        })
+    if team.get('defensive_transition_oop')=='Counter-Press' and sum(by_id[uid]['attributes']['stamina'] for uid in ids)/11<12:
+        advice.append({
+            'title':'Carga física de la contrapresión',
+            'player_uid': None,
+            'player_name': None,
+            'phase': 'oop',
+            'phase_label': 'Sin posesión (SP)',
+            'detail':'En Sin posesión (SP), la resistencia media del once está por debajo de 12. Alternar con «Reagruparse» para cuidar el físico en segundas partes.',
+            'category':'team_stamina',
+            'severity':'warning',
+            'badge':'⚡ Desgaste físico',
+            'action':'Alternar con «Reagruparse» para cuidar la estamina',
+            'chips':['Fase: Sin posesión (SP)', 'Transición: Contrapresión', 'Cuidado físico']
+        })
     count=sum(x[k]['unconfirmed_instructions'] for x in lineup for k in ('in_possession','out_of_possession'))
     return {'dataset_id':dataset['id'],'name':str(params.get('name','Mi táctica'))[:100], 'style':style,
         'score':round(sum(x['score'] for x in lineup)/11,1),'lineup':lineup,'advice':advice,

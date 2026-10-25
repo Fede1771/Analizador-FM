@@ -2,13 +2,13 @@ import {api, upload, RequestGate} from './api.js';
 import {currentView, freshDraft, referenceDraft, reconcileCurrentDraft} from './current-view.js';
 import {reconcile, preferenceKey, contextKey} from './session.js';
 import {esc, date} from './format.js';
-import {navigation, welcome, overview, tactics, roster, methodology, playerRows, playerDialog, groupDialog, syncDialog} from './views.js';
+import {navigation, welcome, overview, tactics, contractsView, scoutingView, companionView, roster, methodology, playerRows, playerDialog, groupDialog, syncDialog} from './views.js';
 
 const $ = selector => document.querySelector(selector);
 const gate = new RequestGate();
 const state = {data:null, analysis:null, simulation:null, byId:new Map(), prefs:null,
   view:'overview', phase:'ip', busy:false, uploadBusy:false, pendingUpload:false, error:'', connectionError:'',
-  currentDraft:null, currentResult:null, currentBusy:false, currentError:'', currentVersion:0, promptDraft:'', overrideDraft:{}, filters:{query:'',group:'all',order:'score'}, job:null, sync:null};
+  currentDraft:null, currentResult:null, currentBusy:false, currentError:'', currentVersion:0, promptDraft:'', overrideDraft:{}, contractsFilter:{urgency:'all',query:''}, scoutingFilter:{position:'all',query:'',sort:'score'}, filters:{query:'',group:'all',order:'score'}, job:null, sync:null};
 let trackedJob=null, loadVersion=0, saveQueue=Promise.resolve(), stopped=false;
 const handledJobs=new Set();
 
@@ -39,16 +39,27 @@ function render({focusHeading=false}={}) {
   const active=document.activeElement;
   const focus=content.contains(active)&&active.id?{id:active.id,start:active.selectionStart,end:active.selectionEnd}:null;
   const open=new Map([...content.querySelectorAll('details')].map(d=>[d.id||d.querySelector('summary')?.textContent,d.open]));
+  if(new URLSearchParams(location.search).get('companion')==='1') {
+    $('#sidebar').hidden=true;
+    const top=$('header.topbar'); if(top) top.style.display='none';
+    const foot=$('footer'); if(foot) foot.style.display='none';
+    document.body.classList.add('companion-standalone');
+    content.innerHTML=companionView(state);
+    return;
+  }
   $('#sidebar').hidden=!state.data;
   document.body.classList.toggle('has-dataset',!!state.data);
   $('#nav').innerHTML=Object.entries(navigation).map(([key,label])=>`<a href="#${key}" ${key===state.view?'aria-current="page"':''}>${label}</a>`).join('');
   $('#source-label').textContent=state.data?`${state.data.source.filename} · ${date(state.data.date)}`:'Análisis local · Football Manager 26';
   $('#groups-button').hidden=!state.data;
+  const compBtn=$('#companion-button'); if(compBtn) compBtn.hidden=!state.data;
   let html;
   if(!state.data) html=welcome(state);
   else if(state.view==='overview') html=overview(state);
   else if(state.view==='current') html=currentView(state);
   else if(state.view==='tactics') html=tactics(state);
+  else if(state.view==='contracts') html=contractsView(state);
+  else if(state.view==='scouting') html=scoutingView(state);
   else if(state.view==='method') html=methodology(state);
   else html=roster(state,state.view);
   content.innerHTML=html;
@@ -193,8 +204,60 @@ async function auditCurrent() {
 }
 
 async function action(name, button) {
+  if(name==='companion')return showDialog(companionView(state));
+  if(name==='popout-companion') {
+    window.open('/?companion=1#'+(state.view==='current'?'current':'tactics'),'TouchlineCompanion','width=460,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
+    return;
+  }
+  if(name==='copy-match-instructions') {
+    const tactic = state.prefs?.formation==='auto' ? state.analysis?.requested_tactic||state.analysis?.tactics?.[0] : state.simulation;
+    const acts = (state.currentResult?.tactical_advice || tactic?.tactical_recommendations || [])
+      .map(a => a.action ? `• ${a.title}: ${a.action} (${a.phase_label || 'Táctica'})` : `• ${a.title}`);
+    const text = [
+      `📋 TOUCHLINE FM26 - AJUSTES PARA EL PARTIDO (${state.data?.club || 'Club'}):`,
+      `Esquema: ${tactic?.name || state.prefs?.formation || '4-3-3'} | Estilo: ${state.data?.styles?.[state.prefs?.style]?.name || 'Posesión'}`,
+      '',
+      ...(acts.length ? acts : ['• Confirmá el once titular y roles en FM.']),
+      '',
+      `Generado por Touchline · ${date(state.data?.date)}`
+    ].join('\n');
+    try {
+      await navigator.clipboard.writeText(text);
+      toast('¡Ajustes copiados al portapapeles!');
+    } catch(e) {
+      download('ajustes-partido-fm.txt', text, 'text/plain;charset=utf-8');
+      toast('Ajustes descargados.');
+    }
+    return;
+  }
+  if(name==='export-tactic-fm') {
+    if(!state.data) return toast('Cargá una partida primero.');
+    const tactic = state.prefs?.formation==='auto' ? state.analysis?.requested_tactic||state.analysis?.tactics?.[0] : state.simulation;
+    const acts = (state.currentResult?.tactical_advice || tactic?.tactical_recommendations || [])
+      .map(a => a.action ? `${a.title}: ${a.action}` : a.title);
+    try {
+      const res = await api('/api/export-tactic', {
+        method: 'POST',
+        body: {
+          formation: tactic?.id || state.prefs?.formation || '433',
+          name: `Touchline_${(state.data.club||'Club').replace(/\s+/g,'_')}_${tactic?.id || state.prefs?.formation || '433'}`,
+          style: state.prefs?.style,
+          style_name: state.data.styles?.[state.prefs?.style]?.name || 'Posesión',
+          mentality: tactic?.mentality || 'Positiva',
+          team: tactic?.team_instructions || {},
+          lineup: tactic?.lineup || [],
+          actions: acts
+        }
+      });
+      try { await navigator.clipboard.writeText(res.clipboard_summary); } catch {}
+      toast('¡Táctica guardada en Documentos\\Sports Interactive\\Football Manager 26\\tactics!');
+    } catch(e) {
+      toast('Error al exportar táctica: ' + e.message, true);
+    }
+    return;
+  }
   if(name==='audit-current')return auditCurrent();
-  if(name==='reference-current') {state.currentDraft=referenceDraft(state.data);saveCurrentDraft();render();return;}
+  if(name==='reference-current') {state.currentDraft=referenceDraft(state.data);saveCurrentDraft();state.currentDraft.confirmed=true;await auditCurrent();return;}
   if(name==='export-current') {if(state.currentResult)download('touchline-mi-tactica.json',{draft:state.currentDraft,result:state.currentResult});return;}
   if(name==='shutdown') { await api('/api/shutdown',{method:'POST',body:{}}); stopped=true;gate.invalidate();$('#content').innerHTML='<h1>Touchline se cerró</h1><p>Podés cerrar esta pestaña.</p>';return; }
   if(name==='import')return $('#save-file').click();
@@ -213,7 +276,7 @@ async function action(name, button) {
     const result=await api('/api/sync/trigger',{method:'POST',body:{filename:filename==='auto'?null:filename}});
     trackedJob=result.job_id;state.uploadBusy=true;state.job={message:'Preparando sincronización…'};$('#dialog').close();progress();return;
   }
-  if(name==='apply-prompt') {
+  if(name==='apply-prompt'||name==='apply-quick-prompt') {
     state.prefs.prompt=state.promptDraft.trim();state.prefs.overrides={};return refresh();
   }
   if(name==='clear-prompt') {state.prefs.prompt='';state.promptDraft='';state.prefs.overrides={};return refresh();}
@@ -226,9 +289,12 @@ async function action(name, button) {
 }
 
 document.addEventListener('click',event=>{
-  const button=event.target.closest('[data-action],[data-view],[data-player],[data-formation],[data-phase],[data-download-player]');
+  const button=event.target.closest('[data-action],[data-view],[data-player],[data-formation],[data-phase],[data-download-player],[data-contract-filter],[data-scout-position],[data-scout-pos]');
   if(!button)return;
   Promise.resolve().then(async()=>{
+    if(button.dataset.contractFilter) {state.contractsFilter.urgency=button.dataset.contractFilter;render();return;}
+    if(button.dataset.scoutPosition) {state.scoutingFilter.position=button.dataset.scoutPosition;render();return;}
+    if(button.dataset.scoutPos) {state.scoutingFilter.position=button.dataset.scoutPos;state.view='scouting';location.hash='scouting';render();return;}
     if(button.dataset.action)return action(button.dataset.action,button);
     if(button.dataset.view) {location.hash=button.dataset.view;if(state.view===button.dataset.view)navigate(button.dataset.view);return;}
     if(button.dataset.player)return showDialog(playerDialog(state,button.dataset.player));
@@ -246,7 +312,9 @@ document.addEventListener('click',event=>{
 
 document.addEventListener('input',event=>{
   const input=event.target;
-  if(input.id==='prompt-input')state.promptDraft=input.value;
+  if(input.id==='prompt-input'||input.id==='quick-prompt-input')state.promptDraft=input.value;
+  if(input.id==='contracts-search') {state.contractsFilter.query=input.value;render();}
+  if(input.id==='scouting-search') {state.scoutingFilter.query=input.value;render();}
   if(input.id==='search') {state.filters.query=input.value;$('#results').innerHTML=playerRows(state,state.view);}
 });
 
@@ -276,6 +344,12 @@ document.addEventListener('change',event=>{
       else draft[field]=input.value;
       saveCurrentDraft();render();return;
     }
+    if(input.dataset.companionCheck) {
+      try { localStorage.setItem('touchline:chk:' + input.dataset.companionCheck, input.checked ? '1' : '0'); } catch {}
+      input.closest('.companion-check-item')?.classList.toggle('checked', input.checked);
+      return;
+    }
+    if(input.id==='scouting-sort') {state.scoutingFilter.sort=input.value;render();return;}
     if(input.id==='style-select') {state.prefs.style=input.value;state.prefs.prompt='';state.prefs.overrides={};await refresh();}
     if(input.id==='formation-select') {state.prefs.formation=input.value;await refresh();}
     if(input.dataset.override) {
@@ -304,7 +378,7 @@ document.addEventListener('submit',event=>{
   }).catch(error=>toast(error.message,true));
 });
 
-document.addEventListener('keydown',event=>{if(event.target.id==='prompt-input'&&event.key==='Enter'&&(event.ctrlKey||event.metaKey)){event.preventDefault();action('apply-prompt').catch(error=>toast(error.message,true));}});
+document.addEventListener('keydown',event=>{if((event.target.id==='prompt-input'||event.target.id==='quick-prompt-input')&&event.key==='Enter'&&(event.ctrlKey||event.metaKey||event.target.id==='quick-prompt-input')){event.preventDefault();action('apply-prompt').catch(error=>toast(error.message,true));}});
 document.addEventListener('dragover',event=>{if(event.target.closest('.upload-drop')){event.preventDefault();event.target.closest('.upload-drop').classList.add('dragover');}});
 document.addEventListener('dragleave',event=>event.target.closest('.upload-drop')?.classList.remove('dragover'));
 document.addEventListener('drop',event=>{const drop=event.target.closest('.upload-drop');if(drop){event.preventDefault();drop.classList.remove('dragover');startImport(event.dataTransfer.files[0]);}});

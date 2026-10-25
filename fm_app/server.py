@@ -154,6 +154,9 @@ class Handler(BaseHTTPRequestHandler):
                 if params.get('dataset_id') != data['id']:
                     return self.reply(409, {'error':'La partida cambió. Revisá y confirmá tu táctica nuevamente.'})
                 return self.reply(200, audit_tactic(data, params))
+            if self.path == '/api/export-tactic':
+                from fm_app.tactic_exporter import export_tactic_file
+                return self.reply(200, export_tactic_file(data, params))
             if self.path not in ('/api/analyze','/api/simulate'):
                 return self.reply(404, {'error': 'No encontrado.'})
             if params.get('dataset_id') != data['id']:

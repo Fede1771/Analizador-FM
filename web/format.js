@@ -1,5 +1,5 @@
 export const esc = value => String(value ?? '—').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export const positions = {GK:'POR',DL:'LI',DR:'LD',DC:'DFC',WBL:'CRI',WBR:'CRD',DM:'MCD',MC:'MC',ML:'MI',MR:'MD',AMC:'MPC',AML:'EI',AMR:'ED',STC:'DC'};
+export const positions = {GK:'POR',DL:'DFI',DR:'DFD',DC:'DFC',WBL:'CRI',WBR:'CRD',DM:'MCD',MC:'MC',ML:'MI',MR:'MD',AMC:'MPC',AML:'MPI',AMR:'MPD',STC:'DLC'};
 export const pos = value => positions[String(value).toUpperCase()] || value;
 export const number = (value, decimals = 1) => value == null ? '—' : Number(value).toLocaleString('es-AR', {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
 export const score = value => `<span class="score">${number(value)}<small>/100</small></span>`;

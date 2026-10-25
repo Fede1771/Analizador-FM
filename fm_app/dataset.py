@@ -3,7 +3,7 @@ import hashlib
 import json
 from fm_app.tactics import ATTRS, STYLES, FORMATION_CATALOG
 from fm_app.fm26 import ROLES, CATALOG, LOCALE, TI, PI, PLAYER_MENU, SCREENSHOT_LOCKS, instruction
-from fm_app.contracts import clean_player
+from fm_app.contracts import clean_player, get_transfer_window_status
 from pathlib import Path
 from fm_app.current_tactic import POSITIONS
 
@@ -20,7 +20,13 @@ def load_dataset(folder):
     squad_file=folder/('squad_full.json' if (folder/'squad_full.json').exists() else 'brighton_full.json')
     loans_file=folder/('loaned_out.json' if (folder/'loaned_out.json').exists() else 'brighton_loaned_out.json')
     players=[clean_player(p) for p in json.loads(squad_file.read_text(encoding='utf-8'))]
-    loans=[clean_player(p) for p in json.loads(loans_file.read_text(encoding='utf-8'))]
+    loans_raw = json.loads(loans_file.read_text(encoding='utf-8'))
+    loans = []
+    game_date_str = report.get('game_date')
+    for lp in loans_raw:
+        cl = clean_player(lp)
+        cl['loan_window'] = get_transfer_window_status(game_date_str, cl.get('loan_end'))
+        loans.append(cl)
     if not players:
         raise ValueError('La partida no contiene jugadores para el club detectado.')
     manager=next((m for m in report['managed_clubs'] if m['club_uid']==report['club']['uid']),{})
@@ -49,7 +55,48 @@ def load_dataset(folder):
     career_id = hashlib.sha256(identity.encode('utf-8')).hexdigest()[:24]
     if len({p['uid'] for p in players + loans}) != len(players + loans):
         raise ValueError('Identificadores de jugadores duplicados.')
+
+    game_date_str = report.get('game_date')
+    contract_alerts = []
+    if game_date_str:
+        from datetime import datetime
+        try:
+            g_dt = datetime.fromisoformat(game_date_str)
+            for p in players:
+                c = p.get('contract') or {}
+                c_end = c.get('end')
+                if c_end:
+                    e_dt = datetime.fromisoformat(c_end)
+                    days_left = (e_dt - g_dt).days
+                    months_left = max(0, round(days_left / 30.4))
+                    urgency = 'danger' if months_left <= 10 else ('warning' if months_left <= 22 else 'info')
+                    badge = '🔴 Vence en < 10 meses' if months_left <= 10 else ('🟡 Vence en 1-2 años' if months_left <= 22 else '🟢 En término')
+                    action = 'Renovar urgente o vender: entra a los últimos meses y puede firmar libre.' if months_left <= 10 else ('Iniciar negociaciones para blindar su valor.' if months_left <= 22 else 'Situación contractual estable.')
+                    if c.get('has_extension_option'):
+                        action += ' (El club tiene opción de extensión unilateral por 1 año más).'
+                    contract_alerts.append({
+                        'player_uid': p['uid'],
+                        'player_name': p['name'],
+                        'team_slot': p.get('team_slot'),
+                        'wage': c.get('wage'),
+                        'contract_end': c_end,
+                        'months_remaining': months_left,
+                        'days_remaining': days_left,
+                        'has_extension_option': c.get('has_extension_option', False),
+                        'urgency': urgency,
+                        'badge': badge,
+                        'action': action,
+                        'transfer_value': p.get('transfer_value')
+                    })
+            contract_alerts.sort(key=lambda x: (x['days_remaining'], -(x['transfer_value'] or 0)))
+        except Exception:
+            contract_alerts = []
+
+    scouting_file = folder / 'scouting.json'
+    scouting = json.loads(scouting_file.read_text(encoding='utf-8')) if scouting_file.exists() else []
+
     return {'id':report['save_sha256'][:16], 'career_id':career_id, 'club':report['club']['name'],
+            'contract_alerts': contract_alerts, 'scouting': scouting,
             'manager':manager.get('manager_name'), 'source':source,'default_primary_slot':slots[0],
             'date':report['game_date'],'build':report['build'], 'players':players,'loans':loans,
             'slots':slots, 'slot_labels':slot_labels,
