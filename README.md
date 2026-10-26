@@ -36,10 +36,21 @@ flowchart LR
 
 ## 📖 Guía visual paso a paso
 
-### Paso 1: Carga y sincronización automática de tu partida
-Al abrir Touchline, el **Centro del Club** detecta de forma automática tus partidas en la carpeta habitual de Football Manager 26 (`Documentos\Sports Interactive\Football Manager 26\games`). Cada vez que guardes tu juego en FM26, Touchline actualiza todos los datos en segundo plano sin interrumpirte.
+### Paso 1: Carga y sincronización de tu partida
+
+Por defecto, Touchline detecta automáticamente tus partidas guardadas en la carpeta habitual de Football Manager 26 (`Documentos\Sports Interactive\Football Manager 26\games`). Cada vez que guardes tu juego en FM26, Touchline actualiza todos los datos en segundo plano sin interrumpirte.
 
 ![Paso 1: Centro del club y sincronización](docs/capturas-finales/01-inicio-centro-del-club.png)
+
+#### 📂 ¿Tenés tus partidas en otra carpeta o disco?
+Si guardás tus partidas en otra ubicación (como un disco secundario `D:\`, carpeta de Steam personalizada o carpeta compartida), podés cambiar la ruta en dos simples pasos:
+
+1. Hacé clic en el botón **Sincronización** en la barra superior (o en *"Configurar sincronización automática"* en la pantalla inicial).
+2. En el panel que se abre, escribí o pegá la dirección de tu carpeta en el campo **Carpeta de partidas** y hacé clic en **Guardar configuración** (o en *Sincronizar ahora*).
+
+![Configurar carpeta de partidas personalizada](docs/capturas-finales/11-cambiar-ruta-partidas.png)
+
+*(También podés elegir monitorear siempre la última partida modificada, fijar un archivo `.fm` en particular o arrastrar directamente tu archivo `.fm` a la ventana).*
 
 > **Seguridad garantizada**: Touchline nunca modifica tus archivos originales. Trabaja exclusivamente con copias temporales seguras de solo lectura en tu propia PC.
 

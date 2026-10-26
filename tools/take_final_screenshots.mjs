@@ -136,6 +136,13 @@ try {
   await wait(`document.querySelector('h1')?.textContent==='Club de prueba'`, 'overview heading');
   await snap('01-inicio-centro-del-club.png');
 
+  // Modal para cambiar ruta de partidas / sincronización
+  await evaluate(`document.querySelector('#sync-button').click()`);
+  await wait(`document.querySelector('#dialog').open && document.querySelector('#sync-form')`, 'sync dialog');
+  await snap('11-cambiar-ruta-partidas.png');
+  await evaluate(`document.querySelector('#dialog-close').click()`);
+  await sleep(200);
+
   // Ojeo de mercado masculino
   await evaluate(`location.hash='scouting'`);
   await wait(`document.querySelector('.scouting-grid')`, 'scouting grid');
