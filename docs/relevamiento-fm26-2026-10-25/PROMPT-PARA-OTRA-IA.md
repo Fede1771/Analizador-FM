@@ -36,3 +36,13 @@ Implementá y validá el flujo completo con pruebas significativas y capturas de
 Se revisaron **27 paneles colectivos únicos (28 dimensiones)** y se confirmaron dos controles compartidos. Leé [ADENDA-COLECTIVAS.md](ADENDA-COLECTIVAS.md) y [verificacion-colectivas.json](verificacion-colectivas.json). Estas pruebas cierran la lista de opciones visibles y las duplicaciones de Regate/Trampa de presión; las combinaciones de contexto y todas las ayudas siguen sin certificarse. El marcaje queda excluido de nuevas investigaciones por pedido del usuario.
 
 Integrá estas opciones y únicamente los bloqueos observados, conservando el trabajo actual. No agregues nuevos requisitos de marcaje. Priorizá estos datos frente a listas históricas de variantes pendientes.
+
+## Actualización del 26/10/2026: costados y portero
+
+Quedaron cerrados los desdobles por costado y los botones duplicados del portero. La matriz 4×4 tiene nueve combinaciones seleccionadas y siete bloqueadas en el contexto observado: exterior e interior coexisten en lados opuestos y se excluyen en el mismo lado. Los dos botones Bandas son equivalentes entre sí; también los dos Laterales. Leé [ADENDA-COSTADOS-PORTERO-2026-10-26.md](ADENDA-COSTADOS-PORTERO-2026-10-26.md) y [verificacion-costados-portero-2026-10-26.json](verificacion-costados-portero-2026-10-26.json). Se incorporaron 17 capturas nuevas. Persisten únicamente los contextos no ensayados y las ayudas no abiertas; no extrapolar reglas universales.
+
+Conservá tu implementación actual e integrá únicamente lo que falte. No reinicies el proyecto ni reemplaces configuraciones del usuario. Validá los casos de costados opuestos, mismo costado y Ambas bandas, y la equivalencia de los cuatro botones probados del portero.
+
+## Cierre del alcance acordado — 26/10/2026
+
+El relevamiento queda completo para el alcance acordado; no hay identificado un dato indispensable pendiente. Los contextos no ensayados y las ayudas no abiertas individualmente son límites no bloqueantes. No se confirmó que cambiar la mentalidad modifique los candados individuales: no implementar bloqueos por esa hipótesis. La búsqueda web no proporcionó una matriz universal ni certifica los textos exactos de la instalación; se conservan los recursos locales extraídos. Aplicar las restricciones documentadas con su procedencia, mantener desconocidos explícitos y revisar casos nuevos ante discrepancias concretas. El marcaje sigue excluido. Ver [ALCANCE-Y-CIERRE.md](ALCANCE-Y-CIERRE.md) y [PROMPT-ACTUALIZACION-INCREMENTAL.md](PROMPT-ACTUALIZACION-INCREMENTAL.md). Este cierre prevalece sobre listas históricas que parezcan exigir probar todas las combinaciones antes de implementar.

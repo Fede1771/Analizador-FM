@@ -50,10 +50,28 @@ export function formationCards(tactics, selectedId) {
   return `<div class="formation-grid">${tactics.map((t,index)=>`<button class="formation-card ${selectedId===t.id?'selected':''}" id="formation-${t.id}" data-formation="${t.id}" aria-pressed="${selectedId===t.id}"><span class="eyebrow">${index+1}. ${index===0?'Mayor encaje':'Alternativa'}</span><div class="split"><strong>${esc(t.name)}</strong>${score(t.score)}</div><small>${esc(t.defensive)} sin posesión</small><p>${esc(t.idea)}</p></button>`).join('')}</div>`;
 }
 
+export const SUPPORT_SIDES = {
+  'Overlap - Balanced': [],
+  'Overlap - Left': ['left'],
+  'Overlap - Right': ['right'],
+  'Overlap - Both Flanks': ['left', 'right'],
+  'Underlap - Balanced': [],
+  'Underlap - Left': ['left'],
+  'Underlap - Right': ['right'],
+  'Underlap - Both Flanks': ['left', 'right'],
+};
+
+export function checkSupportRunsConflict(overlapVal, underlapVal) {
+  const oSides = SUPPORT_SIDES[overlapVal] || [];
+  const uSides = SUPPORT_SIDES[underlapVal] || [];
+  return oSides.filter(s => uSides.includes(s));
+}
+
 export function instructions(tactic, data, prefs, draft = {}) {
   const pendingCount = Object.keys(draft).length;
   const currentUnderlap = draft.underlap_ip ?? prefs.overrides.underlap_ip ?? tactic.instructions.find(i => i.id === 'underlap_ip')?.value_en;
   const currentOverlap = draft.overlap_ip ?? prefs.overrides.overlap_ip ?? tactic.instructions.find(i => i.id === 'overlap_ip')?.value_en;
+  const existingConflict = checkSupportRunsConflict(currentOverlap, currentUnderlap);
 
   const instruction = item => {
     const applied = prefs.overrides[item.id] ?? item.value_en;
@@ -63,8 +81,6 @@ export function instructions(tactic, data, prefs, draft = {}) {
 
     const isOverlap = item.id === 'overlap_ip';
     const isUnderlap = item.id === 'underlap_ip';
-    const underlapBothFlanks = currentUnderlap === 'Underlap - Both Flanks';
-    const overlapBothFlanks = currentOverlap === 'Overlap - Both Flanks';
 
     const helperNote = item.id === 'short_goalkeeper_distribution_oop'
       ? `<span class="inst-scope-tag">Presionar salida rival</span>`
@@ -72,13 +88,27 @@ export function instructions(tactic, data, prefs, draft = {}) {
       ? `<span class="inst-scope-tag">Compartido: Avance / Último tercio</span>`
       : item.id === 'pressing_trap_oop'
       ? `<span class="inst-scope-tag">Compartido: Presión alta / Bloque medio</span>`
+      : item.id === 'gk_distribution_ip'
+      ? `<span class="inst-scope-tag">Destino colectivo único</span>`
       : '';
 
     const opts = (data.instruction_options[item.id] || []).map(option => {
       let disabled = false;
-      if (isOverlap && underlapBothFlanks && option.value !== 'Overlap - Balanced') disabled = true;
-      if (isUnderlap && overlapBothFlanks && option.value !== 'Underlap - Balanced') disabled = true;
-      return `<option value="${esc(option.value)}" ${option.value === selected ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${esc(option.label)}${disabled ? ' (Incompatible con desdoble interior en ambas bandas)' : ''}</option>`;
+      let reasonMsg = '';
+      if (isOverlap) {
+        const conflict = checkSupportRunsConflict(option.value, currentUnderlap);
+        if (conflict.length > 0) {
+          disabled = true;
+          reasonMsg = ` (Incompatible con desdoble interior en ${conflict.includes('left') && conflict.includes('right') ? 'ambas bandas' : conflict.includes('left') ? 'la izquierda' : 'la derecha'})`;
+        }
+      } else if (isUnderlap) {
+        const conflict = checkSupportRunsConflict(currentOverlap, option.value);
+        if (conflict.length > 0) {
+          disabled = true;
+          reasonMsg = ` (Incompatible con desdoble exterior en ${conflict.includes('left') && conflict.includes('right') ? 'ambas bandas' : conflict.includes('left') ? 'la izquierda' : 'la derecha'})`;
+        }
+      }
+      return `<option value="${esc(option.value)}" ${option.value === selected ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${esc(option.label)}${reasonMsg}</option>`;
     }).join('');
 
     return `<article class="instruction"><label for="override-${item.id}">${esc(item.property)} ${helperNote} <small>${origin}</small></label>
@@ -86,6 +116,10 @@ export function instructions(tactic, data, prefs, draft = {}) {
       <p>${esc(item.reason)}</p></article>`;
   };
   return `<details class="panel"><summary>Instrucciones de equipo · ${tactic.instructions.length} ajustes</summary><p class="muted">Las etiquetas proceden del catálogo FM26; las elecciones y el índice de encaje son recomendaciones de Touchline.</p>
+    ${existingConflict.length ? `<div class="notice warning" role="alert">
+      <strong>⚠️ Incompatibilidad detectada en Carreras de apoyo:</strong>
+      <p>Doblar por banda («${esc(currentOverlap)}») y Doblar por dentro («${esc(currentUnderlap)}») coinciden en ${existingConflict.includes('left') && existingConflict.includes('right') ? 'ambas bandas' : existingConflict.includes('left') ? 'la banda izquierda' : 'la banda derecha'}. En FM26 se excluyen en el mismo costado. Podés seleccionar una opción compatible en los selectores a continuación.</p>
+    </div>` : ''}
     ${pendingCount ? `<p class="notice" data-pending-overrides role="status">Tenés ${pendingCount} ${pendingCount === 1 ? 'cambio sin aplicar' : 'cambios sin aplicar'}. Revisá los valores y pulsá “Aplicar ajustes” para actualizar la propuesta.</p>` : ''}
     <div class="instruction-grid">${['in_possession', 'out_of_possession'].map(phase => `<section><h3>${phase === 'in_possession' ? 'Con posesión' : 'Sin posesión'}</h3>${tactic.instructions.filter(item => item.phase === phase).map(instruction).join('')}</section>`).join('')}</div>
     <div class="actions"><button class="button primary" data-action="apply-overrides">Aplicar ajustes</button><button class="button" data-action="clear-overrides">Restablecer ajustes manuales</button></div></details>`;

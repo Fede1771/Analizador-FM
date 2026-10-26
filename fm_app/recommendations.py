@@ -9,20 +9,20 @@ from fm_app.tactics import ATTRS, STYLES, FORMATIONS, FORMATION_CATALOG, FORMATI
 from fm_app.contracts import get_transfer_window_status
 
 POS_NAMES_ES = {
-    'GK': 'Arquero / Portero (POR)',
-    'DL': 'Lateral izquierdo (LTI)',
-    'DR': 'Lateral derecho (LTD)',
-    'DC': 'Defensa central (DFC)',
-    'WBL': 'Carrilero izquierdo (CRI)',
-    'WBR': 'Carrilero derecho (CRD)',
-    'DM': 'Pivote defensivo (MCD)',
+    'GK': 'Arquero / Portero (POR)', 'POR': 'Arquero / Portero (POR)',
+    'DL': 'Lateral izquierdo (LTI)', 'LTI': 'Lateral izquierdo (LTI)',
+    'DR': 'Lateral derecho (LTD)', 'LTD': 'Lateral derecho (LTD)',
+    'DC': 'Defensa central (DFC)', 'DFC': 'Defensa central (DFC)',
+    'WBL': 'Carrilero izquierdo (CRI)', 'CRI': 'Carrilero izquierdo (CRI)',
+    'WBR': 'Carrilero derecho (CRD)', 'CRD': 'Carrilero derecho (CRD)',
+    'DM': 'Pivote defensivo (MCD)', 'MCD': 'Pivote defensivo (MCD)',
     'MC': 'Mediocentro (MC)',
-    'ML': 'Volante izquierdo (MI)',
-    'MR': 'Volante derecho (MD)',
-    'AMC': 'Mediapunta central (MP)',
-    'AML': 'Extremo izquierdo (EXI)',
-    'AMR': 'Extremo derecho (EXD)',
-    'STC': 'Delantero centro (DLC)',
+    'ML': 'Volante izquierdo (MI)', 'MI': 'Volante izquierdo (MI)',
+    'MR': 'Volante derecho (MD)', 'MD': 'Volante derecho (MD)',
+    'AMC': 'Mediapunta central (MP)', 'MP': 'Mediapunta central (MP)',
+    'AML': 'Extremo izquierdo (EXI)', 'EXI': 'Extremo izquierdo (EXI)',
+    'AMR': 'Extremo derecho (EXD)', 'EXD': 'Extremo derecho (EXD)',
+    'STC': 'Delantero centro (DLC)', 'DLC': 'Delantero centro (DLC)',
     'ST': 'Delantero centro (DLC)',
 }
 
@@ -765,7 +765,9 @@ def analyze(dataset, style='possession', primary_slot=0, excluded=(), prompt=Non
             'excluded_count': len(excluded), 'actions': dict(Counter(a['action'] for a in academy)),
             'prompt_analysis': context.parsed, 'custom_prompt': prompt or '',
             'formations_catalog': [{k: f[k] for k in ('id','name','category','defensive','idea')} for f in FORMATION_CATALOG],
-            'requested_tactic': requested, 'effective_overrides': context.overrides}
+            'requested_tactic': requested, 'effective_overrides': context.overrides,
+            'squad_overcrowding': tactics[0].get('overcrowding', []) if tactics else [],
+            'surplus_players': tactics[0].get('surplus_players', {}) if tactics else {}}
 
 
 def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profiles, byid=None, dataset=None):
@@ -959,6 +961,112 @@ def evaluate_formation_reinforcements(lineup, seniors, loans, form, style, profi
 
     return weak_positions
 
+def evaluate_squad_overcrowding(lineup, seniors, profiles, form=None, byid=None):
+    """
+    Evaluates senior squad depth and detects overcrowded positions.
+    Recommends:
+      - 'loan' (Mandar a préstamo): for young players (age <= 22) who need match minutes.
+      - 'sell' (Evaluar venta): for adult/veteran players (age > 22) to capitalize transfer value
+        and release wage mass.
+    """
+    from collections import Counter, defaultdict
+    if byid is None:
+        byid = {p['uid']: p for p in seniors}
+
+    starter_counts = Counter()
+    starter_uids = set()
+    for slot in lineup:
+        pos = slot['in_possession']['position'].upper()
+        norm_pos = POS_CODES_ES.get(pos, pos)
+        starter_counts[norm_pos] += 1
+        starter_uids.add(slot['uid'])
+
+    players_by_pos = defaultdict(list)
+    for p in seniors:
+        raw_pos = (p.get('natural_positions') or ['MC'])[0].upper()
+        norm_pos = POS_CODES_ES.get(raw_pos, raw_pos)
+        players_by_pos[norm_pos].append(p)
+
+    overcrowded_positions = []
+    surplus_by_uid = {}
+
+    for pos, plist in sorted(players_by_pos.items()):
+        starters_needed = starter_counts.get(pos, 0)
+        max_ideal = 1 if starters_needed == 0 else (2 if starters_needed == 1 else starters_needed * 2)
+
+        if len(plist) <= max_ideal:
+            continue
+
+        sorted_p = sorted(
+            plist,
+            key=lambda x: (
+                1 if x['uid'] in starter_uids else 0,
+                profiles.get(x['uid'], {}).get('score', 0)
+            ),
+            reverse=True
+        )
+
+        active_slots = max_ideal
+        surplus = sorted_p[active_slots:]
+        pos_label = POS_NAMES_ES.get(pos, pos)
+
+        candidates = []
+        for rank_offset, sp in enumerate(surplus):
+            overall_rank = active_slots + rank_offset + 1
+            age = sp.get('age') or 25
+            c = sp.get('contract') or {}
+            wage = c.get('wage')
+            wage_fmt = f"€{wage:,.0f}/sem".replace(',', '.') if wage else None
+            score_val = profiles.get(sp['uid'], {}).get('score') or 70.0
+
+            if age <= 22:
+                action = 'loan'
+                action_label = 'Mandar a préstamo'
+                badge_class = 'badge-loan'
+                reason = f"Con {age} años, es la {overall_rank}ª opción en {pos_label} ({score_val:.1f}/100). Conviene gestionar una cesión con minutos garantizados para potenciar su desarrollo sin frenar su progresión."
+            else:
+                action = 'sell'
+                action_label = 'Evaluar venta'
+                badge_class = 'badge-sell'
+                wage_clause = f" con un salario de {wage_fmt}" if wage_fmt else ""
+                reason = f"Con {age} años{wage_clause}, queda relegado como {overall_rank}ª opción en {pos_label} ({score_val:.1f}/100). Conviene considerar una transferencia para capitalizar su valor de mercado y optimizar la masa salarial."
+
+            candidate_info = {
+                'uid': sp['uid'],
+                'name': sp['name'],
+                'age': age,
+                'wage': wage,
+                'wage_formatted': wage_fmt,
+                'contract_end': str(c.get('end')) if c.get('end') else None,
+                'score': score_val,
+                'action': action,
+                'action_label': action_label,
+                'badge_class': badge_class,
+                'rank': overall_rank,
+                'reason': reason,
+                'position': pos,
+                'position_label': pos_label
+            }
+            candidates.append(candidate_info)
+            surplus_by_uid[sp['uid']] = candidate_info
+
+        overcrowded_positions.append({
+            'position': pos,
+            'position_label': pos_label,
+            'starters_needed': starters_needed,
+            'player_count': len(plist),
+            'max_ideal': max_ideal,
+            'surplus_count': len(candidates),
+            'candidates': candidates
+        })
+
+    return {
+        'positions': overcrowded_positions,
+        'by_uid': surplus_by_uid,
+        'total_surplus': len(surplus_by_uid)
+    }
+
+
 class AnalysisContext:
     """One request-scoped set of profiles, slot evaluations and result construction."""
     def __init__(self, dataset, style, primary_slot, excluded, prompt, overrides=None):
@@ -1008,6 +1116,7 @@ class AnalysisContext:
                 risks.append(f"{p['name']}: requiere adaptación ({spec['ip_position']} → {spec['oop_position']}, {fam}/20).")
         bench, replacements = self.build_bench(lineup, slots)
         reinforcements = evaluate_formation_reinforcements(lineup, self.seniors, self.loans, form, self.style, self.profiles, self.byid, dataset=self.dataset)
+        overcrowding_res = evaluate_squad_overcrowding(lineup, self.seniors, self.profiles, form, self.byid)
         recalls = {c['player_uid'] for r in reinforcements for c in r['loan_recalls']}
         natural = sum(x['familiarity'] >= 18 for x in lineup)
         verdict = f"{form['name']}: {natural}/11 titulares con familiaridad alta. "
@@ -1030,7 +1139,7 @@ class AnalysisContext:
             'fm26_mentality': self.parsed['recommended_mentality'] if self.parsed else STYLES[self.style]['mentality'],
             'score': round(total / 11, 1), 'lineup': lineup, 'bench': [p['uid'] for p in bench],
             'bench_replacements': replacements, 'risks': risks + [STYLES[self.style]['risk']],
-            'reinforcements': reinforcements, 'tactical_recommendations': advice, 'instructions': instructions,
+            'reinforcements': reinforcements, 'overcrowding': overcrowding_res['positions'], 'surplus_players': overcrowding_res['by_uid'], 'tactical_recommendations': advice, 'instructions': instructions,
             'fit_summary': {'overall_score': round(total / 11, 1), 'natural_count': natural, 'adapted_count': 11 - natural,
                             'weak_count': len(reinforcements), 'recalls_count': len(recalls), 'verdict': verdict}}
         result['coverage'] = coverage(lineup, self.byid, selected)

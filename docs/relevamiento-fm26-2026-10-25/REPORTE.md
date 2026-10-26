@@ -4,7 +4,7 @@ Relevamiento del 25 de octubre de 2026. Idioma **Español latinoamericano**, com
 
 ## 1. Qué contiene y cómo interpretar la evidencia
 
-Este paquete reúne **79 definiciones de rol por fase**, **14 familias de posición**, **15 grupos de instrucciones individuales y sus 45 opciones**, ocho vistas colectivas y 309 capturas actuales. Se adjuntan 1680 registros tácticos seleccionados de la instalación, con claves, contexto del traductor y huellas de los archivos.
+Este paquete reúne **79 definiciones de rol por fase**, **14 familias de posición**, **15 grupos de instrucciones individuales y sus 45 opciones**, ocho vistas colectivas y 326 capturas actuales. Se adjuntan 1680 registros tácticos seleccionados de la instalación, con claves, contexto del traductor y huellas de los archivos.
 
 **La revisión visual completa de todas las combinaciones puesto × rol × fase × alcance no está terminada.** Los 15 menús individuales sí se abrieron y sus conjuntos de opciones se leyeron. Las descripciones completas de los 79 roles se obtuvieron de los recursos instalados. Las familias de compatibilidad combinan el catálogo previo y los menús observados; no constituyen una matriz oficial de disponibilidad.
 
@@ -2487,7 +2487,7 @@ Seleccionar fase → puesto concreto → rol compatible → instrucciones. Mostr
 - Los tres valores antes tapados de Aguantar el balón quedaron confirmados visualmente en **No**, con candado: Central abierto CP, Central que dobla CP y Mediocampista todoterreno CP. [273](capturas/273-todoterreno-aguantar-confirmado.jpg), [274](capturas/274-central-abierto-aguantar-confirmado.jpg), [275](capturas/275-central-dobla-aguantar-confirmado.jpg).
 - La matriz completa de subpuesto, rol, fase y alcance Posición/Jugador sigue sin certificarse. Priorizar únicamente los contextos que necesite la reconstrucción; la partida de prueba puede modificarse con autorización del usuario.
 - Los destinos de Marca específica y Marcar posición ya se abrieron: 25 puestos de campo más Ninguna, o lista dinámica de 10 rivales de campo más Ninguna en el prepartido observado. La investigación adicional de marcaje queda excluida por pedido del usuario. [118](capturas/118-marcar-posicion-destinos.jpg), [120](capturas/120-marca-jugador-destinos.jpg).
-- Consultar ADENDA-COLECTIVAS.md: conjuntos de opciones y dos controles compartidos confirmados; falta verificar combinaciones de contexto y ayudas no abiertas.
+- Consultar ADENDA-COLECTIVAS.md: conjuntos de opciones y dos controles compartidos confirmados; las combinaciones de contexto y ayudas no abiertas son límites no bloqueantes del alcance acordado.
 - Las 79 listas de atributos fueron cotejadas visualmente. Ninguna lista observada revela pesos numéricos del motor.
 - Decodificar, si se desea automatizar la lectura, posiciones, roles e instrucciones de la partida y cotejarlos contra estos menús. Las cadenas de traducción no proporcionan ese mapeo.
 
@@ -2509,3 +2509,11 @@ Fuentes del proyecto consultadas: `README.md`, `docs/fm26-reference.md`, `docs/t
 ## Actualización: selectores colectivos observados
 
 Se revisaron **27 paneles colectivos únicos (28 dimensiones)** y se confirmaron dos controles compartidos. Leé [ADENDA-COLECTIVAS.md](ADENDA-COLECTIVAS.md) y [verificacion-colectivas.json](verificacion-colectivas.json). Estas pruebas cierran la lista de opciones visibles y las duplicaciones de Regate/Trampa de presión; las combinaciones de contexto y todas las ayudas siguen sin certificarse. El marcaje queda excluido de nuevas investigaciones por pedido del usuario.
+
+## Actualización del 26/10/2026: costados y portero
+
+Quedaron cerrados los desdobles por costado y los botones duplicados del portero. La matriz 4×4 tiene nueve combinaciones seleccionadas y siete bloqueadas en el contexto observado: exterior e interior coexisten en lados opuestos y se excluyen en el mismo lado. Los dos botones Bandas son equivalentes entre sí; también los dos Laterales. Leé [ADENDA-COSTADOS-PORTERO-2026-10-26.md](ADENDA-COSTADOS-PORTERO-2026-10-26.md) y [verificacion-costados-portero-2026-10-26.json](verificacion-costados-portero-2026-10-26.json). Se incorporaron 17 capturas nuevas. Persisten únicamente los contextos no ensayados y las ayudas no abiertas; no extrapolar reglas universales.
+
+## Cierre del alcance acordado — 26/10/2026
+
+El relevamiento queda completo para el alcance acordado; no hay identificado un dato indispensable pendiente. Los contextos no ensayados y las ayudas no abiertas individualmente son límites no bloqueantes. No se confirmó que cambiar la mentalidad modifique los candados individuales: no implementar bloqueos por esa hipótesis. La búsqueda web no proporcionó una matriz universal ni certifica los textos exactos de la instalación; se conservan los recursos locales extraídos. Aplicar las restricciones documentadas con su procedencia, mantener desconocidos explícitos y revisar casos nuevos ante discrepancias concretas. El marcaje sigue excluido. Ver [ALCANCE-Y-CIERRE.md](ALCANCE-Y-CIERRE.md) y [PROMPT-ACTUALIZACION-INCREMENTAL.md](PROMPT-ACTUALIZACION-INCREMENTAL.md). Este cierre prevalece sobre listas históricas que parezcan exigir probar todas las combinaciones antes de implementar.

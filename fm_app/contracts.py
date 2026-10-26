@@ -65,17 +65,45 @@ def clean_player(player):
     return result
 
 
+SUPPORT_RUNS_SIDES = {
+    'Overlap - Balanced': frozenset(),
+    'Overlap - Left': frozenset({'L'}),
+    'Overlap - Right': frozenset({'R'}),
+    'Overlap - Both Flanks': frozenset({'L', 'R'}),
+    'Underlap - Balanced': frozenset(),
+    'Underlap - Left': frozenset({'L'}),
+    'Underlap - Right': frozenset({'R'}),
+    'Underlap - Both Flanks': frozenset({'L', 'R'}),
+}
+
+
+def check_support_runs_compatibility(overlap, underlap):
+    if not overlap or not underlap:
+        return True, None
+    o_sides = SUPPORT_RUNS_SIDES.get(overlap, frozenset())
+    u_sides = SUPPORT_RUNS_SIDES.get(underlap, frozenset())
+    conflict = o_sides & u_sides
+    if not conflict:
+        return True, None
+    if conflict == frozenset({'L', 'R'}):
+        return False, 'Incompatibilidad en Carreras de apoyo: al seleccionar ambas bandas en un eje, el otro debe ser Equilibrado.'
+    if 'L' in conflict:
+        return False, 'Incompatibilidad en Carreras de apoyo: no es posible doblar por banda y por dentro en la banda izquierda simultáneamente.'
+    if 'R' in conflict:
+        return False, 'Incompatibilidad en Carreras de apoyo: no es posible doblar por banda y por dentro en la banda derecha simultáneamente.'
+    return False, 'Incompatibilidad en Carreras de apoyo observada en FM26.'
+
+
 def validate_overrides(value):
     if not isinstance(value, dict) or len(value) > len(TI):
         raise ValueError('Los ajustes tácticos deben ser un objeto.')
     for key, option in value.items():
         if key not in TI or not isinstance(option, str) or option not in TI[key]['options']:
             raise ValueError(f'Instrucción desconocida o valor inválido: {key}.')
-    # Support runs verified incompatibilities
-    if value.get('underlap_ip') == 'Underlap - Both Flanks' and value.get('overlap_ip') in ('Overlap - Left', 'Overlap - Right', 'Overlap - Both Flanks'):
-        raise ValueError('Incompatibilidad en Carreras de apoyo: al doblar por dentro en ambas bandas, doblar por banda debe ser Equilibrado.')
-    if value.get('overlap_ip') == 'Overlap - Both Flanks' and value.get('underlap_ip') in ('Underlap - Left', 'Underlap - Right', 'Underlap - Both Flanks'):
-        raise ValueError('Incompatibilidad en Carreras de apoyo: al doblar por ambas bandas, doblar por dentro debe ser Equilibrado.')
+    # Support runs verified 16-combination matrix
+    ok, err = check_support_runs_compatibility(value.get('overlap_ip'), value.get('underlap_ip'))
+    if not ok:
+        raise ValueError(err)
     return value
 
 

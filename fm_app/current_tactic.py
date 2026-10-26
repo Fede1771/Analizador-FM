@@ -2,6 +2,7 @@
 from dataclasses import asdict
 from fm_app.fm26 import ROLES, PI, TI, PLAYER_MENU, SCREENSHOT_LOCKS, EDITABLE_GROUPS, OBSERVED_CONTEXTS, instruction
 from fm_app.tactics import STYLES
+from fm_app.contracts import check_support_runs_compatibility
 from fm_app.recommendations import role_score, explanation
 from fm_app.spatial import coverage
 
@@ -244,10 +245,9 @@ def audit_tactic(dataset, params):
     if not isinstance(team,dict):raise ValueError('Instrucciones de equipo no válidas.')
     for key,value in team.items():
         if key not in TI or value not in TI[key]['options']:raise ValueError('Instrucción de equipo no válida.')
-    if team.get('underlap_ip') == 'Underlap - Both Flanks' and team.get('overlap_ip') in ('Overlap - Left', 'Overlap - Right', 'Overlap - Both Flanks'):
-        raise ValueError('Incompatibilidad en Carreras de apoyo: al doblar por dentro en ambas bandas, doblar por banda debe ser Equilibrado.')
-    if team.get('overlap_ip') == 'Overlap - Both Flanks' and team.get('underlap_ip') in ('Underlap - Left', 'Underlap - Right', 'Underlap - Both Flanks'):
-        raise ValueError('Incompatibilidad en Carreras de apoyo: al doblar por ambas bandas, doblar por dentro debe ser Equilibrado.')
+    ok, err = check_support_runs_compatibility(team.get('overlap_ip'), team.get('underlap_ip'))
+    if not ok:
+        raise ValueError(err)
     if team.get('short_goalkeeper_distribution_oop') == 'Yes':
         advice.append({
             'title': 'Impedir salida en corto del portero rival',

@@ -135,6 +135,16 @@ try {
   await wait(`document.querySelector('h1')?.textContent==='Club de prueba'`, 'overview heading');
   await snap('01-inicio-centro-del-club.png');
 
+  // Ojeo de mercado masculino
+  await evaluate(`location.hash='scouting'`);
+  await wait(`document.querySelector('.scouting-grid')`, 'scouting grid');
+  await snap('07-ojeo-masculino.png');
+
+  // Plantilla con gestión de sobrepoblación
+  await evaluate(`location.hash='squad'`);
+  await wait(`document.querySelector('#results table')`, 'squad table');
+  await snap('08-plantilla-sobrepoblacion.png');
+
   // 2. Propuestas (1360x920)
   await evaluate(`location.hash='tactics'`);
   await wait(`document.querySelectorAll('.pitch-player').length===11 && document.querySelector('#formation-select')`, 'propuestas pitch');

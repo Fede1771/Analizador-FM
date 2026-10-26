@@ -254,30 +254,44 @@ class FM26ReconstructionAcceptanceTests(unittest.TestCase):
         self.assertEqual(shared['pressing_trap_oop'], ['Presión adelantada', 'Bloque medio'])
 
     def test_criterion_14_support_runs_two_axes_and_incompatibilities(self):
-        """14. Carreras de apoyo tiene dos ejes independientes y valida las incompatibilidades comprobadas."""
+        """14. Carreras de apoyo tiene dos ejes independientes y valida la matriz completa de 16 combinaciones comprobadas."""
         self.assertIn('overlap_ip', TI)
         self.assertIn('underlap_ip', TI)
         plan = self.make_plan_433()
 
-        # Incompatibility 1: underlap both flanks + overlap non-balanced
-        plan['team'] = {'underlap_ip': 'Underlap - Both Flanks', 'overlap_ip': 'Overlap - Left'}
-        with self.assertRaisesRegex(ValueError, 'Carreras de apoyo'):
-            audit_tactic(self.data, plan)
+        allowed_combinations = [
+            ('Overlap - Balanced', 'Underlap - Balanced'),
+            ('Overlap - Balanced', 'Underlap - Left'),
+            ('Overlap - Balanced', 'Underlap - Right'),
+            ('Overlap - Balanced', 'Underlap - Both Flanks'),
+            ('Overlap - Left', 'Underlap - Balanced'),
+            ('Overlap - Left', 'Underlap - Right'),  # costados opuestos coexisten
+            ('Overlap - Right', 'Underlap - Balanced'),
+            ('Overlap - Right', 'Underlap - Left'),  # costados opuestos coexisten
+            ('Overlap - Both Flanks', 'Underlap - Balanced'),
+        ]
 
-        # Incompatibility 2: overlap both flanks + underlap non-balanced
-        plan['team'] = {'overlap_ip': 'Overlap - Both Flanks', 'underlap_ip': 'Underlap - Right'}
-        with self.assertRaisesRegex(ValueError, 'Carreras de apoyo'):
-            audit_tactic(self.data, plan)
+        blocked_combinations = [
+            ('Overlap - Left', 'Underlap - Left'),  # mismo costado excluyente
+            ('Overlap - Left', 'Underlap - Both Flanks'),
+            ('Overlap - Right', 'Underlap - Right'),  # mismo costado excluyente
+            ('Overlap - Right', 'Underlap - Both Flanks'),
+            ('Overlap - Both Flanks', 'Underlap - Left'),
+            ('Overlap - Both Flanks', 'Underlap - Right'),
+            ('Overlap - Both Flanks', 'Underlap - Both Flanks'),
+        ]
 
-        # Both Balanced is valid
-        plan['team'] = {'underlap_ip': 'Underlap - Balanced', 'overlap_ip': 'Overlap - Balanced'}
-        res = audit_tactic(self.data, plan)
-        self.assertIsNotNone(res)
+        # Verify all 9 allowed combinations pass
+        for overlap, underlap in allowed_combinations:
+            plan['team'] = {'overlap_ip': overlap, 'underlap_ip': underlap}
+            res = audit_tactic(self.data, plan)
+            self.assertIsNotNone(res, f"Failed for allowed combination ({overlap}, {underlap})")
 
-        # Single flank each (not both flanks) remains unblocked (unverified combinations not extrapolated)
-        plan['team'] = {'underlap_ip': 'Underlap - Left', 'overlap_ip': 'Overlap - Right'}
-        res = audit_tactic(self.data, plan)
-        self.assertIsNotNone(res)
+        # Verify all 7 blocked combinations raise ValueError
+        for overlap, underlap in blocked_combinations:
+            plan['team'] = {'overlap_ip': overlap, 'underlap_ip': underlap}
+            with self.assertRaisesRegex(ValueError, 'Carreras de apoyo', msg=f"Should fail for blocked combination ({overlap}, {underlap})"):
+                audit_tactic(self.data, plan)
 
     def test_criterion_15_opposition_gk_distribution_distinguished_from_own(self):
         """15. La salida del portero rival (prevent_short_gk) se distingue de la distribución propia (gk_distribution)."""

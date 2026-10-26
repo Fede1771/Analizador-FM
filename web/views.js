@@ -236,12 +236,127 @@ export function playerRows(state,kind) {
         </tr>`;
       }).join('')}</tbody></table></div>`;
   }
+  if (kind === 'squad') {
+    const selectedTactic = prefs.formation === 'auto'
+      ? analysis?.requested_tactic || analysis?.tactics?.[0]
+      : state.simulation || analysis?.tactics?.[0];
+    const startersSet = new Set((selectedTactic?.lineup || []).map(l => l.uid));
+    const benchSet = new Set(selectedTactic?.bench || []);
+    const surplusMap = selectedTactic?.surplus_players || analysis?.surplus_players || {};
+
+    return `<div class="table-scroll"><table><caption>${rows.length} jugadores · Encaje individual en su mejor función y situación en la plantilla</caption><thead><tr>${['Jugador','Grupo','Mejor función','Situación en plantilla','Encaje','Pases','Técnica','Velocidad','Disponible'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(p=>{
+      const isExcluded = prefs.excluded.includes(p.uid);
+      const prof = profiles[p.uid];
+      const surplus = surplusMap[p.uid];
+      let statusHtml;
+      if (startersSet.has(p.uid)) {
+        statusHtml = '<span class="squad-status-badge starter" title="Titular en el once propuesto">⭐ Titular</span>';
+      } else if (surplus) {
+        if (surplus.action === 'loan') {
+          statusHtml = `<span class="squad-status-badge loan" title="${esc(surplus.reason)}">📤 Préstamo (${surplus.age}a)</span>`;
+        } else {
+          statusHtml = `<span class="squad-status-badge sell" title="${esc(surplus.reason)}">🏷️ Evaluar venta</span>`;
+        }
+      } else if (benchSet.has(p.uid)) {
+        statusHtml = '<span class="squad-status-badge bench" title="Opción principal en el banco de suplentes">🔄 Rotación</span>';
+      } else {
+        statusHtml = '<span class="squad-status-badge reserve" title="Suplente de reserva">Reserva</span>';
+      }
+
+      return `<tr class="${isExcluded ? 'excluded' : ''}">
+        <td>${playerButton(p)}</td>
+        <td>${esc(groupName(data,prefs,p.team_slot))}</td>
+        <td>${esc(prof?.role_name)}</td>
+        <td>${statusHtml}</td>
+        <td>${score(prof?.score)}</td>
+        <td>${p.attributes.passing}</td>
+        <td>${p.attributes.technique}</td>
+        <td>${p.attributes.pace}</td>
+        <td><input id="available-${p.uid}" type="checkbox" data-available="${p.uid}" ${isExcluded ? '' : 'checked'} aria-label="Incluir a ${esc(p.name)} en las propuestas"></td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
+  }
   return `<div class="table-scroll"><table><caption>${rows.length} jugadores · Encaje individual en su mejor función</caption><thead><tr>${['Jugador','Grupo','Mejor función','Encaje','Pases','Técnica','Velocidad','Disponible'].map(x=>`<th scope="col">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(p=>`<tr class="${prefs.excluded.includes(p.uid)?'excluded':''}"><td>${playerButton(p)}</td><td>${esc(groupName(data,prefs,p.team_slot))}</td><td>${esc(profiles[p.uid]?.role_name)}</td><td>${score(profiles[p.uid]?.score)}</td><td>${p.attributes.passing}</td><td>${p.attributes.technique}</td><td>${p.attributes.pace}</td><td><input id="available-${p.uid}" type="checkbox" data-available="${p.uid}" ${prefs.excluded.includes(p.uid)?'':'checked'} aria-label="Incluir a ${esc(p.name)} en las propuestas"></td></tr>`).join('')}</tbody></table></div>`;
 }
 
+function squadOvercrowdingPanel(overcrowding, tactic) {
+  if (!overcrowding || !overcrowding.length) {
+    return `<div class="squad-balance-banner">
+      <span class="icon">✅</span>
+      <div>
+        <strong>Plantilla equilibrada sin sobrepoblación</strong>
+        <p>No se detectaron puestos con exceso de futbolistas para el esquema propuesto (${esc(tactic?.name || 'táctico')}). Todos los puestos cuentan con una cobertura adecuada de 1 a 2 jugadores sin sobrecosto salarial ni juveniles tapados.</p>
+      </div>
+    </div>`;
+  }
+  const totalSurplus = overcrowding.reduce((acc, x) => acc + (x.surplus_count || 0), 0);
+  return `<section class="panel squad-overcrowding-panel">
+    <div class="overcrowding-header">
+      <div>
+        <span class="eyebrow">Gestión de plantilla · Sobrepoblación detectada</span>
+        <h2>⚖️ Salidas recomendadas por exceso de cupo (${totalSurplus} ${totalSurplus === 1 ? 'jugador excedente' : 'jugadores excedentes'})</h2>
+        <p class="muted">Para el esquema ${esc(tactic?.name || 'titular')} con cupo ideal de hasta 2 futbolistas por puesto activo, estos jugadores quedan relegados en la rotación. Touchline recomienda <strong>préstamo</strong> para menores de 23 años (rodaje competitivo) y <strong>evaluar venta</strong> para mayores de 22 años (alivio salarial y capitalización de mercado).</p>
+      </div>
+    </div>
+    <div class="overcrowding-grid">
+      ${overcrowding.map(item => `
+        <article class="overcrowding-card">
+          <div class="oc-card-header">
+            <div>
+              <h3>${esc(item.position_label || item.position)}</h3>
+              <span class="oc-meta-badge">${item.player_count} jugadores · ${item.starters_needed > 0 ? `${item.starters_needed} titular(es)` : 'Sin titular en el esquema'} (Cupo ideal: ${item.max_ideal})</span>
+            </div>
+            <span class="oc-surplus-badge">+${item.surplus_count} excedente${item.surplus_count > 1 ? 's' : ''}</span>
+          </div>
+          <div class="oc-candidate-list">
+            ${item.candidates.map(c => `
+              <div class="oc-candidate-row">
+                <div class="oc-candidate-info">
+                  <div class="oc-candidate-name-row">
+                    <button class="player-link text-button" data-player="${c.uid}"><strong>${esc(c.name)}</strong></button>
+                    <span class="oc-action-badge ${c.action === 'loan' ? 'loan' : 'sell'}">${c.action === 'loan' ? '📤 Mandar a préstamo' : '🏷️ Evaluar venta'}</span>
+                  </div>
+                  <div class="oc-candidate-sub">
+                    <span>${c.age} años</span>
+                    <span>${score(c.score)}</span>
+                    ${c.wage_formatted ? `<span class="wage-pill">${esc(c.wage_formatted)}</span>` : ''}
+                    <span class="muted">${c.rank}ª opción</span>
+                  </div>
+                  <p class="oc-reason">${esc(c.reason)}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </article>
+      `).join('')}
+    </div>
+  </section>`;
+}
+
 export function roster(state,kind) {
-  const texts={squad:['Plantilla','Marcá los jugadores disponibles para el once y el banco.'],academy:['Inferiores','Compará otros grupos con el primer equipo y elegí una prioridad de desarrollo.'],loans:['Cedidos','Seguí minutos y rendimiento. Las estadísticas ausentes se muestran sin estimar.']};
-  return `<div class="page-heading"><div><h1>${texts[kind][0]}</h1><p>${texts[kind][1]}</p></div><button class="button" data-action="export">Exportar análisis</button></div>${kind==='academy'?'<p class="notice">Se incluyen todos los grupos salvo el principal; pueden contener reservas adultos. El encaje actual no estima potencial.</p>':''}<section class="panel">${toolbar(state,kind)}<div id="results">${playerRows(state,kind)}</div></section>`;
+  const texts={
+    squad:['Plantilla','Marcá los jugadores disponibles para el once y el banco, y gestioná el equilibrio de puestos.'],
+    academy:['Inferiores','Compará otros grupos con el primer equipo y elegí una prioridad de desarrollo.'],
+    loans:['Cedidos','Seguí minutos y rendimiento. Las estadísticas ausentes se muestran sin estimar.']
+  };
+  const selectedTactic = state.prefs?.formation === 'auto'
+    ? state.analysis?.requested_tactic || state.analysis?.tactics?.[0]
+    : state.simulation || state.analysis?.tactics?.[0];
+  const overcrowding = selectedTactic?.overcrowding || state.analysis?.squad_overcrowding || [];
+
+  return `<div class="page-heading">
+    <div>
+      <h1>${texts[kind][0]}</h1>
+      <p>${texts[kind][1]}</p>
+    </div>
+    <button class="button" data-action="export">Exportar análisis</button>
+  </div>
+  ${kind==='academy'?'<p class="notice">Se incluyen todos los grupos salvo el principal; pueden contener reservas adultos. El encaje actual no estima potencial.</p>':''}
+  ${kind==='squad'?squadOvercrowdingPanel(overcrowding, selectedTactic):''}
+  <section class="panel">
+    ${toolbar(state,kind)}
+    <div id="results">${playerRows(state,kind)}</div>
+  </section>`;
 }
 
 export function methodology(state) {
@@ -255,7 +370,13 @@ export function playerDialog(state,id) {
   const tactic=state.prefs.formation==='auto'?state.analysis.requested_tactic||state.analysis.tactics[0]:state.simulation;
   const slot=state.view==='current'?state.currentResult?.lineup.find(x=>x.uid===p.uid):state.view==='tactics'?tactic?.lineup.find(x=>x.uid===p.uid):null;
   const a=state.analysis.academy.find(x=>x.uid===p.uid);
+  const surplus = tactic?.surplus_players?.[p.uid] || state.analysis?.surplus_players?.[p.uid];
   return `<div class="profile-heading"><span class="eyebrow">${slot?(state.view==='current'?'En tu once confirmado':'En el once propuesto'):'Mejor encaje individual'}</span><h2 id="dialog-title">${esc(p.name)}</h2><p>${p.age??'—'} años · ${esc(p.natural_positions.map(pos).join(' / '))} · ${esc(p.club_name||state.data.club)}</p></div>${rolePlan((slot||prof).in_possession)}${rolePlan((slot||prof).out_of_possession)}
+    ${surplus ? `<section class="panel squad-candidate-notice ${surplus.action === 'loan' ? 'notice-loan' : 'notice-sell'}">
+      <h3>${surplus.action === 'loan' ? '📤 Sugerencia de plantilla: Mandar a préstamo' : '🏷️ Sugerencia de plantilla: Evaluar venta'}</h3>
+      <p>${esc(surplus.reason)}</p>
+      ${surplus.wage_formatted ? `<p class="muted"><small>Salario actual: <strong>${esc(surplus.wage_formatted)}</strong>${surplus.contract_end ? ` · Fin de contrato: ${esc(surplus.contract_end)}` : ''}</small></p>` : ''}
+    </section>` : ''}
     ${a?`<section class="panel"><h3>${esc(a.action)}</h3><p>${esc(a.plan)}</p><p>${esc(a.development)}</p>${a.comparison.map(c=>`<div class="split"><span>${esc(c.name)}</span>${score(c.score)}</div>`).join('')}</section>`:''}
     <details><summary>Atributos visibles y familiaridad</summary><div class="attribute-grid">${Object.entries(state.data.attributes).map(([k,label])=>`<div><span>${esc(label)}</span><b>${p.attributes[k]}</b></div>`).join('')}</div><p>${esc(Object.entries(p.positions).filter(([,v])=>v>=10).map(([k,v])=>`${pos(k)} ${v}/20`).join(' · '))}</p><p>Pie izquierdo ${p.left_foot??'—'}/20 · derecho ${p.right_foot??'—'}/20</p></details><button class="button" data-download-player="${p.uid}">Descargar plan del jugador</button>`;
 }

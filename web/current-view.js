@@ -1,5 +1,5 @@
 import {esc,number,score,pos} from './format.js';
-import {rolePlan,pitch} from './tactics-view.js';
+import {rolePlan,pitch,checkSupportRunsConflict} from './tactics-view.js';
 import {zoneMap} from './zones-view.js';
 
 export function reconcileCurrentDraft(data,saved) {
@@ -513,26 +513,53 @@ export function currentView(state) {
         </details>
       ` : ''}
 
+      ${(() => {
+        const curOverlap = d.team['overlap_ip'];
+        const curUnderlap = d.team['underlap_ip'];
+        const conflict = checkSupportRunsConflict(curOverlap, curUnderlap);
+        if (conflict.length > 0) {
+          return `<div class="notice warning" role="alert" style="margin-bottom: 14px;">
+            <strong>⚠️ Incompatibilidad detectada en Carreras de apoyo:</strong>
+            <p>Doblar por banda («${esc(curOverlap)}») y Doblar por dentro («${esc(curUnderlap)}») coinciden en ${conflict.includes('left') && conflict.includes('right') ? 'ambas bandas' : conflict.includes('left') ? 'la banda izquierda' : 'la banda derecha'}. En FM26 se excluyen en el mismo costado. Podés seleccionar una opción compatible en los selectores a continuación.</p>
+          </div>`;
+        }
+        return '';
+      })()}
+
       <div class="instruction-grid">
         ${Object.entries(data.instruction_options).map(([id, opts]) => {
           const isOverlap = id === 'overlap_ip';
           const isUnderlap = id === 'underlap_ip';
-          const underlapBothFlanks = d.team['underlap_ip'] === 'Underlap - Both Flanks';
-          const overlapBothFlanks = d.team['overlap_ip'] === 'Overlap - Both Flanks';
+          const curOverlap = d.team['overlap_ip'];
+          const curUnderlap = d.team['underlap_ip'];
           const filteredOpts = opts.map(o => {
             let disabled = false;
-            if (isOverlap && underlapBothFlanks && o.value !== 'Overlap - Balanced') disabled = true;
-            if (isUnderlap && overlapBothFlanks && o.value !== 'Underlap - Balanced') disabled = true;
-            return { ...o, disabled };
+            let reasonMsg = '';
+            if (isOverlap) {
+              const conflict = checkSupportRunsConflict(o.value, curUnderlap);
+              if (conflict.length > 0) {
+                disabled = true;
+                reasonMsg = ` (Incompatible con interior en ${conflict.includes('left') && conflict.includes('right') ? 'ambas bandas' : conflict.includes('left') ? 'la izquierda' : 'la derecha'})`;
+              }
+            } else if (isUnderlap) {
+              const conflict = checkSupportRunsConflict(curOverlap, o.value);
+              if (conflict.length > 0) {
+                disabled = true;
+                reasonMsg = ` (Incompatible con exterior en ${conflict.includes('left') && conflict.includes('right') ? 'ambas bandas' : conflict.includes('left') ? 'la izquierda' : 'la derecha'})`;
+              }
+            }
+            return { ...o, disabled, reasonMsg };
           });
           const note = id === 'short_goalkeeper_distribution_oop'
             ? ' <small style="color:var(--text-muted);">(Presionar salida rival)</small>'
             : id === 'dribbling_ip'
-            ? ' <small style="color:var(--text-muted);">(Compartido)</small>'
+            ? ' <small style="color:var(--text-muted);">(Compartido: Avance / Último tercio)</small>'
             : id === 'pressing_trap_oop'
-            ? ' <small style="color:var(--text-muted);">(Compartido)</small>'
+            ? ' <small style="color:var(--text-muted);">(Compartido: Presión alta / Bloque medio)</small>'
+            : id === 'gk_distribution_ip'
+            ? ' <small style="color:var(--text-muted);">(Destino colectivo único)</small>'
             : '';
-          return `<label>${esc(editor.team_properties[id])}${note}<select id="current-team-${id}" data-current="team" data-team="${id}">${filteredOpts.map(o => `<option value="${esc(o.value)}" ${d.team[id] === o.value ? 'selected' : ''} ${o.disabled ? 'disabled' : ''}>${esc(o.label)}${o.disabled ? ' (Incompatible con interior en ambas bandas)' : ''}</option>`).join('')}</select></label>`;
+          return `<label>${esc(editor.team_properties[id])}${note}<select id="current-team-${id}" data-current="team" data-team="${id}">${filteredOpts.map(o => `<option value="${esc(o.value)}" ${d.team[id] === o.value ? 'selected' : ''} ${o.disabled ? 'disabled' : ''}>${esc(o.label)}${o.reasonMsg || ''}</option>`).join('')}</select></label>`;
         }).join('')}
       </div>
     </details>

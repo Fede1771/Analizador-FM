@@ -2161,5 +2161,124 @@
     "file": "capturas/308-trampa-compartida-subfases.jpg",
     "window": "Football Manager 26",
     "sha256": "3b5738dcb390e126a1c3a69c75573c2f4fc6fd99caeafb4003c8b7e9adee38f3"
+  },
+  {
+    "id": "309-desdobles-inicio-26",
+    "note": "Estado inicial de los ejes de desdobles en la continuación del 26/10.",
+    "file": "capturas/309-desdobles-inicio-26.jpg",
+    "window": "Football Manager 26",
+    "sha256": "601293ba576f5f10e8800d1c2c677ab245105de230c13de3997c58345f063b8f"
+  },
+  {
+    "id": "310-interior-izquierda",
+    "note": "Interior izquierda: banda izquierda y ambas deshabilitadas; banda derecha habilitada.",
+    "file": "capturas/310-interior-izquierda.jpg",
+    "window": "Football Manager 26",
+    "sha256": "586e630816eadea860b00f07bc591d525e0a7c70226ed811684d90521516919d"
+  },
+  {
+    "id": "311-banda-derecha-interior-izquierda",
+    "note": "Coexistencia confirmada de banda derecha e interior izquierda.",
+    "file": "capturas/311-banda-derecha-interior-izquierda.jpg",
+    "window": "Football Manager 26",
+    "sha256": "d8860f49426a199d5635a260e76f2c8bd480b6dd7b036109e8afd1de20e0a434"
+  },
+  {
+    "id": "312-interior-derecha-bloqueado",
+    "note": "Intento de seleccionar interior derecha con banda derecha: permanece interior izquierda; combinación del mismo costado bloqueada.",
+    "file": "capturas/312-interior-derecha-bloqueado.jpg",
+    "window": "Football Manager 26",
+    "sha256": "9e2fd5ebeabb3d195d48da9fc5c2ac97fa2b69d20fd763a1358a2ba2160f560b"
+  },
+  {
+    "id": "313-interior-derecha",
+    "note": "Interior derecha: banda derecha y ambas bloqueadas; banda izquierda habilitada.",
+    "file": "capturas/313-interior-derecha.jpg",
+    "window": "Football Manager 26",
+    "sha256": "6a5dba6347bdf8078463e1d7e4487ed7fdfa0fb122d804fb8655321ac438854f"
+  },
+  {
+    "id": "314-banda-izquierda-interior-derecha",
+    "note": "Coexistencia confirmada de banda izquierda e interior derecha.",
+    "file": "capturas/314-banda-izquierda-interior-derecha.jpg",
+    "window": "Football Manager 26",
+    "sha256": "775e4025e3f74c57a791f8514ab1294aaf72c002bbcf1c37bed40d9376652227"
+  },
+  {
+    "id": "315-interior-izquierda-bloqueado",
+    "note": "Intento de interior izquierda con banda izquierda no cambia la combinación; permanece interior derecha.",
+    "file": "capturas/315-interior-izquierda-bloqueado.jpg",
+    "window": "Football Manager 26",
+    "sha256": "a1475efa6bf7951041bf7b2c6b61f53224d1b523718831f21a2af4721188dbef"
+  },
+  {
+    "id": "316-banda-izquierda-interior-equilibrado",
+    "note": "Banda izquierda con interior equilibrado: interior derecha habilitada e izquierda/ambas bloqueadas.",
+    "file": "capturas/316-banda-izquierda-interior-equilibrado.jpg",
+    "window": "Football Manager 26",
+    "sha256": "739f1c71db1f0181d3d6ed84df72cdb29a95fa7cb78299b142ea4c7cc3711ea3"
+  },
+  {
+    "id": "317-banda-derecha-interior-equilibrado",
+    "note": "Banda derecha con interior equilibrado: interior izquierda habilitada y derecha/ambas bloqueadas.",
+    "file": "capturas/317-banda-derecha-interior-equilibrado.jpg",
+    "window": "Football Manager 26",
+    "sha256": "8e0cd777ce71c3483982186324406f5e3ae78615ca2138a73152476fa4945b24"
+  },
+  {
+    "id": "318-banda-ambas-interior-equilibrado",
+    "note": "Banda ambas con interior equilibrado: interior izquierda/derecha/ambas bloqueadas.",
+    "file": "capturas/318-banda-ambas-interior-equilibrado.jpg",
+    "window": "Football Manager 26",
+    "sha256": "6df5c8e8bc46ea7547d391f3eeea239f1b4fdd0578535f88f53349da9ed9ec0f"
+  },
+  {
+    "id": "319-desdobles-equilibrados",
+    "note": "Ambos ejes equilibrados: todos los botones habilitados.",
+    "file": "capturas/319-desdobles-equilibrados.jpg",
+    "window": "Football Manager 26",
+    "sha256": "03c95d2c493b9b6b4d40c40fe4d4190b8f5941ee23252dfe43becec8f9eed1a4"
+  },
+  {
+    "id": "320-distribucion-inicio-26",
+    "note": "Distribución propia: centrales seleccionados; botones duplicados Bandas y Laterales.",
+    "file": "capturas/320-distribucion-inicio-26.jpg",
+    "window": "Football Manager 26",
+    "sha256": "54f8345cc57d6fa7f96a35129add076e58a24fe62c9b7d25e5246699951c60b3"
+  },
+  {
+    "id": "321-distribucion-bandas-izquierdo",
+    "note": "Clic en Bandas de la izquierda: ambos botones Bandas resaltados; descripción global sin costado.",
+    "file": "capturas/321-distribucion-bandas-izquierdo.jpg",
+    "window": "Football Manager 26",
+    "sha256": "8926fd2fafaf262cc7bce13d9a5e6ff0ea8661a12937e1e46ff6a143051d1402"
+  },
+  {
+    "id": "322-distribucion-laterales-izquierdo",
+    "note": "Clic en Laterales izquierdo: ambos Laterales resaltados y Bandas deseleccionados; único destino Laterales.",
+    "file": "capturas/322-distribucion-laterales-izquierdo.jpg",
+    "window": "Football Manager 26",
+    "sha256": "74af0d6069cbc1f21555997b534529ff7f132c33a44e0beb941b937f4a69dc21"
+  },
+  {
+    "id": "323-distribucion-bandas-derecho",
+    "note": "Clic en Bandas derecho desde Laterales: ambos Bandas resaltados; mismo título, descripción y valor Bandas.",
+    "file": "capturas/323-distribucion-bandas-derecho.jpg",
+    "window": "Football Manager 26",
+    "sha256": "80d63f93a4fb1bb6fb2e985ac1e012f34dabeec6b150d9431f827a2074f94d55"
+  },
+  {
+    "id": "324-distribucion-laterales-derecho",
+    "note": "Clic en Laterales derecho desde Bandas: ambos Laterales resaltados; mismo valor y descripción que botón izquierdo.",
+    "file": "capturas/324-distribucion-laterales-derecho.jpg",
+    "window": "Football Manager 26",
+    "sha256": "daf6d6c7d8e9fc3449f8ed6df23a0f56e0f708e42b3b341f8667f22c661f7caa"
+  },
+  {
+    "id": "325-cierre-costados-portero",
+    "note": "Estado final: ambos ejes de carreras equilibrados; distribución propia Laterales.",
+    "file": "capturas/325-cierre-costados-portero.jpg",
+    "window": "Football Manager 26",
+    "sha256": "9d10683f470c6c7569ee08be0c8365ace484abb4ac1a63ce7cb8068818159050"
   }
 ]

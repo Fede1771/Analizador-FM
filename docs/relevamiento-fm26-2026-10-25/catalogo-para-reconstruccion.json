@@ -11344,7 +11344,17 @@
     "shared_team_controls_verified": 2,
     "all_listed_team_selector_option_sets_observed": true,
     "all_collective_option_help_texts_opened_in_ui": false,
-    "marking_research": "Excluido de nuevas verificaciones por indicación del usuario"
+    "marking_research": "Excluido de nuevas verificaciones por indicación del usuario",
+    "support_run_side_combinations_verified": 16,
+    "support_run_side_combinations_selected": 9,
+    "support_run_side_combinations_blocked": 7,
+    "gk_distribution_duplicate_button_pairs_verified": 2,
+    "support_run_side_matrix_verified_in_documented_context": true,
+    "gk_distribution_duplicate_buttons_equivalent_verified": true,
+    "agreed_scope_complete": true,
+    "known_indispensable_missing_data": [],
+    "universal_context_coverage_claimed": false,
+    "mentality_changes_individual_locks_confirmed": false
   },
   "lineup_snapshot_initial": [
     {
@@ -11738,7 +11748,147 @@
             "evidence": "capturas/291-doblar-ambas-bandas.jpg"
           }
         ],
-        "unverified": "Combinaciones cruzadas izquierda/derecha no ensayadas."
+        "unverified": "Disponibilidad en otras formaciones/mentalidades/contextos no ensayados; la matriz de costados sí quedó comprobada en el contexto documentado.",
+        "costado_verification": {
+          "status": "Matriz 4×4 observada en este contexto: 9 combinaciones seleccionadas y 7 bloqueadas visualmente.",
+          "values": [
+            "Equilibrado",
+            "Izquierda",
+            "Derecha",
+            "Ambas bandas"
+          ],
+          "matrix": [
+            {
+              "overlap": "Equilibrado",
+              "underlap": "Equilibrado",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/319-desdobles-equilibrados.jpg"
+            },
+            {
+              "overlap": "Equilibrado",
+              "underlap": "Izquierda",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/310-interior-izquierda.jpg"
+            },
+            {
+              "overlap": "Equilibrado",
+              "underlap": "Derecha",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/313-interior-derecha.jpg"
+            },
+            {
+              "overlap": "Equilibrado",
+              "underlap": "Ambas bandas",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/309-desdobles-inicio-26.jpg"
+            },
+            {
+              "overlap": "Izquierda",
+              "underlap": "Equilibrado",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/316-banda-izquierda-interior-equilibrado.jpg"
+            },
+            {
+              "overlap": "Izquierda",
+              "underlap": "Izquierda",
+              "allowed": false,
+              "verification": "Opción deshabilitada en UI",
+              "evidence": "capturas/310-interior-izquierda.jpg"
+            },
+            {
+              "overlap": "Izquierda",
+              "underlap": "Derecha",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/314-banda-izquierda-interior-derecha.jpg"
+            },
+            {
+              "overlap": "Izquierda",
+              "underlap": "Ambas bandas",
+              "allowed": false,
+              "verification": "Opción deshabilitada en UI",
+              "evidence": "capturas/309-desdobles-inicio-26.jpg"
+            },
+            {
+              "overlap": "Derecha",
+              "underlap": "Equilibrado",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/317-banda-derecha-interior-equilibrado.jpg"
+            },
+            {
+              "overlap": "Derecha",
+              "underlap": "Izquierda",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/311-banda-derecha-interior-izquierda.jpg"
+            },
+            {
+              "overlap": "Derecha",
+              "underlap": "Derecha",
+              "allowed": false,
+              "verification": "Opción deshabilitada en UI",
+              "evidence": "capturas/313-interior-derecha.jpg"
+            },
+            {
+              "overlap": "Derecha",
+              "underlap": "Ambas bandas",
+              "allowed": false,
+              "verification": "Opción deshabilitada en UI",
+              "evidence": "capturas/309-desdobles-inicio-26.jpg"
+            },
+            {
+              "overlap": "Ambas bandas",
+              "underlap": "Equilibrado",
+              "allowed": true,
+              "verification": "Seleccionada en UI",
+              "evidence": "capturas/318-banda-ambas-interior-equilibrado.jpg"
+            },
+            {
+              "overlap": "Ambas bandas",
+              "underlap": "Izquierda",
+              "allowed": false,
+              "verification": "Opción deshabilitada en UI",
+              "evidence": "capturas/310-interior-izquierda.jpg"
+            },
+            {
+              "overlap": "Ambas bandas",
+              "underlap": "Derecha",
+              "allowed": false,
+              "verification": "Opción deshabilitada en UI",
+              "evidence": "capturas/313-interior-derecha.jpg"
+            },
+            {
+              "overlap": "Ambas bandas",
+              "underlap": "Ambas bandas",
+              "allowed": false,
+              "verification": "Opción deshabilitada en UI",
+              "evidence": "capturas/309-desdobles-inicio-26.jpg"
+            }
+          ],
+          "blocked_click_checks": [
+            {
+              "overlap": "Derecha",
+              "attempted_underlap": "Derecha",
+              "actual_underlap": "Izquierda",
+              "changed": false,
+              "evidence": "capturas/312-interior-derecha-bloqueado.jpg"
+            },
+            {
+              "overlap": "Izquierda",
+              "attempted_underlap": "Izquierda",
+              "actual_underlap": "Derecha",
+              "changed": false,
+              "evidence": "capturas/315-interior-izquierda-bloqueado.jpg"
+            }
+          ],
+          "implementation_rule": "Representar cada eje como conjunto de costados: Equilibrado={}, Izquierda={I}, Derecha={D}, Ambas={I,D}. La combinación se admite cuando la intersección es vacía. Esta fórmula resume los estados observados; no es código ni regla interna extraída del motor."
+        }
       },
       "progress_through": {
         "label_ui": "Avance",
@@ -11841,7 +11991,50 @@
           "Equilibrado"
         ],
         "evidence": "capturas/297-colectiva-destino-portero.jpg",
-        "ui_note": "Bandas y Laterales aparecen dos veces en el dibujo; no inferir selección de lado sin comprobar."
+        "ui_note": "Bandas y Laterales aparecen dos veces en el dibujo. Ambos botones de cada nombre activan el mismo valor global; no son selectores de costado. Comprobado el 26/10/2026.",
+        "duplicate_button_verification": {
+          "status": "Equivalencia visual y funcional confirmada de ambos botones Bandas y de ambos botones Laterales.",
+          "side_selection_supported_by_these_buttons": false,
+          "selection_model": "Un único destino entre las siete opciones del selector; Bandas/Laterales tienen dos representaciones gráficas cada uno.",
+          "checks": [
+            {
+              "clicked": "Bandas izquierdo",
+              "selected_buttons": [
+                "Bandas izquierdo",
+                "Bandas derecho"
+              ],
+              "value_ui": "Bandas",
+              "evidence": "capturas/321-distribucion-bandas-izquierdo.jpg"
+            },
+            {
+              "clicked": "Laterales izquierdo",
+              "selected_buttons": [
+                "Laterales izquierdo",
+                "Laterales derecho"
+              ],
+              "value_ui": "Laterales",
+              "evidence": "capturas/322-distribucion-laterales-izquierdo.jpg"
+            },
+            {
+              "clicked": "Bandas derecho",
+              "selected_buttons": [
+                "Bandas izquierdo",
+                "Bandas derecho"
+              ],
+              "value_ui": "Bandas",
+              "evidence": "capturas/323-distribucion-bandas-derecho.jpg"
+            },
+            {
+              "clicked": "Laterales derecho",
+              "selected_buttons": [
+                "Laterales izquierdo",
+                "Laterales derecho"
+              ],
+              "value_ui": "Laterales",
+              "evidence": "capturas/324-distribucion-laterales-derecho.jpg"
+            }
+          ]
+        }
       },
       "cross_engagement": {
         "label_ui": "Compromiso de centros",
@@ -12014,10 +12207,233 @@
       "all_listed_selector_option_sets_observed": true,
       "all_context_combinations_verified": false,
       "all_option_help_texts_opened_in_ui": false,
-      "marking_research": "Excluido por el usuario"
+      "marking_research": "Excluido por el usuario",
+      "costado_matrix_verified_in_documented_context": true,
+      "gk_duplicate_buttons_equivalent_verified": true
     }
   },
   "team_review_final_state": {
+    "evidence": "capturas/325-cierre-costados-portero.jpg",
+    "overlap": "Equilibrado",
+    "underlap": "Equilibrado",
+    "gk_distribution_target": "Laterales",
+    "save_written": false,
+    "date_advanced": false,
+    "restoration_required": false
+  },
+  "side_and_gk_verification_2026_10_26": {
+    "schema_version": 1,
+    "review_date": "2026-10-26",
+    "scope": "Desdobles por costado y equivalencia de botones de destinos del propio portero; observación de UI, no decodificación de partida.",
+    "context": {
+      "version": "26.3.2.2329565 según relevamiento previo",
+      "save_date_ui": "14/9/2028 13:15",
+      "mentality": "Ofensivo",
+      "in_possession_shape": "3-2-4-1",
+      "out_of_possession_shape": "4-2-2-2 ancho con mediocampista defensivo",
+      "context_universality_verified": false
+    },
+    "support_runs": {
+      "status": "Matriz 4×4 observada en este contexto: 9 combinaciones seleccionadas y 7 bloqueadas visualmente.",
+      "values": [
+        "Equilibrado",
+        "Izquierda",
+        "Derecha",
+        "Ambas bandas"
+      ],
+      "matrix": [
+        {
+          "overlap": "Equilibrado",
+          "underlap": "Equilibrado",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/319-desdobles-equilibrados.jpg"
+        },
+        {
+          "overlap": "Equilibrado",
+          "underlap": "Izquierda",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/310-interior-izquierda.jpg"
+        },
+        {
+          "overlap": "Equilibrado",
+          "underlap": "Derecha",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/313-interior-derecha.jpg"
+        },
+        {
+          "overlap": "Equilibrado",
+          "underlap": "Ambas bandas",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/309-desdobles-inicio-26.jpg"
+        },
+        {
+          "overlap": "Izquierda",
+          "underlap": "Equilibrado",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/316-banda-izquierda-interior-equilibrado.jpg"
+        },
+        {
+          "overlap": "Izquierda",
+          "underlap": "Izquierda",
+          "allowed": false,
+          "verification": "Opción deshabilitada en UI",
+          "evidence": "capturas/310-interior-izquierda.jpg"
+        },
+        {
+          "overlap": "Izquierda",
+          "underlap": "Derecha",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/314-banda-izquierda-interior-derecha.jpg"
+        },
+        {
+          "overlap": "Izquierda",
+          "underlap": "Ambas bandas",
+          "allowed": false,
+          "verification": "Opción deshabilitada en UI",
+          "evidence": "capturas/309-desdobles-inicio-26.jpg"
+        },
+        {
+          "overlap": "Derecha",
+          "underlap": "Equilibrado",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/317-banda-derecha-interior-equilibrado.jpg"
+        },
+        {
+          "overlap": "Derecha",
+          "underlap": "Izquierda",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/311-banda-derecha-interior-izquierda.jpg"
+        },
+        {
+          "overlap": "Derecha",
+          "underlap": "Derecha",
+          "allowed": false,
+          "verification": "Opción deshabilitada en UI",
+          "evidence": "capturas/313-interior-derecha.jpg"
+        },
+        {
+          "overlap": "Derecha",
+          "underlap": "Ambas bandas",
+          "allowed": false,
+          "verification": "Opción deshabilitada en UI",
+          "evidence": "capturas/309-desdobles-inicio-26.jpg"
+        },
+        {
+          "overlap": "Ambas bandas",
+          "underlap": "Equilibrado",
+          "allowed": true,
+          "verification": "Seleccionada en UI",
+          "evidence": "capturas/318-banda-ambas-interior-equilibrado.jpg"
+        },
+        {
+          "overlap": "Ambas bandas",
+          "underlap": "Izquierda",
+          "allowed": false,
+          "verification": "Opción deshabilitada en UI",
+          "evidence": "capturas/310-interior-izquierda.jpg"
+        },
+        {
+          "overlap": "Ambas bandas",
+          "underlap": "Derecha",
+          "allowed": false,
+          "verification": "Opción deshabilitada en UI",
+          "evidence": "capturas/313-interior-derecha.jpg"
+        },
+        {
+          "overlap": "Ambas bandas",
+          "underlap": "Ambas bandas",
+          "allowed": false,
+          "verification": "Opción deshabilitada en UI",
+          "evidence": "capturas/309-desdobles-inicio-26.jpg"
+        }
+      ],
+      "blocked_click_checks": [
+        {
+          "overlap": "Derecha",
+          "attempted_underlap": "Derecha",
+          "actual_underlap": "Izquierda",
+          "changed": false,
+          "evidence": "capturas/312-interior-derecha-bloqueado.jpg"
+        },
+        {
+          "overlap": "Izquierda",
+          "attempted_underlap": "Izquierda",
+          "actual_underlap": "Derecha",
+          "changed": false,
+          "evidence": "capturas/315-interior-izquierda-bloqueado.jpg"
+        }
+      ],
+      "implementation_rule": "Representar cada eje como conjunto de costados: Equilibrado={}, Izquierda={I}, Derecha={D}, Ambas={I,D}. La combinación se admite cuando la intersección es vacía. Esta fórmula resume los estados observados; no es código ni regla interna extraída del motor."
+    },
+    "gk_distribution_target": {
+      "status": "Equivalencia visual y funcional confirmada de ambos botones Bandas y de ambos botones Laterales.",
+      "side_selection_supported_by_these_buttons": false,
+      "selection_model": "Un único destino entre las siete opciones del selector; Bandas/Laterales tienen dos representaciones gráficas cada uno.",
+      "checks": [
+        {
+          "clicked": "Bandas izquierdo",
+          "selected_buttons": [
+            "Bandas izquierdo",
+            "Bandas derecho"
+          ],
+          "value_ui": "Bandas",
+          "evidence": "capturas/321-distribucion-bandas-izquierdo.jpg"
+        },
+        {
+          "clicked": "Laterales izquierdo",
+          "selected_buttons": [
+            "Laterales izquierdo",
+            "Laterales derecho"
+          ],
+          "value_ui": "Laterales",
+          "evidence": "capturas/322-distribucion-laterales-izquierdo.jpg"
+        },
+        {
+          "clicked": "Bandas derecho",
+          "selected_buttons": [
+            "Bandas izquierdo",
+            "Bandas derecho"
+          ],
+          "value_ui": "Bandas",
+          "evidence": "capturas/323-distribucion-bandas-derecho.jpg"
+        },
+        {
+          "clicked": "Laterales derecho",
+          "selected_buttons": [
+            "Laterales izquierdo",
+            "Laterales derecho"
+          ],
+          "value_ui": "Laterales",
+          "evidence": "capturas/324-distribucion-laterales-derecho.jpg"
+        }
+      ]
+    },
+    "remaining": [
+      "Disponibilidad en otros contextos de puesto/rol, alcance, formación, mentalidad y personalización no ensayados.",
+      "Ayudas de todas las alternativas colectivas no abiertas individualmente; textos instalados ya conservados."
+    ],
+    "excluded": [
+      "Investigación adicional de marcaje"
+    ],
+    "final_state": {
+      "evidence": "capturas/325-cierre-costados-portero.jpg",
+      "overlap": "Equilibrado",
+      "underlap": "Equilibrado",
+      "gk_distribution_target": "Laterales",
+      "save_written": false,
+      "date_advanced": false,
+      "restoration_required": false
+    }
+  },
+  "team_review_final_state_previous_review": {
     "evidence": "capturas/308-trampa-compartida-subfases.jpg",
     "changed_for_verification": [
       "Regate: Desanimar → Animar",
@@ -12026,5 +12442,34 @@
     ],
     "restoration_required": false,
     "note": "Las instantáneas anteriores son históricas. No se avanzó fecha ni se guardó la partida en esta continuación."
+  },
+  "scope_closure_2026_10_26": {
+    "date": "2026-10-26",
+    "status": "complete_for_agreed_scope",
+    "known_indispensable_missing_data": [],
+    "universal_context_coverage_claimed": false,
+    "clarifications": {
+      "other_positions_and_formations": "No se ensayaron todas las combinaciones. Esto es un límite de cobertura y no evidencia de que existan bloqueos adicionales.",
+      "mentality_changes_individual_locks": "Hipótesis no confirmada. No se encontró evidencia suficiente en la búsqueda web realizada para afirmarla. No implementar bloqueos por mentalidad basados en esta posibilidad.",
+      "personalisation_changes_availability": "Las interacciones no observadas siguen desconocidas; no tratarlas como mecánicas confirmadas ni como faltantes indispensables conocidos.",
+      "help_texts": "Los textos están extraídos de la instalación. No se abrieron todas las ayudas individualmente en pantalla. La web no certifica el texto exacto de esta versión e idioma.",
+      "online_research": "La búsqueda realizada no aportó una matriz exhaustiva que permita cerrar todos los contextos. No encontrarla no demuestra ausencia de esas interacciones.",
+      "marking": "Excluido de nuevas investigaciones por pedido del usuario."
+    },
+    "implementation_policy": [
+      "Aplicar las restricciones documentadas en el contexto acreditado, conservando procedencia.",
+      "No inventar candados por mentalidad, formación o personalización ni certificar como editable comprobado un contexto desconocido.",
+      "La falta de evidencia de un bloqueo no prueba disponibilidad universal; tampoco justifica bloquear por precaución.",
+      "Los límites no bloquean la incorporación del relevamiento a Touchline; revisar casos nuevos ante discrepancias concretas.",
+      "Conservar el trabajo actual, los datos importados, las configuraciones y la compatibilidad de persistencia."
+    ],
+    "sources": [
+      {
+        "url": "https://www.footballmanager.com/fm26/features/possession-out-possession-fm26s-new-tactical-evolution",
+        "title": "Sports Interactive: In Possession, Out of Possession: FM26’s New Tactical Evolution",
+        "supports": "Explicación general de la reducción de instrucciones fijas asociadas a roles y mayor personalización.",
+        "does_not_establish": "Matriz exhaustiva de candados por puesto, formación, mentalidad o alcance en la instalación relevada."
+      }
+    ]
   }
 }

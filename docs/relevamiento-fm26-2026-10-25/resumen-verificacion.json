@@ -12,10 +12,16 @@
   "individual_groups": 15,
   "individual_options": 45,
   "current_team_control_appearances": 29,
-  "current_ui_captures": 309,
+  "current_ui_captures": 326,
   "resource_records": 1680,
-  "report_words": 20004,
+  "report_words": 20209,
   "team_selector_panels_verified": 27,
   "team_selector_dimensions_verified": 28,
-  "shared_team_controls_verified": 2
+  "shared_team_controls_verified": 2,
+  "support_run_side_combinations_verified": 16,
+  "support_run_side_combinations_selected": 9,
+  "support_run_side_combinations_blocked": 7,
+  "gk_distribution_duplicate_button_pairs_verified": 2,
+  "agreed_scope_complete": true,
+  "known_indispensable_missing_data": []
 }

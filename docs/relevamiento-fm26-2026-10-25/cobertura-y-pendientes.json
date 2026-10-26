@@ -12,5 +12,15 @@
   "shared_team_controls_verified": 2,
   "all_listed_team_selector_option_sets_observed": true,
   "all_collective_option_help_texts_opened_in_ui": false,
-  "marking_research": "Excluido de nuevas verificaciones por indicación del usuario"
+  "marking_research": "Excluido de nuevas verificaciones por indicación del usuario",
+  "support_run_side_combinations_verified": 16,
+  "support_run_side_combinations_selected": 9,
+  "support_run_side_combinations_blocked": 7,
+  "gk_distribution_duplicate_button_pairs_verified": 2,
+  "support_run_side_matrix_verified_in_documented_context": true,
+  "gk_distribution_duplicate_buttons_equivalent_verified": true,
+  "agreed_scope_complete": true,
+  "known_indispensable_missing_data": [],
+  "universal_context_coverage_claimed": false,
+  "mentality_changes_individual_locks_confirmed": false
 }

@@ -93,6 +93,49 @@ class RealDataCompatibilityTests(unittest.TestCase):
         self.assertEqual(len(sim['lineup']), 11)
         self.assertEqual(len(sim['instructions']), 28)
 
+    def test_real_dataset_squad_overcrowding_recommendations(self):
+        """Verifies squad overcrowding detection and loan/sell recommendations on real Liverpool save."""
+        dataset = load_dataset(self.isolated_path / 'output')
+        result = analyze(dataset, style='possession')
+
+        self.assertIn('squad_overcrowding', result)
+        self.assertIn('surplus_players', result)
+
+        overcrowding = result['squad_overcrowding']
+        surplus_map = result['surplus_players']
+
+        # Overcrowding list contains position summaries
+        self.assertIsInstance(overcrowding, list)
+        self.assertGreater(len(overcrowding), 0)
+
+        for pos_data in overcrowding:
+            self.assertIn('position', pos_data)
+            self.assertIn('position_label', pos_data)
+            self.assertIn('player_count', pos_data)
+            self.assertIn('max_ideal', pos_data)
+            self.assertIn('surplus_count', pos_data)
+            self.assertIn('candidates', pos_data)
+            self.assertGreater(pos_data['player_count'], pos_data['max_ideal'])
+            self.assertEqual(len(pos_data['candidates']), pos_data['surplus_count'])
+
+            for cand in pos_data['candidates']:
+                uid = cand['uid']
+                self.assertIn(uid, surplus_map)
+                self.assertIn(cand['action'], ('loan', 'sell'))
+                self.assertIn(cand['action_label'], ('Mandar a préstamo', 'Evaluar venta'))
+                self.assertTrue(cand['reason'])
+                self.assertIsInstance(cand['score'], float)
+
+                # Age rule verification: <= 22 -> loan, > 22 -> sell
+                if cand['age'] <= 22:
+                    self.assertEqual(cand['action'], 'loan')
+                    self.assertEqual(cand['action_label'], 'Mandar a préstamo')
+                    self.assertIn('desarrollo', cand['reason'])
+                else:
+                    self.assertEqual(cand['action'], 'sell')
+                    self.assertEqual(cand['action_label'], 'Evaluar venta')
+                    self.assertIn('mercado', cand['reason'])
+
     def test_real_dataset_custom_tactic_draft_audit_and_persistence(self):
         """Verifies auditing and persisting a real tactic using real Liverpool player UIDs."""
         dataset = load_dataset(self.isolated_path / 'output')
@@ -145,24 +188,94 @@ class RealDataCompatibilityTests(unittest.TestCase):
         """Verifies collective instruction restrictions and overrides against real squad."""
         dataset = load_dataset(self.isolated_path / 'output')
 
-        # Valid overrides
+        # Valid overrides: opposite flanks coexist (Right + Left) and Balanced combinations
         valid_overrides = {
             'tempo': 'Much Lower',
             'passing_directness': 'Much Shorter',
             'attacking_width_ip': 'Much Narrower',
-            'underlap_ip': 'Underlap - Both Flanks',
-            'overlap_ip': 'Overlap - Balanced'
+            'underlap_ip': 'Underlap - Left',
+            'overlap_ip': 'Overlap - Right',
+            'gk_distribution_ip': 'Flanks'
         }
         checked = validate_overrides(valid_overrides)
-        self.assertEqual(checked['underlap_ip'], 'Underlap - Both Flanks')
+        self.assertEqual(checked['underlap_ip'], 'Underlap - Left')
+        self.assertEqual(checked['overlap_ip'], 'Overlap - Right')
+        self.assertEqual(checked['gk_distribution_ip'], 'Flanks')
 
-        # Incompatible overrides
+        # Incompatible overrides: same flank exclusion (Left + Left)
+        same_flank_invalid = {
+            'underlap_ip': 'Underlap - Left',
+            'overlap_ip': 'Overlap - Left'
+        }
+        with self.assertRaisesRegex(ValueError, 'Carreras de apoyo'):
+            validate_overrides(same_flank_invalid)
+
+        # Incompatible overrides: both flanks on one axis requires balanced on the other
         invalid_overrides = {
             'underlap_ip': 'Underlap - Both Flanks',
             'overlap_ip': 'Overlap - Both Flanks'
         }
         with self.assertRaisesRegex(ValueError, 'Carreras de apoyo'):
             validate_overrides(invalid_overrides)
+
+    def test_real_dataset_support_runs_matrix_and_goalkeeper_distribution(self):
+        """Verifies full 16-combination matrix of support runs and 7 gk distribution destinations on real Liverpool squad."""
+        dataset = load_dataset(self.isolated_path / 'output')
+
+        allowed_matrix = [
+            ('Overlap - Balanced', 'Underlap - Balanced'),
+            ('Overlap - Balanced', 'Underlap - Left'),
+            ('Overlap - Balanced', 'Underlap - Right'),
+            ('Overlap - Balanced', 'Underlap - Both Flanks'),
+            ('Overlap - Left', 'Underlap - Balanced'),
+            ('Overlap - Left', 'Underlap - Right'),  # opposite flanks coexist
+            ('Overlap - Right', 'Underlap - Balanced'),
+            ('Overlap - Right', 'Underlap - Left'),  # opposite flanks coexist
+            ('Overlap - Both Flanks', 'Underlap - Balanced'),
+        ]
+
+        blocked_matrix = [
+            ('Overlap - Left', 'Underlap - Left'),  # same flank excluded
+            ('Overlap - Left', 'Underlap - Both Flanks'),
+            ('Overlap - Right', 'Underlap - Right'),  # same flank excluded
+            ('Overlap - Right', 'Underlap - Both Flanks'),
+            ('Overlap - Both Flanks', 'Underlap - Left'),
+            ('Overlap - Both Flanks', 'Underlap - Right'),
+            ('Overlap - Both Flanks', 'Underlap - Both Flanks'),
+        ]
+
+        # Verify all 9 allowed combinations pass validate_overrides
+        for overlap, underlap in allowed_matrix:
+            ov = {'overlap_ip': overlap, 'underlap_ip': underlap}
+            res = validate_overrides(ov)
+            self.assertEqual(res['overlap_ip'], overlap)
+            self.assertEqual(res['underlap_ip'], underlap)
+
+        # Verify all 7 blocked combinations raise ValueError
+        for overlap, underlap in blocked_matrix:
+            ov = {'overlap_ip': overlap, 'underlap_ip': underlap}
+            with self.assertRaisesRegex(ValueError, 'Carreras de apoyo'):
+                validate_overrides(ov)
+
+        # Verify goalkeeper distribution: 7 destinations, Flanks and Full-Backs are single destinations
+        gk_targets = [
+            'Over Opposition Defense', 'Target Forward', 'Flanks',
+            'Playmaker', 'Full-Backs', 'Center-Backs', 'Balanced'
+        ]
+        for target in gk_targets:
+            res = validate_overrides({'gk_distribution_ip': target})
+            self.assertEqual(res['gk_distribution_ip'], target)
+
+        # Verify shared state dimensions: dribbling_ip and pressing_trap_oop
+        dribbling_values = ['Discourage', 'Balanced', 'Encourage']
+        for val in dribbling_values:
+            res = validate_overrides({'dribbling_ip': val})
+            self.assertEqual(res['dribbling_ip'], val)
+
+        trap_values = ['Trap Inside', 'Balanced', 'Trap Outside']
+        for val in trap_values:
+            res = validate_overrides({'pressing_trap_oop': val})
+            self.assertEqual(res['pressing_trap_oop'], val)
 
 
 if __name__ == '__main__':

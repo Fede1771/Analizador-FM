@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-26",
+  "status": "complete_for_agreed_scope",
+  "known_indispensable_missing_data": [],
+  "universal_context_coverage_claimed": false,
+  "clarifications": {
+    "other_positions_and_formations": "No se ensayaron todas las combinaciones. Esto es un límite de cobertura y no evidencia de que existan bloqueos adicionales.",
+    "mentality_changes_individual_locks": "Hipótesis no confirmada. No se encontró evidencia suficiente en la búsqueda web realizada para afirmarla. No implementar bloqueos por mentalidad basados en esta posibilidad.",
+    "personalisation_changes_availability": "Las interacciones no observadas siguen desconocidas; no tratarlas como mecánicas confirmadas ni como faltantes indispensables conocidos.",
+    "help_texts": "Los textos están extraídos de la instalación. No se abrieron todas las ayudas individualmente en pantalla. La web no certifica el texto exacto de esta versión e idioma.",
+    "online_research": "La búsqueda realizada no aportó una matriz exhaustiva que permita cerrar todos los contextos. No encontrarla no demuestra ausencia de esas interacciones.",
+    "marking": "Excluido de nuevas investigaciones por pedido del usuario."
+  },
+  "implementation_policy": [
+    "Aplicar las restricciones documentadas en el contexto acreditado, conservando procedencia.",
+    "No inventar candados por mentalidad, formación o personalización ni certificar como editable comprobado un contexto desconocido.",
+    "La falta de evidencia de un bloqueo no prueba disponibilidad universal; tampoco justifica bloquear por precaución.",
+    "Los límites no bloquean la incorporación del relevamiento a Touchline; revisar casos nuevos ante discrepancias concretas.",
+    "Conservar el trabajo actual, los datos importados, las configuraciones y la compatibilidad de persistencia."
+  ],
+  "sources": [
+    {
+      "url": "https://www.footballmanager.com/fm26/features/possession-out-possession-fm26s-new-tactical-evolution",
+      "title": "Sports Interactive: In Possession, Out of Possession: FM26’s New Tactical Evolution",
+      "supports": "Explicación general de la reducción de instrucciones fijas asociadas a roles y mayor personalización.",
+      "does_not_establish": "Matriz exhaustiva de candados por puesto, formación, mentalidad o alcance en la instalación relevada."
+    }
+  ]
+}

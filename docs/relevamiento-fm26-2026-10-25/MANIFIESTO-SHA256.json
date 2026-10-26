@@ -1,13 +1,23 @@
 [
   {
     "file": "actualizar_colectivas_fm26.py",
-    "bytes": 10204,
-    "sha256": "7b901e43606c36735290732d5c4e997bbc89172db1d127888f03b0cb12252898"
+    "bytes": 22210,
+    "sha256": "1ddc6c428d7005ac91bb21c499f04e0ab5837e986ac3e4d759da1c38f7fe282c"
   },
   {
     "file": "ADENDA-COLECTIVAS.md",
-    "bytes": 8018,
-    "sha256": "2c68d60f4d4d64b454b1d8dc2b91063b235e4883f578d4e894c6308de7d5dc13"
+    "bytes": 9458,
+    "sha256": "eb1fcf331ed173be3492020dcdafe552e54535206d25dfee07cd8c90095f870e"
+  },
+  {
+    "file": "ADENDA-COSTADOS-PORTERO-2026-10-26.md",
+    "bytes": 6033,
+    "sha256": "a861661c604f785c9ec6c5354cc1008e8cfbf4fc35e0619798055fc8c21f91dd"
+  },
+  {
+    "file": "ALCANCE-Y-CIERRE.md",
+    "bytes": 3776,
+    "sha256": "9ed77b56e0aef4eb2e87a0c1c5b65d37d6e4339f8b00753d7e72451fc7a3345b"
   },
   {
     "file": "ANEXO-TEXTOS-INSTRUCCIONES.md",
@@ -1560,14 +1570,104 @@
     "sha256": "3b5738dcb390e126a1c3a69c75573c2f4fc6fd99caeafb4003c8b7e9adee38f3"
   },
   {
+    "file": "capturas/309-desdobles-inicio-26.jpg",
+    "bytes": 198008,
+    "sha256": "601293ba576f5f10e8800d1c2c677ab245105de230c13de3997c58345f063b8f"
+  },
+  {
+    "file": "capturas/310-interior-izquierda.jpg",
+    "bytes": 198098,
+    "sha256": "586e630816eadea860b00f07bc591d525e0a7c70226ed811684d90521516919d"
+  },
+  {
+    "file": "capturas/311-banda-derecha-interior-izquierda.jpg",
+    "bytes": 201838,
+    "sha256": "d8860f49426a199d5635a260e76f2c8bd480b6dd7b036109e8afd1de20e0a434"
+  },
+  {
+    "file": "capturas/312-interior-derecha-bloqueado.jpg",
+    "bytes": 202054,
+    "sha256": "9e2fd5ebeabb3d195d48da9fc5c2ac97fa2b69d20fd763a1358a2ba2160f560b"
+  },
+  {
+    "file": "capturas/313-interior-derecha.jpg",
+    "bytes": 197919,
+    "sha256": "6a5dba6347bdf8078463e1d7e4487ed7fdfa0fb122d804fb8655321ac438854f"
+  },
+  {
+    "file": "capturas/314-banda-izquierda-interior-derecha.jpg",
+    "bytes": 201985,
+    "sha256": "775e4025e3f74c57a791f8514ab1294aaf72c002bbcf1c37bed40d9376652227"
+  },
+  {
+    "file": "capturas/315-interior-izquierda-bloqueado.jpg",
+    "bytes": 202183,
+    "sha256": "a1475efa6bf7951041bf7b2c6b61f53224d1b523718831f21a2af4721188dbef"
+  },
+  {
+    "file": "capturas/316-banda-izquierda-interior-equilibrado.jpg",
+    "bytes": 197614,
+    "sha256": "739f1c71db1f0181d3d6ed84df72cdb29a95fa7cb78299b142ea4c7cc3711ea3"
+  },
+  {
+    "file": "capturas/317-banda-derecha-interior-equilibrado.jpg",
+    "bytes": 197410,
+    "sha256": "8e0cd777ce71c3483982186324406f5e3ae78615ca2138a73152476fa4945b24"
+  },
+  {
+    "file": "capturas/318-banda-ambas-interior-equilibrado.jpg",
+    "bytes": 198350,
+    "sha256": "6df5c8e8bc46ea7547d391f3eeea239f1b4fdd0578535f88f53349da9ed9ec0f"
+  },
+  {
+    "file": "capturas/319-desdobles-equilibrados.jpg",
+    "bytes": 191772,
+    "sha256": "03c95d2c493b9b6b4d40c40fe4d4190b8f5941ee23252dfe43becec8f9eed1a4"
+  },
+  {
+    "file": "capturas/320-distribucion-inicio-26.jpg",
+    "bytes": 190032,
+    "sha256": "54f8345cc57d6fa7f96a35129add076e58a24fe62c9b7d25e5246699951c60b3"
+  },
+  {
+    "file": "capturas/321-distribucion-bandas-izquierdo.jpg",
+    "bytes": 191982,
+    "sha256": "8926fd2fafaf262cc7bce13d9a5e6ff0ea8661a12937e1e46ff6a143051d1402"
+  },
+  {
+    "file": "capturas/322-distribucion-laterales-izquierdo.jpg",
+    "bytes": 189462,
+    "sha256": "74af0d6069cbc1f21555997b534529ff7f132c33a44e0beb941b937f4a69dc21"
+  },
+  {
+    "file": "capturas/323-distribucion-bandas-derecho.jpg",
+    "bytes": 192070,
+    "sha256": "80d63f93a4fb1bb6fb2e985ac1e012f34dabeec6b150d9431f827a2074f94d55"
+  },
+  {
+    "file": "capturas/324-distribucion-laterales-derecho.jpg",
+    "bytes": 189452,
+    "sha256": "daf6d6c7d8e9fc3449f8ed6df23a0f56e0f708e42b3b341f8667f22c661f7caa"
+  },
+  {
+    "file": "capturas/325-cierre-costados-portero.jpg",
+    "bytes": 220959,
+    "sha256": "9d10683f470c6c7569ee08be0c8365ace484abb4ac1a63ce7cb8068818159050"
+  },
+  {
     "file": "catalogo-para-reconstruccion.json",
-    "bytes": 474941,
-    "sha256": "2eb4cc08492106d0c7e456f5e15d35745feaa0485081eaa971eba57f08f570d0"
+    "bytes": 493605,
+    "sha256": "7da553ebb29665cf7a1656f5b11fa387108a3a54e425dc336515c2b497de49b6"
+  },
+  {
+    "file": "cierre-relevamiento.json",
+    "bytes": 2360,
+    "sha256": "0486fc4c7120aafe294a14f3da84de2937c2c2dbb8c24a10701b9ebce8c57800"
   },
   {
     "file": "cobertura-y-pendientes.json",
-    "bytes": 656,
-    "sha256": "c990725bc774c00869b665b723aa81f4b588ce8f750c17f1f38fbaa863a2283b"
+    "bytes": 1173,
+    "sha256": "8f4339c0216a7447c9d6880ed38a371c41d82a0625dc123e39d7bfc0471d3e8c"
   },
   {
     "file": "crear_reporte_relevamiento_fm26.py",
@@ -1576,8 +1676,8 @@
   },
   {
     "file": "INFORME-INTEGRAL.md",
-    "bytes": 6288,
-    "sha256": "e173e3125cefe0a2803b54308d2c96a89d9f0d9baebd49156a45ea93483e3fa0"
+    "bytes": 7967,
+    "sha256": "a8990c2cc6907d33eb23a86935270d85dd6c0b73a0a0460043b104d81c61acbc"
   },
   {
     "file": "matriz-instrucciones-observadas.json",
@@ -1591,18 +1691,23 @@
   },
   {
     "file": "observaciones-ui.json",
-    "bytes": 93042,
-    "sha256": "2cbd1ddae54b462312565322b8371a1960aa3e572cd5f639f8e9a86647b9bd80"
+    "bytes": 98895,
+    "sha256": "4f17b4ea656d45e8130d4f82ac35d780a8a2ce9eb56638dd808c46ed25ef436c"
   },
   {
     "file": "PENDIENTES.md",
-    "bytes": 2535,
-    "sha256": "5c9686bb4e85dfd41c012309041fe86dc0fa82d7dc0d4fd60179c6ebeef98545"
+    "bytes": 4336,
+    "sha256": "bb94d55874cbb64948352e1218ef2da45b78d1469876644a03e59deada47cd85"
+  },
+  {
+    "file": "PROMPT-ACTUALIZACION-INCREMENTAL.md",
+    "bytes": 3588,
+    "sha256": "7270d34c59229a6303a7111d5b9a0f89df69eecd46f1e5804f3c1fe73624198c"
   },
   {
     "file": "PROMPT-PARA-OTRA-IA.md",
-    "bytes": 6206,
-    "sha256": "9e7c766eddfe18be0b530edccb7eac51c9ee97df7678e115db1e114a8b7c8ec6"
+    "bytes": 8161,
+    "sha256": "a8004d056ef2385c8409f9ea65ba51f35f50372ae69568bead5901e04006c220"
   },
   {
     "file": "referencias-interfaz/mi-tactica-prueba.png",
@@ -1626,13 +1731,13 @@
   },
   {
     "file": "REPORTE.md",
-    "bytes": 166040,
-    "sha256": "283fa68747bd8a80ae57d9d6bd27158f3b5f1c1117ced8382c9ffd61e1e5bf5b"
+    "bytes": 167756,
+    "sha256": "70f47a6ee0c80645473b754438b0c8f9133abc1207c41b2b32fdae4832139a93"
   },
   {
     "file": "resumen-verificacion.json",
-    "bytes": 687,
-    "sha256": "54d41be46c03d90b1dd9c46b7a6b647d24cb1a935e67528f7d302c42db481502"
+    "bytes": 965,
+    "sha256": "0854c7b07232f50ead3463f272f68a46f49b3479e2e442865d8812bdbb020f8b"
   },
   {
     "file": "textos-instalacion.json",
@@ -1651,7 +1756,12 @@
   },
   {
     "file": "verificacion-colectivas.json",
-    "bytes": 13726,
-    "sha256": "9e53c11640d153986cb11e0ff51bd7af4317d53687466c06db47d4b29af25bb8"
+    "bytes": 20738,
+    "sha256": "2bd4e2466528c0e448af07b2513ed74f13f6f0848e0c6b1b2ca514895b963122"
+  },
+  {
+    "file": "verificacion-costados-portero-2026-10-26.json",
+    "bytes": 7093,
+    "sha256": "75e337b069892651322d3337cf7150120bfbd477721313afc38d174a960968b7"
   }
 ]

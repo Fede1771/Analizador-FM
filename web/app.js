@@ -325,15 +325,6 @@ document.addEventListener('change',event=>{
         const val = input.value;
         if(val) draft.team[key] = val;
         else delete draft.team[key];
-        if (key === 'underlap_ip' && val === 'Underlap - Both Flanks') {
-          if (draft.team.overlap_ip && draft.team.overlap_ip !== 'Overlap - Balanced') {
-            draft.team.overlap_ip = 'Overlap - Balanced';
-          }
-        } else if (key === 'overlap_ip' && val === 'Overlap - Both Flanks') {
-          if (draft.team.underlap_ip && draft.team.underlap_ip !== 'Underlap - Balanced') {
-            draft.team.underlap_ip = 'Underlap - Balanced';
-          }
-        }
       }
       else draft[field]=input.value;
       saveCurrentDraft();render();return;
@@ -377,19 +368,6 @@ document.addEventListener('change',event=>{
       const val = input.value;
       if(val===input.dataset.applied) delete state.overrideDraft[key];
       else state.overrideDraft[key] = val;
-
-      // Handle support runs mutual exclusions
-      if (key === 'underlap_ip' && val === 'Underlap - Both Flanks') {
-        const curOverlap = state.overrideDraft.overlap_ip ?? state.prefs.overrides.overlap_ip;
-        if (curOverlap && curOverlap !== 'Overlap - Balanced') {
-          state.overrideDraft.overlap_ip = 'Overlap - Balanced';
-        }
-      } else if (key === 'overlap_ip' && val === 'Overlap - Both Flanks') {
-        const curUnderlap = state.overrideDraft.underlap_ip ?? state.prefs.overrides.underlap_ip;
-        if (curUnderlap && curUnderlap !== 'Underlap - Balanced') {
-          state.overrideDraft.underlap_ip = 'Underlap - Balanced';
-        }
-      }
       render();
     }
     if(input.dataset.available) {const id=Number(input.dataset.available);state.prefs.excluded=input.checked?state.prefs.excluded.filter(x=>x!==id):[...new Set([...state.prefs.excluded,id])];await refresh();}

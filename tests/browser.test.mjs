@@ -130,6 +130,12 @@ try {
     const overlapDisabled = await evaluate(`Array.from(document.querySelectorAll('#override-overlap_ip option')).filter(o => o.disabled).map(o => o.value)`);
     assert.deepEqual(overlapDisabled, ['Overlap - Left', 'Overlap - Right', 'Overlap - Both Flanks']);
 
+    await set('#override-underlap_ip', 'Underlap - Left');
+    const overlapLeftDisabled = await evaluate(`Array.from(document.querySelectorAll('#override-overlap_ip option')).filter(o => o.disabled).map(o => o.value)`);
+    assert.deepEqual(overlapLeftDisabled, ['Overlap - Left', 'Overlap - Both Flanks']);
+    const rightEnabled = await evaluate(`!document.querySelector('#override-overlap_ip option[value="Overlap - Right"]').disabled`);
+    assert.ok(rightEnabled);
+
     await set('#override-underlap_ip', 'Underlap - Balanced');
     const overlapReenabled = await evaluate(`Array.from(document.querySelectorAll('#override-overlap_ip option')).filter(o => o.disabled).length`);
     assert.equal(overlapReenabled, 0);
@@ -149,6 +155,14 @@ try {
     assert.ok(await evaluate(`document.querySelector('h1').textContent.includes('Ojeo')`));
     assert.ok(await evaluate(`document.querySelectorAll('[data-scout-position]').length >= 10`));
     assert.ok(await evaluate(`document.querySelector('#scouting-search') !== null`));
+  });
+  await check('squad view displays overcrowding recommendations and status badges',async()=>{
+    await navigate('squad');
+    await wait(`document.querySelector('#results table')`,'squad table');
+    assert.ok(await evaluate(`document.querySelector('h1').textContent.includes('Plantilla')`));
+    assert.ok(await evaluate(`document.querySelectorAll('.squad-status-badge').length >= 10`));
+    const hasPanel = await evaluate(`document.querySelector('.squad-overcrowding-panel') !== null || document.querySelector('.squad-balance-banner') !== null`);
+    assert.ok(hasPanel);
   });
   await check('companion mini-hud dialog and match instructions',async()=>{
     await evaluate(`document.querySelector('#companion-button').click()`);

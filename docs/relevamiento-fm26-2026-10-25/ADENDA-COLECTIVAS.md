@@ -38,7 +38,7 @@ Se abrieron 27 paneles únicos de selectores colectivos en las ocho vistas. Hay 
 
 - Regate comparte estado entre Avance y Último tercio: Desanimar → Animar modifica ambas apariciones. [285](capturas/285-regate-compartido-subfases.jpg).
 - Trampa de presión comparte estado entre Presión adelantada y Bloque medio: interior → Presionar fuera modifica ambas apariciones. [308](capturas/308-trampa-compartida-subfases.jpg).
-- Carreras de apoyo tiene dos ejes: Doblar por banda y Doblar por dentro. Con interior Ambas bandas, las tres opciones no equilibradas de banda se muestran deshabilitadas [289](capturas/289-colectiva-carreras-apoyo.jpg). Con ambos ejes Equilibrado se habilitan [290](capturas/290-carreras-interiores-equilibradas.jpg). Con banda Ambas bandas, las tres opciones no equilibradas interiores se deshabilitan [291](capturas/291-doblar-ambas-bandas.jpg). No extrapolar esto a todas las combinaciones cruzadas de costado.
+- Carreras de apoyo tiene dos ejes: Doblar por banda y Doblar por dentro. Con interior Ambas bandas, las tres opciones no equilibradas de banda se muestran deshabilitadas [289](capturas/289-colectiva-carreras-apoyo.jpg). Con ambos ejes Equilibrado se habilitan [290](capturas/290-carreras-interiores-equilibradas.jpg). Con banda Ambas bandas, las tres opciones no equilibradas interiores se deshabilitan [291](capturas/291-doblar-ambas-bandas.jpg). La matriz completa de costados quedó comprobada el 26/10/2026 en el contexto documentado; ver la nueva adenda.
 
 ## Consecuencias para Touchline
 
@@ -49,13 +49,19 @@ Se abrieron 27 paneles únicos de selectores colectivos en las ocho vistas. Hay 
 - La distribución corta del portero en Sin posesión afecta la salida del portero rival y tiene No/Sí. Es distinta del destino y velocidad del propio portero en Con posesión.
 - Mantener los rótulos reales por selector: Equilibrado, Equilibrada, Estándar y Normal no son una única etiqueta universal.
 
-## Pendiente preciso
+## Límites no bloqueantes y exclusiones
 
 - Variantes de disponibilidad por formación, mentalidad, puesto/rol, alcance Posición/Jugador y personalización. No se probaron todas las combinaciones.
-- Combinaciones cruzadas izquierda/derecha entre desdobles por banda y por dentro.
-- Confirmar si los botones duplicados Bandas y Laterales en el dibujo de distribución del propio portero son equivalentes o admiten diferencias por lado. Solo se transcribieron sus etiquetas, sin afirmar independencia.
 - Ayudas de cada alternativa: no se abrieron todas en la UI; los textos instalados se conservan con su procedencia.
 - Marcaje: excluido de la investigación adicional por pedido del usuario. No presentarlo como una tarea pendiente para retomar.
 - Identificadores de partida y pesos del motor: fuera del relevamiento visual; necesarios solo para una futura lectura automática o investigación del motor.
 
 El JSON verificacion-colectivas.json conserva los controles, dimensiones, evidencia y límites. options_shown_available describe su apariencia en el contexto observado, no disponibilidad universal.
+
+## Actualización del 26/10/2026: costados y portero
+
+Quedaron cerrados los desdobles por costado y los botones duplicados del portero. La matriz 4×4 tiene nueve combinaciones seleccionadas y siete bloqueadas en el contexto observado: exterior e interior coexisten en lados opuestos y se excluyen en el mismo lado. Los dos botones Bandas son equivalentes entre sí; también los dos Laterales. Leé [ADENDA-COSTADOS-PORTERO-2026-10-26.md](ADENDA-COSTADOS-PORTERO-2026-10-26.md) y [verificacion-costados-portero-2026-10-26.json](verificacion-costados-portero-2026-10-26.json). Se incorporaron 17 capturas nuevas. Persisten únicamente los contextos no ensayados y las ayudas no abiertas; no extrapolar reglas universales.
+
+## Cierre del alcance acordado — 26/10/2026
+
+El relevamiento queda completo para el alcance acordado; no hay identificado un dato indispensable pendiente. Los contextos no ensayados y las ayudas no abiertas individualmente son límites no bloqueantes. No se confirmó que cambiar la mentalidad modifique los candados individuales: no implementar bloqueos por esa hipótesis. La búsqueda web no proporcionó una matriz universal ni certifica los textos exactos de la instalación; se conservan los recursos locales extraídos. Aplicar las restricciones documentadas con su procedencia, mantener desconocidos explícitos y revisar casos nuevos ante discrepancias concretas. El marcaje sigue excluido. Ver [ALCANCE-Y-CIERRE.md](ALCANCE-Y-CIERRE.md) y [PROMPT-ACTUALIZACION-INCREMENTAL.md](PROMPT-ACTUALIZACION-INCREMENTAL.md). Este cierre prevalece sobre listas históricas que parezcan exigir probar todas las combinaciones antes de implementar.
