@@ -66,6 +66,13 @@ def main():
                 stored_tactics = {'available':False,'records':[], 'error':str(error),
                     'limitations':'No se pudo interpretar el bloque táctico; podés confirmar tu táctica manualmente.'}
             (args.output/'tactics.json').write_text(json.dumps(stored_tactics, ensure_ascii=False, default=serial), encoding='utf-8')
+            shared_scouting = Path('data/scouting_cache.json')
+            if shared_scouting.exists():
+                import shutil
+                try:
+                    shutil.copy2(shared_scouting, args.output / 'scouting.json')
+                except Exception:
+                    pass
             squad.write_json(args.output / "squad_full.json")
             squad.write_csv(args.output / "squad_full.csv")
             loaned_out.write_json(args.output / "loaned_out.json")

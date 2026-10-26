@@ -1,0 +1,16 @@
+{
+  "total_roles": 79,
+  "roles_with_instruction_panel": 79,
+  "roles_with_verified_attribute_list": 79,
+  "missing_instruction_panels": [],
+  "missing_attribute_lists": [],
+  "unresolved_locked_values": [],
+  "all_position_role_scope_combinations_verified": false,
+  "all_team_instruction_variants_verified": false,
+  "team_selector_panels_verified": 27,
+  "team_selector_dimensions_verified": 28,
+  "shared_team_controls_verified": 2,
+  "all_listed_team_selector_option_sets_observed": true,
+  "all_collective_option_help_texts_opened_in_ui": false,
+  "marking_research": "Excluido de nuevas verificaciones por indicación del usuario"
+}

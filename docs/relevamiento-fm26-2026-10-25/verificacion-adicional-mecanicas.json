@@ -1,0 +1,50 @@
+{
+  "marking_position_targets": {
+    "evidence": "capturas/118-marcar-posicion-destinos.jpg",
+    "values": [
+      "Ninguna",
+      "DF (D)",
+      "DF (I)",
+      "DF (C)",
+      "DF (CI)",
+      "DF (CD)",
+      "CR (D)",
+      "CR (I)",
+      "MD",
+      "MD (CI)",
+      "MD (CD)",
+      "ME (D)",
+      "ME (I)",
+      "ME (C)",
+      "ME (CI)",
+      "ME (CD)",
+      "MP (D)",
+      "MP (I)",
+      "MP (C)",
+      "MP (CI)",
+      "MP (CD)",
+      "DL (C)",
+      "DL (CI)",
+      "DL (CD)",
+      "DL (D)",
+      "DL (I)"
+    ]
+  },
+  "specific_marking_targets": {
+    "evidence": "capturas/120-marca-jugador-destinos.jpg",
+    "context": "Prepartido Arsenal; lista dinámica observada de 10 jugadores de campo y Ninguna; no se prueba disponibilidad durante partido.",
+    "values": [
+      "Ninguna",
+      "Bruno Guimarães (MD (CD))",
+      "Brooke Norton-Cuffy (DF (D))",
+      "William Saliba (DF (CD))",
+      "Gabriel (DF (CI))",
+      "Maxim De Cuyper (DF (I))",
+      "Declan Rice (MD (CI))",
+      "Ethan Nwaneri (MP (D))",
+      "Martin Ødegaard (MP (C))",
+      "Jérémy Doku (MP (I))",
+      "Kai Havertz (DL (C))"
+    ]
+  }
+}

@@ -18,6 +18,9 @@ export function reconcileCurrentDraft(data,saved) {
       const role=editor.roles[old[phase+'_role']];
       if(role?.phase===(phase==='ip'?'in_possession':'out_of_possession')&&role.positions.includes(row[phase+'_position']))row[phase+'_role']=old[phase+'_role'];
     }
+    row.instruction_scope = old.instruction_scope || 'Posición';
+    row.marking_target_player = old.marking_target_player || '';
+    row.marking_target_position = old.marking_target_position || '';
     row.instructions=Object.fromEntries(Object.entries(old.instructions||{}).filter(([id,v])=>editor.player_options[id]?.options.some(o=>o.value===v)));
     return row;
   });
@@ -27,7 +30,7 @@ export function reconcileCurrentDraft(data,saved) {
 export function freshDraft(data,formation='433') {
   const form=data.tactic_editor.formations.find(f=>f.id===formation)||data.tactic_editor.formations[0];
   return {formation:form.id,name:'Mi táctica',stored_id:'',style:'possession',confirmed:false,team:{},
-    lineup:form.slots.map(slot=>({uid:'',ip_position:slot.ip_position,oop_position:slot.oop_position,ip_role:'',oop_role:'',instructions:{}}))};
+    lineup:form.slots.map(slot=>({uid:'',ip_position:slot.ip_position,oop_position:slot.oop_position,ip_role:'',oop_role:'',instruction_scope:'Posición',marking_target_player:'',marking_target_position:'',instructions:{}}))};
 }
 
 const standard={attacking_width_ip:'Standard',dribbling_direction_ip:'Standard',dribbling_frequency_ip:'Standard',forward_runs_ip:'Standard',freedom_of_movement_ip:'Follow Tactical Position',hold_up_ball_ip:'No',shoot_ip:'Standard',passing_risk_ip:'Standard',passing_directness_ip:'Standard',cross_from_ip:'Standard',crossing_strategy_ip:'Standard',pressing_oop:'Standard',marking_oop:'Standard',tackling_oop:'Standard',marking_target_oop:'Standard'};
@@ -55,7 +58,7 @@ export function referenceDraft(data) {
     const ref=refList.find(r=>r.match===names[index])||refList[index];
     if(!ref)return;
     const player=find(data,ref.match);row.uid=player?.uid||'';
-    if(player)Object.assign(row,{ip_position:ref.ip_position,oop_position:ref.oop_position,ip_role:ref.ip_role||ref.ip,oop_role:ref.oop_role||ref.oop,instructions:{...standard,...(ref.instructions||{})}});
+    if(player)Object.assign(row,{ip_position:ref.ip_position,oop_position:ref.oop_position,ip_role:ref.ip_role||ref.ip,oop_role:ref.oop_role||ref.oop,instruction_scope:ref.instruction_scope||'Posición',marking_target_player:ref.marking_target_player||'',marking_target_position:ref.marking_target_position||'',instructions:{...standard,...(ref.instructions||{})}});
   });
   if(data.liverpool_reference?.team) {
     draft.team = {...data.liverpool_reference.team};
@@ -66,128 +69,14 @@ export function referenceDraft(data) {
 }
 
 function captureReview(data) {
-  const kerkez=find(data,'kerkez'),wirtz=find(data,'wirtz'),ayari=find(data,'ayari'),pavlovic=find(data,'pavlovic'),vu=find(data,'vuskovic'),eki=find(data,'ekitike'),wharton=find(data,'wharton'),szobo=find(data,'szoboszlai'),cubarsi=find(data,'cubarsi');
-  if(![kerkez,wirtz,ayari,pavlovic,vu,eki].every(Boolean))return '';
   return `<section class="panel capture-review">
     <div class="split">
       <div>
-        <span class="eyebrow">Diagnóstico visual · Tus 30 capturas de FM26</span>
-        <h2>Revisión rápida de tu 4-3-3</h2>
+        <span class="eyebrow">Diagnóstico táctico de tu equipo</span>
+        <h2>Revisá tu once y detectá mejoras inmediatas</h2>
+        <p class="muted">Confirmá o ajustá tus 11 titulares para evaluar la estructura con posesión y sin posesión con el motor de análisis de Touchline.</p>
       </div>
-      <button class="button primary" data-action="reference-current">⚡ Cargar y revisar mi táctica confirmada</button>
-    </div>
-    <p class="muted">Ajustes recomendados agrupados con fases tácticas precisas (Con posesión y Sin posesión):</p>
-
-    <div class="match-checklist-card">
-      <div class="checklist-header">
-        <div class="checklist-title-box">
-          <span class="checklist-icon">📋</span>
-          <div>
-            <h4>Checklist antes del partido · 3 ajustes clave</h4>
-            <small>Marcá los cambios aplicados en FM antes de dar «Continuar»</small>
-          </div>
-        </div>
-        <span class="checklist-badge">⚡ Prioridad Máxima</span>
-      </div>
-      <div class="checklist-items">
-        <label class="checklist-item">
-          <input type="checkbox" id="check-capture-0">
-          <span class="check-box-custom"></span>
-          <div class="check-text">
-            <span class="check-player-title"><strong>Hugo Ekitiké</strong> · <span class="phase-badge phase-sp">🔴 Sin posesión (SP)</span></span>
-            <span class="check-action-desc">Cambiar <u>Entradas</u> a <strong>«Normal»</strong> (evita faltas y rojas innecesarias con entradas 7/20).</span>
-          </div>
-        </label>
-        <label class="checklist-item">
-          <input type="checkbox" id="check-capture-1">
-          <span class="check-box-custom"></span>
-          <div class="check-text">
-            <span class="check-player-title"><strong>Luka Vušković</strong> · <span class="phase-badge phase-sp">🔴 Sin posesión (SP)</span></span>
-            <span class="check-action-desc">Cambiar <u>Presión</u> a <strong>«Normal»</strong> (para que Vušković haga la cobertura y Cubarsí anticipe).</span>
-          </div>
-        </label>
-        <label class="checklist-item">
-          <input type="checkbox" id="check-capture-2">
-          <span class="check-box-custom"></span>
-          <div class="check-text">
-            <span class="check-player-title"><strong>Adam Wharton</strong> · <span class="phase-badge phase-sp">🔴 Sin posesión (SP)</span></span>
-            <span class="check-action-desc">Cambiar puesto defensivo de <u>MPC</u> (12/20) ➔ a <strong>MC (20/20 Natural)</strong> como <em>Centrocampista defensivo</em>.</span>
-          </div>
-        </label>
-      </div>
-    </div>
-
-    <div class="advice-grid" style="margin-top: 18px;">
-      <article class="advice-card severity-danger">
-        <div class="advice-header">
-          <span class="advice-badge badge-danger">🔴 Riesgo disciplinario y tarjetas</span>
-          <h4 class="advice-title">Hugo Ekitiké · Entradas al límite</h4>
-        </div>
-        <div class="advice-action">
-          <span class="advice-action-icon">⚡</span>
-          <div class="advice-action-text"><strong>Ajuste recomendado en FM:</strong> Cambiar a <strong>«Entradas en Normal»</strong> en fase <span class="phase-badge phase-sp">🔴 Sin posesión (SP)</span></div>
-        </div>
-        <div class="advice-chips">
-          <span class="advice-chip">Fase: Sin posesión (SP)</span>
-          <span class="advice-chip alert">Ekitiké: Entradas 7/20</span>
-          <span class="advice-chip">Colectivo: Ser agresivos</span>
-        </div>
-        <p class="advice-detail">Con la orden colectiva de entrar fuerte y 7/20 de entradas, Ekitiké arriesga amarillas tempranas sin ganar duelos. Bajarlo a Normal evita faltas sin perder contrapresión.</p>
-      </article>
-
-      <article class="advice-card severity-warning">
-        <div class="advice-header">
-          <span class="advice-badge badge-warning">🟡 Cobertura zaga central</span>
-          <h4 class="advice-title">Zaga DFC: Pau Cubarsí + Luka Vušković</h4>
-        </div>
-        <div class="advice-action">
-          <span class="advice-action-icon">⚡</span>
-          <div class="advice-action-text"><strong>Ajuste recomendado en FM:</strong> Poner a <u>Vušković con Presión en «Normal»</u> en fase <span class="phase-badge phase-sp">🔴 Sin posesión (SP)</span></div>
-        </div>
-        <div class="advice-chips">
-          <span class="advice-chip">Fase: Sin posesión (SP)</span>
-          <span class="advice-chip">Línea: Más adelantada</span>
-          <span class="advice-chip">Cubarsí: Anticipador</span>
-          <span class="advice-chip">Vušković: Cobertura</span>
-        </div>
-        <p class="advice-detail">Cubarsí y Vušković salen juntos a encimar al receptor. Si Vušković conserva la zona en Normal, escalonan la cobertura y protegen el espacio a espaldas de la zaga adelantada.</p>
-      </article>
-
-      <article class="advice-card severity-purple">
-        <div class="advice-header">
-          <span class="advice-badge badge-purple">🟣 Posición no natural defensiva</span>
-          <h4 class="advice-title">Adam Wharton · Puesto sin balón</h4>
-        </div>
-        <div class="advice-action">
-          <span class="advice-action-icon">⚡</span>
-          <div class="advice-action-text"><strong>Ajuste recomendado en FM:</strong> Cambiar puesto de <u>MPC</u> (12/20) ➔ a <strong>MC (20/20 Natural)</strong> en fase <span class="phase-badge phase-sp">🔴 Sin posesión (SP)</span></div>
-        </div>
-        <div class="advice-chips">
-          <span class="advice-chip">Fase: Sin posesión (SP)</span>
-          <span class="advice-chip alert">Actual: MPC (12/20)</span>
-          <span class="advice-chip">Recomendado: MC (20/20)</span>
-          <span class="advice-chip">Rol: Centrocampista defensivo</span>
-        </div>
-        <p class="advice-detail">En MPC queda descolgado sin marcar y con penalización de familiaridad. Pasarlo a defender en MC forma un trivote compacto junto a Pavlović y Ayari.</p>
-      </article>
-
-      <article class="advice-card severity-info">
-        <div class="advice-header">
-          <span class="advice-badge badge-info">🧠 Mediocampo asociativo</span>
-          <h4 class="advice-title">Trivote central: Tres organizadores con pase al pie</h4>
-        </div>
-        <div class="advice-action">
-          <span class="advice-action-icon">⚡</span>
-          <div class="advice-action-text"><strong>Ajuste recomendado en FM:</strong> Sostener desmarques de Szoboszlai en fase <span class="phase-badge phase-cp">🟢 Con posesión (CP)</span></div>
-        </div>
-        <div class="advice-chips">
-          <span class="advice-chip">Fase: Con posesión (CP)</span>
-          <span class="advice-chip">Pavlović: ORD</span>
-          <span class="advice-chip">Ayari: OAD</span>
-          <span class="advice-chip">Wharton: MOR</span>
-        </div>
-        <p class="advice-detail">Gran posesión y control con ritmo bajo. Como los tres piden al pie, la profundidad del ataque descansa en las rupturas de Szoboszlai y los apoyos de Ekitiké.</p>
-      </article>
+      <button class="button primary" data-action="reference-current">⚡ Cargar y revisar táctica activa</button>
     </div>
   </section>`;
 }
@@ -204,6 +93,91 @@ function renderAdviceCard(a) {
     ${Array.isArray(a.chips) && a.chips.length ? `<div class="advice-chips">${a.chips.map(c=>`<span class="advice-chip ${c.includes('baja')||c.includes('7/20')||c.includes('MPC')?'alert':''}">${esc(c)}</span>`).join('')}</div>` : ''}
     <p class="advice-detail">${esc(a.detail)}</p>
   </article>`;
+}
+
+export function renderDynamicChecklist(result, state) {
+  const actionItems = (result.advice || []).filter(a => a.action);
+  if (!actionItems.length) {
+    return `
+      <div class="match-checklist-card">
+        <div class="checklist-header">
+          <div class="checklist-title-box">
+            <span class="checklist-icon">✓</span>
+            <div>
+              <h4>Once equilibrado en FM26</h4>
+              <small class="checklist-subtitle">No se detectaron alertas críticas ni ajustes necesarios para este once.</small>
+            </div>
+          </div>
+          <div class="checklist-status-pill status-ready"><span>0 pendientes</span></div>
+        </div>
+        <div class="checklist-actions-bar">
+          <button type="button" class="button primary" data-action="companion">⚡ Guía para FM</button>
+          <button type="button" class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
+        </div>
+      </div>
+    `;
+  }
+
+  const savedKeys = [];
+  actionItems.forEach((item, idx) => {
+    const key = (item.player_uid || 'team') + '_' + (item.category || item.title || idx);
+    try {
+      if (localStorage.getItem('touchline:chk:' + key) === '1') savedKeys.push(key);
+    } catch {}
+  });
+
+  const allChecked = (savedKeys.length === actionItems.length);
+
+  return `
+    <div class="match-checklist-card">
+      <div class="checklist-header">
+        <div class="checklist-title-box">
+          <span class="checklist-icon">📋</span>
+          <div>
+            <h4>Ajustes prioritarios para FM</h4>
+            <small class="checklist-subtitle">Marcá los ajustes aplicados en la pantalla táctica de FM26.</small>
+          </div>
+        </div>
+        <div class="checklist-status-pill ${allChecked ? 'status-ready' : 'status-pending'}">
+          <span id="checklist-counter">${savedKeys.length} de ${actionItems.length} aplicados por vos</span>
+        </div>
+      </div>
+
+      <div class="checklist-items">
+        ${actionItems.map((item, idx) => {
+          const key = (item.player_uid || 'team') + '_' + (item.category || item.title || idx);
+          const isDone = savedKeys.includes(key);
+          const phaseBadge = item.phase === 'ip' ? '<span class="phase-badge phase-cp">CP · Con posesión</span>' : item.phase === 'oop' ? '<span class="phase-badge phase-sp">SP · Sin posesión</span>' : '<span class="phase-badge">Equipo</span>';
+          return `
+            <label class="checklist-item ${isDone ? 'checked' : ''}" data-audit-item="${esc(key)}">
+              <input type="checkbox" id="check-audit-${idx}" data-audit-check="${esc(key)}" ${isDone ? 'checked' : ''}>
+              <span class="check-box-custom"></span>
+              <div class="check-text">
+                <div class="check-top-line">
+                  <span class="check-player-title"><strong>${esc(item.player_name || 'Ajuste colectivo')}</strong> · ${phaseBadge}</span>
+                  <span class="check-state-badge ${isDone ? 'state-done' : 'state-pending'}">${isDone ? '✓ Marcado como aplicado' : 'Pendiente en FM'}</span>
+                </div>
+                <span class="check-action-desc">${esc(item.action)}</span>
+              </div>
+            </label>
+          `;
+        }).join('')}
+      </div>
+
+      <div class="checklist-complete-banner" id="checklist-complete-banner" ${allChecked ? '' : 'hidden'}>
+        <span class="complete-icon">✓</span>
+        <div>
+          <strong>${actionItems.length} ajustes marcados como aplicados en tu partida</strong>
+          <p>Ya completaste los ajustes tácticos registrados. Continuá tu partido dentro de Football Manager.</p>
+        </div>
+      </div>
+
+      <div class="checklist-actions-bar">
+        <button type="button" class="button primary" data-action="companion">⚡ Guía para FM</button>
+        <button type="button" class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
+      </div>
+    </div>
+  `;
 }
 
 function renderGroupedAdvice(result, state) {
@@ -231,54 +205,11 @@ function renderGroupedAdvice(result, state) {
     }
   }
 
-  const checklist = [
-    {
-      player: 'Hugo Ekitiké',
-      phase: '🔴 Sin posesión (SP)',
-      action: 'Cambiar <u>Entradas</u> a <strong>«Normal»</strong> (evita tarjetas y expulsiones innecesarias con entradas 7/20)'
-    },
-    {
-      player: 'Luka Vušković',
-      phase: '🔴 Sin posesión (SP)',
-      action: 'Cambiar <u>Presión</u> a <strong>«Normal»</strong> (para que Vušković haga la cobertura y Cubarsí anticipe)'
-    },
-    {
-      player: 'Adam Wharton',
-      phase: '🔴 Sin posesión (SP)',
-      action: 'Cambiar puesto defensivo de <u>MPC</u> (12/20) ➔ a <strong>MC (20/20 Natural)</strong> como <em>Centrocampista defensivo</em>'
-    }
-  ];
-
-  let html = `
-    <div class="match-checklist-card">
-      <div class="checklist-header">
-        <div class="checklist-title-box">
-          <span class="checklist-icon">📋</span>
-          <div>
-            <h4>Checklist antes del partido · 3 ajustes clave</h4>
-            <small>Marcá los cambios aplicados en FM antes de dar «Continuar»</small>
-          </div>
-        </div>
-        <span class="checklist-badge">⚡ Prioridad Máxima</span>
-      </div>
-      <div class="checklist-items">
-        ${checklist.map((item, idx) => `
-          <label class="checklist-item">
-            <input type="checkbox" id="check-audit-${idx}">
-            <span class="check-box-custom"></span>
-            <div class="check-text">
-              <span class="check-player-title"><strong>${item.player}</strong> · <span class="phase-badge phase-sp">${item.phase}</span></span>
-              <span class="check-action-desc">${item.action}</span>
-            </div>
-          </label>
-        `).join('')}
-      </div>
-    </div>
-  `;
+  let html = '';
 
   if (teamItems.length) {
     html += `
-      <div class="section-heading-visual" style="margin-top: 20px;">
+      <div class="section-heading-visual" style="margin-top: 14px;">
         <h3>Estructura colectiva y zaga</h3>
         <span class="badge-count">${teamItems.length} ajustes de equipo</span>
       </div>
@@ -288,60 +219,62 @@ function renderGroupedAdvice(result, state) {
     `;
   }
 
-  html += `
-    <div class="section-heading-visual" style="margin-top: 24px;">
-      <h3>Ajustes individuales agrupados por jugador</h3>
-      <span class="badge-count">${playerMap.size} jugadores con recomendaciones</span>
-    </div>
-    <div class="player-advice-grid">
-      ${Array.from(playerMap.values()).map(g => {
-        const slot = g.slot;
-        const slotIndex = slot ? result.lineup.indexOf(slot) : -1;
-        const hasDanger = g.items.some(i => i.severity === 'danger');
-        const hasWarning = g.items.some(i => i.severity === 'warning');
-        const badgeClass = hasDanger ? 'badge-danger' : hasWarning ? 'badge-warning' : 'badge-info';
-        const cardClass = hasDanger ? 'severity-danger' : hasWarning ? 'severity-warning' : 'severity-info';
+  if (playerMap.size) {
+    html += `
+      <div class="section-heading-visual" style="margin-top: 20px;">
+        <h3>Ajustes individuales agrupados por jugador</h3>
+        <span class="badge-count">${playerMap.size} jugadores con recomendaciones</span>
+      </div>
+      <div class="player-advice-grid">
+        ${Array.from(playerMap.values()).map(g => {
+          const slot = g.slot;
+          const slotIndex = slot ? result.lineup.indexOf(slot) : -1;
+          const hasDanger = g.items.some(i => i.severity === 'danger');
+          const hasWarning = g.items.some(i => i.severity === 'warning');
+          const badgeClass = hasDanger ? 'badge-danger' : hasWarning ? 'badge-warning' : 'badge-info';
+          const cardClass = hasDanger ? 'severity-danger' : hasWarning ? 'severity-warning' : 'severity-info';
 
-        return `
-          <article class="player-grouped-card ${cardClass}" id="player-advice-${g.uid}">
-            <div class="player-grouped-header">
-              <div class="player-grouped-identity">
-                <span class="player-shirt-circle">${slotIndex >= 0 ? slotIndex + 1 : '•'}</span>
-                <div>
-                  <h4 class="player-name">${esc(g.name)}</h4>
-                  <small class="player-positions-line">
-                    ${slot ? `CP: <strong>${esc(pos(slot.in_possession?.position))}</strong> · SP: <strong>${esc(pos(slot.out_of_possession?.position))}</strong>` : ''}
-                  </small>
+          return `
+            <article class="player-grouped-card ${cardClass}" id="player-advice-${g.uid}">
+              <div class="player-grouped-header">
+                <div class="player-grouped-identity">
+                  <span class="player-shirt-circle">${slotIndex >= 0 ? slotIndex + 1 : '•'}</span>
+                  <div>
+                    <h4 class="player-name">${esc(g.name)}</h4>
+                    <small class="player-positions-line">
+                      ${slot ? `CP: <strong>${esc(pos(slot.in_possession?.position))}</strong> · SP: <strong>${esc(pos(slot.out_of_possession?.position))}</strong>` : ''}
+                    </small>
+                  </div>
                 </div>
+                <span class="advice-badge ${badgeClass}">${g.items.length} ${g.items.length === 1 ? 'ajuste' : 'ajustes'}</span>
               </div>
-              <span class="advice-badge ${badgeClass}">${g.items.length} ${g.items.length === 1 ? 'ajuste' : 'ajustes'}</span>
-            </div>
 
-            <div class="player-alerts-list">
-              ${g.items.map(item => `
-                <div class="player-alert-item severity-${esc(item.severity)}">
-                  <div class="alert-phase-row">
-                    <span class="phase-pill ${item.phase === 'ip' ? 'pill-cp' : item.phase === 'oop' ? 'pill-sp' : 'pill-both'}">
-                      ${item.phase === 'ip' ? '🟢 Con posesión (CP)' : item.phase === 'oop' ? '🔴 Sin posesión (SP)' : '⚪ Ambas fases'}
-                    </span>
-                    <span class="alert-type-badge">${esc(item.badge)}</span>
+              <div class="player-alerts-list">
+                ${g.items.map(item => `
+                  <div class="player-alert-item severity-${esc(item.severity)}">
+                    <div class="alert-phase-row">
+                      <span class="phase-pill ${item.phase === 'ip' ? 'pill-cp' : item.phase === 'oop' ? 'pill-sp' : 'pill-both'}">
+                        ${item.phase === 'ip' ? 'CP · Con posesión' : item.phase === 'oop' ? 'SP · Sin posesión' : 'Ambas fases'}
+                      </span>
+                      <span class="alert-type-badge">${esc(item.badge)}</span>
+                    </div>
+                    <div class="advice-action">
+                      <span class="advice-action-icon">⚡</span>
+                      <div class="advice-action-text"><strong>Ajuste recomendado en FM:</strong> <span>${esc(item.action)}</span></div>
+                    </div>
+                    ${Array.isArray(item.chips) && item.chips.length ? `
+                      <div class="advice-chips">${item.chips.map(c => `<span class="advice-chip ${c.includes('baja') || c.includes('7/20') || c.includes('MPC') ? 'alert' : ''}">${esc(c)}</span>`).join('')}</div>
+                    ` : ''}
+                    <p class="advice-detail">${esc(item.detail)}</p>
                   </div>
-                  <div class="advice-action">
-                    <span class="advice-action-icon">⚡</span>
-                    <div class="advice-action-text"><strong>Ajuste recomendado en FM:</strong> <span>${esc(item.action)}</span></div>
-                  </div>
-                  ${Array.isArray(item.chips) && item.chips.length ? `
-                    <div class="advice-chips">${item.chips.map(c => `<span class="advice-chip ${c.includes('baja') || c.includes('7/20') || c.includes('MPC') ? 'alert' : ''}">${esc(c)}</span>`).join('')}</div>
-                  ` : ''}
-                  <p class="advice-detail">${esc(item.detail)}</p>
-                </div>
-              `).join('')}
-            </div>
-          </article>
-        `;
-      }).join('')}
-    </div>
-  `;
+                `).join('')}
+              </div>
+            </article>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
 
   return html;
 }
@@ -357,12 +290,14 @@ export function currentView(state) {
   const phaseKey=state.phase==='ip'?'in_possession':'out_of_possession';
   return `<div class="page-heading">
     <div>
-      <span class="eyebrow">Tu plan actual, con mejoras concretas</span>
+      <span class="eyebrow">Tu once en FM26 · Revisión táctica</span>
       <h1>Mi táctica</h1>
-      <p>Evaluá los jugadores y los roles que usás en FM, conservando tu once.</p>
+      <p>Evaluación de encaje y ajustes prioritarios para tu once titular actual.</p>
     </div>
     <div class="actions">
-      <button class="button primary" data-action="reference-current">⚡ Cargar y revisar mi táctica confirmada</button>
+      <button class="button primary" data-action="companion">⚡ Guía para FM</button>
+      <button class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
+      <button class="button" data-action="reference-current">⚡ Cargar táctica guardada</button>
       ${result?'<button class="button" data-action="export-current">Exportar revisión</button>':''}
     </div>
   </div>
@@ -370,34 +305,56 @@ export function currentView(state) {
   ${!result ? captureReview(data) : ''}
 
   ${result ? `
-    <section class="panel" id="current-result">
-      <div class="split"><h2 tabindex="-1">Revisión de ${esc(result.name)}</h2>${score(result.score)}</div>
-      <p>Encaje de tu once confirmado · ${esc(data.styles[result.style].name)}</p>
-      <div class="status-summary-strip">
-        <span class="status-pill ${result.unconfirmed_player_instructions===0?'pill-ok':'pill-pending'}">${result.unconfirmed_player_instructions===0?'✓ 0 órdenes individuales pendientes (100% confirmadas)':`⚠ ${result.unconfirmed_player_instructions} órdenes individuales sin confirmar`}</span>
-        <span class="status-pill ${result.unconfirmed_team_instructions===0?'pill-ok':'pill-pending'}">${result.unconfirmed_team_instructions===0?'✓ 0 órdenes colectivas pendientes (100% confirmadas)':`⚠ ${result.unconfirmed_team_instructions} órdenes colectivas sin confirmar`}</span>
+    <section class="panel current-summary-panel" id="current-result">
+      <div class="split">
+        <div>
+          <span class="eyebrow">Once titular confirmado</span>
+          <h2 tabindex="-1">Revisión de ${esc(result.name)}</h2>
+          <small class="muted">Estilo de referencia: ${esc(data.styles[result.style]?.name || result.style)}</small>
+        </div>
+        ${score(result.score)}
       </div>
-      <p class="muted" style="margin: 8px 0 16px;"><small>${esc(result.limits)}</small></p>
-      ${renderGroupedAdvice(result, state)}
+      <div class="status-summary-strip">
+        <span class="status-pill ${result.unconfirmed_player_instructions===0?'pill-ok':'pill-pending'}">
+          ${result.unconfirmed_player_instructions===0?'✓ Órdenes individuales confirmadas':`⚠ ${result.unconfirmed_player_instructions} órdenes individuales sin confirmar`}
+        </span>
+        <span class="status-pill ${result.unconfirmed_team_instructions===0?'pill-ok':'pill-pending'}">
+          ${result.unconfirmed_team_instructions===0?'✓ Órdenes colectivas confirmadas':`⚠ ${result.unconfirmed_team_instructions} órdenes colectivas sin confirmar`}
+        </span>
+      </div>
+      <p class="muted" style="margin: 8px 0 0;"><small>${esc(result.limits)}</small></p>
     </section>
 
-    <section class="panel">
-      <div class="split">
-        <h2>Tu once confirmado</h2>
-        <div class="segmented">
-          <button data-phase="ip" aria-pressed="${state.phase==='ip'}">Con posesión</button>
-          <button data-phase="oop" aria-pressed="${state.phase==='oop'}">Sin posesión</button>
+    <div class="current-main-grid">
+      <section class="panel current-pitch-panel">
+        <div class="split">
+          <h2>Tu once en cancha</h2>
+          <div class="segmented" role="group" aria-label="Fase táctica">
+            <button data-phase="ip" aria-pressed="${state.phase==='ip'}">Con posesión (CP)</button>
+            <button data-phase="oop" aria-pressed="${state.phase==='oop'}">Sin posesión (SP)</button>
+          </div>
         </div>
-      </div>
-      ${pitch(result,state.phase,state.byId)}
-    </section>
+        ${pitch(result,state.phase,state.byId)}
+      </section>
+
+      <section class="panel current-priorities-panel">
+        ${renderDynamicChecklist(result, state)}
+      </section>
+    </div>
+
+    ${result.advice && result.advice.length ? `
+      <details class="panel current-details-panel">
+        <summary>🔍 Ver todas las alertas y ajustes detallados (${result.advice.length})</summary>
+        ${renderGroupedAdvice(result, state)}
+      </details>
+    ` : ''}
 
     ${zoneMap(result.coverage,state.phase)}
 
-    <section class="panel">
-      <h2>Ajustes de función sin cambiar al jugador</h2>
+    <details class="panel">
+      <summary>🔄 Ajustes de función por puesto (${result.lineup.length} jugadores)</summary>
       ${result.lineup.map(slot=>`<details><summary>${esc(state.byId.get(slot.uid).name)} · ${esc(slot[phaseKey].name)} · ${number(slot[phaseKey].score)}</summary>${rolePlan(slot[phaseKey])}<p>Alternativas por atributos, no sustituciones automáticas:</p><ul>${slot[phaseKey].alternatives.map(a=>`<li>${esc(a.name)} · ${number(a.score)}</li>`).join('')}</ul></details>`).join('')}
-    </section>
+    </details>
   ` : ''}
 
   <details class="panel" id="current-editor-accordion" ${!result ? 'open' : ''}>
@@ -410,14 +367,175 @@ export function currentView(state) {
       <label>Objetivo para comparar el encaje<select id="current-style" data-current="style">${Object.entries(data.styles).map(([id,s])=>`<option value="${id}" ${d.style===id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>
     </div>
     <p class="muted">La plantilla facilita cargar las posiciones: no demuestra la formación del guardado. Las filas mantienen la identidad del jugador entre fases. Wharton queda como mediapunta sin balón en tu referencia confirmada. Completá los roles faltantes según tu juego; no se reemplazan por los de mayor puntaje.</p>
-    <div class="current-lineup">${d.lineup.map((row,index)=>`<section class="current-slot"><h3>Puesto ${index+1}</h3><label>Jugador<select id="current-player-${index}" data-current="uid" data-row="${index}">${options(data.players.map(p=>({value:p.uid,label:p.name})),row.uid,'Elegí jugador')}</select></label>
-    <div class="control-grid">${['ip','oop'].map(phase=>`<fieldset><legend>${phase==='ip'?'Con posesión':'Sin posesión'}</legend><label>Posición<select id="current-${phase}-position-${index}" data-current="${phase}_position" data-row="${index}">${editor.positions.map(p=>`<option value="${p}" ${row[phase+'_position']===p?'selected':''}>${esc(pos(p))}</option>`).join('')}</select></label><label>Rol actual<select id="current-${phase}-role-${index}" data-current="${phase}_role" data-row="${index}">${options(Object.entries(editor.roles).filter(([,r])=>r.phase===(phase==='ip'?'in_possession':'out_of_possession')&&r.positions.includes(row[phase+'_position'])).map(([id,r])=>({value:id,label:r.name})),row[phase+'_role'])}</select></label></fieldset>`).join('')}</div>
-    <details id="current-instructions-${index}"><summary>Instrucciones individuales actuales</summary><p class="muted">Confirmá solo las órdenes que podés cotejar en FM. Sin confirmar no significa Normal. Menús completos para jugadores de campo y arquero.</p>
-    <div class="instruction-grid">${Object.entries(editor.player_options).map(([id,v])=>{
-      const phase=v.phase==='in_possession'?'ip':'oop',lock=editor.locks[row[phase+'_role']]?.[id];
-      return `<label>${esc(v.label)} · ${phase==='ip'?'CP':'SP'} ${lock!==undefined?'<small>Bloqueada por el rol</small>':''}<select id="current-pi-${index}-${id}" data-current="instruction" data-row="${index}" data-pi="${id}" ${lock!==undefined?'disabled':''}>${options(v.options,lock??row.instructions[id])}</select></label>`;
-    }).join('')}</div></details></section>`).join('')}</div>
-    <details><summary>Instrucciones colectivas actuales</summary><p>Las que no confirmes quedan fuera de la revisión. Los valores son los del catálogo disponible.</p><div class="instruction-grid">${Object.entries(data.instruction_options).map(([id,opts])=>`<label>${esc(editor.team_properties[id])}<select id="current-team-${id}" data-current="team" data-team="${id}">${options(opts,d.team[id])}</select></label>`).join('')}</div></details>
+    <div class="current-lineup">${d.lineup.map((row,index)=>{
+      const ipRoleObj = editor.roles[row.ip_role];
+      const oopRoleObj = editor.roles[row.oop_role];
+
+      return `<section class="current-slot">
+        <div class="split">
+          <h3>Puesto ${index+1}</h3>
+          <label class="scope-toggle-label">Ámbito
+            <select id="current-scope-${index}" data-current="instruction_scope" data-row="${index}">
+              <option value="Posición" ${row.instruction_scope!=='Personalizada'?'selected':''}>Posición</option>
+              <option value="Personalizada" ${row.instruction_scope==='Personalizada'?'selected':''}>Personalizada (jugador)</option>
+            </select>
+          </label>
+        </div>
+        <label>Jugador
+          <select id="current-player-${index}" data-current="uid" data-row="${index}">
+            ${options(data.players.map(p=>({value:p.uid,label:p.name})),row.uid,'Elegí jugador')}
+          </select>
+        </label>
+        <div class="control-grid">
+          ${['ip','oop'].map(phase=>{
+            const rObj = phase === 'ip' ? ipRoleObj : oopRoleObj;
+            const subpos = rObj?.subposition_rule ? `<div class="subpos-badge">🛡️ ${rObj.subposition_rule.min_central_defenders ? 'Solo zagas de 3 centrales' : 'Requiere doble pivote'}</div>` : '';
+            const behaviors = (Array.isArray(rObj?.behaviors) && rObj.behaviors.length)
+              ? `<div class="role-behaviors-chips">${rObj.behaviors.map(b=>`<span class="behavior-chip" title="Comportamiento inherente al rol en FM26">⚡ ${esc(b)}</span>`).join('')}</div>`
+              : '';
+
+            return `<fieldset>
+              <legend>${phase==='ip'?'Con posesión':'Sin posesión'}</legend>
+              <label>Posición
+                <select id="current-${phase}-position-${index}" data-current="${phase}_position" data-row="${index}">
+                  ${editor.positions.map(p=>`<option value="${p}" ${row[phase+'_position']===p?'selected':''}>${esc(pos(p))}</option>`).join('')}
+                </select>
+              </label>
+              <label>Rol actual ${rObj?.abbreviation ? `<span class="role-abbrev-tag">${esc(rObj.abbreviation)}</span>` : ''}
+                <select id="current-${phase}-role-${index}" data-current="${phase}_role" data-row="${index}">
+                  ${options(Object.entries(editor.roles).filter(([,r])=>r.phase===(phase==='ip'?'in_possession':'out_of_possession')&&r.positions.includes(row[phase+'_position'])).map(([id,r])=>({value:id,label:r.name})),row[phase+'_role'])}
+                </select>
+              </label>
+              ${subpos}
+              ${behaviors}
+            </fieldset>`;
+          }).join('')}
+        </div>
+        <details id="current-instructions-${index}">
+          <summary>Instrucciones individuales actuales (${row.instruction_scope || 'Posición'})</summary>
+          <p class="muted">Confirmá solo las órdenes que podés cotejar en FM. Los candados 🔒 proceden de las capturas comprobadas en FM26; los controles ⚙️ son los editables observados.</p>
+          <div class="instruction-grid">
+            ${Object.entries(editor.player_options).map(([id,v])=>{
+              const phase = v.phase === 'in_possession' ? 'ip' : 'oop';
+              const roleId = row[phase + '_role'];
+              const ctx = editor.observed_contexts?.[roleId];
+
+              let lockBadge = '';
+              let isDisabled = false;
+              let selectedVal = row.instructions[id];
+              let titleAttr = '';
+
+              if (ctx) {
+                if (id in ctx.locked_values) {
+                  isDisabled = true;
+                  const lockedVal = ctx.locked_values[id];
+                  if (lockedVal === null) {
+                    lockBadge = '<span class="inst-badge-masked" title="Tapado por ayuda emergente en captura de FM26">🔒 Bloqueado (valor tapado)</span>';
+                    selectedVal = null;
+                  } else {
+                    selectedVal = lockedVal;
+                    titleAttr = `title="Bloqueado comprobado por el rol en FM26 (${ctx.evidence})"`;
+                    lockBadge = `<span class="inst-badge-lock" ${titleAttr}>🔒 Bloqueado comprobado</span>`;
+                  }
+                } else if (ctx.editable_groups?.includes(id)) {
+                  titleAttr = `title="Editable comprobado en FM26 (${ctx.evidence})"`;
+                  lockBadge = `<span class="inst-badge-edit" ${titleAttr}>⚙️ Editable comprobado</span>`;
+                } else {
+                  titleAttr = 'title="Disponibilidad no verificada en FM para este contexto específico (edición permitida en borrador)"';
+                  lockBadge = `<span class="inst-badge-unverified" ${titleAttr}>❓ Disponibilidad no verificada</span>`;
+                }
+              } else {
+                titleAttr = 'title="Disponibilidad no verificada en capturas para este rol (edición permitida en borrador)"';
+                lockBadge = `<span class="inst-badge-unverified" ${titleAttr}>❓ Disponibilidad no verificada</span>`;
+              }
+
+              const isMarkingOop = (id === 'marking_target_oop');
+              const currentMarkingVal = selectedVal ?? row.instructions['marking_target_oop'];
+
+              let markingSubInput = '';
+              if (isMarkingOop) {
+                if (currentMarkingVal === 'Mark Specific') {
+                  markingSubInput = `<div class="marking-sub-input">
+                    <label>Jugador rival a marcar (nombre o dorsal):
+                      <input type="text" id="current-target-player-${index}" data-current="marking_target_player" data-row="${index}" value="${esc(row.marking_target_player || '')}" placeholder="Ej. Erling Haaland">
+                    </label>
+                  </div>`;
+                } else if (currentMarkingVal === 'Mark Position') {
+                  markingSubInput = `<div class="marking-sub-input">
+                    <label>Puesto rival a marcar:
+                      <select id="current-target-pos-${index}" data-current="marking_target_position" data-row="${index}">
+                        ${options(editor.positions.map(p => ({value: p, label: pos(p)})), row.marking_target_position || '', 'Elegí puesto rival')}
+                      </select>
+                    </label>
+                  </div>`;
+                }
+              }
+
+              return `<div>
+                <label>${esc(v.label)} · ${phase==='ip'?'CP':'SP'} ${lockBadge}
+                  <select id="current-pi-${index}-${id}" data-current="instruction" data-row="${index}" data-pi="${id}" ${isDisabled ? 'disabled' : ''}>
+                    ${options(v.options, selectedVal)}
+                  </select>
+                </label>
+                ${markingSubInput}
+              </div>`;
+            }).join('')}
+          </div>
+        </details>
+      </section>`;
+    }).join('')}</div>
+    <details>
+      <summary>Instrucciones colectivas actuales y vistas comprobadas en FM26</summary>
+      <p class="muted">Las que no confirmes quedan fuera de la revisión. Los valores son los del catálogo disponible de FM26.</p>
+
+      ${Array.isArray(editor.team_views_current) && editor.team_views_current.length ? `
+        <details style="margin-bottom: 14px;">
+          <summary>📋 Registro empírico: 8 vistas y 29 estados observados en FM26</summary>
+          <p class="muted"><small>Estados observados directamente en la interfaz del juego durante el relevamiento de la táctica:</small></p>
+          <div class="team-views-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px;">
+            ${(() => {
+              const grouped = {};
+              for (const entry of editor.team_views_current) {
+                const k = `${entry.phase === 'CP' ? '⚽ Con posesión' : '🛡️ Sin posesión'} · ${entry.area}`;
+                if (!grouped[k]) grouped[k] = [];
+                grouped[k].push(entry);
+              }
+              return Object.entries(grouped).map(([title, items]) => `
+                <div class="team-view-card">
+                  <div class="team-view-header"><span class="team-view-title">${esc(title)}</span></div>
+                  <div class="team-view-items">
+                    ${items.map(it => `<span class="team-view-item">${esc(it.name)}: <strong>${esc(it.value)}</strong></span>`).join('')}
+                  </div>
+                </div>
+              `).join('');
+            })()}
+          </div>
+        </details>
+      ` : ''}
+
+      <div class="instruction-grid">
+        ${Object.entries(data.instruction_options).map(([id, opts]) => {
+          const isOverlap = id === 'overlap_ip';
+          const isUnderlap = id === 'underlap_ip';
+          const underlapBothFlanks = d.team['underlap_ip'] === 'Underlap - Both Flanks';
+          const overlapBothFlanks = d.team['overlap_ip'] === 'Overlap - Both Flanks';
+          const filteredOpts = opts.map(o => {
+            let disabled = false;
+            if (isOverlap && underlapBothFlanks && o.value !== 'Overlap - Balanced') disabled = true;
+            if (isUnderlap && overlapBothFlanks && o.value !== 'Underlap - Balanced') disabled = true;
+            return { ...o, disabled };
+          });
+          const note = id === 'short_goalkeeper_distribution_oop'
+            ? ' <small style="color:var(--text-muted);">(Presionar salida rival)</small>'
+            : id === 'dribbling_ip'
+            ? ' <small style="color:var(--text-muted);">(Compartido)</small>'
+            : id === 'pressing_trap_oop'
+            ? ' <small style="color:var(--text-muted);">(Compartido)</small>'
+            : '';
+          return `<label>${esc(editor.team_properties[id])}${note}<select id="current-team-${id}" data-current="team" data-team="${id}">${filteredOpts.map(o => `<option value="${esc(o.value)}" ${d.team[id] === o.value ? 'selected' : ''} ${o.disabled ? 'disabled' : ''}>${esc(o.label)}${o.disabled ? ' (Incompatible con interior en ambas bandas)' : ''}</option>`).join('')}</select></label>`;
+        }).join('')}
+      </div>
+    </details>
     <label class="current-confirm"><input type="checkbox" id="current-confirm" data-current="confirmed" ${d.confirmed?'checked':''}> Confirmo que este once, sus posiciones y roles coinciden con la táctica que estoy usando en FM.</label>
     <button class="button primary" data-action="audit-current" ${state.currentBusy?'disabled':''}>${state.currentBusy?'Revisando…':'Revisar mi táctica'}</button>
     ${state.currentError?`<p class="notice warning" role="alert">${esc(state.currentError)}</p>`:''}

@@ -210,12 +210,17 @@ async function action(name, button) {
     return;
   }
   if(name==='copy-match-instructions') {
+    const isCurrent = state.view === 'current' && state.currentResult;
     const tactic = state.prefs?.formation==='auto' ? state.analysis?.requested_tactic||state.analysis?.tactics?.[0] : state.simulation;
-    const acts = (state.currentResult?.tactical_advice || tactic?.tactical_recommendations || [])
-      .map(a => a.action ? `• ${a.title}: ${a.action} (${a.phase_label || 'Táctica'})` : `• ${a.title}`);
+    const nameLabel = isCurrent ? state.currentResult.name : (tactic?.name || state.prefs?.formation || '4-3-3');
+    const styleLabel = isCurrent ? (state.data?.styles?.[state.currentResult.style]?.name || state.currentResult.style) : (state.data?.styles?.[state.prefs?.style]?.name || 'Posesión');
+    const sourceAdvice = isCurrent ? (state.currentResult?.advice || []) : (tactic?.tactical_recommendations || []);
+    const acts = sourceAdvice
+      .filter(a => a.action)
+      .map(a => `• ${a.title}: ${a.action} (${a.phase_label || (a.phase==='ip'?'Con posesión':a.phase==='oop'?'Sin posesión':'Equipo')})`);
     const text = [
       `📋 TOUCHLINE FM26 - AJUSTES PARA EL PARTIDO (${state.data?.club || 'Club'}):`,
-      `Esquema: ${tactic?.name || state.prefs?.formation || '4-3-3'} | Estilo: ${state.data?.styles?.[state.prefs?.style]?.name || 'Posesión'}`,
+      `Esquema: ${nameLabel} | Estilo: ${styleLabel}`,
       '',
       ...(acts.length ? acts : ['• Confirmá el once titular y roles en FM.']),
       '',
@@ -230,32 +235,7 @@ async function action(name, button) {
     }
     return;
   }
-  if(name==='export-tactic-fm') {
-    if(!state.data) return toast('Cargá una partida primero.');
-    const tactic = state.prefs?.formation==='auto' ? state.analysis?.requested_tactic||state.analysis?.tactics?.[0] : state.simulation;
-    const acts = (state.currentResult?.tactical_advice || tactic?.tactical_recommendations || [])
-      .map(a => a.action ? `${a.title}: ${a.action}` : a.title);
-    try {
-      const res = await api('/api/export-tactic', {
-        method: 'POST',
-        body: {
-          formation: tactic?.id || state.prefs?.formation || '433',
-          name: `Touchline_${(state.data.club||'Club').replace(/\s+/g,'_')}_${tactic?.id || state.prefs?.formation || '433'}`,
-          style: state.prefs?.style,
-          style_name: state.data.styles?.[state.prefs?.style]?.name || 'Posesión',
-          mentality: tactic?.mentality || 'Positiva',
-          team: tactic?.team_instructions || {},
-          lineup: tactic?.lineup || [],
-          actions: acts
-        }
-      });
-      try { await navigator.clipboard.writeText(res.clipboard_summary); } catch {}
-      toast('¡Táctica guardada en Documentos\\Sports Interactive\\Football Manager 26\\tactics!');
-    } catch(e) {
-      toast('Error al exportar táctica: ' + e.message, true);
-    }
-    return;
-  }
+  if(name==='close-dialog') { $('#dialog').close(); return; }
   if(name==='audit-current')return auditCurrent();
   if(name==='reference-current') {state.currentDraft=referenceDraft(state.data);saveCurrentDraft();state.currentDraft.confirmed=true;await auditCurrent();return;}
   if(name==='export-current') {if(state.currentResult)download('touchline-mi-tactica.json',{draft:state.currentDraft,result:state.currentResult});return;}
@@ -340,21 +320,76 @@ document.addEventListener('change',event=>{
             for(const key of Object.keys(row.instructions))if(state.data.tactic_editor.player_options[key]?.phase===phase)delete row.instructions[key];
           }
         }
-      } else if(input.dataset.team) {if(input.value)draft.team[input.dataset.team]=input.value;else delete draft.team[input.dataset.team];}
+      } else if(input.dataset.team) {
+        const key = input.dataset.team;
+        const val = input.value;
+        if(val) draft.team[key] = val;
+        else delete draft.team[key];
+        if (key === 'underlap_ip' && val === 'Underlap - Both Flanks') {
+          if (draft.team.overlap_ip && draft.team.overlap_ip !== 'Overlap - Balanced') {
+            draft.team.overlap_ip = 'Overlap - Balanced';
+          }
+        } else if (key === 'overlap_ip' && val === 'Overlap - Both Flanks') {
+          if (draft.team.underlap_ip && draft.team.underlap_ip !== 'Underlap - Balanced') {
+            draft.team.underlap_ip = 'Underlap - Balanced';
+          }
+        }
+      }
       else draft[field]=input.value;
       saveCurrentDraft();render();return;
     }
-    if(input.dataset.companionCheck) {
-      try { localStorage.setItem('touchline:chk:' + input.dataset.companionCheck, input.checked ? '1' : '0'); } catch {}
-      input.closest('.companion-check-item')?.classList.toggle('checked', input.checked);
+    if(input.dataset.companionCheck || input.dataset.auditCheck) {
+      const key = input.dataset.companionCheck || input.dataset.auditCheck;
+      const isChecked = input.checked;
+      try { localStorage.setItem('touchline:chk:' + key, isChecked ? '1' : '0'); } catch {}
+
+      document.querySelectorAll(`input[data-companion-check="${key}"], input[data-audit-check="${key}"]`).forEach(el => {
+        el.checked = isChecked;
+        el.closest('.companion-check-item')?.classList.toggle('checked', isChecked);
+        const label = el.closest('label.checklist-item');
+        if (label) {
+          label.classList.toggle('checked', isChecked);
+          const badge = label.querySelector('.check-state-badge');
+          if (badge) {
+            badge.className = 'check-state-badge ' + (isChecked ? 'state-done' : 'state-pending');
+            badge.textContent = isChecked ? '✓ Marcado como aplicado' : 'Pendiente en FM';
+          }
+        }
+      });
+
+      const allChecks = document.querySelectorAll('input[data-audit-check]');
+      if (allChecks.length) {
+        const checkedCount = Array.from(allChecks).filter(c => c.checked).length;
+        const counter = $('#checklist-counter');
+        if (counter) counter.textContent = `${checkedCount} de ${allChecks.length} aplicados por vos`;
+        const pill = counter?.closest('.checklist-status-pill');
+        if (pill) pill.className = 'checklist-status-pill ' + (checkedCount === allChecks.length ? 'status-ready' : 'status-pending');
+        const banner = $('#checklist-complete-banner');
+        if (banner) banner.hidden = (checkedCount !== allChecks.length);
+      }
       return;
     }
     if(input.id==='scouting-sort') {state.scoutingFilter.sort=input.value;render();return;}
     if(input.id==='style-select') {state.prefs.style=input.value;state.prefs.prompt='';state.prefs.overrides={};await refresh();}
     if(input.id==='formation-select') {state.prefs.formation=input.value;await refresh();}
     if(input.dataset.override) {
-      if(input.value===input.dataset.applied)delete state.overrideDraft[input.dataset.override];
-      else state.overrideDraft[input.dataset.override]=input.value;
+      const key = input.dataset.override;
+      const val = input.value;
+      if(val===input.dataset.applied) delete state.overrideDraft[key];
+      else state.overrideDraft[key] = val;
+
+      // Handle support runs mutual exclusions
+      if (key === 'underlap_ip' && val === 'Underlap - Both Flanks') {
+        const curOverlap = state.overrideDraft.overlap_ip ?? state.prefs.overrides.overlap_ip;
+        if (curOverlap && curOverlap !== 'Overlap - Balanced') {
+          state.overrideDraft.overlap_ip = 'Overlap - Balanced';
+        }
+      } else if (key === 'overlap_ip' && val === 'Overlap - Both Flanks') {
+        const curUnderlap = state.overrideDraft.underlap_ip ?? state.prefs.overrides.underlap_ip;
+        if (curUnderlap && curUnderlap !== 'Underlap - Balanced') {
+          state.overrideDraft.underlap_ip = 'Underlap - Balanced';
+        }
+      }
       render();
     }
     if(input.dataset.available) {const id=Number(input.dataset.available);state.prefs.excluded=input.checked?state.prefs.excluded.filter(x=>x!==id):[...new Set([...state.prefs.excluded,id])];await refresh();}

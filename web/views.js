@@ -12,49 +12,179 @@ function stat(label,value,detail) { return `<article class="stat"><span>${label}
 
 export function overview(state) {
   const {data,analysis,prefs} = state;
-  const first = analysis?.tactics[0];
+  const first = analysis?.tactics?.[0];
   const senior = data.players.filter(p=>p.team_slot===prefs.primary_slot);
   const youth = data.players.filter(p=>p.team_slot!==prefs.primary_slot);
-  return `<div class="page-heading"><div><span class="eyebrow">${esc(data.manager || 'Tu club')} · ${esc(date(data.date))}</span><h1>${esc(data.club)}</h1><p>Tu plantel, sus alternativas y las próximas decisiones.</p></div><div class="actions"><button class="button" data-view="current">Ver mi táctica actual →</button><button class="button primary" data-view="tactics">Ver propuesta táctica →</button></div></div>
-    <div class="stats-grid">${stat('Disponibles en el grupo principal',senior.filter(p=>!prefs.excluded.includes(p.uid)).length,`${senior.length} jugadores en ${esc(groupName(data,prefs,prefs.primary_slot))}`)}${stat('Mayor encaje del once',first?number(first.score):'—',first?`${esc(first.name)} · índice propio /100`:'Revisá el grupo principal')}${stat('Otros grupos',youth.length,'Reservas y juveniles, según tu configuración')}${stat('Cedidos',data.loans.length,'Alternativas para seguimiento')}</div>
-    <section class="panel"><div class="split"><div><h2>Tu siguiente decisión</h2><p>${first?esc(first.fit_summary.verdict):'Confirmá el grupo principal y que haya al menos once jugadores disponibles.'}</p></div><button class="button" data-action="groups">Revisar grupos</button></div>
-    ${analysis?.academy.filter(a=>a.action==='Probar con el primer equipo').length?`<p><button class="text-button" data-view="academy">${analysis.academy.filter(a=>a.action==='Probar con el primer equipo').length} jugadores de otros grupos merecen una prueba →</button></p>`:''}</section>
-    ${first?`<div class="section-heading"><h2>Las tres propuestas con mayor encaje</h2><span class="muted">Comparadas entre ${analysis.evaluated_formations} esquemas</span></div>${formationCards(analysis.tactics,null)}`:''}`;
+  const urgentContracts = (data.contract_alerts || []).filter(a=>a.urgency==='danger');
+  const scoutingCount = (data.scouting || []).length;
+  const academyTrials = (analysis?.academy || []).filter(a=>a.action==='Probar con el primer equipo');
+  const weakPos = first?.reinforcements?.[0]?.position_label || 'Plantilla balanceada';
+
+  return `<div class="page-heading">
+    <div>
+      <span class="eyebrow">Panel de control ejecutivo · ${esc(data.manager || 'Tu club')} · ${esc(date(data.date))}</span>
+      <h1>${esc(data.club)}</h1>
+      <p>Tu centro de mando: estado del partido, alertas de contratos y oportunidades de mercado.</p>
+    </div>
+    <div class="actions">
+      <button class="button primary" data-action="companion">⚡ Guía para FM</button>
+      <button class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
+      <button class="button" data-view="current">Ver mi táctica actual →</button>
+    </div>
+  </div>
+
+  <div class="executive-dashboard-grid">
+    <article class="exec-card exec-card-match">
+      <div class="exec-card-header">
+        <div class="exec-card-title">
+          <span class="exec-icon">⚽</span>
+          <div>
+            <h3>Resumen táctico del club</h3>
+            <small>${state.currentResult ? 'Once actual revisado · ' + esc(state.currentResult.name) : first ? 'Propuesta recomendada · ' + esc(first.name) : 'Táctica activa'}</small>
+          </div>
+        </div>
+        <span class="score-pill">${state.currentResult ? number(state.currentResult.score) : first ? number(first.score) : '—'}<small>/100</small></span>
+      </div>
+      <div class="exec-card-body">
+        <div class="exec-alert-box alert-match">
+          <span class="exec-alert-icon">⚡</span>
+          <div>
+            ${(() => {
+              const audited = state.currentResult;
+              const alerts = audited ? (audited.advice || []).filter(a => a.action) : (first?.tactical_recommendations || []);
+              if (alerts.length) {
+                return `<strong>${alerts.length} ${alerts.length === 1 ? 'ajuste táctico detectado' : 'ajustes tácticos detectados'}</strong>
+                <p>${esc(alerts.slice(0, 2).map(a => a.action || a.title).join('. '))}${alerts.length > 2 ? '…' : ''}</p>`;
+              }
+              return `<strong>Estructura equilibrada</strong>
+              <p>Tu táctica no presenta alertas críticas registradas.</p>`;
+            })()}
+          </div>
+        </div>
+      </div>
+      <div class="exec-card-footer">
+        <button class="button primary" data-view="current">Ver mi táctica actual →</button>
+        <button class="button" data-action="companion">⚡ Guía para FM</button>
+      </div>
+    </article>
+
+    <article class="exec-card exec-card-contracts">
+      <div class="exec-card-header">
+        <div class="exec-card-title">
+          <span class="exec-icon">⚠️</span>
+          <div>
+            <h3>Contratos & Fugas</h3>
+            <small>${(data.contract_alerts || []).length} contratos monitoreados</small>
+          </div>
+        </div>
+        <span class="badge-time ${urgentContracts.length ? 'badge-danger' : 'badge-info'}">
+          ${urgentContracts.length ? `🔴 ${urgentContracts.length} en riesgo` : '🟢 En término'}
+        </span>
+      </div>
+      <div class="exec-card-body">
+        ${urgentContracts.length ? `
+          <div class="exec-alert-box alert-danger">
+            <span class="exec-alert-icon">🚨</span>
+            <div>
+              <strong>${urgentContracts.length} futbolistas vencen en &lt; 10 meses</strong>
+              <p>Riesgo de firma libre en enero (${esc(urgentContracts.slice(0, 2).map(a => a.player_name).join(', '))}${urgentContracts.length > 2 ? '…' : ''}).</p>
+            </div>
+          </div>
+        ` : `
+          <p class="muted">Situación contractual estable. Sin alertas críticas de fuga libre.</p>
+        `}
+      </div>
+      <div class="exec-card-footer">
+        <button class="button" data-view="contracts">Gestionar contratos y renovaciones →</button>
+      </div>
+    </article>
+
+    <article class="exec-card exec-card-scouting">
+      <div class="exec-card-header">
+        <div class="exec-card-title">
+          <span class="exec-icon">🔍</span>
+          <div>
+            <h3>Ojeo de Mercado</h3>
+            <small>${scoutingCount} futbolistas evaluados en tu partida</small>
+          </div>
+        </div>
+        <span class="role-badge-subtle">Mercado FM26</span>
+      </div>
+      <div class="exec-card-body">
+        <div class="exec-alert-box alert-info">
+          <span class="exec-alert-icon">🎯</span>
+          <div>
+            <strong>Puesto a reforzar: ${esc(weakPos)}</strong>
+            <p>Futbolistas destacados de otros clubes con encaje /100 según tu estilo de juego.</p>
+          </div>
+        </div>
+      </div>
+      <div class="exec-card-footer">
+        <button class="button" data-view="scouting">Explorar Ojeo de Mercado (${scoutingCount}) →</button>
+      </div>
+    </article>
+
+    <article class="exec-card exec-card-academy">
+      <div class="exec-card-header">
+        <div class="exec-card-title">
+          <span class="exec-icon">🌱</span>
+          <div>
+            <h3>Cantera y Cedidos</h3>
+            <small>${data.loans.length} cedidos · ${youth.length} en inferiores</small>
+          </div>
+        </div>
+        <span class="extension-tag">${academyTrials.length} para prueba</span>
+      </div>
+      <div class="exec-card-body">
+        <p class="muted">${academyTrials.length ? `Hay ${academyTrials.length} juveniles con nivel competitivo para probar en primera división.` : 'Plantel de juveniles y cedidos en seguimiento habitual.'}</p>
+      </div>
+      <div class="exec-card-footer">
+        <button class="button" data-view="academy">Ver cantera →</button>
+        <button class="button" data-view="loans">Ver cedidos →</button>
+      </div>
+    </article>
+  </div>
+
+  <div class="stats-grid" style="margin-top: 18px;">
+    ${stat('Disponibles en el grupo principal',senior.filter(p=>!prefs.excluded.includes(p.uid)).length,`${senior.length} jugadores en ${esc(groupName(data,prefs,prefs.primary_slot))}`)}
+    ${stat('Mayor encaje del once',first?number(first.score):'—',first?`${esc(first.name)} · índice propio /100`:'Revisá el grupo principal')}
+    ${stat('Otros grupos',youth.length,'Reservas y juveniles, según tu configuración')}
+    ${stat('Cedidos',data.loans.length,'Alternativas para seguimiento')}
+  </div>
+
+  ${first?`<div class="section-heading" style="margin-top: 24px;"><h2>Las tres propuestas con mayor encaje</h2><span class="muted">Comparadas entre ${analysis.evaluated_formations} esquemas</span></div>${formationCards(analysis.tactics,null)}`:''}`;
 }
 
 export function tactics(state) {
   const {data,prefs,analysis,simulation} = state;
   const selected = prefs.formation==='auto' ? analysis?.requested_tactic || analysis?.tactics[0] : simulation;
   const pa=analysis?.prompt_analysis;
-  const quickList = [
-    {id:'433',label:'4-3-3'},
-    {id:'352',label:'3-5-2'},
-    {id:'4231',label:'4-2-3-1'},
-    {id:'532',label:'5-3-2'},
-    {id:'442',label:'4-4-2'},
-    {id:'424',label:'4-2-4'},
-    {id:'343',label:'3-4-3'},
-    {id:'5212',label:'5-2-1-2'},
-    {id:'auto',label:'★ Recomendada'}
-  ];
-  return `<div class="page-heading"><div><span class="eyebrow">Idea, estructura y decisiones</span><h1>Tácticas</h1><p>Un espacio para comparar esquemas y ajustar tu propuesta.</p></div><button class="button" data-action="export">Exportar propuesta</button></div>
-    <section class="panel quick-panel">
-      <div class="quick-tactics-bar">
-        <div class="quick-formations-wrapper">
-          <span class="quick-label">⚡ Probar formación en 1 clic:</span>
-          <div class="formation-pills" role="group" aria-label="Esquemas rápidos">
-            ${quickList.map(f=>`<button type="button" class="formation-pill ${prefs.formation===f.id?'active':''}" data-formation="${f.id}">${f.label}</button>`).join('')}
-          </div>
-        </div>
-        <div class="quick-prompt-row">
-          <input type="text" id="quick-prompt-input" class="quick-prompt-input" placeholder="💬 Escribí tu idea de juego o formación (ej: 3-5-2 posesión, 4-4-2 contragolpe)..." value="${esc(state.promptDraft)}">
-          <button type="button" class="button primary" data-action="apply-quick-prompt">Probar idea</button>
-        </div>
+  return `<div class="page-heading"><div><span class="eyebrow">Propuestas tácticas · Esquemas para tu plantel</span><h1>Propuestas</h1><p>Compará esquemas y evaluá la mejor propuesta para tu plantilla.</p></div><div class="actions"><button class="button primary" data-action="companion">⚡ Guía para FM</button><button class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button><button class="button" data-action="export">Exportar JSON</button></div></div>
+    <section class="panel controls">
+      <div class="control-grid">
+        <label>Formación propuesta
+          <select id="formation-select">
+            <option value="auto" ${prefs.formation==='auto'?'selected':''}>★ Recomendar el mejor esquema (entre 10)</option>
+            ${data.formations_catalog.map(f=>`<option value="${f.id}" ${prefs.formation===f.id?'selected':''}>${esc(f.name)} → ${esc(f.defensive)}</option>`).join('')}
+          </select>
+        </label>
+        <label>Estilo táctico aplicado
+          <select id="style-select">
+            ${Object.entries(data.styles).map(([k,s])=>`<option value="${k}" ${prefs.style===k?'selected':''}>${esc(s.name)} · ${esc(s.fm26_style)}</option>`).join('')}
+          </select>
+        </label>
       </div>
+      <details id="prompt-details" ${state.promptDraft ? 'open' : ''}>
+        <summary>💬 Idea de juego o pedido personalizado</summary>
+        <label for="prompt-input">Instrucción en lenguaje natural <small>Interpretación con reglas y estilos de FM26 · Ctrl + Enter</small></label>
+        <textarea id="prompt-input" maxlength="2000" rows="2" placeholder="Ej.: posesión paciente, muchas ocasiones y solidez atrás...">${esc(state.promptDraft)}</textarea>
+        <div class="actions">
+          <button class="button primary" data-action="apply-prompt">Aplicar idea</button>
+          <button class="button" data-action="clear-prompt">Restablecer</button>
+        </div>
+        ${pa?`<div class="interpretation"><strong>Interpretación aplicada</strong><p>${esc(data.styles[pa.recommended_style]?.name || pa.recommended_style)} · ${esc(pa.recommended_mentality)}${pa.avoided.length?' · Evitar: '+esc(pa.avoided.join(', ')):''}</p>${pa.warnings.map(x=>`<p class="notice warning">${esc(x)}</p>`).join('')}<p class="muted">Podés ajustar la formación, el estilo y las instrucciones de equipo a continuación.</p></div>`:''}
+      </details>
     </section>
-    <section class="panel controls"><div class="control-grid"><label>Estilo aplicado<select id="style-select">${Object.entries(data.styles).map(([k,s])=>`<option value="${k}" ${prefs.style===k?'selected':''}>${esc(s.name)} · ${esc(s.fm26_style)}</option>`).join('')}</select></label><label>Formación<select id="formation-select"><option value="auto" ${prefs.formation==='auto'?'selected':''}>Recomendar entre los diez esquemas</option>${data.formations_catalog.map(f=>`<option value="${f.id}" ${prefs.formation===f.id?'selected':''}>${esc(f.name)} → ${esc(f.defensive)}</option>`).join('')}</select></label></div>
-    <details id="prompt-details"><summary>Ajustes avanzados de la idea de juego</summary><label for="prompt-input">Pedido táctico <small>Interpretación mediante reglas · Ctrl + Enter para aplicar</small></label><textarea id="prompt-input" maxlength="2000" rows="3" placeholder="Ej.: posesión, muchas ocasiones y evitar remates rivales">${esc(state.promptDraft)}</textarea><div class="actions"><button class="button primary" data-action="apply-prompt">Aplicar idea</button><button class="button" data-action="clear-prompt">Restablecer idea</button></div>
-    ${pa?`<div class="interpretation"><strong>Interpretación aplicada</strong><p>${esc(data.styles[pa.recommended_style].name)} · ${esc(pa.recommended_mentality)}${pa.avoided.length?' · Evitar: '+esc(pa.avoided.join(', ')):''}</p>${pa.warnings.map(x=>`<p class="notice warning">${esc(x)}</p>`).join('')}<p class="muted">Podés elegir otro estilo, formación y ajustar cada instrucción debajo de la propuesta.</p></div>`:''}</details></section>
     ${analysis?.tactics.length?`<details class="ranking"><summary>Comparar las tres mejores · ${analysis.evaluated_formations} esquemas evaluados</summary>${formationCards(analysis.tactics,selected?.id)}</details>`:''}
     ${state.error?`<div class="notice warning" role="alert">${esc(state.error)} <button class="text-button" data-action="retry">Reintentar</button></div>`:''}
     ${selected?tacticResult(selected,state):state.busy?'<div class="panel skeleton" role="status">Calculando tu propuesta…</div>':'<section class="panel empty"><h2>No hay un once completo</h2><p>Necesitás al menos once jugadores disponibles en el grupo principal. Revisá tus exclusiones y la asignación de grupos.</p><button class="button" data-action="groups">Configurar grupos</button></section>'}`;
@@ -116,7 +246,7 @@ export function roster(state,kind) {
 
 export function methodology(state) {
   const m=state.data.methodology;
-  return `<div class="page-heading"><div><h1>Cómo se calcula</h1><p>Las reglas, los datos y sus límites.</p></div></div><section class="panel prose"><h2>Índice propio de Touchline</h2><p>${esc(m.formula)}</p><p>El puntaje no es una probabilidad de victoria ni una calificación del motor de FM.</p><h3>Construcción del once y banco</h3><p>${esc(m.lineup)}</p><p>Las alertas de nivel comparan cada puesto con la media del once, con un margen de ocho puntos. La cobertura del banco usa familiaridad de ambas fases.</p><h3>Inferiores</h3><p>${esc(m.academy)}</p><h3>Lenguaje natural</h3><p>Se utilizan reglas de reconocimiento, negaciones y prioridades explícitas. La interpretación se muestra en Tácticas y puede corregirse mediante estilo, formación y ajustes de equipo.</p><h3>Datos y límites</h3><p>Se usan atributos visibles. La extracción realiza controles de estructura y rangos; eso no demuestra que cada dato coincida con la ficha del juego. La verificación de etiquetas se informa por rol.</p><p>Confirmá lesiones, sanciones, inscripción, familiaridad táctica, rival, carga de partidos y condiciones de repesca dentro de FM. No se exportan tácticas .fmf.</p><h3>Persistencia</h3><p>Las preferencias se conservan por club e identificador del manager; las copias de una misma carrera comparten configuración. Los resultados se invalidan con cada guardado y cambio de contexto.</p></section><details class="panel"><summary>Roles y atributos de referencia</summary>${Object.values(m.roles).map(r=>`<details><summary>${esc(r.name)} · ${r.phase==='in_possession'?'Con posesión':'Sin posesión'}</summary><p>${esc(r.english)} · ${esc(r.positions.map(pos).join(', '))}</p><p>${esc(Object.keys(r.weights).map(k=>state.data.attributes[k]).join(', '))}</p><a href="${esc(r.source)}" target="_blank" rel="noreferrer">Fuente del rol ↗</a></details>`).join('')}</details>`;
+  return `<div class="page-heading"><div><h1>Cómo se calcula</h1><p>Las reglas, los datos y sus límites.</p></div></div><section class="panel prose"><h2>Índice propio de Touchline</h2><p>${esc(m.formula)}</p><p>El puntaje no es una probabilidad de victoria ni una calificación del motor de FM.</p><h3>Construcción del once y banco</h3><p>${esc(m.lineup)}</p><p>Las alertas de nivel comparan cada puesto con la media del once, con un margen de ocho puntos. La cobertura del banco usa familiaridad de ambas fases.</p><h3>Inferiores</h3><p>${esc(m.academy)}</p><h3>Lenguaje natural</h3><p>Se utilizan reglas de reconocimiento, negaciones y prioridades explícitas. La interpretación se muestra en Tácticas y puede corregirse mediante estilo, formación y ajustes de equipo.</p><h3>Datos y límites</h3><p>Se usan atributos visibles. La extracción realiza controles de estructura y rangos; eso no demuestra que cada dato coincida con la ficha del juego. La verificación de etiquetas se informa por rol.</p><p>Confirmá lesiones, sanciones, inscripción, familiaridad táctica, rival, carga de partidos y condiciones de repesca dentro de FM. No se exportan tácticas .fmf.</p><h3>Persistencia</h3><p>Las preferencias se conservan por club e identificador del manager; las copias de una misma carrera comparten configuración. Los resultados se invalidan con cada guardado y cambio de contexto.</p></section><details class="panel"><summary>Catálogo de roles de FM26 y atributos (${Object.keys(m.roles).length} roles)</summary>${Object.values(m.roles).map(r=>`<details><summary>${esc(r.name)} [${esc(r.abbreviation||'ROL')}] · ${r.phase==='in_possession'?'Con posesión (CP)':'Sin posesión (SP)'}</summary><p>${esc(r.english)} · Posiciones: ${esc(r.positions.map(pos).join(', '))}</p>${r.subposition_rule ? `<p class="notice">🛡️ Subpuesto: ${r.subposition_rule.min_central_defenders ? 'Requiere línea de al menos 3 centrales' : 'Requiere doble pivote'}</p>` : ''}${Array.isArray(r.behaviors) && r.behaviors.length ? `<p><strong>Comportamientos inherentes al rol:</strong></p><div class="role-behaviors-chips">${r.behaviors.map(b=>`<span class="behavior-chip">⚡ ${esc(b)}</span>`).join('')}</div>` : ''}<p><strong>Atributos requeridos:</strong> ${esc(Object.keys(r.weights).map(k=>state.data.attributes[k] || k).join(', '))}</p><p class="muted"><small>${r.key_attributes_ui_verified ? '✅ Atributos clave cotejados en interfaz de FM26' : 'ℹ️ Ponderación analítica propia de Touchline (80/20), no del motor interno de FM'}</small></p><a href="${esc(r.source)}" target="_blank" rel="noreferrer">Fuente del rol ↗</a></details>`).join('')}</details>`;
 }
 
 export function playerDialog(state,id) {
@@ -408,19 +538,37 @@ export function scoutingView(state) {
 
 export function companionView(state) {
   const {data, analysis, currentResult} = state;
+  const isCurrent = state.view === 'current' && currentResult;
   const tactic = state.prefs?.formation === 'auto' ? analysis?.requested_tactic || analysis?.tactics?.[0] : state.simulation;
   const club = data?.club || 'Tu club';
-  const formationName = tactic?.name || state.prefs?.formation || '4-3-3';
-  const styleName = data?.styles?.[state.prefs?.style]?.name || 'Posesión';
+  const formationName = isCurrent ? currentResult.name : (tactic?.name || state.prefs?.formation || '4-3-3');
+  const styleName = isCurrent ? (data?.styles?.[currentResult.style]?.name || currentResult.style) : (data?.styles?.[state.prefs?.style]?.name || 'Posesión');
+  const contextTag = isCurrent ? 'MINI-HUD · MI TÁCTICA' : 'MINI-HUD · PROPUESTAS';
 
   const actions = [];
-  if (state.currentResult?.tactical_advice) {
-    for (const a of state.currentResult.tactical_advice) {
-      if (a.action) actions.push({id: a.player_name || a.title, title: a.title, text: a.action, phase: a.phase_label});
+  if (isCurrent && currentResult?.advice) {
+    for (const a of currentResult.advice) {
+      if (a.action) {
+        const itemId = (a.player_uid || 'team') + '_' + (a.category || a.title);
+        actions.push({
+          id: itemId,
+          title: a.title,
+          text: a.action,
+          phase: a.phase_label || (a.phase==='ip'?'Con posesión':a.phase==='oop'?'Sin posesión':'Equipo')
+        });
+      }
     }
   } else if (tactic?.tactical_recommendations) {
     for (const a of tactic.tactical_recommendations) {
-      if (a.action) actions.push({id: a.title, title: a.title, text: a.action, phase: 'Propuesta'});
+      if (a.action) {
+        const itemId = 'prop_' + (a.category || a.title);
+        actions.push({
+          id: itemId,
+          title: a.title,
+          text: a.action,
+          phase: 'Propuesta'
+        });
+      }
     }
   }
   if (!actions.length) {
@@ -432,8 +580,8 @@ export function companionView(state) {
     <div class="companion-shell">
       <div class="companion-header">
         <div class="companion-title-row">
-          <span class="companion-brand">⚡ TOUCHLINE COMPANION</span>
-          <span class="companion-tag">MINI-HUD FM26</span>
+          <span class="companion-brand">⚡ TOUCHLINE GUÍA PARA FM</span>
+          <span class="companion-tag">${esc(contextTag)}</span>
         </div>
         <h2>${esc(club)}</h2>
         <div class="companion-meta">
@@ -450,9 +598,11 @@ export function companionView(state) {
             <span class="muted">${actions.length} acciones</span>
           </div>
           <div class="companion-checklist">
-            ${actions.map((act, i) => `
-              <label class="companion-check-item">
-                <input type="checkbox" data-companion-check="${act.id}">
+            ${actions.map((act) => {
+              const isChecked = localStorage.getItem('touchline:chk:' + act.id) === '1';
+              return `
+              <label class="companion-check-item ${isChecked ? 'checked' : ''}">
+                <input type="checkbox" data-companion-check="${esc(act.id)}" ${isChecked ? 'checked' : ''}>
                 <div class="check-content">
                   <div class="check-title-row">
                     <strong>${esc(act.title)}</strong>
@@ -461,22 +611,14 @@ export function companionView(state) {
                   <p>${esc(act.text)}</p>
                 </div>
               </label>
-            `).join('')}
+            `;}).join('')}
           </div>
         </section>
+      </div>
 
-        <section class="companion-section">
-          <h3>⚡ Acciones rápidas</h3>
-          <div class="companion-actions-grid">
-            <button class="button primary" data-action="copy-match-instructions">📋 Copiar ajustes al portapapeles</button>
-            <button class="button accent" data-action="export-tactic-fm">📥 Exportar táctica para FM (.fmf)</button>
-            <button class="button" data-action="popout-companion">↗ Abrir en ventana flotante independiente</button>
-          </div>
-        </section>
-
-        <div class="companion-hint">
-          <small>💡 Dejá este Mini-HUD abierto junto a Football Manager para marcar los cambios en tu táctica antes de cada partido.</small>
-        </div>
+      <div class="companion-footer">
+        <button class="button primary" data-action="copy-match-instructions">📋 Copiar ajustes</button>
+        <button class="button" data-action="close-dialog">Cerrar</button>
       </div>
     </div>
   `;

@@ -2,7 +2,7 @@
 import hashlib
 import json
 from fm_app.tactics import ATTRS, STYLES, FORMATION_CATALOG
-from fm_app.fm26 import ROLES, CATALOG, LOCALE, TI, PI, PLAYER_MENU, SCREENSHOT_LOCKS, instruction
+from fm_app.fm26 import ROLES, CATALOG, LOCALE, TI, PI, PLAYER_MENU, SCREENSHOT_LOCKS, EDITABLE_GROUPS, OBSERVED_CONTEXTS, instruction
 from fm_app.contracts import clean_player, get_transfer_window_status
 from pathlib import Path
 from fm_app.current_tactic import POSITIONS
@@ -93,7 +93,26 @@ def load_dataset(folder):
             contract_alerts = []
 
     scouting_file = folder / 'scouting.json'
-    scouting = json.loads(scouting_file.read_text(encoding='utf-8')) if scouting_file.exists() else []
+    shared_scouting = folder.parent.parent / 'scouting_cache.json'
+    if not scouting_file.exists():
+        import shutil
+        if shared_scouting.exists():
+            try:
+                shutil.copy2(shared_scouting, scouting_file)
+            except Exception:
+                pass
+        else:
+            for other_imp in folder.parent.glob('*/output/scouting.json'):
+                if other_imp.exists():
+                    try:
+                        shutil.copy2(other_imp, scouting_file)
+                        shutil.copy2(other_imp, shared_scouting)
+                        break
+                    except Exception:
+                        pass
+    scouting = json.loads(scouting_file.read_text(encoding='utf-8')) if scouting_file.exists() else (
+        json.loads(shared_scouting.read_text(encoding='utf-8')) if shared_scouting.exists() else []
+    )
 
     return {'id':report['save_sha256'][:16], 'career_id':career_id, 'club':report['club']['name'],
             'contract_alerts': contract_alerts, 'scouting': scouting,
@@ -111,7 +130,18 @@ def load_dataset(folder):
             'liverpool_reference': LIVERPOOL_REF if report['club']['name'] == 'Liverpool' else None,
             'tactic_editor':{'positions':list(POSITIONS),
                 'formations':FORMATION_CATALOG,'locks':SCREENSHOT_LOCKS,
-                'roles':{key:{'name':r['name'],'phase':r['phase'],'positions':r['positions']} for key,r in ROLES.items()},
+                'observed_contexts':OBSERVED_CONTEXTS,
+                'team_views_current':CATALOG.get('team_views_current', []),
+                'roles':{key:{
+                    'name':r['name'],
+                    'phase':r['phase'],
+                    'positions':r['positions'],
+                    'abbreviation':r.get('abbreviation', 'ROL'),
+                    'behaviors':r.get('behaviors', []),
+                    'subposition_rule':r.get('subposition_rule'),
+                    'english':r.get('english', ''),
+                    'spanish_status':r.get('spanish_status', '')
+                } for key,r in ROLES.items()},
                 'team_properties':{k:instruction('team',k,v['options'][0],'')['property'] for k,v in TI.items()},
                 'player_options':{k:{'label':instruction('player',k,v['options'][0],'')['property'],
                     'phase':v['phase'],'options':[{'value':o,'label':instruction('player',k,o,'')['value']} for o in v['options']]} for k,v in PI.items()}},
@@ -120,4 +150,15 @@ def load_dataset(folder):
             'methodology':{'formula':'80% atributos de la función + 20% atributos del estilo, multiplicado por (0,25 + 0,75 × familiaridad/20). Ambos promedios se llevan a escala 0–100.',
                            'lineup':'Se maximiza la suma del encaje de los once, sin repetir jugadores. Cada puesto pondera 80% función con balón y 20% función defensiva. Se evalúan las diez estructuras del catálogo y se presentan las tres de mayor encaje. El banco prioriza cobertura y compara ambas fases con la misma fórmula.',
                            'academy':'Se compara el mejor encaje actual del juvenil contra la tercera opción disponible del primer equipo con familiaridad de al menos 15/20 en una posición de esa función. Si hay menos de tres opciones, se usa la última disponible. Sin opciones, no se recomienda promoción. Una diferencia de hasta −3 puntos permite sugerir una prueba. No predice potencial ni evolución.',
-                           'roles':{key:{'name':v['name'],'english':v['english'],'positions':v['positions'],'phase':v['phase'],'weights':v['weights'],'source':v['source']} for key,v in ROLES.items()}}}
+                           'roles':{key:{
+                               'name':v['name'],
+                               'english':v['english'],
+                               'positions':v['positions'],
+                               'phase':v['phase'],
+                               'weights':v['weights'],
+                               'source':v['source'],
+                               'abbreviation':v.get('abbreviation', 'ROL'),
+                               'behaviors':v.get('behaviors', []),
+                               'subposition_rule':v.get('subposition_rule'),
+                               'key_attributes_ui_verified':v.get('key_attributes_ui_verified', False)
+                           } for key,v in ROLES.items()}}}

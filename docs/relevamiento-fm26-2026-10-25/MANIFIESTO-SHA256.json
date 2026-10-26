@@ -1,0 +1,1657 @@
+[
+  {
+    "file": "actualizar_colectivas_fm26.py",
+    "bytes": 10204,
+    "sha256": "7b901e43606c36735290732d5c4e997bbc89172db1d127888f03b0cb12252898"
+  },
+  {
+    "file": "ADENDA-COLECTIVAS.md",
+    "bytes": 8018,
+    "sha256": "2c68d60f4d4d64b454b1d8dc2b91063b235e4883f578d4e894c6308de7d5dc13"
+  },
+  {
+    "file": "ANEXO-TEXTOS-INSTRUCCIONES.md",
+    "bytes": 491993,
+    "sha256": "ebbe6d725be50dbb5a5ad666b1801caaafde1cb21181a33f66195db81055af05"
+  },
+  {
+    "file": "capturas/001-portero-cp.jpg",
+    "bytes": 145705,
+    "sha256": "e352328d78cf8f058795844590b454284d75dc15f1ad8341f44858056690e201"
+  },
+  {
+    "file": "capturas/002-portero-practico-cp.jpg",
+    "bytes": 146449,
+    "sha256": "ec20e025ad46a8ebdf757533e844bc148878ac94fd1da5e69ae1b151a28ff621"
+  },
+  {
+    "file": "capturas/003-portero-con-salida-cp.jpg",
+    "bytes": 149051,
+    "sha256": "b56a68bef14ac71fd88673e820e9be7052364cdbae2dbe5e1a46d9cf15966b7a"
+  },
+  {
+    "file": "capturas/004-instrucciones-arquero-cp.jpg",
+    "bytes": 147974,
+    "sha256": "1422dfc63f17a94bf745f5df9ea674207576113909829fe487f3fc37630f4a7d"
+  },
+  {
+    "file": "capturas/005-regate-arquero-cp.jpg",
+    "bytes": 150499,
+    "sha256": "a666d374239548ab69fbc594178f20eb95ab83826bbd72e022dc476572e26bd3"
+  },
+  {
+    "file": "capturas/006-pases-arquero-cp.jpg",
+    "bytes": 150704,
+    "sha256": "b58d9b6fa84da4d803b78e0bd269460f2b51e274843e5e087c3f4422de353886"
+  },
+  {
+    "file": "capturas/007-menu-portero-sp.jpg",
+    "bytes": 211646,
+    "sha256": "8c579f212a4b72bf3e0777f0d17556e65becf1fc6f437b31e6f3782595a9557d"
+  },
+  {
+    "file": "capturas/008-portero-libero-sp.jpg",
+    "bytes": 151211,
+    "sha256": "d9ce9350335ce2220018e915dee8d1d67e7686b77ef6f8b54aecfee209308add"
+  },
+  {
+    "file": "capturas/009-instrucciones-portero-sp.jpg",
+    "bytes": 148556,
+    "sha256": "ffdba6729265e45e4b2732e12e1417370e0c2eae629f07e73ec5d4c2eb4ee261"
+  },
+  {
+    "file": "capturas/010-instrucciones-portero-sp.jpg",
+    "bytes": 127073,
+    "sha256": "37fedb6162ccc0c9b187e660c1d2334d0cc25e96fc6a54b2b882c99d6c30f07c"
+  },
+  {
+    "file": "capturas/011-menu-lateral-cp.jpg",
+    "bytes": 210792,
+    "sha256": "fb49750b6f1471902bf05f41fcbb70e94d1f91be5a5a4d1390402edfe7110094"
+  },
+  {
+    "file": "capturas/012-menu-central-cp.jpg",
+    "bytes": 206586,
+    "sha256": "f02cfb573b1afdb64e11357077648a9a899450186e550365403a7969e5b5d8f7"
+  },
+  {
+    "file": "capturas/013-menu-central-cp.jpg",
+    "bytes": 207670,
+    "sha256": "164ba97f019d74e9ad6c7698f0418b695c9446d1d6bf19489cc9815725b9d8ef"
+  },
+  {
+    "file": "capturas/014-central-con-salida-cp.jpg",
+    "bytes": 153634,
+    "sha256": "bd82737c1f1f145678d4f62419364fbf889c6655760f9eddba284ea9c127cdda"
+  },
+  {
+    "file": "capturas/015-roles-mediocentro-cp.jpg",
+    "bytes": 150744,
+    "sha256": "46f6a85541b18c573197e9aba0f7465bf060cf0fd8211d0059803b74d3df596a"
+  },
+  {
+    "file": "capturas/016-roles-mc-cp.jpg",
+    "bytes": 155499,
+    "sha256": "19cca6836e8f2b92490039f4dfd93d78f1e84c108181aaf5cb1cc84d879a5405"
+  },
+  {
+    "file": "capturas/017-roles-mc-cp-inferiores.jpg",
+    "bytes": 219423,
+    "sha256": "012907df094a9e02079d8f2283f8ec2f398ae0239147be6ad2a3a275f9a76da3"
+  },
+  {
+    "file": "capturas/018-roles-extremo-cp.jpg",
+    "bytes": 225183,
+    "sha256": "7f16db10bd3412fb97ad2d5735fa160134cb577c7fe51b8715b670a6857f5c70"
+  },
+  {
+    "file": "capturas/019-instrucciones-extremo-cp.jpg",
+    "bytes": 213872,
+    "sha256": "1cce60ac7401b2e064a51a6820b5a30cbb93393990056c63eac9f080778f2f1b"
+  },
+  {
+    "file": "capturas/020-menu-amplitud-cp.jpg",
+    "bytes": 225040,
+    "sha256": "e77ec9b41a153ce4bd6032ec93c8c42247d77bd963babd895314e2c2494ff6f5"
+  },
+  {
+    "file": "capturas/021-menu-carreras-cp.jpg",
+    "bytes": 216510,
+    "sha256": "70854331423726aa914f5d093d45009c6e3745c4db975c4a41374ba632ed03ff"
+  },
+  {
+    "file": "capturas/022-menu-libertad-cp.jpg",
+    "bytes": 228912,
+    "sha256": "b4c52868ec8d1bfe5f08a8563c1de759dda2546ccd8e744b1f204cc900755561"
+  },
+  {
+    "file": "capturas/023-menu-centro-desde-cp.jpg",
+    "bytes": 211594,
+    "sha256": "1b73fc112c91718d1a07c15760643bd9abce00718e007c946faa7611c12e00f2"
+  },
+  {
+    "file": "capturas/024-menu-riesgo-pases-cp.jpg",
+    "bytes": 215974,
+    "sha256": "fe03f63a52e4da9b9154bdb99f95a5ca0d3b72ff58da6e2c850c2544609d4ca9"
+  },
+  {
+    "file": "capturas/025-menu-disparos-cp.jpg",
+    "bytes": 221171,
+    "sha256": "0c46b5e89f56114e0282aceb7dadf30d2b496e3d0214d6abd4501f12b60e0000"
+  },
+  {
+    "file": "capturas/026-menu-direccion-regate-cp.jpg",
+    "bytes": 221382,
+    "sha256": "273a8077349f6d44932906950613987ae7874afe7edb161733d724cc0b10ad76"
+  },
+  {
+    "file": "capturas/027-menu-aguantar-cp.jpg",
+    "bytes": 217835,
+    "sha256": "59116410bd8da20c84afef3bb4ffec17ba5a4fd371b3858985d1638827c2970e"
+  },
+  {
+    "file": "capturas/028-menu-estrategia-centros-cp.jpg",
+    "bytes": 214364,
+    "sha256": "ff986131fb9f2c41c8266a808377767c0f436de958ed6e462ece9dcf043b1c43"
+  },
+  {
+    "file": "capturas/029-menu-medio-banda-sp.jpg",
+    "bytes": 291741,
+    "sha256": "34b765a0106bfb12d8109707007a7ca67524e6167883cf284230318e9bfed3f7"
+  },
+  {
+    "file": "capturas/030-instrucciones-campo-sp.jpg",
+    "bytes": 178651,
+    "sha256": "1847a6941db31b2cf33e060c0ad96fd3bb22df4b5c79bde411322f98ccc61af1"
+  },
+  {
+    "file": "capturas/031-menu-presion-sp.jpg",
+    "bytes": 192709,
+    "sha256": "3382e915c71aa55fc132a20331447ea65b2fb26c26bc3392e0febbc441190a6a"
+  },
+  {
+    "file": "capturas/032-menu-marca-sp.jpg",
+    "bytes": 202680,
+    "sha256": "55f1b5f4a78383e2a0c73856d88186d70de6f1705bba530656443a18382ae23f"
+  },
+  {
+    "file": "capturas/033-menu-entradas-sp.jpg",
+    "bytes": 206545,
+    "sha256": "20e7c0c654e0ff1839b68896958734ce05a19cdcbcc16f19c9967395a935852f"
+  },
+  {
+    "file": "capturas/034-menu-objetivo-marca-sp.jpg",
+    "bytes": 203902,
+    "sha256": "8c0a3c0cfc5e8bed2cac997b949491570e9e1c6f81b89eef654e720c48f21427"
+  },
+  {
+    "file": "capturas/035-roles-delantero-sp.jpg",
+    "bytes": 291031,
+    "sha256": "3c5e87331dba33121573c2f3602d4da440e79fcc3ab8eb0052c828d8aa54fad0"
+  },
+  {
+    "file": "capturas/036-delantero-sp.jpg",
+    "bytes": 207354,
+    "sha256": "1f90a8171fb43219dbcccecf8fde023b3cf900c234d62057ae7157028b94afda"
+  },
+  {
+    "file": "capturas/037-roles-mediapunta-sp.jpg",
+    "bytes": 205767,
+    "sha256": "c97b2c0052a6813ffc996ab14eca51f5b5e3b08b28816d65736ffffd122a2dfc"
+  },
+  {
+    "file": "capturas/038-roles-md-sp.jpg",
+    "bytes": 219743,
+    "sha256": "f86e2339d8ed911f4fbe669dab2f3f1b04edad9d4e1fc219ca3b42360ae42b3e"
+  },
+  {
+    "file": "capturas/039-roles-md-sp-inferiores.jpg",
+    "bytes": 218958,
+    "sha256": "daa0019e5af2fb9ce4951c265d18460a1ddd2ae7388c42b7f4efc7fac7c4126e"
+  },
+  {
+    "file": "capturas/040-roles-central-sp.jpg",
+    "bytes": 207346,
+    "sha256": "ee4169e776eec8493780ba041962530af37e2a1b399d799deb55cbbf275b938d"
+  },
+  {
+    "file": "capturas/041-roles-lateral-sp.jpg",
+    "bytes": 205037,
+    "sha256": "3918dba85fad033f2b14724db8c0bd575dc7d266774c62cf6c97ec55ec807c2b"
+  },
+  {
+    "file": "capturas/042-roles-delantero-cp.jpg",
+    "bytes": 284922,
+    "sha256": "8149161e802980aee33c5c1d8aedf27492de3ceb843e22a80a24d35460d52da7"
+  },
+  {
+    "file": "capturas/043-delantero-apoyo-cp.jpg",
+    "bytes": 229293,
+    "sha256": "6c140dc3f313ea3bd5a1137d0a6d02652245e35ed436e1386579153a88fb0a30"
+  },
+  {
+    "file": "capturas/044-equipo-cp-general.jpg",
+    "bytes": 222640,
+    "sha256": "eeb800e8052e2148217a153ccf80164cd8c8632b8bfdd27a1ceead7be0981afd"
+  },
+  {
+    "file": "capturas/045-equipo-cp-ultimo-tercio.jpg",
+    "bytes": 219395,
+    "sha256": "fff000c1238320ac44c3ed384848f666df73cfccdb653d3eb49192fb070dde70"
+  },
+  {
+    "file": "capturas/046-equipo-cp-avance.jpg",
+    "bytes": 214089,
+    "sha256": "3335d08589b3392c61cc6df9f93b8f254e2c285e0f3fe67c38d0db8c30483c3f"
+  },
+  {
+    "file": "capturas/047-equipo-cp-creacion.jpg",
+    "bytes": 218172,
+    "sha256": "ada8a6f85e73cbe75d651062538abe6a25c5dba29dc5f89b58f39bfae674b8f1"
+  },
+  {
+    "file": "capturas/048-equipo-sp-general.jpg",
+    "bytes": 188863,
+    "sha256": "326a0d723384bb013e5f957bb1ece2e9b4f19caaea1f1d4aa3d6f26171c0921d"
+  },
+  {
+    "file": "capturas/049-equipo-sp-general.jpg",
+    "bytes": 205353,
+    "sha256": "e3cbdcb11160be7e0ac1effd0da20f77faebd401e7ed11601b3be536bf177b08"
+  },
+  {
+    "file": "capturas/050-equipo-sp-presion-alta.jpg",
+    "bytes": 192412,
+    "sha256": "36c90f08e5503359fc0bf629eda8da9f2203bb67426b5366c190ac0459e8d48a"
+  },
+  {
+    "file": "capturas/051-equipo-sp-bloque-medio.jpg",
+    "bytes": 189629,
+    "sha256": "7c22415fe307c31a38450553e1b8a337358d73ae41d691100fbf4559a517347d"
+  },
+  {
+    "file": "capturas/052-equipo-sp-bloque-bajo.jpg",
+    "bytes": 188990,
+    "sha256": "e81d193942c9c478995e8acc89b80a03fafd6e2ac248dc0fef887498c58ca64c"
+  },
+  {
+    "file": "capturas/053-tactica-final.jpg",
+    "bytes": 291515,
+    "sha256": "24c4ce52c768844095b443e3954de6c3f9b6bdffb2c864c94e316f60e5423972"
+  },
+  {
+    "file": "capturas/054-preferencias.jpg",
+    "bytes": 205910,
+    "sha256": "4961bc28cc272f42c76ef0258388415ed0d196ec710a9bfe6587771d3d99e57f"
+  },
+  {
+    "file": "capturas/055-fmpedia.jpg",
+    "bytes": 195277,
+    "sha256": "9814eefa0db1dfdf0fc0e24f03f4bedecc8842a783d879aebfbad77a2b8c34e4"
+  },
+  {
+    "file": "capturas/056-fmpedia-tacticas.jpg",
+    "bytes": 180013,
+    "sha256": "f00cba1e83008c79397190fc74c9f9efb27b15a16a3cf7c637725848a41f42c0"
+  },
+  {
+    "file": "capturas/057-fmpedia-roles.jpg",
+    "bytes": 166858,
+    "sha256": "ed3196329061a3452dc93da9d17f33df87a3d827e2cfc505d5b3f474a5f98bc7"
+  },
+  {
+    "file": "capturas/058-fmpedia-categorias-roles.jpg",
+    "bytes": 170994,
+    "sha256": "3ee2f504753f205fa7b875dd2df6f6d768abf911d4d8cedcd9eb653ddf5711a5"
+  },
+  {
+    "file": "capturas/059-estado-juego.jpg",
+    "bytes": 82236,
+    "sha256": "a3afce03c264cda1ac72baa097d0d0a880e4fbb0350ca4b65d5b2e66a41f84e6"
+  },
+  {
+    "file": "capturas/060-version-juego.jpg",
+    "bytes": 143518,
+    "sha256": "1f513498ebd28800b793d3b80f04d7959a1887fcb524acd167cd0cb7741f5699"
+  },
+  {
+    "file": "capturas/061-selector-puesto.jpg",
+    "bytes": 251457,
+    "sha256": "5ce666bbb89f31237995b377eb9822756296fc796d70dd95ddeb23a60e021f6c"
+  },
+  {
+    "file": "capturas/062-continuacion-tactica-inicial.jpg",
+    "bytes": 299077,
+    "sha256": "49eae42723ee7b16107dffd6dc8244b0119dd742a83e544d29c6ceaafb699a47"
+  },
+  {
+    "file": "capturas/063-editar-dibujo.jpg",
+    "bytes": 181588,
+    "sha256": "e628a76a599734c0fb12739e39b4b0336e753c7ed8e3e99e24a772f86aaa8737"
+  },
+  {
+    "file": "capturas/064-vista-previa-formacion.jpg",
+    "bytes": 192844,
+    "sha256": "c06f58546f9f4b3306ebeb9d6c7e78ee7a0044b96158d45f9aae40c0492db9d9"
+  },
+  {
+    "file": "capturas/065-mc-sp-entrada.jpg",
+    "bytes": 228383,
+    "sha256": "b417cc93f53109ef4405b2a44be8bed52d6e6bcf492ab55cc6e73a7a1b1921f2"
+  },
+  {
+    "file": "capturas/066-mcp-instrucciones.jpg",
+    "bytes": 220224,
+    "sha256": "72fddb95fd37f78a8f845293e690e049e50369ff26ab8381a1500bef8ac8dd86"
+  },
+  {
+    "file": "capturas/067-mcp-sp-instrucciones.jpg",
+    "bytes": 185689,
+    "sha256": "304c4df259caaded3957aa3ff27d259eeaa8634e6b5baefac9a88136ea989653"
+  },
+  {
+    "file": "capturas/068-mc-sp-centrocampista.jpg",
+    "bytes": 217350,
+    "sha256": "d95cda957d836b2b77702ab8f57cccc6f4a36249c7f1d9e136ecb2ae8ce3d25f"
+  },
+  {
+    "file": "capturas/069-mc-sp-panel.jpg",
+    "bytes": 217658,
+    "sha256": "ac3c391c1d9cf9c0cfd21990f13df9a887177a9c30447b13baefb5c035b56d69"
+  },
+  {
+    "file": "capturas/070-centrocampista-panel.jpg",
+    "bytes": 217720,
+    "sha256": "75c59adf3f6fa02b86b5df7b98f3042bc11bfcf6b91e4925b54518432c14211a"
+  },
+  {
+    "file": "capturas/071-mc-sp-fijo.jpg",
+    "bytes": 221427,
+    "sha256": "4d4524d60f4cf9c27d79d83ebbe10b96eefb6b935edfe2ff36b4cde570f1e614"
+  },
+  {
+    "file": "capturas/072-mc-fijo-seleccion.jpg",
+    "bytes": 221601,
+    "sha256": "09fef9efcf6646f0072acb7b374f8a7de81a70f9178913d790052701611aa4ff"
+  },
+  {
+    "file": "capturas/073-mc-fijo-panel.jpg",
+    "bytes": 220241,
+    "sha256": "a8d044758ccb2ff7d8733a1e3d5ab31e4d4a66a0ecc8ce175cd163bfd132a109"
+  },
+  {
+    "file": "capturas/074-mc-fijo-sp-instrucciones.jpg",
+    "bytes": 185164,
+    "sha256": "23bf6f512a7d6b419e0de2de2f1b7b562caa46720e5e5429a91752d471bc096a"
+  },
+  {
+    "file": "capturas/075-mc-sp-cobertura.jpg",
+    "bytes": 225950,
+    "sha256": "8e822a9f4e11c20bc491606f77d299855537c852f00e6959b9e2f2b85ee19190"
+  },
+  {
+    "file": "capturas/076-mc-cobertura-panel.jpg",
+    "bytes": 220325,
+    "sha256": "968fa2cb348a05f9e7cd960264e95fe3cf48a4bff4698c52d065eb8ef6a9bb0f"
+  },
+  {
+    "file": "capturas/077-mc-cobertura-sp-instrucciones.jpg",
+    "bytes": 185833,
+    "sha256": "2c6c7f6651b7b273fa99382879773b236a7336781bc71c70d6aafba7540f1000"
+  },
+  {
+    "file": "capturas/078-centrocampista-seleccion.jpg",
+    "bytes": 217769,
+    "sha256": "b0fdae56edf2af9eb49cfe39374e96eb214cc27f9e819dc022848a0a99fc75e7"
+  },
+  {
+    "file": "capturas/079-centrocampista-panel.jpg",
+    "bytes": 220415,
+    "sha256": "44accd984be26bf4a978b5fc838e03e9694ee4d4116c652a4ed4785cba5d17b4"
+  },
+  {
+    "file": "capturas/080-centrocampista-sp-instrucciones.jpg",
+    "bytes": 184400,
+    "sha256": "0a9182166b15b1e7de7ec3aa9a4d27bbd6b81af6097ccbc50a56e399c138efc2"
+  },
+  {
+    "file": "capturas/081-mc-presionante-restaurado.jpg",
+    "bytes": 226585,
+    "sha256": "52a6d6bcfb0ef240341db46c26378ba9036432eea6bb497a139175cd1c983ccc"
+  },
+  {
+    "file": "capturas/082-amc-cp-libre.jpg",
+    "bytes": 229278,
+    "sha256": "14c36bc1c9aa688a68930848bf67de83ef40b4211a40f81059a9f02da21eaee4"
+  },
+  {
+    "file": "capturas/083-amc-libre.jpg",
+    "bytes": 228272,
+    "sha256": "5cedea91b2427089c51637fe697e41bedb86d5c266936de746c3863516a3d6c6"
+  },
+  {
+    "file": "capturas/084-amc-libre-instrucciones.jpg",
+    "bytes": 220324,
+    "sha256": "e661ab58f31ca5ea16c6921ec570e1feae5b5cf902326298387407587f6c640e"
+  },
+  {
+    "file": "capturas/085-amc-segundo-delantero.jpg",
+    "bytes": 232870,
+    "sha256": "f4bcfc96f2fe813d525ab5d6a5fedd04b0f5a5a064bdc1f123bf3c5abb807056"
+  },
+  {
+    "file": "capturas/086-amc-segundo-instrucciones.jpg",
+    "bytes": 218719,
+    "sha256": "046be70acbb1f8fba18721b933446c8b4a792831d14eeeb0cf705e29ecd5ea62"
+  },
+  {
+    "file": "capturas/087-amc-restaurado.jpg",
+    "bytes": 229057,
+    "sha256": "ec2574ac2e4d290727a7ddc0d7711823833595cd1326a2764f4914979fcedd02"
+  },
+  {
+    "file": "capturas/088-extremo-sp.jpg",
+    "bytes": 222475,
+    "sha256": "140fabb73edb2e7fd0f1933fd2158acc2a545cb4cdf23508a563a9fcde7f9240"
+  },
+  {
+    "file": "capturas/089-extremo-sp-instrucciones.jpg",
+    "bytes": 184472,
+    "sha256": "ce8bf4aa31601f350cbc91bfad54322e0419b0fd4f2498e2b4a4eb6c36b3e909"
+  },
+  {
+    "file": "capturas/090-extremo-retroceso.jpg",
+    "bytes": 228288,
+    "sha256": "247f1b009a75fea41a4fe4d9d9322b61db0ae8980df4e36f295427cd7efed43f"
+  },
+  {
+    "file": "capturas/091-extremo-retroceso-instrucciones.jpg",
+    "bytes": 185427,
+    "sha256": "6e5da7ec1f381b0abcf4ae9ad955f58c6195e66a5e2fccfc712d866c43406f09"
+  },
+  {
+    "file": "capturas/092-extremo-salida-invertida.jpg",
+    "bytes": 232796,
+    "sha256": "c32c2c17c813c3c3bf8b139438ef0d11c3cc723208bc95f93c6603155349bbc7"
+  },
+  {
+    "file": "capturas/093-extremo-salida-invertida-instrucciones.jpg",
+    "bytes": 185711,
+    "sha256": "ff081e34e67a812c3f3f9e3abd52bba442262b98064113c5fa2951e2d46b626c"
+  },
+  {
+    "file": "capturas/094-extremo-estacionario.jpg",
+    "bytes": 232364,
+    "sha256": "7c134a011584409ce8b5a363e4d26cfeba24cb94efc8aae2c142f6559cf3b532"
+  },
+  {
+    "file": "capturas/095-extremo-estacionario-instrucciones.jpg",
+    "bytes": 185317,
+    "sha256": "31858916233217305973b84c0d1aca45729aacfd532aa03100dbf054e0969147"
+  },
+  {
+    "file": "capturas/096-extremo-restaurado.jpg",
+    "bytes": 223197,
+    "sha256": "751a39ab2df033166578111eca93ace8d8860ddfe72668619ade71c6436201e9"
+  },
+  {
+    "file": "capturas/097-amc-derecho-temporal.jpg",
+    "bytes": 298983,
+    "sha256": "0b476deac937f153a75ebe59e39b3f2ade19ec44547588668e1653fc474e8e6d"
+  },
+  {
+    "file": "capturas/098-cuadricula-sp.jpg",
+    "bytes": 342207,
+    "sha256": "343ac339059581eb2a917696db554d55c9b1a70fc69b309c19218c4b99827991"
+  },
+  {
+    "file": "capturas/099-vista-movimiento-sp.jpg",
+    "bytes": 283278,
+    "sha256": "b7fdb1548f59e3ca6acf12278448ae5e5638dea1bfe47551ba5990e8c011ad55"
+  },
+  {
+    "file": "capturas/100-amc-derecho-prueba.jpg",
+    "bytes": 299204,
+    "sha256": "f6edbdcfb0aafe4553926153ef2f77d5a370e1c833fa7226d339d180b0cf3412"
+  },
+  {
+    "file": "capturas/101-editor-sp.jpg",
+    "bytes": 184550,
+    "sha256": "6915685dcd46188a9a4f20246dd7900813384c6def2cef86bf234bf80f64fa41"
+  },
+  {
+    "file": "capturas/102-preview-amc-pareja.jpg",
+    "bytes": 196811,
+    "sha256": "cd3fe3c5a8bfb5d641ccf664dd3a008597ccd063314d70933f7317c7b3420bf7"
+  },
+  {
+    "file": "capturas/103-selector-posicion-sp.jpg",
+    "bytes": 251809,
+    "sha256": "78c0640dd56f9f26144015012fd42f3989e12b712fb1241abeb9ab3bb14f74cb"
+  },
+  {
+    "file": "capturas/104-menu-tactica.jpg",
+    "bytes": 300760,
+    "sha256": "3c377d986597afc8adc6ef25611fc741a2a9002edb54bbebe0aa5e030c76ace1"
+  },
+  {
+    "file": "capturas/105-guardar-tactica.jpg",
+    "bytes": 149338,
+    "sha256": "d40dc53aa628ca814b8d160c2b5b459f9d9dc836a6e22378a29fb102aa112b71"
+  },
+  {
+    "file": "capturas/106-respaldo-guardado.jpg",
+    "bytes": 301585,
+    "sha256": "9457cc41067c519eb050cd20ff39e4261068365f906340fbbdad0d7a714aa14c"
+  },
+  {
+    "file": "capturas/107-dibujo-sp-temporal.jpg",
+    "bytes": 303072,
+    "sha256": "09a225825b2a5ce5268301beac2e01177edb3586f92b2b692207504523608e4f"
+  },
+  {
+    "file": "capturas/108-amc-pareja-roles.jpg",
+    "bytes": 218140,
+    "sha256": "2fb394ac119aea7cbbd33f2523aa4e50f07a223a6406086fcb8bdded912c4111"
+  },
+  {
+    "file": "capturas/109-mediapunta-estacionario-salida.jpg",
+    "bytes": 235067,
+    "sha256": "942cd7d67abe353c8df41ab0d10e698952a5a0f1bd2503f5313142c298a69410"
+  },
+  {
+    "file": "capturas/110-canal-amc-instrucciones.jpg",
+    "bytes": 221470,
+    "sha256": "c61fbb6ceb461af0038785d829937be49e48ffbfe03ae3e31c1bdb612b203ab8"
+  },
+  {
+    "file": "capturas/111-amc-salida-instrucciones.jpg",
+    "bytes": 187171,
+    "sha256": "b2b1d454680ce8b06e2ebfbf4021824d22022e607e3a3751fba26c3f9af4eccb"
+  },
+  {
+    "file": "capturas/112-dos-delanteros-temporal.jpg",
+    "bytes": 301363,
+    "sha256": "c8073309dbad9588482c8205ceef5b6c8d93b003ab3def112c736f72e7960071"
+  },
+  {
+    "file": "capturas/113-delantero-pareja-roles.jpg",
+    "bytes": 235840,
+    "sha256": "ce440ae4b7d86dd5c4df266df0e3f455a3f69f0a2dde7af814bf2ebc5bf9b331"
+  },
+  {
+    "file": "capturas/114-delantero-salida.jpg",
+    "bytes": 237481,
+    "sha256": "2ea94e464cc999e6162acf21707e7295b107a7630cf0e54dbce7b1d553e62605"
+  },
+  {
+    "file": "capturas/115-delantero-salida-instrucciones.jpg",
+    "bytes": 187449,
+    "sha256": "380fade1ccd7926a971a97d44f2bb5c32b7525020722c1fc73e83cbe3c1cc51b"
+  },
+  {
+    "file": "capturas/116-objetivo-marca-menu.jpg",
+    "bytes": 203683,
+    "sha256": "32f5c805b95ae9ece9fa83a9bcc8395851faf4f22797e81a6e2b86bdc3b4030c"
+  },
+  {
+    "file": "capturas/117-marcar-posicion-selector.jpg",
+    "bytes": 224213,
+    "sha256": "9a43220283bf71e81acd160112b2d0bfc43ea2fb5dfa41442c6e95ba14c0cf7a"
+  },
+  {
+    "file": "capturas/118-marcar-posicion-destinos.jpg",
+    "bytes": 229128,
+    "sha256": "ffe505896b80fd57b0a7892e0f95df3489e1b7a7d738928a0772f120c80680c0"
+  },
+  {
+    "file": "capturas/119-marca-especifica.jpg",
+    "bytes": 219401,
+    "sha256": "6b28c8a3cbff40dd244db34df2d9c8dd5da525fd5311c64bad12ee68c9ebb1bf"
+  },
+  {
+    "file": "capturas/120-marca-jugador-destinos.jpg",
+    "bytes": 219967,
+    "sha256": "e082699292295639c192ba91edcc65731a38d9a5143f44a52eb40ac75c237366"
+  },
+  {
+    "file": "capturas/121-marca-normal-restaurada.jpg",
+    "bytes": 203638,
+    "sha256": "a745227aea1932bf20d8b4d4a9473a32e2616ac1057a279235b3d81b187b6174"
+  },
+  {
+    "file": "capturas/122-tres-centrales-cp.jpg",
+    "bytes": 296277,
+    "sha256": "d295595f9b12123f929f6712778c67d224c7b2d87c24173b8e04553d4a8284fe"
+  },
+  {
+    "file": "capturas/123-central-exterior-cp-menu.jpg",
+    "bytes": 229281,
+    "sha256": "9057edbb8971e8ea65ba1978527b2a61d66efd97e0dd40b3a94a21fb905786fc"
+  },
+  {
+    "file": "capturas/124-central-abierto-cp.jpg",
+    "bytes": 232453,
+    "sha256": "d63d5d26518c40a3a43208d98e3211e5c876e89132d0a0421f81ef3ff2204df3"
+  },
+  {
+    "file": "capturas/125-central-abierto-instrucciones.jpg",
+    "bytes": 218280,
+    "sha256": "bf7507d0251526bc7d90cf729612fbfc3241f812d3a54db6bb3b541913ac678d"
+  },
+  {
+    "file": "capturas/126-central-dobla.jpg",
+    "bytes": 226250,
+    "sha256": "90344d8966b39722e9baad90a84538b5081c79c9c98a7873c7db58caf05b98a2"
+  },
+  {
+    "file": "capturas/127-central-dobla-instrucciones.jpg",
+    "bytes": 219278,
+    "sha256": "4845326658d8f45cb8b65aa1a61dd7587a681dc558bfda1330fe68b9908bd21c"
+  },
+  {
+    "file": "capturas/128-doble-pivote-cp-menu.jpg",
+    "bytes": 231998,
+    "sha256": "1f898934de39dc1e5f31b9cc2fa70632a5754d6b48f0cbf53814a6d0d5972e63"
+  },
+  {
+    "file": "capturas/129-todoterreno-dm.jpg",
+    "bytes": 233410,
+    "sha256": "efbccd7f5f590ce6e7eb51f977bbe34dc31e30615292abe0ba9fd37c7e20c47d"
+  },
+  {
+    "file": "capturas/130-todoterreno-instrucciones.jpg",
+    "bytes": 219439,
+    "sha256": "765c6707d1a1c3e3f3a03d4f642aea77399bde6bd22f55d085304f5b9435a53a"
+  },
+  {
+    "file": "capturas/131-organizador-todoterreno.jpg",
+    "bytes": 230771,
+    "sha256": "bc9c63289cb06625c6ad17224a7c0b08dfaec339e76cc24520551413f58c1fed"
+  },
+  {
+    "file": "capturas/132-organizador-todoterreno-instrucciones.jpg",
+    "bytes": 220127,
+    "sha256": "c564677bd13a2efdb629cc31d667ed837a6f83b8c830406392a80bc63af0b886"
+  },
+  {
+    "file": "capturas/133-carrileros-sp-temporal.jpg",
+    "bytes": 295515,
+    "sha256": "0b5329c9b02753acad186ec6fe5ab5fdd5f21cd370e1f7f8757e08281436b2da"
+  },
+  {
+    "file": "capturas/134-central-exterior-sp-menu.jpg",
+    "bytes": 221957,
+    "sha256": "4641cc74397ab6ae92613e9e348f38dd0b68bff5817a551e392ebdc8b67f6265"
+  },
+  {
+    "file": "capturas/135-central-abierto-sp.jpg",
+    "bytes": 228321,
+    "sha256": "bc8922598bc0a81397c8162efab6523f56c2988b85fc2e2a883a860966d08c25"
+  },
+  {
+    "file": "capturas/136-central-abierto-sp-instrucciones.jpg",
+    "bytes": 184375,
+    "sha256": "edd92167781861df188dbf31fd46a7c8615e4e6defe18044c52411b39743fceb"
+  },
+  {
+    "file": "capturas/137-zaguero-abierto.jpg",
+    "bytes": 225882,
+    "sha256": "275cbbc5e85cb22f6fed7940fa190ac1ba4ff1486e80030015d03d7c88c5ba2f"
+  },
+  {
+    "file": "capturas/138-zaguero-abierto-instrucciones.jpg",
+    "bytes": 184452,
+    "sha256": "194911fd21b171079b5b6b8ef900901c2260f43dcf92f12a9b6d0afef5a9444e"
+  },
+  {
+    "file": "capturas/139-central-cobertura-abierta.jpg",
+    "bytes": 226072,
+    "sha256": "e5583929c2e17a230371ceeb26c43bb815129c6d12e45395dfdf6e8f3624865b"
+  },
+  {
+    "file": "capturas/140-central-cobertura-abierta-instrucciones.jpg",
+    "bytes": 185274,
+    "sha256": "544b58570c513c02e175696f1464a21a255f0da1c7f428f4fa8ff099ee3482e8"
+  },
+  {
+    "file": "capturas/141-carrilero-sp.jpg",
+    "bytes": 219906,
+    "sha256": "bd8cf481e16b90e435d14a8b517cb334fa9c558d0d66948e5690dc3c935f607e"
+  },
+  {
+    "file": "capturas/142-carrilero-sp-instrucciones.jpg",
+    "bytes": 184091,
+    "sha256": "e3ae7111a78dcdb5ef1282414030dee40aa37f5f57ee6d372e90b2929d6c2299"
+  },
+  {
+    "file": "capturas/143-carrilero-presionante.jpg",
+    "bytes": 217357,
+    "sha256": "765cf92093e70dd9754f44b9587d241d52eaf6ad8041c5b38c86bec5120c3239"
+  },
+  {
+    "file": "capturas/144-organizador-todoterreno-sin-tooltip.jpg",
+    "bytes": 214636,
+    "sha256": "203b991b19c9806afbc7ff7e0243db93a4c817ceba622bfe6134d2819ca344c5"
+  },
+  {
+    "file": "capturas/145-carrilero-presionante-instrucciones.jpg",
+    "bytes": 184771,
+    "sha256": "ca689c217dd65331e8fe2a19ef6aadd57e6c13be4968720665d7e96d48b47f76"
+  },
+  {
+    "file": "capturas/146-carrilero-contencion.jpg",
+    "bytes": 220193,
+    "sha256": "02fd8f246ee85f420f51fe1e2f856777466986662cafb1d8e43f13735275c070"
+  },
+  {
+    "file": "capturas/147-carrilero-contencion-instrucciones.jpg",
+    "bytes": 185190,
+    "sha256": "b0f2877ffed3b2cf41126a63a62c64b05da12c42398f5ecb67d1a5d3a27eda67"
+  },
+  {
+    "file": "capturas/148-carrileros-cp-temporal.jpg",
+    "bytes": 295375,
+    "sha256": "c6397076fcdc245b51271e44d0b196333516cb9e01e9db8df2867c359a886649"
+  },
+  {
+    "file": "capturas/149-carrilero-cp-menu.jpg",
+    "bytes": 228249,
+    "sha256": "4dee012f836f663adb5948adf87130f86466812d9a9d70d82911dea83ed2f28c"
+  },
+  {
+    "file": "capturas/150-carrilero-avanzado.jpg",
+    "bytes": 229007,
+    "sha256": "e33dd4b0408b73c6155bcb0b8268330754de2f24947ba1d8fd92197174a6332f"
+  },
+  {
+    "file": "capturas/151-carrilero-avanzado-instrucciones.jpg",
+    "bytes": 219898,
+    "sha256": "23d5f5893584b5f5deeeece04c6ff8e64f4ee738c27e5b13c88262a44ad3c2dd"
+  },
+  {
+    "file": "capturas/152-carrilero-avanzado-sin-tooltip.jpg",
+    "bytes": 213934,
+    "sha256": "1702683123d02c12aab80e7cc30226c37728ab70b90e4e37496724c83381ede9"
+  },
+  {
+    "file": "capturas/153-bandas-cp-temporal.jpg",
+    "bytes": 294469,
+    "sha256": "7bb65cab80c587769a3a609ea523ac7e9d1285e20f211fb5dd9fa9491cbac8f2"
+  },
+  {
+    "file": "capturas/154-mediocampista-banda-menu.jpg",
+    "bytes": 227693,
+    "sha256": "46153acdcfce3362ffccd261538f677f61c6c45b4c5fad2a8d82f4aaeacffff3"
+  },
+  {
+    "file": "capturas/155-mediocampista-abierto-cp.jpg",
+    "bytes": 228751,
+    "sha256": "307004af7917961564ef7e83f34d0ae07a47b923fcf22cc6d7dae286bb5a81cf"
+  },
+  {
+    "file": "capturas/156-mediocampista-abierto-instrucciones.jpg",
+    "bytes": 218314,
+    "sha256": "079566023531d95605c39a1b33d2975c4b97de409fbd9b219f3bf32069f21869"
+  },
+  {
+    "file": "capturas/157-mediocampista-abierto-sin-tooltip.jpg",
+    "bytes": 212182,
+    "sha256": "3777eb70e37ae19bf013b36ba5486c14cff2ba0ac127c0b70e7c013060a89e0f"
+  },
+  {
+    "file": "capturas/158-cargar-respaldo.jpg",
+    "bytes": 146889,
+    "sha256": "d3fd91604d4620dd97d11777ebf8775c5839128c71baa3b7d2405dabbbfeaa51"
+  },
+  {
+    "file": "capturas/159-respaldo-cargado.jpg",
+    "bytes": 295753,
+    "sha256": "06265b3dbfe7db48517116056dabc1eaf8f399947dace3c1db79991a52f292be"
+  },
+  {
+    "file": "capturas/160-spence-restaurado.jpg",
+    "bytes": 298937,
+    "sha256": "3840f86c9476f0a62c9c220bcdd7841cb08e5b7d5297ed7e197cfb1a145bd1d3"
+  },
+  {
+    "file": "capturas/161-kerkez-restaurado.jpg",
+    "bytes": 298939,
+    "sha256": "ce23e521eb93b3b78fa0ef572a0bd4957bfe6ee7d2c1e0d02432dcab1eee8a5c"
+  },
+  {
+    "file": "capturas/162-once-restaurado.jpg",
+    "bytes": 301797,
+    "sha256": "c719c3fec4475d2f089f751743d0a8fd5ded5bdb033e803bc4a4e380fe6a7252"
+  },
+  {
+    "file": "capturas/163-arquero-cp-segunda-pasada.jpg",
+    "bytes": 218448,
+    "sha256": "5d1dfb13cc6fd4b5f75624c3af33131c0df14f25bd128d3f08ca6bf633c25dfc"
+  },
+  {
+    "file": "capturas/164-portero-cp.jpg",
+    "bytes": 212782,
+    "sha256": "c0b7c0d61b5cd1f69e182dd0416cdf37d5dbba4fbf1dc16a6cbc2a710325dcd0"
+  },
+  {
+    "file": "capturas/165-portero-cp-instrucciones.jpg",
+    "bytes": 219577,
+    "sha256": "09bedc8124255dfe3de774a9cb3787c180dcfe68a3b5a42a08d0eb8acfeb7762"
+  },
+  {
+    "file": "capturas/166-portero-cp-sin-tooltip.jpg",
+    "bytes": 213812,
+    "sha256": "a22a7713e4e48506cffd1ee113e35223355ca4ac02f644bbfbd20d66d56e4272"
+  },
+  {
+    "file": "capturas/167-portero-practico-ficha.jpg",
+    "bytes": 218207,
+    "sha256": "5a5a80203b5b9118cb0a7c2ac435abb23fab2e1e20f94eba2551243a409f5234"
+  },
+  {
+    "file": "capturas/168-portero-practico-instrucciones.jpg",
+    "bytes": 221483,
+    "sha256": "df942db914401f40ed5f0f7d21d06f1ec10648e1d667a32e798c3ada4edf1993"
+  },
+  {
+    "file": "capturas/169-portero-practico-sin-tooltip.jpg",
+    "bytes": 215848,
+    "sha256": "723349658e8f70e3b9404315e55e237c799b726215bd19632ce7acd46bdc179c"
+  },
+  {
+    "file": "capturas/170-portero-libero-ficha.jpg",
+    "bytes": 218364,
+    "sha256": "b366a76ab14a9367e3e2c0eb38edde0b056006531d76f321068337fc7bb87809"
+  },
+  {
+    "file": "capturas/171-portero-sp-ficha.jpg",
+    "bytes": 217171,
+    "sha256": "ff95d72db6ab64e51205486eec3eb186130e9ff9df964784107dcd19d7e0f959"
+  },
+  {
+    "file": "capturas/172-portero-sp-instrucciones.jpg",
+    "bytes": 185498,
+    "sha256": "fc0db10c0a772129b11bb90b573947f0eb88b14a56f469a29ba3cd071437834f"
+  },
+  {
+    "file": "capturas/173-portero-entre-palos-ficha.jpg",
+    "bytes": 217068,
+    "sha256": "32ae523602991b87ce446acbf1de90b7ccbd19bcb0306af832d7862d74c3db1c"
+  },
+  {
+    "file": "capturas/174-portero-entre-palos-instrucciones.jpg",
+    "bytes": 186208,
+    "sha256": "acf963b7f2f12b40a81df78737624c18c63e1cc6668ffc915337febc7d979806"
+  },
+  {
+    "file": "capturas/175-central-salida-ficha.jpg",
+    "bytes": 225627,
+    "sha256": "0a76890acc91be62089f4750f131b8c3d8622a74f5f3b45a9bf7d860c8f220fd"
+  },
+  {
+    "file": "capturas/176-central-salida-instrucciones.jpg",
+    "bytes": 217196,
+    "sha256": "d7c096dd99a0a44d61ca2bace90eefbf7447668dfa4f10086a10f23d9fc7b32c"
+  },
+  {
+    "file": "capturas/177-defensa-central-cp-ficha.jpg",
+    "bytes": 226008,
+    "sha256": "b106bb85c35ea720d28dacb077d49ec08dffab7142aaf7deea8a15c0e0cbf28b"
+  },
+  {
+    "file": "capturas/178-defensa-central-cp-instrucciones.jpg",
+    "bytes": 215065,
+    "sha256": "8e33d4baaa9170363ca7e3ee749d709131b3b204c70bb0ab6053dcfedd3d6299"
+  },
+  {
+    "file": "capturas/179-central-avanzado-ficha.jpg",
+    "bytes": 228306,
+    "sha256": "566759f71cb968b9497e682f075281d7a85e9566927c6058dc0ae67f0ddcd4af"
+  },
+  {
+    "file": "capturas/180-central-avanzado-instrucciones.jpg",
+    "bytes": 221777,
+    "sha256": "d216d81e839915dbdbe9e6a288fcc1905bb267b796d172da1d4826bb7e1e4193"
+  },
+  {
+    "file": "capturas/181-central-avanzado-carreras.jpg",
+    "bytes": 226758,
+    "sha256": "5076c0f4fd90116b35da3569967df25434c9213bebc517771047e12f6cc6be8e"
+  },
+  {
+    "file": "capturas/182-central-practico-ficha.jpg",
+    "bytes": 223284,
+    "sha256": "e9e4c02c6e627634f9238613236ea4bce1eda4faa527fe6ed4e9400e06c46bf6"
+  },
+  {
+    "file": "capturas/183-central-practico-instrucciones.jpg",
+    "bytes": 217068,
+    "sha256": "d2dd4690dd59b673d9bce288be4dd01555ba2b20624b0187bf6e835739ae786c"
+  },
+  {
+    "file": "capturas/184-central-sp-ficha.jpg",
+    "bytes": 214895,
+    "sha256": "fdd45f987a5bf79013d760429bf23d46057e0866ca1f66f2b20e3c1c4db7d1e4"
+  },
+  {
+    "file": "capturas/185-central-sp-instrucciones.jpg",
+    "bytes": 186165,
+    "sha256": "cd5800f0231215920e7974ee35a8fe5a4e61e0319398fd57d4e625af05d324cd"
+  },
+  {
+    "file": "capturas/186-zaguero-ficha.jpg",
+    "bytes": 218172,
+    "sha256": "e0bca642c0455c5dbb4c6b41f2a082486b2ca2b0a15083c5d3cfde2fa99a6ae3"
+  },
+  {
+    "file": "capturas/187-zaguero-instrucciones.jpg",
+    "bytes": 186106,
+    "sha256": "bb888db8e94d608ee0cc0c328a89ab82444b2388d9e5cf9e70589f2f3134166f"
+  },
+  {
+    "file": "capturas/188-central-cobertura-ficha.jpg",
+    "bytes": 218591,
+    "sha256": "d5fcb32569c993cf31d76e766a226ce4ca75757da65ed00d37d998152b85ff4a"
+  },
+  {
+    "file": "capturas/189-central-cobertura-instrucciones.jpg",
+    "bytes": 187634,
+    "sha256": "cfe5e1b75a2388ba552b90c2270c998b57043b85eb7649d203cf6047d907872e"
+  },
+  {
+    "file": "capturas/190-lateral-interior-ficha.jpg",
+    "bytes": 236609,
+    "sha256": "570b4d02fc51851088981abc68f16fa1d04818c09c4e8d6635d8af060ea4587c"
+  },
+  {
+    "file": "capturas/190-lateral-invertido-ficha.jpg",
+    "bytes": 259431,
+    "sha256": "9f75d60996553fa9d790f315d517d92ad233a5beda02f6d72016a86ee53f91a8"
+  },
+  {
+    "file": "capturas/191-lateral-interior-instrucciones.jpg",
+    "bytes": 215258,
+    "sha256": "8072411c26b78c23b17401c705068e00f82d6be3e18309070108e7c9384239cd"
+  },
+  {
+    "file": "capturas/192-lateral-defensivo-ficha.jpg",
+    "bytes": 234915,
+    "sha256": "81142fbf253a30269a730ee75c57022ae32401c25d0d7178570854d01d75a097"
+  },
+  {
+    "file": "capturas/193-lateral-defensivo-instrucciones.jpg",
+    "bytes": 215447,
+    "sha256": "bb715839a5a1e3d6069d2d4c49449d2f42bf7238d0c655495f1503444b4ee621"
+  },
+  {
+    "file": "capturas/194-lateral-ofensivo-cp-ficha.jpg",
+    "bytes": 233022,
+    "sha256": "fa6ca3c36308e28e003450035d6fad2a255ad21a91611139db87cc587e169d3f"
+  },
+  {
+    "file": "capturas/195-lateral-ofensivo-cp-instrucciones.jpg",
+    "bytes": 215709,
+    "sha256": "5a98b8ae5224fc2a6af8e14dcf0d08c807064efbffa919bba113c0f98d0c9e73"
+  },
+  {
+    "file": "capturas/196-carrilero-interior-ficha.jpg",
+    "bytes": 235218,
+    "sha256": "885924b0e823a5706bbab1beb23d5c7a708a4e6b69e57b031f242fc0f0d746b0"
+  },
+  {
+    "file": "capturas/197-carrilero-interior-instrucciones.jpg",
+    "bytes": 215358,
+    "sha256": "8766a633005087be737324cb31ea12343fec7f4d3c14b708d06abba3a3b6e535"
+  },
+  {
+    "file": "capturas/198-carrilero-organizador-ficha.jpg",
+    "bytes": 230934,
+    "sha256": "2fb20c8fb843f2d753872e1a5eb029c8094795a05de308cb8690c7f495d3b923"
+  },
+  {
+    "file": "capturas/199-carrilero-organizador-instrucciones.jpg",
+    "bytes": 215878,
+    "sha256": "defc1ae11781b332315e8bca244344a985ab3dc0b0db679bebd29e5c61c0db7d"
+  },
+  {
+    "file": "capturas/200-lateral-sp-ficha.jpg",
+    "bytes": 212661,
+    "sha256": "e52a7e2470fc65002656d3a047e7316233e0d5606582b84ac6dcbd97b310de53"
+  },
+  {
+    "file": "capturas/201-lateral-sp-instrucciones.jpg",
+    "bytes": 186288,
+    "sha256": "8a693c0a5e3f926d25ab02c9c41d0e61958d00ed399baf291622b80d9497becd"
+  },
+  {
+    "file": "capturas/202-lateral-presionante-ficha.jpg",
+    "bytes": 218520,
+    "sha256": "6bb9f91fc1347b6cb3eea8929a4aacfb61cd1468181d4334dfbefc00a7a18015"
+  },
+  {
+    "file": "capturas/203-lateral-presionante-instrucciones.jpg",
+    "bytes": 186853,
+    "sha256": "0b54812d6b792f0fcb755c190bbd39ab0177ddbd16e96dcef68635a8e48ee2ca"
+  },
+  {
+    "file": "capturas/204-lateral-contencion-ficha.jpg",
+    "bytes": 223857,
+    "sha256": "2bcd56cf1539b8380ec7277999f79d572113cb0994ce1c0f101e2f6dde4e2168"
+  },
+  {
+    "file": "capturas/205-lateral-contencion-instrucciones.jpg",
+    "bytes": 187180,
+    "sha256": "29dcd197e81ca9b364310fba7450d038179fdda6ef49b696a7ed5f4dd5889d75"
+  },
+  {
+    "file": "capturas/206-organizador-retrasado-ficha.jpg",
+    "bytes": 230610,
+    "sha256": "e43fd8e3fbe7556629fcad3075445dd566486d800c29b76c03cd26068e321445"
+  },
+  {
+    "file": "capturas/207-organizador-defensivo-instrucciones.jpg",
+    "bytes": 218163,
+    "sha256": "ef3b46ee697cbe038b1739b24b60f308f1d931c14bf870104d64a0bbb4da353a"
+  },
+  {
+    "file": "capturas/208-mediocentro-defensivo-cp-ficha.jpg",
+    "bytes": 234168,
+    "sha256": "cd054c75a3a9005dd1b59eb90c43f42a2e932fd40a2c549e30ff58246b99bf1b"
+  },
+  {
+    "file": "capturas/209-mediocentro-defensivo-cp-instrucciones.jpg",
+    "bytes": 217968,
+    "sha256": "c9041402c3fac512f87c73c070a209b780cd884e8bc7f2514ba896e6c7742f72"
+  },
+  {
+    "file": "capturas/210-medio-cierre-ficha.jpg",
+    "bytes": 230967,
+    "sha256": "4c7d3b4ee4cadc067f1c3a4af3f92bc7b97c2da625f3e85d613eb49d0e739e7e"
+  },
+  {
+    "file": "capturas/211-medio-cierre-instrucciones.jpg",
+    "bytes": 216353,
+    "sha256": "9b6211c963251d72252ee0f52720ece5a613b08ba860cf6e0d8c7215ef7984b1"
+  },
+  {
+    "file": "capturas/212-mediocentro-fijo-ficha.jpg",
+    "bytes": 222726,
+    "sha256": "002745a2b2290e31bb923c9d0a1856812d2431909ed6112a6c09268a893a00ed"
+  },
+  {
+    "file": "capturas/213-mediocentro-fijo-instrucciones.jpg",
+    "bytes": 187577,
+    "sha256": "6967142a9d03b0c0d4dbffd5f122c7ed9d6efb095c2106616c593c14559f6438"
+  },
+  {
+    "file": "capturas/214-mediocentro-defensivo-sp-ficha.jpg",
+    "bytes": 217902,
+    "sha256": "9a371bbe898e36282249891c7e4b95d07b538c49783c4df0a2af7e98e4fdb15c"
+  },
+  {
+    "file": "capturas/215-mediocentro-defensivo-sp-instrucciones.jpg",
+    "bytes": 187438,
+    "sha256": "f41e4776dd17b766e4d67433c57e52325c0f2281ac1169e9b6d0482145acc60d"
+  },
+  {
+    "file": "capturas/216-mediocentro-repliegue-ficha.jpg",
+    "bytes": 222179,
+    "sha256": "80c0c87c4d2d0880bc6961f8f726ef5749e2ba4d9fefce3f65b53e6bf716f7f0"
+  },
+  {
+    "file": "capturas/217-mediocentro-repliegue-instrucciones.jpg",
+    "bytes": 187609,
+    "sha256": "4e61984f00f37f5598663c10c22400195ab5e4a4228f3e0afd8927b2d5e56dcc"
+  },
+  {
+    "file": "capturas/218-centrocampista-cp-ficha.jpg",
+    "bytes": 233440,
+    "sha256": "01b96890ba8b54420335b8925efc3a3693d7237ce2b50fad8b88827abd44b473"
+  },
+  {
+    "file": "capturas/219-centrocampista-cp-instrucciones.jpg",
+    "bytes": 215733,
+    "sha256": "3d867c996f623bfeac8a3900b0fe536d612fda6e9a1e481eb759673816f18c3a"
+  },
+  {
+    "file": "capturas/220-mediapunta-cp-ficha.jpg",
+    "bytes": 229557,
+    "sha256": "711a95dda4a9bd107780969d1ee406728930d6bc355e6c7dd7bf51c7a1fadf17"
+  },
+  {
+    "file": "capturas/221-mediapunta-cp-instrucciones.jpg",
+    "bytes": 215587,
+    "sha256": "c457afef850f284af5890d78ec139a3f941f49f810d3c189add36394742d74c9"
+  },
+  {
+    "file": "capturas/222-organizador-adelantado-sin-tooltip.jpg",
+    "bytes": 217529,
+    "sha256": "fde47f9820794db58161834e6f032ed8c17b80cc51b6a5571d1b2f69ccde61bc"
+  },
+  {
+    "file": "capturas/223-mediocampista-abierto-central-ficha.jpg",
+    "bytes": 233446,
+    "sha256": "3587602267cc384681d15f399c1ace1bfccbdbe9cbaa5e75ac6c94405f2d7559"
+  },
+  {
+    "file": "capturas/224-mediocampista-abierto-central-instrucciones.jpg",
+    "bytes": 216732,
+    "sha256": "8feafd27c2264d62416e05bd44124006f118cad5973cbc6f527c67ed4ebe49d7"
+  },
+  {
+    "file": "capturas/225-mediocampista-organizador-ficha.jpg",
+    "bytes": 226834,
+    "sha256": "d816bed7eabd1bf171ab21365b504de25866c82d953b3d8af939da10fe8a2e9e"
+  },
+  {
+    "file": "capturas/226-mediocampista-organizador-instrucciones.jpg",
+    "bytes": 217727,
+    "sha256": "7443237c29d43d23d6687def597de54f7f14d5a0b70100ea41fb1abf2a917db8"
+  },
+  {
+    "file": "capturas/227-delantero-interior-ficha.jpg",
+    "bytes": 232807,
+    "sha256": "812b1ad6f4103914d08218b209662116d5d4c8e96d11cf6fb7af0e69c2fdf1e1"
+  },
+  {
+    "file": "capturas/228-delantero-interior-instrucciones.jpg",
+    "bytes": 222518,
+    "sha256": "c30e9b30640e0840d04b3c5251ed8231886151b46500b66d6cff6a30f4790361"
+  },
+  {
+    "file": "capturas/229-extremo-cp-ficha.jpg",
+    "bytes": 233242,
+    "sha256": "21fadcc65d32721eaad977ddea5c9a3961fbcb6d393f79f8077869667741128b"
+  },
+  {
+    "file": "capturas/230-extremo-cp-instrucciones.jpg",
+    "bytes": 221361,
+    "sha256": "1acec06d89740c4578035e0a8034bb59dafdb111e744b1e1107b5f9a635e0cb0"
+  },
+  {
+    "file": "capturas/231-extremo-organizador-ficha.jpg",
+    "bytes": 227766,
+    "sha256": "edef7e51ad226c4b3e4cb960e25044a012f35a74616785517fb122f2b7f8fc2b"
+  },
+  {
+    "file": "capturas/232-extremo-organizador-instrucciones.jpg",
+    "bytes": 224341,
+    "sha256": "0b3a9b544f93111275f5922e432a151c0ff255a99086c36f74450bc02f86602c"
+  },
+  {
+    "file": "capturas/233-delantero-abierto-ficha.jpg",
+    "bytes": 230356,
+    "sha256": "afa8d75705464318a220f2863192a712aeb306449a4967dbf986f6e373ab57a1"
+  },
+  {
+    "file": "capturas/234-delantero-abierto-instrucciones.jpg",
+    "bytes": 222884,
+    "sha256": "7c02c2142a22a728a3e6250420eb3a5d9f487429fe62c70e207655dce9669119"
+  },
+  {
+    "file": "capturas/235-extremo-invertido-ficha.jpg",
+    "bytes": 233075,
+    "sha256": "53d802fb7bb7eadf0997519fb3b96c5dde17b224fdf578190f9908fd70734c52"
+  },
+  {
+    "file": "capturas/236-extremo-invertido-instrucciones.jpg",
+    "bytes": 221909,
+    "sha256": "008d28500463c2e9d7bd0d6e16b784449dc35b53cb6afb836cfde54abe168251"
+  },
+  {
+    "file": "capturas/237-mediapunta-estacionario-ficha.jpg",
+    "bytes": 226180,
+    "sha256": "2a6d8cb3b689c7d6e7950f53eb8520b78ce6ec6f52c8983c01b1f61592cdc3c0"
+  },
+  {
+    "file": "capturas/238-mediapunta-estacionario-instrucciones.jpg",
+    "bytes": 186259,
+    "sha256": "bd59d1d56266bf9ed0653809caf6518ccaca333772c441bc54f850ce252f4e27"
+  },
+  {
+    "file": "capturas/239-mediapunta-ficha.jpg",
+    "bytes": 212385,
+    "sha256": "050120112bd05445fa31c37d7006b1572d4d53692e13502b23efc4342515136c"
+  },
+  {
+    "file": "capturas/240-mediapunta-instrucciones.jpg",
+    "bytes": 185349,
+    "sha256": "ae731f4e72668930aa902995319e967d00e1f728020974df9109626514a23008"
+  },
+  {
+    "file": "capturas/241-mediapunta-retroceso-ficha.jpg",
+    "bytes": 226485,
+    "sha256": "4f33c552554c2998e6dfc09b931e5c923a7052eccc98fac2eaeeec3fdc360959"
+  },
+  {
+    "file": "capturas/242-mediapunta-retroceso-instrucciones.jpg",
+    "bytes": 186374,
+    "sha256": "dc55465c6afa769c0e8f07a6e7f14cd8006b738891db151cca8ebe0c1fe08440"
+  },
+  {
+    "file": "capturas/243-organizador-adelantado-atributos.jpg",
+    "bytes": 228858,
+    "sha256": "a84103a31ff9fba635b2d293c8f8c340048608b1a10944f180951c2a4509f38b"
+  },
+  {
+    "file": "capturas/244-formacion-relevamiento-doble-pivote.jpg",
+    "bytes": 295869,
+    "sha256": "289261d357f8ecfd69079bb4e8349cf2a753bdf8af579737ecc62a141f0e7217"
+  },
+  {
+    "file": "capturas/245-mediocentro-presionante-ficha.jpg",
+    "bytes": 227259,
+    "sha256": "6bf94def53c07f3a068be0886d4c782fd1540cfe6466d2386896e1d3445fe59c"
+  },
+  {
+    "file": "capturas/246-mediocentro-presionante-instrucciones.jpg",
+    "bytes": 184883,
+    "sha256": "9ae8089e4cbf4cc660b435c981ffa30e08737068be67a57650172a21e979e283"
+  },
+  {
+    "file": "capturas/247-mediocentro-cobertura-abierta-ficha.jpg",
+    "bytes": 226789,
+    "sha256": "2ebf619b6f752b3b48fb6e8dfd48cc91ff1d2d8e1d9e19fb2f03ca3b73bd0d06"
+  },
+  {
+    "file": "capturas/248-cobertura-abierta-instrucciones.jpg",
+    "bytes": 185782,
+    "sha256": "d537274a499db5b26371ffb73608b312d5f32ef9c27235d0da42de8ca83f814e"
+  },
+  {
+    "file": "capturas/249-medio-abierto-ficha.jpg",
+    "bytes": 216223,
+    "sha256": "bf36b0f0f949c05c19c52f9f34b84299dcefb48541a9d200bb465a89c68e61a7"
+  },
+  {
+    "file": "capturas/250-medio-abierto-instrucciones.jpg",
+    "bytes": 185139,
+    "sha256": "e0c519d1c1d840cf046211cdedc8e7d97cbf7326b15f72feecc2bbeb36f28111"
+  },
+  {
+    "file": "capturas/251-medio-abierto-retroceso-ficha.jpg",
+    "bytes": 227378,
+    "sha256": "f8a6441a0c2bb7191c9b8bf5b5b4e21c199811c481448be4068e5c5b54b10995"
+  },
+  {
+    "file": "capturas/252-medio-abierto-retroceso-instrucciones.jpg",
+    "bytes": 186131,
+    "sha256": "d346c1caf4b783b10678d356aa71286bb249991c24a2b5f292ed69fa47251c3e"
+  },
+  {
+    "file": "capturas/253-medio-abierto-estacionario-ficha.jpg",
+    "bytes": 228658,
+    "sha256": "c2eab209cf285f95aae0f0c78c159b2b820fd19275a9096627e19dc9b49bef23"
+  },
+  {
+    "file": "capturas/254-medio-abierto-estacionario-instrucciones.jpg",
+    "bytes": 185923,
+    "sha256": "9e5a11b327c0b81a1a86fad0f754475e51a772e29fff8ff7cf24f9c775b5a051"
+  },
+  {
+    "file": "capturas/255-delantero-retroceso-ficha.jpg",
+    "bytes": 233762,
+    "sha256": "508d3774f79957db6c94f0ed9900e2be9fbce545e048597a2b67b95ec1348abe"
+  },
+  {
+    "file": "capturas/256-delantero-retroceso-instrucciones.jpg",
+    "bytes": 184535,
+    "sha256": "646aaa51ebb49674bd3e0638abc17905cad422444a5d05a1e6385e6776f3fbca"
+  },
+  {
+    "file": "capturas/257-delantero-centro-sp-ficha.jpg",
+    "bytes": 218851,
+    "sha256": "750e05ba5edf5f4ffea8d12c5fea0a7ad2c2942f4ccb7c4cd7cac87e5a764343"
+  },
+  {
+    "file": "capturas/258-delantero-centro-sp-instrucciones.jpg",
+    "bytes": 183637,
+    "sha256": "8e392c6f2257287b2bd2b48e57a7e4a4f92f48b1b860879e22e20933eac2ea18"
+  },
+  {
+    "file": "capturas/259-delantero-estacionario-ficha.jpg",
+    "bytes": 233591,
+    "sha256": "d46fe589fb43247f3a64afa8bd7333200eddebd82e9b08d956b1c3d446e44414"
+  },
+  {
+    "file": "capturas/260-delantero-estacionario-instrucciones.jpg",
+    "bytes": 184424,
+    "sha256": "067b3b58684b9804953db6e7375e532c123ea1cd2c53609e4987dfc317074463"
+  },
+  {
+    "file": "capturas/261-delantero-apoyo-ficha.jpg",
+    "bytes": 233319,
+    "sha256": "678cb92daa30b3bfe4c096cb3b8f76c6a63b84c0f0afc552d9c82d251c6c74d4"
+  },
+  {
+    "file": "capturas/262-delantero-apoyo-instrucciones.jpg",
+    "bytes": 212276,
+    "sha256": "35ce98266baa0cc9a7f6650d58f104656dce3a76500d9f859a79a0347859ced5"
+  },
+  {
+    "file": "capturas/263-delantero-centro-cp-ficha.jpg",
+    "bytes": 227681,
+    "sha256": "5171749d868ee1acacb8b0167d4a516b4e8093dc657c0a521af3ac497e2c77a0"
+  },
+  {
+    "file": "capturas/264-delantero-centro-cp-instrucciones.jpg",
+    "bytes": 211361,
+    "sha256": "e7982854b64e5fe690421c2ba73ebebd4097151b95f75c966e8e67653e84f0d2"
+  },
+  {
+    "file": "capturas/265-delantero-torre-ficha.jpg",
+    "bytes": 228714,
+    "sha256": "030bc30c981aa654bfa73415ab7e909b702fad9a60f9332c7300cc5152285b93"
+  },
+  {
+    "file": "capturas/266-delantero-torre-instrucciones.jpg",
+    "bytes": 211941,
+    "sha256": "f3bbe410424766f27f24e2b7356b295e6152cbeaa4fb5b344d3ecc9c850f0107"
+  },
+  {
+    "file": "capturas/267-ariete-ficha.jpg",
+    "bytes": 227738,
+    "sha256": "19800916127795a4695e8bd531b223e107f889920dd4fe350c5ceaa09156cd66"
+  },
+  {
+    "file": "capturas/268-ariete-instrucciones.jpg",
+    "bytes": 210756,
+    "sha256": "16b5bf4808943a56c88c4c910cec22038a453fd42a6e88e19a5a6b2e19b2c269"
+  },
+  {
+    "file": "capturas/269-delantero-entre-lineas-ficha.jpg",
+    "bytes": 229123,
+    "sha256": "d96da8f6893c999cd92f47ec855e222e5f8ecdc3837622d2afae2de5288b0d98"
+  },
+  {
+    "file": "capturas/270-delantero-entre-lineas-instrucciones.jpg",
+    "bytes": 212332,
+    "sha256": "82b4fb76a36a014ee236ceee03af958af159af5dade79f9fb6c7739c95cf4a76"
+  },
+  {
+    "file": "capturas/271-falso-nueve-ficha.jpg",
+    "bytes": 226451,
+    "sha256": "714f5f88dfa7d6365e8a28399128b0fe4d2c6c768ba765bf86a22d7b1b09f224"
+  },
+  {
+    "file": "capturas/272-falso-nueve-instrucciones.jpg",
+    "bytes": 211360,
+    "sha256": "4301aff02e828b7c9ec555ab5acca911888f9c6396cd445bba695ab2e570f333"
+  },
+  {
+    "file": "capturas/273-todoterreno-aguantar-confirmado.jpg",
+    "bytes": 213945,
+    "sha256": "c595b57a8460b7f2882fc9dab7744a9119dd29835846f936020a9fca296d60ce"
+  },
+  {
+    "file": "capturas/274-central-abierto-aguantar-confirmado.jpg",
+    "bytes": 212562,
+    "sha256": "ff3d628476b07e936b8564a6efc59017fa53e68271fed0a77f4bc147eb37057c"
+  },
+  {
+    "file": "capturas/275-central-dobla-aguantar-confirmado.jpg",
+    "bytes": 213658,
+    "sha256": "210bc938ca339900cfe774e92c09aac8042a8d03186c6232f33350a9a537af96"
+  },
+  {
+    "file": "capturas/276-colectiva-pases-directos.jpg",
+    "bytes": 217973,
+    "sha256": "0cf8a35cc5546377b4a85d148dad7bfa3f5190d08db2ffbc4e62f101da5c0761"
+  },
+  {
+    "file": "capturas/277-colectiva-ritmo.jpg",
+    "bytes": 221847,
+    "sha256": "a58b7e95866cdde97fd60c114e8b6d9fa19ad6325e507e459a462480233cbb76"
+  },
+  {
+    "file": "capturas/278-colectiva-amplitud.jpg",
+    "bytes": 219816,
+    "sha256": "dc37c5ed330dc416a3a9f2587145d5f7906f83778fe85f2f8234f5dcf5a2976d"
+  },
+  {
+    "file": "capturas/279-colectiva-transicion-ofensiva.jpg",
+    "bytes": 213528,
+    "sha256": "52541884b197e46b1549c54cdc8df15560c805dcfe1c8dfa90d8dc5e86033236"
+  },
+  {
+    "file": "capturas/280-colectiva-libertad.jpg",
+    "bytes": 213325,
+    "sha256": "868186ad870728a2fac5dd4c389efd57ca030bdf337a72285dcb07e7aa9eb881"
+  },
+  {
+    "file": "capturas/281-colectiva-perder-tiempo.jpg",
+    "bytes": 210864,
+    "sha256": "1e4d1712985d39f1424e39b61d16662971f74855e8ce5167e59159b07d90d914"
+  },
+  {
+    "file": "capturas/282-colectiva-balon-parado.jpg",
+    "bytes": 207981,
+    "sha256": "51f6aca16f19183c05c3a64d9c70ef00a316d6f0552641798b61bf547db2ca9d"
+  },
+  {
+    "file": "capturas/283-colectiva-regate.jpg",
+    "bytes": 200312,
+    "sha256": "2f5875b4bcd44e8d130dfeb0534c1c3882c9e92ec7c370ec2418b628ce5c9fc3"
+  },
+  {
+    "file": "capturas/284-regate-prueba-animar.jpg",
+    "bytes": 198368,
+    "sha256": "54ff4886eee3555ef516393339e76cae4fdf6cbfce7b07444ee3a465f020a4c0"
+  },
+  {
+    "file": "capturas/285-regate-compartido-subfases.jpg",
+    "bytes": 217699,
+    "sha256": "ae009205a666b3e14a479f15212ae82e46debb1d8e10306fdb148527282cb73d"
+  },
+  {
+    "file": "capturas/286-colectiva-paciencia.jpg",
+    "bytes": 200609,
+    "sha256": "eb83f673c868ce9703f74d02677e9f5b6e6990801e0f95e23ac07ff50ad57b28"
+  },
+  {
+    "file": "capturas/287-colectiva-disparos.jpg",
+    "bytes": 198171,
+    "sha256": "b0cb50f1c8ad5490d1d0620259bc464271a61213d6b1c8db3041bb30946da9fc"
+  },
+  {
+    "file": "capturas/288-colectiva-centros.jpg",
+    "bytes": 221641,
+    "sha256": "1db0bf6ee39c22c69642ce636dfecda115aa206fbb8cefde453b3249d4f9f38b"
+  },
+  {
+    "file": "capturas/289-colectiva-carreras-apoyo.jpg",
+    "bytes": 198109,
+    "sha256": "7922c139f742602e54e168b49005246c728226ae3b17fbea55beffab4bf60d0f"
+  },
+  {
+    "file": "capturas/290-carreras-interiores-equilibradas.jpg",
+    "bytes": 191463,
+    "sha256": "44cd74643e81031e7176ac22f169a133de2b03f5a88e0972e79aa3553ecbfcf3"
+  },
+  {
+    "file": "capturas/291-doblar-ambas-bandas.jpg",
+    "bytes": 198037,
+    "sha256": "3de704c7eb35bda0c747eaefebd421c0d20bd3837ee899d410e73205deef11cf"
+  },
+  {
+    "file": "capturas/292-colectiva-avance.jpg",
+    "bytes": 196618,
+    "sha256": "63531dfcb48569a47e2dd1cf71b88f561d3db68c493d28fbfead3492ee560873"
+  },
+  {
+    "file": "capturas/293-colectiva-recepcion.jpg",
+    "bytes": 204166,
+    "sha256": "cb1882ced7d1ba76d8f5f49339f5c19bb034e8c6619888677b756359e5e035f7"
+  },
+  {
+    "file": "capturas/294-colectiva-estrategia-previa.jpg",
+    "bytes": 207603,
+    "sha256": "59cabf768c6bec964639f16aaa0e89cf64b044aa505b72dbfa0af169169520f5"
+  },
+  {
+    "file": "capturas/295-colectiva-saques-meta.jpg",
+    "bytes": 202528,
+    "sha256": "5df5d6e167151090cb36676e98dc4502bfed591f16c162e7d84e466e83e6a74c"
+  },
+  {
+    "file": "capturas/296-colectiva-velocidad-portero.jpg",
+    "bytes": 195109,
+    "sha256": "effc82ddcf5196ac67161c094aecb9cd0c7cd33f318df3c724d7ccb57a6c7a1b"
+  },
+  {
+    "file": "capturas/297-colectiva-destino-portero.jpg",
+    "bytes": 195616,
+    "sha256": "81d95d1b17568bf7f8d041c833b2313066fdacf0607dc3209df92398909aee55"
+  },
+  {
+    "file": "capturas/298-colectiva-centros-rivales.jpg",
+    "bytes": 188543,
+    "sha256": "c4f87dc141a8348d0fc3ef7ac5b4df20d058aef7c64117f62046f86ef38cdc38"
+  },
+  {
+    "file": "capturas/299-colectiva-linea-presion.jpg",
+    "bytes": 209053,
+    "sha256": "053b5dc5dc06ac407bbf608ae0d23944b5fad461392d59ef46c4aebafae677da"
+  },
+  {
+    "file": "capturas/300-colectiva-linea-defensiva.jpg",
+    "bytes": 228845,
+    "sha256": "ddc6e40173e741d7c46d425fe5fe99299a1edbe476cc681a280d76be259a03cc"
+  },
+  {
+    "file": "capturas/301-colectiva-comportamiento-linea.jpg",
+    "bytes": 194738,
+    "sha256": "833e3c828ee505a0f101a5416bc1ca8c388b92c13db4878ec41b93483d68692e"
+  },
+  {
+    "file": "capturas/302-colectiva-activar-presion.jpg",
+    "bytes": 222952,
+    "sha256": "d407e19beffc60e2a9faebbdd78b846146f31033a57117606355eaa8eef89ca9"
+  },
+  {
+    "file": "capturas/303-colectiva-transicion-defensiva.jpg",
+    "bytes": 221673,
+    "sha256": "349897cea3788837c06a66ee381c06942f17b15313bad11b50e6945274c9bc29"
+  },
+  {
+    "file": "capturas/304-colectiva-entradas.jpg",
+    "bytes": 208171,
+    "sha256": "cdf4f8c5ba7a431e1e2511eaf81764d7ea51bae582e1ad3a206210ffe2696ac8"
+  },
+  {
+    "file": "capturas/305-colectiva-trampa-presion.jpg",
+    "bytes": 198598,
+    "sha256": "4e74be9a71e365ee5f1ad6e604ffa9edcb83530ca4674acee69f9a6608092f06"
+  },
+  {
+    "file": "capturas/306-trampa-presionar-fuera.jpg",
+    "bytes": 197615,
+    "sha256": "de53479428d3a51afe46d46aad89857060c422c1e6e88ca4c068d3d72316be85"
+  },
+  {
+    "file": "capturas/307-colectiva-portero-rival.jpg",
+    "bytes": 198121,
+    "sha256": "51dae4ffd49cee91a053e2a3f01a5d819365c41a2196e095d51fa5c5eec0449c"
+  },
+  {
+    "file": "capturas/308-trampa-compartida-subfases.jpg",
+    "bytes": 196965,
+    "sha256": "3b5738dcb390e126a1c3a69c75573c2f4fc6fd99caeafb4003c8b7e9adee38f3"
+  },
+  {
+    "file": "catalogo-para-reconstruccion.json",
+    "bytes": 474941,
+    "sha256": "2eb4cc08492106d0c7e456f5e15d35745feaa0485081eaa971eba57f08f570d0"
+  },
+  {
+    "file": "cobertura-y-pendientes.json",
+    "bytes": 656,
+    "sha256": "c990725bc774c00869b665b723aa81f4b588ce8f750c17f1f38fbaa863a2283b"
+  },
+  {
+    "file": "crear_reporte_relevamiento_fm26.py",
+    "bytes": 66355,
+    "sha256": "e82fdd225445a7708b99426a10bc7ac46051112c6b995fe78b7cd68d61c79667"
+  },
+  {
+    "file": "INFORME-INTEGRAL.md",
+    "bytes": 6288,
+    "sha256": "e173e3125cefe0a2803b54308d2c96a89d9f0d9baebd49156a45ea93483e3fa0"
+  },
+  {
+    "file": "matriz-instrucciones-observadas.json",
+    "bytes": 46809,
+    "sha256": "c79ca17270e143e2d9d7f219832a9fb6598c343b7757b7daf3dfce0332c98635"
+  },
+  {
+    "file": "MEJORAS-DE-INTERFAZ.md",
+    "bytes": 11064,
+    "sha256": "e9ae88b8dd99cae6e04c881a7d7887d0a24045fdd924faffff1b83b4d1ee2b0c"
+  },
+  {
+    "file": "observaciones-ui.json",
+    "bytes": 93042,
+    "sha256": "2cbd1ddae54b462312565322b8371a1960aa3e572cd5f639f8e9a86647b9bd80"
+  },
+  {
+    "file": "PENDIENTES.md",
+    "bytes": 2535,
+    "sha256": "5c9686bb4e85dfd41c012309041fe86dc0fa82d7dc0d4fd60179c6ebeef98545"
+  },
+  {
+    "file": "PROMPT-PARA-OTRA-IA.md",
+    "bytes": 6206,
+    "sha256": "9e7c766eddfe18be0b530edccb7eac51c9ee97df7678e115db1e114a8b7c8ec6"
+  },
+  {
+    "file": "referencias-interfaz/mi-tactica-prueba.png",
+    "bytes": 157935,
+    "sha256": "233cc1c114e750818fe389c456f25ba4905e447c2a8cade271dcdb64548e71d9"
+  },
+  {
+    "file": "referencias-interfaz/propuestas-escritorio-prueba.png",
+    "bytes": 101327,
+    "sha256": "032f15088807ddc34ce094c92f2f08264e8585005dec5ab87a83d11b0ae16b30"
+  },
+  {
+    "file": "referencias-interfaz/propuestas-ventana-angosta-prueba.png",
+    "bytes": 64555,
+    "sha256": "1fe1113f4b6448e9024a072e6435579cb51a98d19d06d7873e4e032f6bbffd36"
+  },
+  {
+    "file": "relevar_textos_fm26.py",
+    "bytes": 4413,
+    "sha256": "31ae8600c626357c5eadec2229f4db38e08a92d6975f6aab81951e5f589c5f4d"
+  },
+  {
+    "file": "REPORTE.md",
+    "bytes": 166040,
+    "sha256": "283fa68747bd8a80ae57d9d6bd27158f3b5f1c1117ced8382c9ffd61e1e5bf5b"
+  },
+  {
+    "file": "resumen-verificacion.json",
+    "bytes": 687,
+    "sha256": "54d41be46c03d90b1dd9c46b7a6b647d24cb1a935e67528f7d302c42db481502"
+  },
+  {
+    "file": "textos-instalacion.json",
+    "bytes": 1209486,
+    "sha256": "25dfcfa1d638470a5959c3ad1a7f5513fe9939621af480932ab4cdfb88083296"
+  },
+  {
+    "file": "verificacion-adicional-mecanicas.json",
+    "bytes": 1152,
+    "sha256": "4a4439654d7171498bb1e4bf3046c5a2f2332696c04723f563b1e1d738be3dc6"
+  },
+  {
+    "file": "verificacion-adicional-roles.json",
+    "bytes": 73347,
+    "sha256": "f59d0b1b3571c353cc01abe7df17fae70c678bbb4c5a028d614c1005ba80c0bf"
+  },
+  {
+    "file": "verificacion-colectivas.json",
+    "bytes": 13726,
+    "sha256": "9e53c11640d153986cb11e0ff51bd7af4317d53687466c06db47d4b29af25bb8"
+  }
+]

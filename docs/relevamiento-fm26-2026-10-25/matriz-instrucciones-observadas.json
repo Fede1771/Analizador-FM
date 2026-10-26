@@ -1,0 +1,1453 @@
+[
+  {
+    "role": "ball_playing_goalkeeper_ip",
+    "position_family": "GK",
+    "scope": "position_panel",
+    "evidence": "capturas/004-instrucciones-arquero-cp.jpg",
+    "locked_values": {
+      "attacking_width_ip": "Standard",
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Standard",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "shoot_ip": "Standard",
+      "passing_risk_ip": "Take More Risks",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "dribbling_frequency_ip",
+      "passing_directness_ip"
+    ],
+    "applicability": "Observed context only; no generalization to other roles."
+  },
+  {
+    "role": "sweeper_keeper_oop",
+    "position_family": "GK",
+    "scope": "position_panel",
+    "evidence": "capturas/010-instrucciones-portero-sp.jpg",
+    "locked_values": {
+      "pressing_oop": "Standard",
+      "marking_oop": "Standard",
+      "marking_target_oop": "Standard"
+    },
+    "editable_groups": [
+      "tackling_oop"
+    ],
+    "applicability": "Observed context only; no generalization to other goalkeeper roles."
+  },
+  {
+    "position": "MC",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/067-mcp-sp-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "More Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "pressing_central_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC-left",
+    "scope": "Posición",
+    "evidence": "capturas/222-organizador-adelantado-sin-tooltip.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "No",
+      "passing_risk_ip": "Take More Risks",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "advanced_playmaker_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/080-centrocampista-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "central_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/074-mc-fijo-sp-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "Less Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "screening_central_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/077-mc-cobertura-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "wide_covering_central_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMC",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/110-canal-amc-instrucciones.jpg",
+    "locked_values": {
+      "attacking_width_ip": "Move Into Channels",
+      "dribbling_direction_ip": "Standard",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "channel_midfielder_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMC",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/084-amc-libre-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "dribbling_frequency_ip": "Dribble More",
+      "passing_risk_ip": "Take More Risks",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "free_role_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMC",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/086-amc-segundo-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Make More Runs",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "second_striker_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/089-extremo-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "winger_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/091-extremo-retroceso-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "tracking_winger_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/093-extremo-salida-invertida-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "inside_outlet_winger_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/095-extremo-estacionario-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "wide_outlet_winger_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMC-right",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/111-amc-salida-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "splitting_outlet_attacking_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST-right",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/115-delantero-salida-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "splitting_outlet_centre_forward_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right-of-three",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/274-central-abierto-aguantar-confirmado.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "occluded_values": [],
+    "value_confirmation_evidence": "capturas/274-central-abierto-aguantar-confirmado.jpg",
+    "prior_panel_evidence": "capturas/125-central-abierto-instrucciones.jpg",
+    "confirmation_formation_ip": "3-2-4-1",
+    "role": "wide_centre_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right-of-three",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/275-central-dobla-aguantar-confirmado.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Make More Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip"
+    ],
+    "occluded_values": [],
+    "value_confirmation_evidence": "capturas/275-central-dobla-aguantar-confirmado.jpg",
+    "prior_panel_evidence": "capturas/127-central-dobla-instrucciones.jpg",
+    "confirmation_formation_ip": "3-2-4-1",
+    "role": "overlapping_centre_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-right-double-pivot",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/273-todoterreno-aguantar-confirmado.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "occluded_values": [],
+    "value_confirmation_evidence": "capturas/273-todoterreno-aguantar-confirmado.jpg",
+    "prior_panel_evidence": "capturas/130-todoterreno-instrucciones.jpg",
+    "confirmation_formation_ip": "4-2-2-2 ancho con mediocampista defensivo",
+    "role": "box_to_box_midfielder_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-right-double-pivot",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/132-organizador-todoterreno-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "occluded_values": [],
+    "additional_evidence": "capturas/144-organizador-todoterreno-sin-tooltip.jpg",
+    "role": "box_to_box_playmaker_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right-of-three",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/136-central-abierto-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "wide_centre_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right-of-three",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/138-zaguero-abierto-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "stopping_wide_centre_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right-of-three",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/140-central-cobertura-abierta-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "covering_wide_centre_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "WBR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/142-carrilero-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "wing_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "WBR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/145-carrilero-presionante-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "More Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "pressing_wing_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "WBR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/147-carrilero-contencion-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "Less Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "holding_wing_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "WBR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/152-carrilero-avanzado-sin-tooltip.jpg",
+    "locked_values": {
+      "forward_runs_ip": "Make More Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "advanced_wing_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MR",
+    "scope": "PosiciÃ³n",
+    "evidence": "capturas/157-mediocampista-abierto-sin-tooltip.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "No"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "wide_midfielder_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "GK",
+    "scope": "Posición",
+    "evidence": "capturas/166-portero-cp-sin-tooltip.jpg",
+    "locked_values": {
+      "attacking_width_ip": "Standard",
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Standard",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "shoot_ip": "Standard",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "dribbling_frequency_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "goalkeeper_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "GK",
+    "scope": "Posición",
+    "evidence": "capturas/169-portero-practico-sin-tooltip.jpg",
+    "locked_values": {
+      "attacking_width_ip": "Standard",
+      "dribbling_direction_ip": "Standard",
+      "dribbling_frequency_ip": "Dribble Less",
+      "forward_runs_ip": "Standard",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "shoot_ip": "Standard",
+      "passing_risk_ip": "Take Fewer Risks",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "passing_directness_ip"
+    ],
+    "role": "no_nonsense_goalkeeper_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "GK",
+    "scope": "Posición",
+    "evidence": "capturas/172-portero-sp-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "Standard",
+      "marking_oop": "Standard",
+      "marking_target_oop": "Standard"
+    },
+    "editable_groups": [
+      "tackling_oop"
+    ],
+    "role": "goalkeeper_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "GK",
+    "scope": "Posición",
+    "evidence": "capturas/174-portero-entre-palos-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "Standard",
+      "marking_oop": "Standard",
+      "marking_target_oop": "Standard"
+    },
+    "editable_groups": [
+      "tackling_oop"
+    ],
+    "role": "line_holding_keeper_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right",
+    "scope": "Posición",
+    "evidence": "capturas/176-central-salida-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Make Fewer Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "passing_risk_ip": "Take More Risks",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_directness_ip"
+    ],
+    "role": "ball_playing_centre_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right",
+    "scope": "Posición",
+    "evidence": "capturas/178-defensa-central-cp-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Make Fewer Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "centre_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right",
+    "scope": "Posición",
+    "evidence": "capturas/181-central-avanzado-carreras.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Make Fewer Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "advanced_centre_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right",
+    "scope": "Posición",
+    "evidence": "capturas/183-central-practico-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "dribbling_frequency_ip": "Dribble Less",
+      "forward_runs_ip": "Make Fewer Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "passing_risk_ip": "Take Fewer Risks",
+      "passing_directness_ip": "More Direct",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "shoot_ip"
+    ],
+    "role": "no_nonsense_center_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right",
+    "scope": "Posición",
+    "evidence": "capturas/185-central-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "centre_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right",
+    "scope": "Posición",
+    "evidence": "capturas/187-zaguero-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "More Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "stopping_centre_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DC-right",
+    "scope": "Posición",
+    "evidence": "capturas/189-central-cobertura-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "Less Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "covering_centre_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/191-lateral-interior-instrucciones.jpg",
+    "locked_values": {
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "inside_full_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/193-lateral-defensivo-instrucciones.jpg",
+    "locked_values": {
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "full_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/195-lateral-ofensivo-cp-instrucciones.jpg",
+    "locked_values": {
+      "forward_runs_ip": "Make More Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "wing_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/197-carrilero-interior-instrucciones.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "No",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip"
+    ],
+    "role": "inside_wing_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/199-carrilero-organizador-instrucciones.jpg",
+    "locked_values": {
+      "freedom_of_movement_ip": "Roam From Position",
+      "hold_up_ball_ip": "No"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "playmaking_wing_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/201-lateral-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "full_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/203-lateral-presionante-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "More Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "pressing_full_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DR",
+    "scope": "Posición",
+    "evidence": "capturas/205-lateral-contencion-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "Less Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "holding_full_back_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-single",
+    "scope": "Posición",
+    "evidence": "capturas/207-organizador-defensivo-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Make Fewer Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "passing_risk_ip": "Take More Risks",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_directness_ip"
+    ],
+    "role": "deep_lying_playmaker_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-single",
+    "scope": "Posición",
+    "evidence": "capturas/209-mediocentro-defensivo-cp-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "dribbling_frequency_ip": "Dribble Less",
+      "forward_runs_ip": "Make Fewer Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "defensive_midfielder_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-single",
+    "scope": "Posición",
+    "evidence": "capturas/211-medio-cierre-instrucciones.jpg",
+    "locked_values": {
+      "dribbling_direction_ip": "Standard",
+      "forward_runs_ip": "Make Fewer Runs",
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_frequency_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "half_back_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-single",
+    "scope": "Posición",
+    "evidence": "capturas/213-mediocentro-fijo-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "Less Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "screening_defensive_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-single",
+    "scope": "Posición",
+    "evidence": "capturas/215-mediocentro-defensivo-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "defensive_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM-single",
+    "scope": "Posición",
+    "evidence": "capturas/217-mediocentro-repliegue-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "dropping_defensive_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC-left",
+    "scope": "Posición",
+    "evidence": "capturas/219-centrocampista-cp-instrucciones.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "central_midfielder_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC-left",
+    "scope": "Posición",
+    "evidence": "capturas/221-mediapunta-cp-instrucciones.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "attacking_midfielder_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC-left",
+    "scope": "Posición",
+    "evidence": "capturas/224-mediocampista-abierto-central-instrucciones.jpg",
+    "locked_values": {
+      "attacking_width_ip": "Stay Wider",
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "wide_central_midfielder_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MC-left",
+    "scope": "Posición",
+    "evidence": "capturas/226-mediocampista-organizador-instrucciones.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "No",
+      "passing_risk_ip": "Take More Risks",
+      "cross_from_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_directness_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "midfield_playmaker_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "Posición",
+    "evidence": "capturas/228-delantero-interior-instrucciones.jpg",
+    "locked_values": {
+      "forward_runs_ip": "Make More Runs"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "inside_forward_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "Posición",
+    "evidence": "capturas/230-extremo-cp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "winger_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "Posición",
+    "evidence": "capturas/232-extremo-organizador-instrucciones.jpg",
+    "locked_values": {
+      "attacking_width_ip": "Sit Narrower",
+      "forward_runs_ip": "Standard",
+      "freedom_of_movement_ip": "Roam From Position",
+      "passing_risk_ip": "Take More Risks",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_directness_ip"
+    ],
+    "role": "playmaking_winger_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "Posición",
+    "evidence": "capturas/234-delantero-abierto-instrucciones.jpg",
+    "locked_values": {
+      "forward_runs_ip": "Make More Runs",
+      "passing_directness_ip": "Shorter",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "cross_from_ip"
+    ],
+    "role": "wide_forward_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMR",
+    "scope": "Posición",
+    "evidence": "capturas/236-extremo-invertido-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip",
+      "cross_from_ip",
+      "crossing_strategy_ip"
+    ],
+    "role": "inside_winger_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMC",
+    "scope": "Posición",
+    "evidence": "capturas/238-mediapunta-estacionario-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "central_outlet_attacking_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMC",
+    "scope": "Posición",
+    "evidence": "capturas/240-mediapunta-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "attacking_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "AMC",
+    "scope": "Posición",
+    "evidence": "capturas/242-mediapunta-retroceso-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "tracking_attacking_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM (derecha, doble pivote)",
+    "scope": "Posición",
+    "evidence": "capturas/246-mediocentro-presionante-instrucciones.jpg",
+    "locked_values": {
+      "pressing_oop": "More Often"
+    },
+    "editable_groups": [
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "pressing_defensive_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "DM (derecha, doble pivote)",
+    "scope": "Posición",
+    "evidence": "capturas/248-cobertura-abierta-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "wide_covering_defensive_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MR",
+    "scope": "Posición",
+    "evidence": "capturas/250-medio-abierto-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "wide_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MR",
+    "scope": "Posición",
+    "evidence": "capturas/252-medio-abierto-retroceso-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "tracking_wide_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "MR",
+    "scope": "Posición",
+    "evidence": "capturas/254-medio-abierto-estacionario-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "wide_outlet_wide_midfielder_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/256-delantero-retroceso-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "tracking_centre_forward_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/258-delantero-centro-sp-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "centre_forward_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/260-delantero-estacionario-instrucciones.jpg",
+    "locked_values": {},
+    "editable_groups": [
+      "pressing_oop",
+      "marking_oop",
+      "tackling_oop",
+      "marking_target_oop"
+    ],
+    "role": "central_outlet_centre_forward_oop",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/262-delantero-apoyo-instrucciones.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "Yes",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "deep_lying_forward_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/264-delantero-centro-cp-instrucciones.jpg",
+    "locked_values": {
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "centre_forward_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/266-delantero-torre-instrucciones.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "Yes",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "target_forward_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/268-ariete-instrucciones.jpg",
+    "locked_values": {
+      "freedom_of_movement_ip": "Follow Tactical Position",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "poacher_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/270-delantero-entre-lineas-instrucciones.jpg",
+    "locked_values": {
+      "hold_up_ball_ip": "No",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "forward_runs_ip",
+      "freedom_of_movement_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "channel_forward_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  },
+  {
+    "position": "ST (derecha, pareja)",
+    "scope": "Posición",
+    "evidence": "capturas/272-falso-nueve-instrucciones.jpg",
+    "locked_values": {
+      "forward_runs_ip": "Standard",
+      "freedom_of_movement_ip": "Roam From Position",
+      "cross_from_ip": "Standard",
+      "crossing_strategy_ip": "Standard"
+    },
+    "editable_groups": [
+      "attacking_width_ip",
+      "dribbling_direction_ip",
+      "dribbling_frequency_ip",
+      "hold_up_ball_ip",
+      "shoot_ip",
+      "passing_risk_ip",
+      "passing_directness_ip"
+    ],
+    "role": "false_nine_ip",
+    "applicability": "Solo el subpuesto, fase y alcance documentados; no es una regla universal del rol."
+  }
+]

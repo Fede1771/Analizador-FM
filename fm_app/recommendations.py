@@ -117,6 +117,18 @@ def choose(player,phase,position,style,kind=None):
 
         ids=[r for r in ids if r.rsplit('_',1)[0] in allowed]
 
+    if position == 'DC' and kind not in ('wcb', 'wide_cb'):
+        ids = [r for r in ids if not ('wide_centre_back' in r or 'overlapping_centre_back' in r)]
+    if position == 'DM' and kind not in ('dm_dual', 'dm_pair', 'box_to_box', 'wide_covering'):
+        ids = [r for r in ids if not ('box_to_box' in r or r.startswith('pressing_') or r.startswith('wide_covering_'))]
+    if position == 'DC' and kind not in ('wcb', 'wide_cb'):
+        ids = [r for r in ids if not ('wide_centre_back' in r or 'overlapping_centre_back' in r)]
+    if position == 'DM' and kind not in ('dm_dual', 'dm_pair', 'box_to_box', 'wide_covering'):
+        ids = [r for r in ids if not ('box_to_box' in r or r.startswith('pressing_') or r.startswith('wide_covering_'))]
+    if position == 'DC' and kind not in ('wcb', 'wide_cb'):
+        ids = [r for r in ids if not ('wide_centre_back' in r or 'overlapping_centre_back' in r)]
+    if position == 'DM' and kind not in ('dm_dual', 'dm_pair', 'box_to_box', 'wide_covering'):
+        ids = [r for r in ids if not ('box_to_box' in r or r.startswith('pressing_') or r.startswith('wide_covering_'))]
     if phase=='ip' and kind=='cb':
 
         ids=[r for r in ids if r!='ball_playing_centre_back_ip']
@@ -602,6 +614,8 @@ def explanation(player,choice,style):
             'instructions':player_instructions(player,r),
 
             'behaviours':r['player_instructions'],
+            'behaviors':r.get('behaviors', []),
+            'subposition_rule':r.get('subposition_rule'),
 
             'alternatives':[{'id':key,'name':ROLES[key]['name'],'english':ROLES[key]['english'],'score':value} for key,value in choice['alternatives']]}
 

@@ -42,7 +42,9 @@
     "defensive_transition_oop": "Counter-Press",
     "cross_engagement_oop": "Stop Crosses",
     "pressing_trap_oop": "Balanced",
-    "short_goalkeeper_distribution_oop": "Yes"
+    "short_goalkeeper_distribution_oop": "Yes",
+    "attacking_width_ip": "Standard",
+    "tackling_oop": "Standard"
   },
   "lineup": [
     {
@@ -52,7 +54,10 @@
       "oop_position": "GK",
       "ip_role": "ball_playing_goalkeeper_ip",
       "oop_role": "sweeper_keeper_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204123.png", "Captura de pantalla 2026-10-24 204125.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204123.png",
+        "Captura de pantalla 2026-10-24 204125.png"
+      ],
       "instructions": {
         "passing_risk_ip": "Take More Risks"
       }
@@ -64,7 +69,10 @@
       "oop_position": "DL",
       "ip_role": "wing_back_ip",
       "oop_role": "full_back_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204059.png", "Captura de pantalla 2026-10-24 204101.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204059.png",
+        "Captura de pantalla 2026-10-24 204101.png"
+      ],
       "instructions": {
         "forward_runs_ip": "Make More Runs",
         "passing_directness_ip": "Shorter",
@@ -79,7 +87,10 @@
       "oop_position": "DC",
       "ip_role": "ball_playing_centre_back_ip",
       "oop_role": "centre_back_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204105.png", "Captura de pantalla 2026-10-24 204108.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204105.png",
+        "Captura de pantalla 2026-10-24 204108.png"
+      ],
       "instructions": {
         "forward_runs_ip": "Make Fewer Runs",
         "passing_risk_ip": "Take More Risks",
@@ -96,7 +107,10 @@
       "oop_position": "DC",
       "ip_role": "centre_back_ip",
       "oop_role": "centre_back_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204111.png", "Captura de pantalla 2026-10-24 204113.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204111.png",
+        "Captura de pantalla 2026-10-24 204113.png"
+      ],
       "instructions": {
         "forward_runs_ip": "Make Fewer Runs",
         "passing_directness_ip": "Shorter",
@@ -112,7 +126,10 @@
       "oop_position": "DR",
       "ip_role": "wing_back_ip",
       "oop_role": "full_back_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204117.png", "Captura de pantalla 2026-10-24 204120.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204117.png",
+        "Captura de pantalla 2026-10-24 204120.png"
+      ],
       "instructions": {
         "forward_runs_ip": "Make More Runs",
         "passing_directness_ip": "Shorter"
@@ -125,7 +142,10 @@
       "oop_position": "DM",
       "ip_role": "deep_lying_playmaker_ip",
       "oop_role": "defensive_midfielder_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204053.png", "Captura de pantalla 2026-10-24 204055.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204053.png",
+        "Captura de pantalla 2026-10-24 204055.png"
+      ],
       "instructions": {
         "forward_runs_ip": "Make Fewer Runs",
         "passing_risk_ip": "Take More Risks",
@@ -139,7 +159,10 @@
       "oop_position": "DM",
       "ip_role": "advanced_playmaker_ip",
       "oop_role": "defensive_midfielder_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204046.png", "Captura de pantalla 2026-10-24 204049.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204046.png",
+        "Captura de pantalla 2026-10-24 204049.png"
+      ],
       "instructions": {
         "forward_runs_ip": "Make Fewer Runs",
         "freedom_of_movement_ip": "Roam From Position",
@@ -156,7 +179,10 @@
       "oop_position": "AMC",
       "ip_role": "midfield_playmaker_ip",
       "oop_role": "attacking_midfielder_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204038.png", "Captura de pantalla 2026-10-24 204040.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204038.png",
+        "Captura de pantalla 2026-10-24 204040.png"
+      ],
       "instructions": {
         "freedom_of_movement_ip": "Roam From Position",
         "passing_risk_ip": "Take More Risks",
@@ -170,7 +196,10 @@
       "oop_position": "ML",
       "ip_role": "inside_winger_ip",
       "oop_role": "wide_midfielder_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204024.png", "Captura de pantalla 2026-10-24 204026.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204024.png",
+        "Captura de pantalla 2026-10-24 204026.png"
+      ],
       "instructions": {
         "attacking_width_ip": "Sit Narrower",
         "dribbling_direction_ip": "Cut Inside With Ball",
@@ -185,7 +214,10 @@
       "oop_position": "STC",
       "ip_role": "deep_lying_forward_ip",
       "oop_role": "centre_forward_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204016.png", "Captura de pantalla 2026-10-24 204019.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204016.png",
+        "Captura de pantalla 2026-10-24 204019.png"
+      ],
       "instructions": {
         "freedom_of_movement_ip": "Roam From Position",
         "hold_up_ball_ip": "Yes",
@@ -201,7 +233,10 @@
       "oop_position": "MR",
       "ip_role": "inside_winger_ip",
       "oop_role": "wide_midfielder_oop",
-      "screenshots": ["Captura de pantalla 2026-10-24 204030.png", "Captura de pantalla 2026-10-24 204033.png"],
+      "screenshots": [
+        "Captura de pantalla 2026-10-24 204030.png",
+        "Captura de pantalla 2026-10-24 204033.png"
+      ],
       "instructions": {
         "attacking_width_ip": "Sit Narrower",
         "dribbling_direction_ip": "Cut Inside With Ball",

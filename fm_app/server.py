@@ -44,7 +44,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def body(self):
         size = int(self.headers.get('Content-Length', '0'))
-        if not 2 <= size <= 16384:
+        if not 2 <= size <= 65536:
             raise ValueError('Solicitud inválida o demasiado grande.')
         self.connection.settimeout(10)
         value = json.loads(self.rfile.read(size))
@@ -154,9 +154,6 @@ class Handler(BaseHTTPRequestHandler):
                 if params.get('dataset_id') != data['id']:
                     return self.reply(409, {'error':'La partida cambió. Revisá y confirmá tu táctica nuevamente.'})
                 return self.reply(200, audit_tactic(data, params))
-            if self.path == '/api/export-tactic':
-                from fm_app.tactic_exporter import export_tactic_file
-                return self.reply(200, export_tactic_file(data, params))
             if self.path not in ('/api/analyze','/api/simulate'):
                 return self.reply(404, {'error': 'No encontrado.'})
             if params.get('dataset_id') != data['id']:

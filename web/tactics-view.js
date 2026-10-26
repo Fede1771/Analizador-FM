@@ -2,10 +2,24 @@ import {esc, number, score, playerButton, pos} from './format.js';
 import {zoneMap} from './zones-view.js';
 
 export function rolePlan(role) {
-  return `<section class="role-plan"><div class="split"><div><span class="eyebrow">${role.phase === 'in_possession' ? 'Con posesión' : 'Sin posesión'} · ${esc(pos(role.position))}</span><h3>${esc(role.name)}</h3><small>${esc(role.english)}</small></div>${score(role.score)}</div>
+  const badge = role.role_abbrev || role.abbreviation || '';
+  const subpos = role.subposition_rule ? `<div class="subpos-badge">🛡️ ${role.subposition_rule.min_central_defenders ? 'Requiere línea de al menos 3 centrales' : 'Requiere doble pivote'}</div>` : '';
+  const behaviorsChips = Array.isArray(role.behaviors) && role.behaviors.length
+    ? `<div class="role-behaviors-chips">${role.behaviors.map(b => `<span class="behavior-chip" title="Comportamiento inherente al rol en FM26">⚡ ${esc(b)}</span>`).join('')}</div>`
+    : '';
+  const scopeBadge = role.scope ? `<span class="advice-chip" style="margin-left:6px;">Ámbito: ${esc(role.scope)}</span>` : '';
+
+  return `<section class="role-plan"><div class="split"><div><span class="eyebrow">${role.phase === 'in_possession' ? 'Con posesión' : 'Sin posesión'} · ${esc(pos(role.position))} ${scopeBadge}</span><h3>${esc(role.name)}</h3><small>${badge ? `<span class="role-abbrev-tag">${esc(badge)}</span> · ` : ''}${esc(role.english)}</small>${subpos}${behaviorsChips}</div>${score(role.score)}</div>
     <p>${esc(role.tactical_summary || role.reasons.at(-1))}</p><ul>${role.reasons.slice(0,3).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
     ${role.warnings.length ? `<p class="notice warning">${esc(role.warnings.join(' '))}</p>` : ''}
-    <details><summary>Instrucciones individuales y alternativas</summary>${role.instructions.map(i=>`<article class="instruction"><strong>${esc(i.property)}: ${esc(i.value)} ${i.locked ? '· Bloqueada por el rol' : ''}</strong><p>${esc(i.reason)}</p><small>${esc(i.availability_source || '')}</small></article>`).join('')}
+    <details><summary>Instrucciones individuales y alternativas</summary>${role.instructions.map(i=>{
+      const statusBadge = i.availability_status === 'locked_verified' || i.locked
+        ? (i.locked_value == null ? '<span class="inst-badge-masked">🔒 Bloqueado (tapado)</span>' : '<span class="inst-badge-lock">🔒 Bloqueado comprobado</span>')
+        : (i.availability_status === 'editable_verified' || (i.editable && i.locked === false && i.availability_status !== 'unverified')
+          ? '<span class="inst-badge-edit">⚙️ Editable comprobado</span>'
+          : '<span class="inst-badge-unverified" title="Disponibilidad no verificada en FM (no comprobado en este contexto)">❓ Disponibilidad no verificada</span>');
+      return `<article class="instruction"><strong>${esc(i.property)}: ${esc(i.value ?? 'No asignado')} ${statusBadge}</strong><p>${esc(i.reason)}</p><small>${esc(i.availability_source || '')}</small></article>`;
+    }).join('')}
     ${role.unconfirmed_instructions?`<p class="muted">${role.unconfirmed_instructions} instrucciones de esta fase sin confirmar. Las que se muestran proceden de tu carga o de bloqueos comprobados del rol.</p>`:''}
     <p>${esc(role.comparison)}</p><p class="muted">${esc(role.spanish_status)}</p><a href="${esc(role.source)}" target="_blank" rel="noreferrer">Referencia del rol ↗</a></details></section>`;
 }
@@ -38,13 +52,37 @@ export function formationCards(tactics, selectedId) {
 
 export function instructions(tactic, data, prefs, draft = {}) {
   const pendingCount = Object.keys(draft).length;
+  const currentUnderlap = draft.underlap_ip ?? prefs.overrides.underlap_ip ?? tactic.instructions.find(i => i.id === 'underlap_ip')?.value_en;
+  const currentOverlap = draft.overlap_ip ?? prefs.overrides.overlap_ip ?? tactic.instructions.find(i => i.id === 'overlap_ip')?.value_en;
+
   const instruction = item => {
     const applied = prefs.overrides[item.id] ?? item.value_en;
     const selected = draft[item.id] ?? applied;
     const origin = Object.hasOwn(draft, item.id) ? 'Cambio pendiente'
       : prefs.overrides[item.id] ? 'Ajuste manual' : item.origin === 'prompt' ? 'Pedido aplicado' : 'Propuesta';
-    return `<article class="instruction"><label for="override-${item.id}">${esc(item.property)} <small>${origin}</small></label>
-      <select id="override-${item.id}" data-override="${item.id}" data-applied="${esc(applied)}">${(data.instruction_options[item.id] || []).map(option => `<option value="${esc(option.value)}" ${option.value === selected ? 'selected' : ''}>${esc(option.label)}</option>`).join('')}</select>
+
+    const isOverlap = item.id === 'overlap_ip';
+    const isUnderlap = item.id === 'underlap_ip';
+    const underlapBothFlanks = currentUnderlap === 'Underlap - Both Flanks';
+    const overlapBothFlanks = currentOverlap === 'Overlap - Both Flanks';
+
+    const helperNote = item.id === 'short_goalkeeper_distribution_oop'
+      ? `<span class="inst-scope-tag">Presionar salida rival</span>`
+      : item.id === 'dribbling_ip'
+      ? `<span class="inst-scope-tag">Compartido: Avance / Último tercio</span>`
+      : item.id === 'pressing_trap_oop'
+      ? `<span class="inst-scope-tag">Compartido: Presión alta / Bloque medio</span>`
+      : '';
+
+    const opts = (data.instruction_options[item.id] || []).map(option => {
+      let disabled = false;
+      if (isOverlap && underlapBothFlanks && option.value !== 'Overlap - Balanced') disabled = true;
+      if (isUnderlap && overlapBothFlanks && option.value !== 'Underlap - Balanced') disabled = true;
+      return `<option value="${esc(option.value)}" ${option.value === selected ? 'selected' : ''} ${disabled ? 'disabled' : ''}>${esc(option.label)}${disabled ? ' (Incompatible con desdoble interior en ambas bandas)' : ''}</option>`;
+    }).join('');
+
+    return `<article class="instruction"><label for="override-${item.id}">${esc(item.property)} ${helperNote} <small>${origin}</small></label>
+      <select id="override-${item.id}" data-override="${item.id}" data-applied="${esc(applied)}">${opts}</select>
       <p>${esc(item.reason)}</p></article>`;
   };
   return `<details class="panel"><summary>Instrucciones de equipo · ${tactic.instructions.length} ajustes</summary><p class="muted">Las etiquetas proceden del catálogo FM26; las elecciones y el índice de encaje son recomendaciones de Touchline.</p>

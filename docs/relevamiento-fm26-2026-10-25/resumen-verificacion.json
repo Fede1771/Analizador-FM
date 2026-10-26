@@ -1,0 +1,21 @@
+{
+  "roles": 79,
+  "roles_seen_in_current_ui": 79,
+  "additional_role_records": 79,
+  "role_attribute_lists_verified_in_continuation": 79,
+  "observed_instruction_context_records": 80,
+  "roles_with_instruction_panel": 79,
+  "roles_missing_instruction_panel": 0,
+  "roles_missing_verified_attributes": 0,
+  "unresolved_locked_values": 0,
+  "position_families": 14,
+  "individual_groups": 15,
+  "individual_options": 45,
+  "current_team_control_appearances": 29,
+  "current_ui_captures": 309,
+  "resource_records": 1680,
+  "report_words": 20004,
+  "team_selector_panels_verified": 27,
+  "team_selector_dimensions_verified": 28,
+  "shared_team_controls_verified": 2
+}

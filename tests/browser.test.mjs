@@ -118,6 +118,22 @@ try {
   });
   await check('negative pressure request',async()=>{await evaluate(`document.querySelector('#prompt-details').open=true`);await set('#prompt-input','No quiero presión alta','input');await evaluate(`document.querySelector('[data-action="apply-prompt"]').click()`);await ready();assert.equal(await evaluate(`document.querySelector('#style-select').value`),'possession');assert.notEqual(await evaluate(`document.querySelector('#override-line_of_engagement_oop').value`),'High Press');});
   await check('pressing request retains counterpress',async()=>{await set('#prompt-input','Presión alta, recuperar rápido','input');await evaluate(`document.querySelector('[data-action="apply-prompt"]').click()`);await ready();assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');assert.equal(await evaluate(`document.querySelector('#override-defensive_transition_oop').value`),'Counter-Press');});
+  await check('collective instructions options and support runs mutual exclusions',async()=>{
+    await evaluate(`document.querySelector('#override-tempo').closest('details').open=true`);
+    assert.equal(await evaluate(`document.querySelectorAll('#override-attacking_width_ip option').length`), 5);
+    assert.equal(await evaluate(`document.querySelectorAll('#override-tempo option').length`), 5);
+    assert.equal(await evaluate(`document.querySelectorAll('#override-crossing_style_ip option').length`), 4);
+    assert.equal(await evaluate(`document.querySelectorAll('#override-play_for_set_pieces_ip option').length`), 2);
+    assert.equal(await evaluate(`document.querySelectorAll('#override-short_goalkeeper_distribution_oop option').length`), 2);
+
+    await set('#override-underlap_ip', 'Underlap - Both Flanks');
+    const overlapDisabled = await evaluate(`Array.from(document.querySelectorAll('#override-overlap_ip option')).filter(o => o.disabled).map(o => o.value)`);
+    assert.deepEqual(overlapDisabled, ['Overlap - Left', 'Overlap - Right', 'Overlap - Both Flanks']);
+
+    await set('#override-underlap_ip', 'Underlap - Balanced');
+    const overlapReenabled = await evaluate(`Array.from(document.querySelectorAll('#override-overlap_ip option')).filter(o => o.disabled).length`);
+    assert.equal(overlapReenabled, 0);
+  });
   await check('player plan dialog',async()=>{await evaluate(`document.querySelector('.pitch-player').click()`);assert.ok(await evaluate(`document.querySelector('#dialog').open`));assert.equal(await evaluate(`document.querySelectorAll('.role-plan').length`),2);await evaluate(`document.querySelector('#dialog-close').click()`);});
   await check('loan search and sort',async()=>{await navigate('loans');await wait(`document.querySelector('#search')`,'loans');await set('#search','200','input');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);await set('#sort-order','age');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);});
   await check('contracts view displays alerts and filtering',async()=>{
@@ -134,11 +150,11 @@ try {
     assert.ok(await evaluate(`document.querySelectorAll('[data-scout-position]').length >= 10`));
     assert.ok(await evaluate(`document.querySelector('#scouting-search') !== null`));
   });
-  await check('companion mini-hud dialog and tactic exporter',async()=>{
+  await check('companion mini-hud dialog and match instructions',async()=>{
     await evaluate(`document.querySelector('#companion-button').click()`);
     await wait(`document.querySelector('#dialog').open && document.querySelector('.companion-shell')`,'companion shell');
     assert.ok(await evaluate(`document.querySelector('.companion-checklist') !== null`));
-    assert.ok(await evaluate(`document.querySelector('[data-action="export-tactic-fm"]') !== null`));
+    assert.ok(await evaluate(`document.querySelector('[data-action="copy-match-instructions"]') !== null`));
     await evaluate(`document.querySelector('#dialog-close').click()`);
   });
   await check('preferences survive a new save',async()=>{await change({id:'save-next'});await wait(`document.querySelector('#source-label') && !document.querySelector('#activity').hidden`,'dataset refresh');await wait(`document.querySelector('#activity').hidden`,'refresh finished');await navigate('tactics');await ready();assert.equal(await evaluate(`document.querySelector('#formation-select').value`),'352');assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');});

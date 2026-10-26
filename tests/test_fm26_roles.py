@@ -79,10 +79,12 @@ class FM26RoleTests(unittest.TestCase):
         self.assertEqual(ins('player','forward_runs_ip','Make More Runs')['property'],'Carreras hacia adelante')
         self.assertEqual(ins('player','pressing_oop','More Often')['value'],'Más a menudo')
         self.assertEqual(ins('team','trigger_press_oop','More Often')['value'],'Más insistente')
-        self.assertEqual(ins('team','tempo','Lower')['value'],'Más bajo')
-        self.assertEqual(ins('team','defensive_line_oop','Lower')['value'],'Más baja')
-        # LATAM is literally "Alto" at this key; Spain's translation is "Alta".
-        self.assertEqual(ins('team','defensive_line_oop','Higher')['value'],'Alto')
+        # Verified empirical labels in FM26 UI
+        self.assertEqual(ins('team','tempo','Lower')['value'],'Bajo')
+        self.assertEqual(ins('team','defensive_line_oop','Lower')['value'],'Más retrasada')
+        self.assertEqual(ins('team','defensive_line_oop','Higher')['value'],'Más adelantada')
+        self.assertEqual(ins('team','attacking_width_ip','Standard')['value'],'Estándar')
+        self.assertEqual(ins('team','tackling_oop','Get Stuck In')['value'],'Ser agresivos')
         self.assertEqual(ins('player','tackling_oop','Standard')['value'],'Normal')
         self.assertEqual(ins('player','hold_up_ball_ip','Yes')['value'],'Sí')
         self.assertEqual(ins('player','hold_up_ball_ip','No')['value'],'No')
@@ -112,7 +114,8 @@ class FM26RoleTests(unittest.TestCase):
                 self.assertEqual(risks[0]['origin'],'role')
             if 'Take Fewer Risks' in defaults:
                 self.assertEqual(risks[0]['value_en'],'Take Fewer Risks')
-        self.assertFalse(any(r.startswith('stopping_centre_back') for r in ROLES))
+        self.assertIn('stopping_centre_back_oop', ROLES)
+        self.assertEqual(ROLES['stopping_centre_back_oop']['name'], 'Zaguero')
 
     def test_weak_goalkeeper_is_not_given_risky_ball_playing_role(self):
         p=player(1,'gk',10)

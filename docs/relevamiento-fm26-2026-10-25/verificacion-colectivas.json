@@ -1,0 +1,503 @@
+{
+  "schema_version": 1,
+  "scope": "Selectores colectivos observados; disponibilidad en contexto, sin certificar todas las combinaciones.",
+  "controls": {
+    "passing_directness": {
+      "label_ui": "Pases directos",
+      "phase": "CP",
+      "options_ui": [
+        "Mucho más corto",
+        "Más corto",
+        "Estándar",
+        "Más directo",
+        "Mucho más directo"
+      ],
+      "options_shown_available": [
+        "Mucho más corto",
+        "Más corto",
+        "Estándar",
+        "Más directo",
+        "Mucho más directo"
+      ],
+      "evidence": "capturas/276-colectiva-pases-directos.jpg"
+    },
+    "tempo": {
+      "label_ui": "Ritmo de juego",
+      "phase": "CP",
+      "options_ui": [
+        "Mucho más bajo",
+        "Bajo",
+        "Estándar",
+        "Alto",
+        "Mucho más alto"
+      ],
+      "options_shown_available": [
+        "Mucho más bajo",
+        "Bajo",
+        "Estándar",
+        "Alto",
+        "Mucho más alto"
+      ],
+      "evidence": "capturas/277-colectiva-ritmo.jpg"
+    },
+    "attacking_width": {
+      "label_ui": "Amplitud del ataque",
+      "phase": "CP",
+      "options_ui": [
+        "Mucho más estrecho",
+        "Más estrecho",
+        "Estándar",
+        "Más ancho",
+        "Mucho más ancho"
+      ],
+      "options_shown_available": [
+        "Mucho más estrecho",
+        "Más estrecho",
+        "Estándar",
+        "Más ancho",
+        "Mucho más ancho"
+      ],
+      "evidence": "capturas/278-colectiva-amplitud.jpg"
+    },
+    "attacking_transition": {
+      "label_ui": "Transición ofensiva",
+      "phase": "CP",
+      "options_ui": [
+        "Mantener dibujo",
+        "Normal",
+        "Contraataque"
+      ],
+      "options_shown_available": [
+        "Mantener dibujo",
+        "Normal",
+        "Contraataque"
+      ],
+      "evidence": "capturas/279-colectiva-transicion-ofensiva.jpg"
+    },
+    "creative_freedom": {
+      "label_ui": "Libertad creativa",
+      "phase": "CP",
+      "options_ui": [
+        "Más disciplinados",
+        "Equilibrado",
+        "Ser más expresivos"
+      ],
+      "options_shown_available": [
+        "Más disciplinados",
+        "Equilibrado",
+        "Ser más expresivos"
+      ],
+      "evidence": "capturas/280-colectiva-libertad.jpg"
+    },
+    "time_wasting": {
+      "label_ui": "Perder tiempo",
+      "phase": "CP",
+      "options_ui": [
+        "Menos a menudo",
+        "Normal",
+        "Más a menudo"
+      ],
+      "options_shown_available": [
+        "Menos a menudo",
+        "Normal",
+        "Más a menudo"
+      ],
+      "evidence": "capturas/281-colectiva-perder-tiempo.jpg"
+    },
+    "play_for_set_pieces": {
+      "label_ui": "Jugar buscando el balón parado",
+      "phase": "CP",
+      "options_ui": [
+        "Mantener el balón en juego",
+        "Buscar jugadas de balón parado"
+      ],
+      "options_shown_available": [
+        "Mantener el balón en juego",
+        "Buscar jugadas de balón parado"
+      ],
+      "evidence": "capturas/282-colectiva-balon-parado.jpg"
+    },
+    "dribbling": {
+      "label_ui": "Regate",
+      "phase": "CP",
+      "options_ui": [
+        "Desanimar",
+        "Equilibrado",
+        "Animar"
+      ],
+      "options_shown_available": [
+        "Desanimar",
+        "Equilibrado",
+        "Animar"
+      ],
+      "evidence": "capturas/283-colectiva-regate.jpg"
+    },
+    "patience": {
+      "label_ui": "Paciencia",
+      "phase": "CP",
+      "options_ui": [
+        "Hacer centros rápidos",
+        "Estándar",
+        "Intentar llevar el balón hasta el área"
+      ],
+      "options_shown_available": [
+        "Hacer centros rápidos",
+        "Estándar",
+        "Intentar llevar el balón hasta el área"
+      ],
+      "evidence": "capturas/286-colectiva-paciencia.jpg"
+    },
+    "shots_from_distance": {
+      "label_ui": "Disparos lejanos",
+      "phase": "CP",
+      "options_ui": [
+        "Desalentar",
+        "Equilibrada",
+        "Alentar"
+      ],
+      "options_shown_available": [
+        "Desalentar",
+        "Equilibrada",
+        "Alentar"
+      ],
+      "evidence": "capturas/287-colectiva-disparos.jpg"
+    },
+    "crossing_style": {
+      "label_ui": "Estilo de centros",
+      "phase": "CP",
+      "options_ui": [
+        "Equilibrada",
+        "Centros colgados",
+        "Centros tocados",
+        "Centros rasos"
+      ],
+      "options_shown_available": [
+        "Equilibrada",
+        "Centros colgados",
+        "Centros tocados",
+        "Centros rasos"
+      ],
+      "evidence": "capturas/288-colectiva-centros.jpg"
+    },
+    "support_runs": {
+      "label_ui": "Carreras de apoyo",
+      "phase": "Con posesión / Avance",
+      "options_ui": [],
+      "options_shown_available": [],
+      "evidence": "capturas/289-colectiva-carreras-apoyo.jpg",
+      "dimensions": {
+        "overlap": {
+          "label_ui": "Doblar por banda",
+          "options_ui": [
+            "Equilibrado",
+            "Izquierda",
+            "Derecha",
+            "Doblar por ambas bandas"
+          ]
+        },
+        "underlap": {
+          "label_ui": "Doblar por dentro",
+          "options_ui": [
+            "Equilibrado",
+            "Izquierda",
+            "Derecha",
+            "Doblar por dentro en ambas bandas"
+          ]
+        }
+      },
+      "observed_restrictions": [
+        {
+          "when": "Doblar por dentro en ambas bandas",
+          "disabled": "Doblar por banda: Izquierda, Derecha, Ambas bandas",
+          "evidence": "capturas/289-colectiva-carreras-apoyo.jpg"
+        },
+        {
+          "when": "Ambos ejes Equilibrado",
+          "enabled": "Todos los valores de ambos ejes",
+          "evidence": "capturas/290-carreras-interiores-equilibradas.jpg"
+        },
+        {
+          "when": "Doblar por ambas bandas",
+          "disabled": "Doblar por dentro: Izquierda, Derecha, Ambas bandas",
+          "evidence": "capturas/291-doblar-ambas-bandas.jpg"
+        }
+      ],
+      "unverified": "Combinaciones cruzadas izquierda/derecha no ensayadas."
+    },
+    "progress_through": {
+      "label_ui": "Avance",
+      "phase": "Con posesión / Avance",
+      "options_ui": [
+        "Equilibrado",
+        "Izquierda",
+        "Centro",
+        "Derecha",
+        "Ambas bandas"
+      ],
+      "options_shown_available": [
+        "Equilibrado",
+        "Izquierda",
+        "Centro",
+        "Derecha",
+        "Ambas bandas"
+      ],
+      "evidence": "capturas/292-colectiva-avance.jpg"
+    },
+    "pass_reception": {
+      "label_ui": "Recepción de pase",
+      "phase": "Con posesión / Avance",
+      "options_ui": [
+        "Pase al pie",
+        "Equilibrado",
+        "Pasar al espacio"
+      ],
+      "options_shown_available": [
+        "Pase al pie",
+        "Equilibrado",
+        "Pasar al espacio"
+      ],
+      "evidence": "capturas/293-colectiva-recepcion.jpg"
+    },
+    "build_up_strategy": {
+      "label_ui": "Estrategia previa",
+      "phase": "Con posesión / Área de creación de oportunidades",
+      "options_ui": [
+        "Jugar superando la presión",
+        "Equilibrada",
+        "Evitar la presión"
+      ],
+      "options_shown_available": [
+        "Jugar superando la presión",
+        "Equilibrada",
+        "Evitar la presión"
+      ],
+      "evidence": "capturas/294-colectiva-estrategia-previa.jpg"
+    },
+    "goal_kicks": {
+      "label_ui": "Saques de meta",
+      "phase": "Con posesión / Área de creación de oportunidades",
+      "options_ui": [
+        "En corto",
+        "Mixto",
+        "Largo"
+      ],
+      "options_shown_available": [
+        "En corto",
+        "Mixto",
+        "Largo"
+      ],
+      "evidence": "capturas/295-colectiva-saques-meta.jpg"
+    },
+    "gk_distribution_speed": {
+      "label_ui": "Distribución del portero (velocidad)",
+      "phase": "Con posesión / Área de creación de oportunidades",
+      "options_ui": [
+        "Ralentizar el juego",
+        "Equilibrada",
+        "Distribuir con rapidez"
+      ],
+      "options_shown_available": [
+        "Ralentizar el juego",
+        "Equilibrada",
+        "Distribuir con rapidez"
+      ],
+      "evidence": "capturas/296-colectiva-velocidad-portero.jpg"
+    },
+    "gk_distribution_target": {
+      "label_ui": "Distribución del portero",
+      "phase": "Con posesión / Área de creación de oportunidades",
+      "options_ui": [
+        "Por encima de la línea defensiva rival",
+        "Delantero torre",
+        "Bandas",
+        "Organizador",
+        "Laterales",
+        "Centrales",
+        "Equilibrado"
+      ],
+      "options_shown_available": [
+        "Por encima de la línea defensiva rival",
+        "Delantero torre",
+        "Bandas",
+        "Organizador",
+        "Laterales",
+        "Centrales",
+        "Equilibrado"
+      ],
+      "evidence": "capturas/297-colectiva-destino-portero.jpg",
+      "ui_note": "Bandas y Laterales aparecen dos veces en el dibujo; no inferir selección de lado sin comprobar."
+    },
+    "cross_engagement": {
+      "label_ui": "Compromiso de centros",
+      "phase": "Sin posesión / Bloque bajo",
+      "options_ui": [
+        "Evitar centros",
+        "Equilibrada",
+        "Permitir centros"
+      ],
+      "options_shown_available": [
+        "Evitar centros",
+        "Equilibrada",
+        "Permitir centros"
+      ],
+      "evidence": "capturas/298-colectiva-centros-rivales.jpg"
+    },
+    "line_of_engagement": {
+      "label_ui": "Línea de presión",
+      "phase": "Sin posesión / Vista general",
+      "options_ui": [
+        "Bloque bajo",
+        "Bloque medio",
+        "Presión adelantada"
+      ],
+      "options_shown_available": [
+        "Bloque bajo",
+        "Bloque medio",
+        "Presión adelantada"
+      ],
+      "evidence": "capturas/299-colectiva-linea-presion.jpg"
+    },
+    "defensive_line": {
+      "label_ui": "Línea defensiva",
+      "phase": "Sin posesión / Vista general",
+      "options_ui": [
+        "Mucho más baja",
+        "Más retrasada",
+        "Estándar",
+        "Más adelantada",
+        "Mucho más alta"
+      ],
+      "options_shown_available": [
+        "Mucho más baja",
+        "Más retrasada",
+        "Estándar",
+        "Más adelantada",
+        "Mucho más alta"
+      ],
+      "evidence": "capturas/300-colectiva-linea-defensiva.jpg"
+    },
+    "defensive_line_behavior": {
+      "label_ui": "Comportamiento de la línea defensiva",
+      "phase": "Sin posesión / Vista general",
+      "options_ui": [
+        "Presionar más arriba",
+        "Equilibrada",
+        "Replegarse más"
+      ],
+      "options_shown_available": [
+        "Presionar más arriba",
+        "Equilibrada",
+        "Replegarse más"
+      ],
+      "evidence": "capturas/301-colectiva-comportamiento-linea.jpg"
+    },
+    "trigger_press": {
+      "label_ui": "Activar presión",
+      "phase": "Sin posesión / Vista general",
+      "options_ui": [
+        "Mucho menos insistente",
+        "Menos insistente",
+        "Estándar",
+        "Más insistente",
+        "Mucho más insistente"
+      ],
+      "options_shown_available": [
+        "Mucho menos insistente",
+        "Menos insistente",
+        "Estándar",
+        "Más insistente",
+        "Mucho más insistente"
+      ],
+      "evidence": "capturas/302-colectiva-activar-presion.jpg"
+    },
+    "defensive_transition": {
+      "label_ui": "Transición defensiva",
+      "phase": "Sin posesión / Vista general",
+      "options_ui": [
+        "Reagruparse",
+        "Estándar",
+        "Contrapresión"
+      ],
+      "options_shown_available": [
+        "Reagruparse",
+        "Estándar",
+        "Contrapresión"
+      ],
+      "evidence": "capturas/303-colectiva-transicion-defensiva.jpg"
+    },
+    "tackling": {
+      "label_ui": "Realizando una entrada",
+      "phase": "Sin posesión / Vista general",
+      "options_ui": [
+        "Mantenerse de pie",
+        "Estándar",
+        "Ser agresivos"
+      ],
+      "options_shown_available": [
+        "Mantenerse de pie",
+        "Estándar",
+        "Ser agresivos"
+      ],
+      "evidence": "capturas/304-colectiva-entradas.jpg"
+    },
+    "pressing_trap": {
+      "label_ui": "Trampa de presión",
+      "phase": "Sin posesión / Presión adelantada y Bloque medio",
+      "options_ui": [
+        "Trampa en el interior",
+        "Equilibrado",
+        "Presionar fuera"
+      ],
+      "options_shown_available": [
+        "Trampa en el interior",
+        "Equilibrado",
+        "Presionar fuera"
+      ],
+      "evidence": "capturas/305-colectiva-trampa-presion.jpg"
+    },
+    "prevent_short_gk_distribution": {
+      "label_ui": "Distribución del portero en corto",
+      "phase": "Sin posesión / Presión adelantada",
+      "options_ui": [
+        "No",
+        "Sí"
+      ],
+      "options_shown_available": [
+        "No",
+        "Sí"
+      ],
+      "evidence": "capturas/307-colectiva-portero-rival.jpg"
+    }
+  },
+  "shared_state_checks": [
+    {
+      "control": "dribbling",
+      "areas": [
+        "Avance",
+        "Último tercio"
+      ],
+      "before": "Desanimar",
+      "after": "Animar",
+      "shared": true,
+      "evidence": "capturas/285-regate-compartido-subfases.jpg"
+    },
+    {
+      "control": "pressing_trap",
+      "areas": [
+        "Presión adelantada",
+        "Bloque medio"
+      ],
+      "before": "Trampa en el interior",
+      "after": "Presionar fuera",
+      "shared": true,
+      "evidence": "capturas/308-trampa-compartida-subfases.jpg"
+    }
+  ],
+  "review_status": {
+    "selector_panels_opened": 27,
+    "all_listed_selector_option_sets_observed": true,
+    "all_context_combinations_verified": false,
+    "all_option_help_texts_opened_in_ui": false,
+    "marking_research": "Excluido por el usuario"
+  }
+}

@@ -34,3 +34,5 @@ Desktop.ini
 
 # Native app profile: local tactic drafts and WebView cache
 /data/webview/
+
+data/scouting_cache.json

@@ -71,6 +71,11 @@ def validate_overrides(value):
     for key, option in value.items():
         if key not in TI or not isinstance(option, str) or option not in TI[key]['options']:
             raise ValueError(f'Instrucción desconocida o valor inválido: {key}.')
+    # Support runs verified incompatibilities
+    if value.get('underlap_ip') == 'Underlap - Both Flanks' and value.get('overlap_ip') in ('Overlap - Left', 'Overlap - Right', 'Overlap - Both Flanks'):
+        raise ValueError('Incompatibilidad en Carreras de apoyo: al doblar por dentro en ambas bandas, doblar por banda debe ser Equilibrado.')
+    if value.get('overlap_ip') == 'Overlap - Both Flanks' and value.get('underlap_ip') in ('Underlap - Left', 'Underlap - Right', 'Underlap - Both Flanks'):
+        raise ValueError('Incompatibilidad en Carreras de apoyo: al doblar por ambas bandas, doblar por dentro debe ser Equilibrado.')
     return value
 
 

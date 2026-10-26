@@ -71,7 +71,11 @@ class CurrentTacticTests(unittest.TestCase):
             instructions=player_instructions(p,role)
             self.assertEqual([i['id'] for i in instructions],PLAYER_MENU[role['phase']])
             for i in instructions:
-                self.assertIn(i['value_en'],PI[i['id']]['options'])
+                if i['value_en'] is not None:
+                    self.assertIn(i['value_en'],PI[i['id']]['options'])
+                else:
+                    self.assertTrue(i['locked'])
+                    self.assertIsNone(i['locked_value'])
             for key,value in SCREENSHOT_LOCKS.get(role['id'],{}).items():
                 item=next(i for i in instructions if i['id']==key)
                 self.assertTrue(item['locked']);self.assertEqual(item['value_en'],value)
@@ -96,7 +100,7 @@ class CurrentTacticTests(unittest.TestCase):
         self.assertIsNotNone(LIVERPOOL_REF)
         self.assertEqual(LIVERPOOL_REF['screenshots_count'], 30)
         self.assertEqual(len(LIVERPOOL_REF['team_screenshots']), 8)
-        self.assertEqual(len(LIVERPOOL_REF['team']), 26)
+        self.assertEqual(len(LIVERPOOL_REF['team']), 28)
         plan = self.plan()
         plan['team'] = dict(LIVERPOOL_REF['team'])
         result = audit_tactic(self.data, plan)

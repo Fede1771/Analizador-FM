@@ -1,0 +1,2712 @@
+{
+  "pressing_central_midfielder_oop": {
+    "attributes": [
+      "Entradas",
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia",
+      "Agresividad"
+    ],
+    "role_instructions_ui": [
+      "Presionar con mÃ¡s insistencia"
+    ],
+    "instruction_context": {
+      "position": "MC",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/067-mcp-sp-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "More Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    },
+    "label_ui": "Mediocampista presionante",
+    "evidence": "capturas/065-mc-sp-entrada.jpg",
+    "behaviors": [
+      "Sube",
+      "Con autoridad"
+    ]
+  },
+  "advanced_playmaker_ip": {
+    "instruction_context": {
+      "position": "MC-left",
+      "scope": "Posición",
+      "evidence": "capturas/222-organizador-adelantado-sin-tooltip.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "No",
+        "passing_risk_ip": "Take More Risks",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    },
+    "attributes": [
+      "Desmarques",
+      "Pases",
+      "Visión",
+      "Decisiones",
+      "Control",
+      "Técnica",
+      "Juego en equipo",
+      "Serenidad"
+    ],
+    "attributes_evidence": "capturas/243-organizador-adelantado-atributos.jpg"
+  },
+  "central_midfielder_oop": {
+    "attributes": [
+      "Entradas",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "MC",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/080-centrocampista-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    },
+    "label_ui": "Centrocampista",
+    "evidence": "capturas/068-mc-sp-centrocampista.jpg",
+    "behaviors": []
+  },
+  "screening_central_midfielder_oop": {
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Decisiones",
+      "ColocaciÃ³n",
+      "ConcentraciÃ³n"
+    ],
+    "role_instructions_ui": [
+      "Presionar con menos insistencia"
+    ],
+    "instruction_context": {
+      "position": "MC",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/074-mc-fijo-sp-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "Less Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    },
+    "label_ui": "Mediocampista fijo",
+    "evidence": "capturas/071-mc-sp-fijo.jpg",
+    "behaviors": [
+      "Mantiene la posiciÃ³n",
+      "Cuidadoso"
+    ]
+  },
+  "wide_covering_central_midfielder_oop": {
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia",
+      "Agilidad"
+    ],
+    "role_instructions_ui": [
+      "Defiende los flancos"
+    ],
+    "instruction_context": {
+      "position": "MC",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/077-mc-cobertura-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    },
+    "label_ui": "Mediocampista de cobertura abierta",
+    "evidence": "capturas/075-mc-sp-cobertura.jpg",
+    "behaviors": [
+      "Cubre la banda"
+    ]
+  },
+  "channel_midfielder_ip": {
+    "attributes": [
+      "Centros",
+      "Desmarques",
+      "Pases",
+      "Control",
+      "TÃ©cnica",
+      "Sacrificio",
+      "AceleraciÃ³n",
+      "Serenidad"
+    ],
+    "role_instructions_ui": [
+      "Moverse entre lÃ­neas"
+    ],
+    "position_context": "AMC",
+    "instruction_context": {
+      "position": "AMC",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/110-canal-amc-instrucciones.jpg",
+      "locked_values": {
+        "attacking_width_ip": "Move Into Channels",
+        "dribbling_direction_ip": "Standard",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    },
+    "label_ui": "Mediocampista entre lÃ­neas",
+    "evidence": "capturas/082-amc-cp-libre.jpg",
+    "behaviors": [
+      "Se abre a las bandas",
+      "Amenaza creativa"
+    ]
+  },
+  "free_role_ip": {
+    "attributes": [
+      "Regate",
+      "Remates lejanos",
+      "Desmarques",
+      "Pases",
+      "VisiÃ³n",
+      "Control",
+      "TÃ©cnica",
+      "Talento"
+    ],
+    "role_instructions_ui": [
+      "Regatear con mÃ¡s frecuencia",
+      "Arriesgar mÃ¡s"
+    ],
+    "instruction_context": {
+      "position": "AMC",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/084-amc-libre-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "dribbling_frequency_ip": "Dribble More",
+        "passing_risk_ip": "Take More Risks",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    },
+    "label_ui": "Mediapunta libre",
+    "evidence": "capturas/083-amc-libre.jpg",
+    "behaviors": [
+      "Expresiva",
+      "Amenaza creativa"
+    ]
+  },
+  "second_striker_ip": {
+    "label_ui": "Segundo delantero",
+    "evidence": "capturas/085-amc-segundo-delantero.jpg",
+    "attributes": [
+      "Remate",
+      "Desmarques",
+      "AnticipaciÃ³n",
+      "Control",
+      "AceleraciÃ³n",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Adelanta su posiciÃ³n al lateral izquierdo",
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [
+      "Subir mÃ¡s"
+    ],
+    "instruction_context": {
+      "position": "AMC",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/086-amc-segundo-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Make More Runs",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "winger_oop": {
+    "label_ui": "Extremo",
+    "evidence": "capturas/088-extremo-sp.jpg",
+    "attributes": [
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "AceleraciÃ³n"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/089-extremo-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "tracking_winger_oop": {
+    "label_ui": "Extremo con retroceso",
+    "evidence": "capturas/090-extremo-retroceso.jpg",
+    "attributes": [
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "AceleraciÃ³n",
+      "Resistencia",
+      "Agresividad"
+    ],
+    "behaviors": [
+      "Retrocede",
+      "Apoya a la defensa"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/091-extremo-retroceso-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "inside_outlet_winger_oop": {
+    "label_ui": "Extremo de salida invertida",
+    "evidence": "capturas/092-extremo-salida-invertida.jpg",
+    "attributes": [
+      "Desmarques",
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "Juego en equipo",
+      "Equilibrio",
+      "ConcentraciÃ³n"
+    ],
+    "behaviors": [
+      "Se queda arriba",
+      "Contraataques"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/093-extremo-salida-invertida-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "wide_outlet_winger_oop": {
+    "label_ui": "Extremo estacionario",
+    "evidence": "capturas/094-extremo-estacionario.jpg",
+    "attributes": [
+      "Desmarques",
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "Juego en equipo",
+      "Velocidad",
+      "ConcentraciÃ³n"
+    ],
+    "behaviors": [
+      "Se queda arriba",
+      "Contraataques"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/095-extremo-estacionario-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "splitting_outlet_attacking_midfielder_oop": {
+    "label_ui": "Mediapunta estacionario con salida",
+    "evidence": "capturas/109-mediapunta-estacionario-salida.jpg",
+    "attributes": [
+      "Desmarques",
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "Juego en equipo",
+      "Velocidad",
+      "ConcentraciÃ³n"
+    ],
+    "behaviors": [
+      "Se queda arriba",
+      "Contraataques"
+    ],
+    "role_instructions_ui": [],
+    "availability_observed": "Disponible en AMC derecho de pareja; ausente en AMC Ãºnico central.",
+    "instruction_context": {
+      "position": "AMC-right",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/111-amc-salida-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "splitting_outlet_centre_forward_oop": {
+    "label_ui": "Delantero centro estacionario con salida",
+    "evidence": "capturas/114-delantero-salida.jpg",
+    "attributes": [
+      "Desmarques",
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "Juego en equipo",
+      "Velocidad",
+      "ConcentraciÃ³n"
+    ],
+    "behaviors": [
+      "Se queda arriba",
+      "Contraataques"
+    ],
+    "role_instructions_ui": [],
+    "availability_observed": "Disponible en ST derecho de pareja; ausente en ST Ãºnico central.",
+    "instruction_context": {
+      "position": "ST-right",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/115-delantero-salida-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "wide_centre_back_ip": {
+    "label_ui": "Central abierto",
+    "evidence": "capturas/124-central-abierto-cp.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "ColocaciÃ³n",
+      "Fuerza",
+      "Alcance de salto"
+    ],
+    "behaviors": [
+      "Mantiene la posiciÃ³n",
+      "Mantenerse abierto"
+    ],
+    "role_instructions_ui": [],
+    "availability_observed": "Central exterior derecho de lÃ­nea de tres.",
+    "instruction_context": {
+      "position": "DC-right-of-three",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/274-central-abierto-aguantar-confirmado.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ],
+      "occluded_values": [],
+      "value_confirmation_evidence": "capturas/274-central-abierto-aguantar-confirmado.jpg",
+      "prior_panel_evidence": "capturas/125-central-abierto-instrucciones.jpg",
+      "confirmation_formation_ip": "3-2-4-1"
+    }
+  },
+  "overlapping_centre_back_ip": {
+    "label_ui": "Central que dobla",
+    "evidence": "capturas/126-central-dobla.jpg",
+    "attributes": [
+      "Centros",
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "Sacrificio",
+      "Fuerza",
+      "Resistencia"
+    ],
+    "behaviors": [
+      "Sube mÃ¡s arriba",
+      "Mantenerse abierto"
+    ],
+    "role_instructions_ui": [
+      "Subir mÃ¡s"
+    ],
+    "instruction_context": {
+      "position": "DC-right-of-three",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/275-central-dobla-aguantar-confirmado.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Make More Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip"
+      ],
+      "occluded_values": [],
+      "value_confirmation_evidence": "capturas/275-central-dobla-aguantar-confirmado.jpg",
+      "prior_panel_evidence": "capturas/127-central-dobla-instrucciones.jpg",
+      "confirmation_formation_ip": "3-2-4-1"
+    }
+  },
+  "box_to_box_midfielder_ip": {
+    "label_ui": "Mediocampista todoterreno",
+    "evidence": "capturas/129-todoterreno-dm.jpg",
+    "attributes": [
+      "Desmarques",
+      "Pases",
+      "Entradas",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia"
+    ],
+    "behaviors": [
+      "Adelanta su posiciÃ³n a mediocampista defensivo",
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [],
+    "availability_observed": "DM derecho de doble pivote.",
+    "instruction_context": {
+      "position": "DM-right-double-pivot",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/273-todoterreno-aguantar-confirmado.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ],
+      "occluded_values": [],
+      "value_confirmation_evidence": "capturas/273-todoterreno-aguantar-confirmado.jpg",
+      "prior_panel_evidence": "capturas/130-todoterreno-instrucciones.jpg",
+      "confirmation_formation_ip": "4-2-2-2 ancho con mediocampista defensivo"
+    }
+  },
+  "box_to_box_playmaker_ip": {
+    "label_ui": "Organizador todoterreno",
+    "evidence": "capturas/131-organizador-todoterreno.jpg",
+    "attributes": [
+      "Desmarques",
+      "Pases",
+      "VisiÃ³n",
+      "Decisiones",
+      "Control",
+      "TÃ©cnica",
+      "Juego en equipo",
+      "Sacrificio"
+    ],
+    "behaviors": [
+      "Adelanta su posiciÃ³n a mediocampista defensivo",
+      "Amenaza creativa"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DM-right-double-pivot",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/132-organizador-todoterreno-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ],
+      "occluded_values": [],
+      "additional_evidence": "capturas/144-organizador-todoterreno-sin-tooltip.jpg"
+    }
+  },
+  "wide_centre_back_oop": {
+    "label_ui": "Central abierto",
+    "evidence": "capturas/135-central-abierto-sp.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "ColocaciÃ³n",
+      "Fuerza",
+      "Alcance de salto"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DC-right-of-three",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/136-central-abierto-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "stopping_wide_centre_back_oop": {
+    "label_ui": "Zaguero abierto",
+    "evidence": "capturas/137-zaguero-abierto.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "ColocaciÃ³n",
+      "Fuerza",
+      "Alcance de salto",
+      "ValentÃ­a"
+    ],
+    "behaviors": [
+      "Sale al encuentro",
+      "Con autoridad"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DC-right-of-three",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/138-zaguero-abierto-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "covering_wide_centre_back_oop": {
+    "label_ui": "Central de cobertura abierta",
+    "evidence": "capturas/139-central-cobertura-abierta.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "ColocaciÃ³n",
+      "Fuerza",
+      "Velocidad"
+    ],
+    "behaviors": [
+      "Mantiene la posiciÃ³n",
+      "Cuidadoso"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DC-right-of-three",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/140-central-cobertura-abierta-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "wing_back_oop": {
+    "label_ui": "Lateral ofensivo",
+    "evidence": "capturas/141-carrilero-sp.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "ColocaciÃ³n",
+      "Juego en equipo",
+      "AceleraciÃ³n",
+      "Resistencia"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "WBR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/142-carrilero-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "pressing_wing_back_oop": {
+    "label_ui": "Carrilero presionante",
+    "evidence": "capturas/143-carrilero-presionante.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "ColocaciÃ³n",
+      "Juego en equipo",
+      "Sacrificio",
+      "AceleraciÃ³n",
+      "Resistencia"
+    ],
+    "behaviors": [
+      "Sube",
+      "Con autoridad"
+    ],
+    "role_instructions_ui": [
+      "Presionar con mÃ¡s insistencia"
+    ],
+    "instruction_context": {
+      "position": "WBR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/145-carrilero-presionante-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "More Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "holding_wing_back_oop": {
+    "label_ui": "Carrilero de contenciÃ³n",
+    "evidence": "capturas/146-carrilero-contencion.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "AnticipaciÃ³n",
+      "Decisiones",
+      "ColocaciÃ³n",
+      "AceleraciÃ³n",
+      "ConcentraciÃ³n"
+    ],
+    "behaviors": [
+      "Mantiene la posiciÃ³n",
+      "Cuidadoso"
+    ],
+    "role_instructions_ui": [
+      "Presionar con menos insistencia"
+    ],
+    "instruction_context": {
+      "position": "WBR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/147-carrilero-contencion-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "Less Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "advanced_wing_back_ip": {
+    "label_ui": "Carrilero avanzado",
+    "evidence": "capturas/150-carrilero-avanzado.jpg",
+    "attributes": [
+      "Centros",
+      "Regate",
+      "Desmarques",
+      "TÃ©cnica",
+      "Juego en equipo",
+      "Sacrificio",
+      "AceleraciÃ³n",
+      "Resistencia"
+    ],
+    "behaviors": [
+      "Sube mÃ¡s arriba",
+      "Mantenerse abierto"
+    ],
+    "role_instructions_ui": [
+      "Subir mÃ¡s"
+    ],
+    "instruction_context": {
+      "position": "WBR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/152-carrilero-avanzado-sin-tooltip.jpg",
+      "locked_values": {
+        "forward_runs_ip": "Make More Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "wide_midfielder_ip": {
+    "label_ui": "Mediocampista abierto",
+    "evidence": "capturas/155-mediocampista-abierto-cp.jpg",
+    "attributes": [
+      "Centros",
+      "Pases",
+      "Decisiones",
+      "TÃ©cnica",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia",
+      "Velocidad"
+    ],
+    "behaviors": [
+      "Mantiene la posiciÃ³n",
+      "Mantenerse abierto"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "MR",
+      "scope": "PosiciÃ³n",
+      "evidence": "capturas/157-mediocampista-abierto-sin-tooltip.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "No"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "ball_playing_goalkeeper_ip": {
+    "label_ui": "Portero con salida",
+    "evidence": "capturas/163-arquero-cp-segunda-pasada.jpg",
+    "attributes": [
+      "Blocaje",
+      "Alcance aéreo",
+      "Mando en el área",
+      "Comunicación",
+      "Saques de puerta",
+      "Colocación",
+      "Reflejos",
+      "Agilidad"
+    ],
+    "behaviors": [
+      "Expresiva",
+      "Itinerante"
+    ],
+    "role_instructions_ui": [
+      "Arriesgar más"
+    ]
+  },
+  "goalkeeper_ip": {
+    "label_ui": "Portero",
+    "evidence": "capturas/164-portero-cp.jpg",
+    "attributes": [
+      "Blocaje",
+      "Alcance aéreo",
+      "Mando en el área",
+      "Comunicación",
+      "Colocación",
+      "Reflejos",
+      "Agilidad",
+      "Concentración"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "GK",
+      "scope": "Posición",
+      "evidence": "capturas/166-portero-cp-sin-tooltip.jpg",
+      "locked_values": {
+        "attacking_width_ip": "Standard",
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Standard",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "shoot_ip": "Standard",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "dribbling_frequency_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "no_nonsense_goalkeeper_ip": {
+    "label_ui": "Portero práctico",
+    "evidence": "capturas/167-portero-practico-ficha.jpg",
+    "attributes": [
+      "Blocaje",
+      "Alcance aéreo",
+      "Mando en el área",
+      "Comunicación",
+      "Colocación",
+      "Reflejos",
+      "Agilidad",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Cuidado",
+      "Mantiene la posición"
+    ],
+    "role_instructions_ui": [
+      "Tomar menos riesgos",
+      "Regatear con menos frecuencia"
+    ],
+    "instruction_context": {
+      "position": "GK",
+      "scope": "Posición",
+      "evidence": "capturas/169-portero-practico-sin-tooltip.jpg",
+      "locked_values": {
+        "attacking_width_ip": "Standard",
+        "dribbling_direction_ip": "Standard",
+        "dribbling_frequency_ip": "Dribble Less",
+        "forward_runs_ip": "Standard",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "shoot_ip": "Standard",
+        "passing_risk_ip": "Take Fewer Risks",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "sweeper_keeper_oop": {
+    "label_ui": "Portero líbero",
+    "evidence": "capturas/170-portero-libero-ficha.jpg",
+    "attributes": [
+      "Blocaje",
+      "Alcance aéreo",
+      "Mando en el área",
+      "Comunicación",
+      "Anticipación",
+      "Decisiones",
+      "Uno contra uno",
+      "Reflejos"
+    ],
+    "behaviors": [
+      "No se queda bajo los palos",
+      "Proactivo"
+    ],
+    "role_instructions_ui": []
+  },
+  "goalkeeper_oop": {
+    "label_ui": "Portero",
+    "evidence": "capturas/171-portero-sp-ficha.jpg",
+    "attributes": [
+      "Blocaje",
+      "Alcance aéreo",
+      "Mando en el área",
+      "Comunicación",
+      "Colocación",
+      "Reflejos",
+      "Agilidad",
+      "Concentración"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "GK",
+      "scope": "Posición",
+      "evidence": "capturas/172-portero-sp-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "Standard",
+        "marking_oop": "Standard",
+        "marking_target_oop": "Standard"
+      },
+      "editable_groups": [
+        "tackling_oop"
+      ]
+    }
+  },
+  "line_holding_keeper_oop": {
+    "label_ui": "Portero entre palos",
+    "evidence": "capturas/173-portero-entre-palos-ficha.jpg",
+    "attributes": [
+      "Blocaje",
+      "Alcance aéreo",
+      "Mando en el área",
+      "Comunicación",
+      "Colocación",
+      "Reflejos",
+      "Agilidad",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Reactivo"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "GK",
+      "scope": "Posición",
+      "evidence": "capturas/174-portero-entre-palos-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "Standard",
+        "marking_oop": "Standard",
+        "marking_target_oop": "Standard"
+      },
+      "editable_groups": [
+        "tackling_oop"
+      ]
+    }
+  },
+  "ball_playing_centre_back_ip": {
+    "label_ui": "Central con salida",
+    "evidence": "capturas/175-central-salida-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Pases",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Fuerza",
+      "Alcance de salto"
+    ],
+    "behaviors": [
+      "Expresiva",
+      "Mantiene la posición"
+    ],
+    "role_instructions_ui": [
+      "Mantener la posición",
+      "Arriesgar más"
+    ],
+    "instruction_context": {
+      "position": "DC-right",
+      "scope": "Posición",
+      "evidence": "capturas/176-central-salida-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Make Fewer Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "passing_risk_ip": "Take More Risks",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "centre_back_ip": {
+    "label_ui": "Defensa central",
+    "evidence": "capturas/177-defensa-central-cp-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Fuerza",
+      "Alcance de salto"
+    ],
+    "behaviors": [
+      "Mantiene la posición"
+    ],
+    "role_instructions_ui": [
+      "Mantener la posición"
+    ],
+    "instruction_context": {
+      "position": "DC-right",
+      "scope": "Posición",
+      "evidence": "capturas/178-defensa-central-cp-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Make Fewer Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "advanced_centre_back_ip": {
+    "label_ui": "Central avanzado",
+    "evidence": "capturas/179-central-avanzado-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Pases",
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Técnica"
+    ],
+    "behaviors": [
+      "Se adelanta a posición de mediocampista defensivo",
+      "Expresiva"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DC-right",
+      "scope": "Posición",
+      "evidence": "capturas/181-central-avanzado-carreras.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Make Fewer Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "no_nonsense_center_back_ip": {
+    "label_ui": "Central práctico",
+    "evidence": "capturas/182-central-practico-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Fuerza",
+      "Alcance de salto"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Cuidado"
+    ],
+    "role_instructions_ui": [
+      "Tomar menos riesgos",
+      "Regatear con menos frecuencia",
+      "Mantener la posición"
+    ],
+    "instruction_context": {
+      "position": "DC-right",
+      "scope": "Posición",
+      "evidence": "capturas/183-central-practico-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "dribbling_frequency_ip": "Dribble Less",
+        "forward_runs_ip": "Make Fewer Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "passing_risk_ip": "Take Fewer Risks",
+        "passing_directness_ip": "More Direct",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "shoot_ip"
+      ]
+    }
+  },
+  "centre_back_oop": {
+    "label_ui": "Defensa central",
+    "evidence": "capturas/184-central-sp-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Fuerza",
+      "Alcance de salto"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DC-right",
+      "scope": "Posición",
+      "evidence": "capturas/185-central-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "stopping_centre_back_oop": {
+    "label_ui": "Zaguero",
+    "evidence": "capturas/186-zaguero-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Fuerza",
+      "Alcance de salto",
+      "Valentía"
+    ],
+    "behaviors": [
+      "Sale al encuentro",
+      "Con autoridad"
+    ],
+    "role_instructions_ui": [
+      "Presionar con menos insistencia"
+    ],
+    "instruction_context": {
+      "position": "DC-right",
+      "scope": "Posición",
+      "evidence": "capturas/187-zaguero-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "More Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    },
+    "ui_discrepancy": "La ficha 186 mostraba resumen Presionar con menos insistencia; el panel activo 187 confirma Más a menudo bloqueado. Priorizar panel, conservar discrepancia."
+  },
+  "covering_centre_back_oop": {
+    "label_ui": "Defensa central de cobertura",
+    "evidence": "capturas/188-central-cobertura-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Fuerza",
+      "Velocidad"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Prudente"
+    ],
+    "role_instructions_ui": [
+      "Presionar con menos insistencia"
+    ],
+    "instruction_context": {
+      "position": "DC-right",
+      "scope": "Posición",
+      "evidence": "capturas/189-central-cobertura-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "Less Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "inside_full_back_ip": {
+    "label_ui": "Lateral interior",
+    "evidence": "capturas/190-lateral-interior-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Fuerza"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Se mueve hacia dentro a posición de central"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/191-lateral-interior-instrucciones.jpg",
+      "locked_values": {
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "full_back_ip": {
+    "label_ui": "Lateral defensivo",
+    "evidence": "capturas/192-lateral-defensivo-ficha.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Juego en equipo",
+      "Aceleración",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Mantenerse abierto"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/193-lateral-defensivo-instrucciones.jpg",
+      "locked_values": {
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "wing_back_ip": {
+    "label_ui": "Lateral ofensivo",
+    "evidence": "capturas/194-lateral-ofensivo-cp-ficha.jpg",
+    "attributes": [
+      "Centros",
+      "Marca",
+      "Entradas",
+      "Juego en equipo",
+      "Sacrificio",
+      "Aceleración",
+      "Resistencia",
+      "Velocidad"
+    ],
+    "behaviors": [
+      "Sube más arriba",
+      "Mantenerse abierto"
+    ],
+    "role_instructions_ui": [
+      "Subir más"
+    ],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/195-lateral-ofensivo-cp-instrucciones.jpg",
+      "locked_values": {
+        "forward_runs_ip": "Make More Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "inside_wing_back_ip": {
+    "label_ui": "Carrilero interior",
+    "evidence": "capturas/196-carrilero-interior-ficha.jpg",
+    "attributes": [
+      "Pases",
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Juego en equipo",
+      "Aceleración",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Se mueve hacia dentro a posición de mediocampista defensivo"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/197-carrilero-interior-instrucciones.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "No",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip"
+      ]
+    }
+  },
+  "playmaking_wing_back_ip": {
+    "label_ui": "Carrilero organizador",
+    "evidence": "capturas/198-carrilero-organizador-ficha.jpg",
+    "attributes": [
+      "Pases",
+      "Entradas",
+      "Visión",
+      "Decisiones",
+      "Control",
+      "Técnica",
+      "Juego en equipo",
+      "Aceleración"
+    ],
+    "behaviors": [
+      "Se mueve hacia dentro a posición de mediocampista defensivo",
+      "Expresiva"
+    ],
+    "role_instructions_ui": [
+      "Variar la posición"
+    ],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/199-carrilero-organizador-instrucciones.jpg",
+      "locked_values": {
+        "freedom_of_movement_ip": "Roam From Position",
+        "hold_up_ball_ip": "No"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "full_back_oop": {
+    "label_ui": "Lateral defensivo",
+    "evidence": "capturas/200-lateral-sp-ficha.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Juego en equipo",
+      "Aceleración"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/201-lateral-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "pressing_full_back_oop": {
+    "label_ui": "Lateral presionante",
+    "evidence": "capturas/202-lateral-presionante-ficha.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Juego en equipo",
+      "Sacrificio",
+      "Aceleración",
+      "Agresividad"
+    ],
+    "behaviors": [
+      "Sube",
+      "Con autoridad"
+    ],
+    "role_instructions_ui": [
+      "Presionar con más insistencia"
+    ],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/203-lateral-presionante-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "More Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "holding_full_back_oop": {
+    "label_ui": "Lateral de contención",
+    "evidence": "capturas/204-lateral-contencion-ficha.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Aceleración",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Cuidadoso"
+    ],
+    "role_instructions_ui": [
+      "Presionar con menos insistencia"
+    ],
+    "instruction_context": {
+      "position": "DR",
+      "scope": "Posición",
+      "evidence": "capturas/205-lateral-contencion-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "Less Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "deep_lying_playmaker_ip": {
+    "label_ui": "Organizador defensivo",
+    "evidence": "capturas/206-organizador-retrasado-ficha.jpg",
+    "attributes": [
+      "Pases",
+      "Visión",
+      "Decisiones",
+      "Control",
+      "Técnica",
+      "Juego en equipo",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Expresiva"
+    ],
+    "role_instructions_ui": [
+      "Arriesgar más"
+    ],
+    "instruction_context": {
+      "position": "DM-single",
+      "scope": "Posición",
+      "evidence": "capturas/207-organizador-defensivo-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Make Fewer Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "passing_risk_ip": "Take More Risks",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "defensive_midfielder_ip": {
+    "label_ui": "Mediocentro defensivo",
+    "evidence": "capturas/208-mediocentro-defensivo-cp-ficha.jpg",
+    "attributes": [
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Juego en equipo",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Cuidado"
+    ],
+    "role_instructions_ui": [
+      "Mantener la posición"
+    ],
+    "instruction_context": {
+      "position": "DM-single",
+      "scope": "Posición",
+      "evidence": "capturas/209-mediocentro-defensivo-cp-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "dribbling_frequency_ip": "Dribble Less",
+        "forward_runs_ip": "Make Fewer Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "half_back_ip": {
+    "label_ui": "Medio cierre",
+    "evidence": "capturas/210-medio-cierre-ficha.jpg",
+    "attributes": [
+      "Cabeceo",
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Colocación",
+      "Juego en equipo",
+      "Fuerza",
+      "Alcance de salto"
+    ],
+    "behaviors": [
+      "Se retrasa a posición de central",
+      "Cuidado"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DM-single",
+      "scope": "Posición",
+      "evidence": "capturas/211-medio-cierre-instrucciones.jpg",
+      "locked_values": {
+        "dribbling_direction_ip": "Standard",
+        "forward_runs_ip": "Make Fewer Runs",
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_frequency_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "screening_defensive_midfielder_oop": {
+    "label_ui": "Mediocentro fijo",
+    "evidence": "capturas/212-mediocentro-fijo-ficha.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Mantiene la posición",
+      "Cuidadoso"
+    ],
+    "role_instructions_ui": [
+      "Presionar con menos insistencia"
+    ],
+    "instruction_context": {
+      "position": "DM-single",
+      "scope": "Posición",
+      "evidence": "capturas/213-mediocentro-fijo-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "Less Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "defensive_midfielder_oop": {
+    "label_ui": "Mediocentro defensivo",
+    "evidence": "capturas/214-mediocentro-defensivo-sp-ficha.jpg",
+    "attributes": [
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Juego en equipo",
+      "Sacrificio"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DM-single",
+      "scope": "Posición",
+      "evidence": "capturas/215-mediocentro-defensivo-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "dropping_defensive_midfielder_oop": {
+    "label_ui": "Mediocentro de repliegue",
+    "evidence": "capturas/216-mediocentro-repliegue-ficha.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Juego en equipo",
+      "Sacrificio",
+      "Fuerza"
+    ],
+    "behaviors": [
+      "Se retrasa a posición de central"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "DM-single",
+      "scope": "Posición",
+      "evidence": "capturas/217-mediocentro-repliegue-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "central_midfielder_ip": {
+    "label_ui": "Centrocampista",
+    "evidence": "capturas/218-centrocampista-cp-ficha.jpg",
+    "attributes": [
+      "Pases",
+      "Entradas",
+      "Decisiones",
+      "Control",
+      "Juego en equipo"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "MC-left",
+      "scope": "Posición",
+      "evidence": "capturas/219-centrocampista-cp-instrucciones.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "attacking_midfielder_ip": {
+    "label_ui": "Mediapunta",
+    "evidence": "capturas/220-mediapunta-cp-ficha.jpg",
+    "attributes": [
+      "Remates lejanos",
+      "Desmarques",
+      "Pases",
+      "Control",
+      "Técnica",
+      "Talento",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Encuentra espacios entre líneas",
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "MC-left",
+      "scope": "Posición",
+      "evidence": "capturas/221-mediapunta-cp-instrucciones.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "wide_central_midfielder_ip": {
+    "label_ui": "Mediocampista abierto",
+    "evidence": "capturas/223-mediocampista-abierto-central-ficha.jpg",
+    "attributes": [
+      "Pases",
+      "Entradas",
+      "Decisiones",
+      "Control",
+      "Juego en equipo"
+    ],
+    "behaviors": [
+      "Cae a banda"
+    ],
+    "role_instructions_ui": [
+      "Abrirse a banda"
+    ],
+    "instruction_context": {
+      "position": "MC-left",
+      "scope": "Posición",
+      "evidence": "capturas/224-mediocampista-abierto-central-instrucciones.jpg",
+      "locked_values": {
+        "attacking_width_ip": "Stay Wider",
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "midfield_playmaker_ip": {
+    "label_ui": "Mediocampista organizador",
+    "evidence": "capturas/225-mediocampista-organizador-ficha.jpg",
+    "attributes": [
+      "Desmarques",
+      "Pases",
+      "Visión",
+      "Decisiones",
+      "Control",
+      "Técnica",
+      "Juego en equipo",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Expresiva",
+      "Amenaza creativa"
+    ],
+    "role_instructions_ui": [
+      "Arriesgar más"
+    ],
+    "instruction_context": {
+      "position": "MC-left",
+      "scope": "Posición",
+      "evidence": "capturas/226-mediocampista-organizador-instrucciones.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "No",
+        "passing_risk_ip": "Take More Risks",
+        "cross_from_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_directness_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "inside_forward_ip": {
+    "label_ui": "Delantero interior",
+    "evidence": "capturas/227-delantero-interior-ficha.jpg",
+    "attributes": [
+      "Regate",
+      "Desmarques",
+      "Anticipación",
+      "Control",
+      "Técnica",
+      "Aceleración",
+      "Agilidad",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Se mueve hacia adentro",
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [
+      "Subir más"
+    ],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "Posición",
+      "evidence": "capturas/228-delantero-interior-instrucciones.jpg",
+      "locked_values": {
+        "forward_runs_ip": "Make More Runs"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "winger_ip": {
+    "label_ui": "Extremo",
+    "evidence": "capturas/229-extremo-cp-ficha.jpg",
+    "attributes": [
+      "Centros",
+      "Regate",
+      "Técnica",
+      "Juego en equipo",
+      "Aceleración",
+      "Velocidad",
+      "Agilidad"
+    ],
+    "behaviors": [
+      "Mantenerse abierto",
+      "Amenaza creativa"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "Posición",
+      "evidence": "capturas/230-extremo-cp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "playmaking_winger_ip": {
+    "label_ui": "Extremo organizador",
+    "evidence": "capturas/231-extremo-organizador-ficha.jpg",
+    "attributes": [
+      "Centros",
+      "Regate",
+      "Desmarques",
+      "Pases",
+      "Visión",
+      "Decisiones",
+      "Control",
+      "Técnica"
+    ],
+    "behaviors": [
+      "Se mueve hacia adentro",
+      "Expresiva"
+    ],
+    "role_instructions_ui": [
+      "Arriesgar más"
+    ],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "Posición",
+      "evidence": "capturas/232-extremo-organizador-instrucciones.jpg",
+      "locked_values": {
+        "attacking_width_ip": "Sit Narrower",
+        "forward_runs_ip": "Standard",
+        "freedom_of_movement_ip": "Roam From Position",
+        "passing_risk_ip": "Take More Risks",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "wide_forward_ip": {
+    "label_ui": "Delantero abierto",
+    "evidence": "capturas/233-delantero-abierto-ficha.jpg",
+    "attributes": [
+      "Regate",
+      "Desmarques",
+      "Anticipación",
+      "Control",
+      "Técnica",
+      "Aceleración",
+      "Velocidad",
+      "Agilidad"
+    ],
+    "behaviors": [
+      "Mantenerse abierto",
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [
+      "Subir más"
+    ],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "Posición",
+      "evidence": "capturas/234-delantero-abierto-instrucciones.jpg",
+      "locked_values": {
+        "forward_runs_ip": "Make More Runs",
+        "passing_directness_ip": "Shorter",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "cross_from_ip"
+      ]
+    }
+  },
+  "inside_winger_ip": {
+    "label_ui": "Extremo invertido",
+    "evidence": "capturas/235-extremo-invertido-ficha.jpg",
+    "attributes": [
+      "Regate",
+      "Control",
+      "Técnica",
+      "Juego en equipo",
+      "Aceleración",
+      "Agilidad",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Se mueve hacia adentro",
+      "Amenaza creativa"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMR",
+      "scope": "Posición",
+      "evidence": "capturas/236-extremo-invertido-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip",
+        "cross_from_ip",
+        "crossing_strategy_ip"
+      ]
+    }
+  },
+  "central_outlet_attacking_midfielder_oop": {
+    "label_ui": "Mediapunta estacionario",
+    "evidence": "capturas/237-mediapunta-estacionario-ficha.jpg",
+    "attributes": [
+      "Desmarques",
+      "Anticipación",
+      "Decisiones",
+      "Juego en equipo",
+      "Equilibrio",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Se queda arriba",
+      "Contraataques"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMC",
+      "scope": "Posición",
+      "evidence": "capturas/238-mediapunta-estacionario-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "attacking_midfielder_oop": {
+    "label_ui": "Mediapunta",
+    "evidence": "capturas/239-mediapunta-ficha.jpg",
+    "attributes": [
+      "Anticipación",
+      "Decisiones",
+      "Sacrificio"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMC",
+      "scope": "Posición",
+      "evidence": "capturas/240-mediapunta-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "tracking_attacking_midfielder_oop": {
+    "label_ui": "Mediapunta con retroceso",
+    "evidence": "capturas/241-mediapunta-retroceso-ficha.jpg",
+    "attributes": [
+      "Anticipación",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia",
+      "Agresividad"
+    ],
+    "behaviors": [
+      "Retrocede",
+      "Apoya a la defensa"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "AMC",
+      "scope": "Posición",
+      "evidence": "capturas/242-mediapunta-retroceso-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "pressing_defensive_midfielder_oop": {
+    "label_ui": "Mediocentro presionante",
+    "evidence": "capturas/245-mediocentro-presionante-ficha.jpg",
+    "attributes": [
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia",
+      "Agresividad"
+    ],
+    "behaviors": [
+      "Sube",
+      "Con autoridad"
+    ],
+    "role_instructions_ui": [
+      "Presionar con más insistencia"
+    ],
+    "instruction_context": {
+      "position": "DM (derecha, doble pivote)",
+      "scope": "Posición",
+      "evidence": "capturas/246-mediocentro-presionante-instrucciones.jpg",
+      "locked_values": {
+        "pressing_oop": "More Often"
+      },
+      "editable_groups": [
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "wide_covering_defensive_midfielder_oop": {
+    "label_ui": "Mediocampista defensivo de cobertura abierta",
+    "evidence": "capturas/247-mediocentro-cobertura-abierta-ficha.jpg",
+    "attributes": [
+      "Marca",
+      "Entradas",
+      "Anticipación",
+      "Decisiones",
+      "Colocación",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia"
+    ],
+    "behaviors": [
+      "Cubre la banda"
+    ],
+    "role_instructions_ui": [
+      "Defiende los flancos"
+    ],
+    "instruction_context": {
+      "position": "DM (derecha, doble pivote)",
+      "scope": "Posición",
+      "evidence": "capturas/248-cobertura-abierta-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "wide_midfielder_oop": {
+    "label_ui": "Mediocampista abierto",
+    "evidence": "capturas/249-medio-abierto-ficha.jpg",
+    "attributes": [
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "Aceleración"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "MR",
+      "scope": "Posición",
+      "evidence": "capturas/250-medio-abierto-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "tracking_wide_midfielder_oop": {
+    "label_ui": "Mediocampista abierto con retroceso",
+    "evidence": "capturas/251-medio-abierto-retroceso-ficha.jpg",
+    "attributes": [
+      "Anticipación",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "Aceleración",
+      "Resistencia",
+      "Agresividad"
+    ],
+    "behaviors": [
+      "Retrocede",
+      "Apoya a la defensa"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "MR",
+      "scope": "Posición",
+      "evidence": "capturas/252-medio-abierto-retroceso-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "wide_outlet_wide_midfielder_oop": {
+    "label_ui": "Mediocampista abierto estacionario",
+    "evidence": "capturas/253-medio-abierto-estacionario-ficha.jpg",
+    "attributes": [
+      "Desmarques",
+      "Anticipación",
+      "Decisiones",
+      "Juego en equipo",
+      "Velocidad",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Se queda arriba",
+      "Contraataques"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "MR",
+      "scope": "Posición",
+      "evidence": "capturas/254-medio-abierto-estacionario-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "tracking_centre_forward_oop": {
+    "label_ui": "Delantero centro con retroceso",
+    "evidence": "capturas/255-delantero-retroceso-ficha.jpg",
+    "attributes": [
+      "Anticipación",
+      "Decisiones",
+      "Juego en equipo",
+      "Sacrificio",
+      "Resistencia",
+      "Agresividad"
+    ],
+    "behaviors": [
+      "Retrocede",
+      "Apoya a la defensa"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/256-delantero-retroceso-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "centre_forward_oop": {
+    "label_ui": "Delantero centro",
+    "evidence": "capturas/257-delantero-centro-sp-ficha.jpg",
+    "attributes": [
+      "Anticipación",
+      "Decisiones",
+      "Sacrificio"
+    ],
+    "behaviors": [],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/258-delantero-centro-sp-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "central_outlet_centre_forward_oop": {
+    "label_ui": "Delantero centro estacionario",
+    "evidence": "capturas/259-delantero-estacionario-ficha.jpg",
+    "attributes": [
+      "Desmarques",
+      "Anticipación",
+      "Decisiones",
+      "Juego en equipo",
+      "Equilibrio",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Se queda arriba",
+      "Contraataques"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/260-delantero-estacionario-instrucciones.jpg",
+      "locked_values": {},
+      "editable_groups": [
+        "pressing_oop",
+        "marking_oop",
+        "tackling_oop",
+        "marking_target_oop"
+      ]
+    }
+  },
+  "deep_lying_forward_ip": {
+    "label_ui": "Delantero de apoyo",
+    "evidence": "capturas/261-delantero-apoyo-ficha.jpg",
+    "attributes": [
+      "Remate",
+      "Desmarques",
+      "Control",
+      "Técnica",
+      "Fuerza",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Retrocede al espacio",
+      "Conecta el juego"
+    ],
+    "role_instructions_ui": [
+      "Mantener el balón"
+    ],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/262-delantero-apoyo-instrucciones.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "Yes",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "centre_forward_ip": {
+    "label_ui": "Delantero centro",
+    "evidence": "capturas/263-delantero-centro-cp-ficha.jpg",
+    "attributes": [
+      "Remate",
+      "Cabeceo",
+      "Desmarques",
+      "Control",
+      "Técnica",
+      "Aceleración",
+      "Fuerza",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/264-delantero-centro-cp-instrucciones.jpg",
+      "locked_values": {
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "target_forward_ip": {
+    "label_ui": "Delantero torre",
+    "evidence": "capturas/265-delantero-torre-ficha.jpg",
+    "attributes": [
+      "Remate",
+      "Cabeceo",
+      "Desmarques",
+      "Fuerza",
+      "Alcance de salto",
+      "Equilibrio",
+      "Valentía",
+      "Agresividad"
+    ],
+    "behaviors": [
+      "Juega en la última línea",
+      "Conecta el juego"
+    ],
+    "role_instructions_ui": [
+      "Mantener la posición"
+    ],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/266-delantero-torre-instrucciones.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "Yes",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "poacher_ip": {
+    "label_ui": "Ariete",
+    "evidence": "capturas/267-ariete-ficha.jpg",
+    "attributes": [
+      "Remate",
+      "Cabeceo",
+      "Desmarques",
+      "Anticipación",
+      "Aceleración",
+      "Serenidad",
+      "Concentración"
+    ],
+    "behaviors": [
+      "Juega en la última línea",
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [
+      "Mantener la posición"
+    ],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/268-ariete-instrucciones.jpg",
+      "locked_values": {
+        "freedom_of_movement_ip": "Follow Tactical Position",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "channel_forward_ip": {
+    "label_ui": "Delantero entre líneas",
+    "evidence": "capturas/269-delantero-entre-lineas-ficha.jpg",
+    "attributes": [
+      "Regate",
+      "Remate",
+      "Desmarques",
+      "Control",
+      "Técnica",
+      "Sacrificio",
+      "Aceleración",
+      "Serenidad"
+    ],
+    "behaviors": [
+      "Se abre a las bandas",
+      "Amenaza de gol"
+    ],
+    "role_instructions_ui": [
+      "Moverse entre líneas"
+    ],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/270-delantero-entre-lineas-instrucciones.jpg",
+      "locked_values": {
+        "hold_up_ball_ip": "No",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "forward_runs_ip",
+        "freedom_of_movement_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  },
+  "false_nine_ip": {
+    "label_ui": "Falso nueve",
+    "evidence": "capturas/271-falso-nueve-ficha.jpg",
+    "attributes": [
+      "Regate",
+      "Desmarques",
+      "Pases",
+      "Visión",
+      "Decisiones",
+      "Control",
+      "Técnica",
+      "Juego en equipo"
+    ],
+    "behaviors": [
+      "Retrasa su posición para ser mediapunta",
+      "Conecta el juego"
+    ],
+    "role_instructions_ui": [
+      "Variar la posición"
+    ],
+    "instruction_context": {
+      "position": "ST (derecha, pareja)",
+      "scope": "Posición",
+      "evidence": "capturas/272-falso-nueve-instrucciones.jpg",
+      "locked_values": {
+        "forward_runs_ip": "Standard",
+        "freedom_of_movement_ip": "Roam From Position",
+        "cross_from_ip": "Standard",
+        "crossing_strategy_ip": "Standard"
+      },
+      "editable_groups": [
+        "attacking_width_ip",
+        "dribbling_direction_ip",
+        "dribbling_frequency_ip",
+        "hold_up_ball_ip",
+        "shoot_ip",
+        "passing_risk_ip",
+        "passing_directness_ip"
+      ]
+    }
+  }
+}
