@@ -1,7 +1,10 @@
 $ErrorActionPreference = "Stop"
 $workspace = Split-Path -Parent $PSScriptRoot
 $venvPython = Join-Path $workspace ".venv\Scripts\python.exe"
-$requirements = Join-Path $workspace "requirements-lock-windows.txt"
+$requirements = Join-Path $PSScriptRoot "requirements-lock-windows.txt"
+if (-not (Test-Path -LiteralPath $requirements)) {
+    $requirements = Join-Path $workspace "requirements-lock-windows.txt"
+}
 if (-not (Test-Path -LiteralPath $venvPython)) {
     $launcher = Get-Command py -ErrorAction SilentlyContinue
     if ($launcher) {

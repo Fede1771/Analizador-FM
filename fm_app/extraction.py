@@ -66,7 +66,10 @@ def main():
                 stored_tactics = {'available':False,'records':[], 'error':str(error),
                     'limitations':'No se pudo interpretar el bloque táctico; podés confirmar tu táctica manualmente.'}
             (args.output/'tactics.json').write_text(json.dumps(stored_tactics, ensure_ascii=False, default=serial), encoding='utf-8')
-            shared_scouting = Path('data/scouting_cache.json')
+            from fm_app.storage import DATA_DIR
+            shared_scouting = DATA_DIR / 'scouting_cache.json'
+            if not shared_scouting.exists():
+                shared_scouting = Path('data/scouting_cache.json')
             if shared_scouting.exists():
                 import shutil
                 try:

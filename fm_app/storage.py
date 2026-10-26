@@ -4,10 +4,40 @@ import json
 import logging
 import os
 import shutil
+import sys
 import uuid
 
-ROOT = Path(__file__).resolve().parents[1]
-STORAGE = ROOT / 'data' / 'imports'
+
+def get_base_dir() -> Path:
+    if getattr(sys, 'frozen', False):
+        meipass = getattr(sys, '_MEIPASS', None)
+        if meipass and (Path(meipass) / 'web').is_dir():
+            return Path(meipass)
+        exe_parent = Path(sys.executable).resolve().parent
+        if (exe_parent / 'web').is_dir():
+            return exe_parent
+        if (exe_parent / '_internal' / 'web').is_dir():
+            return exe_parent / '_internal'
+        if meipass:
+            return Path(meipass)
+        return exe_parent
+    return Path(__file__).resolve().parents[1]
+
+
+def get_data_dir() -> Path:
+    env = os.environ.get('TOUCHLINE_DATA_DIR')
+    if env:
+        return Path(env).resolve()
+    if getattr(sys, 'frozen', False):
+        local_app = os.environ.get('LOCALAPPDATA')
+        if local_app:
+            return Path(local_app).resolve() / 'Touchline' / 'data'
+    return Path(__file__).resolve().parents[1] / 'data'
+
+
+ROOT = get_base_dir()
+DATA_DIR = get_data_dir()
+STORAGE = DATA_DIR / 'imports'
 logger = logging.getLogger(__name__)
 
 

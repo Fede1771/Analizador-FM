@@ -13,6 +13,11 @@ __pycache__/
 .tmp/
 *.tmp
 
+# Packaging & distribution
+build/
+dist/
+*.spec
+
 # Large game saves and extracted user data (FM saves are up to 400 MB)
 *.fm
 data/input/

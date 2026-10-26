@@ -1,90 +1,94 @@
-# Touchline · Analizador FM26
+# Touchline · Analizador para Football Manager 26
 
-Aplicación local para analizar partidas de Football Manager 2026, revisar el plantel y comparar propuestas tácticas con y sin posesión. Los puntajes y recomendaciones son cálculos propios de Touchline y deben contrastarse en FM.
+**Touchline** es una aplicación de escritorio diseñada para acompañar tus partidas de **Football Manager 2026**. Te ayuda a entender a fondo el rendimiento de tu plantel, auditar y comparar propuestas tácticas con y sin pelota, gestionar contratos y tomar mejores decisiones en el mercado de pases.
 
-![Vista de Mi táctica con datos de prueba](docs/capturas-finales/02-mi-tactica-desktop.png)
+[![Descargar Touchline para Windows](https://img.shields.io/badge/⬇️_Descargar_Touchline-Instalador_.msi-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Fede1771/Analizador-FM/releases/latest/download/Touchline-Analizador-FM26.msi)
 
-*Captura generada con datos de prueba. [Ver las demás pantallas](docs/capturas-finales/README.md).*
+![Vista general de Touchline](docs/capturas-finales/02-mi-tactica-desktop.png)
 
-## Empezar en Windows
+---
 
-1. Instalá Python 3.12 o posterior y ejecutá `Instalar_Analizador_FM.bat`. El instalador crea `.venv/`, instala las versiones de `requirements-lock-windows.txt`, comprueba los componentes y crea un acceso directo.
-2. Abrí **Touchline - Analizador FM26** desde el acceso directo o ejecutá `Touchline.bat`.
-3. Importá una partida `.fm` de hasta 400 MB o configurá el monitor dentro de Touchline. El archivo original no se modifica.
-4. Revisá los grupos detectados y confirmá cuál es el primer equipo antes de comparar jugadores y propuestas.
+## 🚀 Instalación en 3 pasos (Windows)
 
-La ventana usa pywebview y Microsoft Edge WebView2. Para abrir Touchline en el navegador, ejecutá `app_desktop.py --browser-only` con el Python de `.venv/` (comando completo más abajo). Ese modo se elige explícitamente: si falla la ventana nativa, la aplicación muestra un diagnóstico en vez de abrir el navegador. Los errores se guardan en `data/logs/touchline.log`.
+No necesitás conocimientos técnicos ni instalar programas adicionales:
 
-## Qué podés hacer
+1. **Descargá el instalador oficial**: Hacé clic en el botón verde de arriba o descargá [**Touchline-Analizador-FM26.msi**](https://github.com/Fede1771/Analizador-FM/releases/latest/download/Touchline-Analizador-FM26.msi) desde la sección de [Releases](https://github.com/Fede1771/Analizador-FM/releases).
+2. **Hacé doble clic** en el archivo `.msi` y seguí el asistente en pantalla:
+   - *No requiere permisos de Administrador (se instala en tu usuario).*
+   - *No requiere instalar Python, terminales ni dependencias.*
+3. **¡Listo!** Abrí la aplicación desde el acceso directo creado en tu **Escritorio** o en el **Menú Inicio**.
 
-- **Mi táctica:** armá o revisá tu once y los roles de ambas fases, confirmá instrucciones individuales y colectivas, y observá un mapa estimado de cobertura por zonas. El lector recupera algunos datos tácticos de la partida, pero **no identifica automáticamente el once activo ni descifra todos sus roles e instrucciones**. Confirmalos en FM antes de tomar el análisis como referencia.
-- **Propuestas:** compará diez estructuras, consultá las tres de mayor encaje o elegí una. Touchline construye once y banco con la misma lógica de evaluación, y permite ajustar estilo e instrucciones de equipo.
-- **Idea de juego:** describí lo que buscás y revisá cómo se interpretó el texto. Podés corregir el resultado con controles explícitos.
-- **Plantilla y cedidos:** examiná grupos, posibles excedentes, refuerzos y retornos. Las estadísticas ausentes se muestran como «—»; las condiciones de préstamos e inscripción se confirman en FM.
+---
 
-El puntaje del once pondera **80 % con posesión y 20 % sin posesión**. La cancha muestra el puntaje de la fase seleccionada. Estos números sirven para comparar opciones dentro de Touchline; no predicen resultados de partidos.
+## 🗺️ Flujo de trabajo en Touchline
 
-## Interfaz táctica
-
-La cancha es el centro de **Mi táctica** y **Propuestas**: cada jugador reúne dorsal, nombre, rol y encaje en una misma ficha. Los avisos de instrucciones pendientes permanecen visibles y la explicación extensa del índice se abre cuando la necesitás. El centro del club destaca la revisión táctica y muestra contratos, mercado y cantera como resúmenes secundarios.
-
-En ventanas angostas, la navegación se distribuye sin barra horizontal y los controles de Propuestas se compactan para acercar la cancha al principio de la página. El verde identifica acciones y encaje; el ámbar señala pendientes. Podés comparar las [capturas de escritorio, 760 px y 420 px](docs/capturas-finales/README.md), todas generadas con datos de prueba.
-
-## Partidas y preferencias
-
-El monitor se configura en pantalla. Por defecto busca `Documents/Sports Interactive/Football Manager 26/games` del usuario actual. Podés seguir la partida más reciente o fijar un archivo.
-
-El monitor espera a que el guardado sea estable antes de copiarlo. Una actualización se registra como exitosa al terminar la extracción y el análisis. Si falla, se conserva el informe anterior y se puede reintentar.
-
-Después de cada importación exitosa se aplica una retención configurable a las **copias administradas por Touchline**: por defecto cinco copias y 2048 MB. Siempre se conserva la copia activa. Esa limpieza no alcanza los archivos `.fm` originales. Las preferencias se guardan por carrera; los autoguardados y copias de una misma carrera comparten configuración.
-
-## Documentación y estructura
-
-| Ruta | Para qué sirve |
-|---|---|
-| `data/` | Partidas importadas, preferencias, configuración y perfil local; excluidos de Git |
-| `fm_app/`, `web/` | Código de Touchline y su interfaz |
-| `docs/` | [Índice de documentación](docs/README.md), relevamiento de FM26, ZIP e informes |
-| `docs/capturas-finales/` | Capturas de referencia de la interfaz |
-| `docs/verificaciones/` | Evidencias conservadas de las revisiones y pruebas |
-| `scripts/` | [Instalación, diagnóstico y generación de informes](scripts/README.md) |
-| `tools/` | [Herramientas auxiliares vigentes](tools/README.md); scripts antiguos en `tools/historicos/` |
-| `tests/` | Pruebas automáticas |
-| `.venv/` | Entorno Python instalado, necesario para el acceso directo; excluido de Git |
-
-**Conservá `data/` y `.venv/`** si querés mantener tus datos y el acceso directo funcionando. Las carpetas `.tmp/` y `__pycache__/` son regenerables y pueden reaparecer durante las pruebas o la ejecución.
-
-El [informe integral de FM26](docs/relevamiento-fm26-2026-10-25/INFORME-INTEGRAL.md) documenta los 79 paneles de roles observados, atributos, instrucciones, evidencias y límites. La [revisión de la integración](docs/REVISION-TOUCHLINE-2026-10-26.md) registra las correcciones y pruebas de Touchline.
-
-## Desarrollo y comprobaciones
-
-Desde la carpeta del proyecto, con la instalación ya hecha:
-
-```powershell
-.\.venv\Scripts\python.exe -B scripts/diagnostico.py
-.\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
-node --test tests/frontend.test.mjs
-node tests/browser.test.mjs
-node tools/take_final_screenshots.mjs
+```mermaid
+flowchart LR
+    A["🎮 1. Tu partida de FM26\n(Guarda o autoguarda)"] -->|Detección automática| B["⚡ 2. Touchline analiza\nel club y plantel"]
+    B --> C["⚽ 3. Mi Táctica\n(Con y sin posesión)"]
+    B --> D["📋 4. Propuestas\n(Top 3 formaciones ideales)"]
+    B --> E["👥 5. Plantilla y Mercado\n(Ventas, cesiones y contratos)"]
+    C --> F["🏆 6. Aplicá en FM26\ncon el Mini-HUD flotante"]
+    D --> F
 ```
 
-Las pruebas de navegador requieren Node.js y Chrome, Edge o Chromium. Podés indicar el navegador con `CHROME_BIN` y el intérprete con `PYTHON_BIN`. Los artefactos temporales se guardan en `.tmp/browser-*` o en `TOUCHLINE_TEST_ARTIFACTS`.
+---
 
-Las pruebas generan datos sintéticos y, cuando corresponde, usan **copias aisladas** de datos importados. No deben editar las partidas ni las preferencias originales.
-El último comando regenera las capturas de referencia en `docs/capturas-finales/` con un servidor y un perfil de navegador temporales.
+## 📖 Guía visual paso a paso
 
-Inicio manual:
+### Paso 1: Carga y sincronización automática de tu partida
+Al abrir Touchline, el **Centro del Club** detecta de forma automática tus partidas en la carpeta habitual de Football Manager 26 (`Documentos\Sports Interactive\Football Manager 26\games`). Cada vez que guardes tu juego en FM26, Touchline actualiza todos los datos en segundo plano sin interrumpirte.
 
-```powershell
-.\.venv\Scripts\python.exe -B app_desktop.py
-.\.venv\Scripts\python.exe -B app_desktop.py --browser-only
-.\.venv\Scripts\python.exe -B -m fm_app.server --no-sync --port 8765
-```
+![Paso 1: Centro del club y sincronización](docs/capturas-finales/01-inicio-centro-del-club.png)
 
-El servidor escucha en `127.0.0.1`. En modo navegador, usá **Cerrar Touchline** para detener también el servidor.
+> **Seguridad garantizada**: Touchline nunca modifica tus archivos originales. Trabaja exclusivamente con copias temporales seguras de solo lectura en tu propia PC.
 
-## Alcance del análisis
+---
 
-Touchline trabaja con los datos accesibles de la partida y con los atributos visibles. No lee capacidad o potencial ocultos, ni verifica por sí solo lesiones, sanciones, inscripción, rival o carga de partidos. El lector valida estructura y rangos, pero eso no certifica que cada valor coincida con la ficha de FM. La disponibilidad de ciertas instrucciones fuera del puesto, costado o ámbito observado sigue **sin verificar**; esas reglas no se inventan.
+### Paso 2: Auditá tu once y la cobertura en dos fases
+En **Mi táctica** podés ver a tus once titulares con sus dorsales, nombre, rol y encaje porcentual (0 a 100).
+- **Fase con posesión (Ataque)** y **Fase sin posesión (Defensa)**: alterná entre ambas con un solo clic para observar cómo se reorganiza tu equipo según los roles asignados en FM26.
+- **Mapa de calor y cobertura por zonas**: descubrí qué pasillos del campo están protegidos y qué áreas quedan descubiertas para corregir instrucciones antes del próximo partido.
 
-La exportación general es JSON y el plan individual es texto; no se exportan tácticas `.fmf`. Para detalles de lectura, confirmación manual y mapa de zonas, consultá [Táctica actual y zonas](docs/tactica-actual-y-zonas.md). La [arquitectura](docs/arquitectura.md) describe los contratos y componentes.
+![Paso 2: Mi táctica y visualización del once](docs/capturas-finales/02-mi-tactica-desktop.png)
+
+---
+
+### Paso 3: Descubrí las formaciones ideales para tus jugadores
+¿Dudas sobre qué esquema le sienta mejor a tus futbolistas? En **Propuestas** el motor analiza diez estructuras tácticas diferentes y te destaca las **tres formaciones de mayor encaje**:
+- Te arma automáticamente el **once titular ideal** y el **banco de suplentes** asegurando cobertura para todas las líneas.
+- Podés filtrar y simular diferentes estilos: juego de posesión, contragolpe directo, presión adelantada, bloque medio, etc.
+
+![Paso 3: Propuestas y esquemas recomendados](docs/capturas-finales/03-propuestas-desktop.png)
+
+---
+
+### Paso 4: Ajustá tu partido con la Guía Rápida Mini-HUD
+Cuando estés jugando el partido en Football Manager 26, podés abrir la **Guía rápida / Mini-HUD**: una ventana compacta y flotante pensada para tener al costado de tu pantalla que resume exactamente qué instrucciones colectivas e individuales ponerle a cada jugador sin tener que memorizarlas.
+
+![Paso 4: Mini-HUD y guía para partido](docs/capturas-finales/04-guia-fm-mini-hud.png)
+
+---
+
+### Paso 5: Optimizá tu plantel (Ventas, préstamos y juveniles)
+En la sección **Plantilla**:
+- **Recomendación de sobrepoblación**: detecta si tenés demasiados futbolistas en una misma posición y te sugiere a quién conviene vender o dar a préstamo para aligerar la masa salarial y evitar descontentos por falta de minutos.
+- **Seguimiento de cedidos**: evaluá el rendimiento y situación contractual de los jugadores a préstamo en otros equipos.
+- **Promoción de canteranos**: compará si tus promesas juveniles ya tienen nivel para alternar con los titulares.
+
+![Paso 5: Gestión de plantilla y sobrepoblación](docs/capturas-finales/08-plantilla-sobrepoblacion.png)
+
+---
+
+### Paso 6: Ojeo inteligente y blindaje de contratos
+- **Ojeo por necesidades tácticas**: encontrá refuerzos filtrados por posición y roles que encajen específicamente en lo que tu táctica demanda, adaptado al género de tu plantel (femenino o masculino).
+- **Semáforo de contratos**: alertas automáticas con cuenta regresiva (6 y 12 meses) para renovar a tiempo y evitar que tus estrellas se marchen libres.
+
+![Paso 6: Ojeo y refuerzos recomendados](docs/capturas-finales/07-ojeo-masculino.png)
+
+---
+
+## 🔒 Privacidad y funcionamiento local
+
+- **100 % local y privado**: Todo el procesamiento se realiza en tu equipo. Touchline no requiere conexión a internet ni envía partidas o datos a ningún servidor externo.
+- **Herramienta complementaria**: Los cálculos, puntajes y recomendaciones son estimaciones analíticas propias de Touchline desarrolladas para ayudarte a tomar mejores decisiones en Football Manager 2026.

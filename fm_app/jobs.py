@@ -130,8 +130,12 @@ class AppState:
             with self.lock:
                 if self.closing.is_set():
                     raise InterruptedError('Importación cancelada al cerrar.')
-                executable = str(Path(sys.executable).with_name('python.exe')) if sys.platform == 'win32' and Path(sys.executable).name.lower() == 'pythonw.exe' else sys.executable
-                self.process = subprocess.Popen([executable, '-B', '-m', 'fm_app.extraction', str(source), '--output', str(folder/'output')],
+                if getattr(sys, 'frozen', False):
+                    cmd = [sys.executable, '--extract-save', str(source), '--output', str(folder/'output')]
+                else:
+                    executable = str(Path(sys.executable).with_name('python.exe')) if sys.platform == 'win32' and Path(sys.executable).name.lower() == 'pythonw.exe' else sys.executable
+                    cmd = [executable, '-B', '-m', 'fm_app.extraction', str(source), '--output', str(folder/'output')]
+                self.process = subprocess.Popen(cmd,
                     cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
                     creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0)
                 process = self.process

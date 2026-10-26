@@ -2,7 +2,7 @@
 chcp 65001 >nul
 cd /d "%~dp0"
 title Instalar Touchline
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\instalar.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0instalar.ps1"
 if errorlevel 1 (
   echo No se pudo completar la instalacion. Revisa el mensaje anterior.
   pause

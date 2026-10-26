@@ -12,12 +12,12 @@ import threading
 import urllib.request
 import webbrowser
 
-ROOT = Path(__file__).resolve().parent
+from fm_app.storage import ROOT, DATA_DIR
 from fm_app.server import create_app_server
 
 
 def configure_logging():
-    folder = ROOT/'data/logs'
+    folder = DATA_DIR/'logs'
     folder.mkdir(parents=True, exist_ok=True)
     handlers = [RotatingFileHandler(folder/'touchline.log', maxBytes=2*1024*1024, backupCount=3, encoding='utf-8')]
     if sys.stderr is not None:
@@ -57,6 +57,12 @@ def find_free_port(start_port=8765, max_attempts=20):
 
 
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == '--extract-save':
+        from fm_app.extraction import main as extraction_main
+        sys.argv.pop(1)
+        extraction_main()
+        return
+
     configure_logging()
     logger = logging.getLogger('touchline.desktop')
     if sys.platform == 'win32':
@@ -127,7 +133,7 @@ def main():
                 window.restore()
                 window.show()
             server.request_activate = activate
-            webview.start(icon=str(ROOT/'web/touchline.ico'), private_mode=False, storage_path=str(ROOT/'data/webview'))
+            webview.start(icon=str(ROOT/'web/touchline.ico'), private_mode=False, storage_path=str(DATA_DIR/'webview'))
     except KeyboardInterrupt:
         pass
     finally:
@@ -140,6 +146,7 @@ if __name__ == '__main__':
     except Exception as error:
         logging.getLogger('touchline.desktop').exception('No se pudo iniciar Touchline')
         if sys.platform == 'win32':
-            ctypes.windll.user32.MessageBoxW(None, f'No se pudo iniciar Touchline: {error}\nRevisá data/logs/touchline.log o ejecutá scripts/diagnostico.py.', 'Touchline', 16)
+            log_file = DATA_DIR/'logs/touchline.log'
+            ctypes.windll.user32.MessageBoxW(None, f'No se pudo iniciar Touchline: {error}\nRevisá {log_file} o ejecutá scripts/diagnostico.py.', 'Touchline', 16)
         else:
             raise
