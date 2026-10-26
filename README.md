@@ -24,6 +24,12 @@ La ventana usa pywebview y Microsoft Edge WebView2. Para abrir Touchline en el n
 
 El puntaje del once pondera **80 % con posesión y 20 % sin posesión**. La cancha muestra el puntaje de la fase seleccionada. Estos números sirven para comparar opciones dentro de Touchline; no predicen resultados de partidos.
 
+## Interfaz táctica
+
+La cancha es el centro de **Mi táctica** y **Propuestas**: cada jugador reúne dorsal, nombre, rol y encaje en una misma ficha. Los avisos de instrucciones pendientes permanecen visibles y la explicación extensa del índice se abre cuando la necesitás. El centro del club destaca la revisión táctica y muestra contratos, mercado y cantera como resúmenes secundarios.
+
+En ventanas angostas, la navegación se distribuye sin barra horizontal y los controles de Propuestas se compactan para acercar la cancha al principio de la página. El verde identifica acciones y encaje; el ámbar señala pendientes. Podés comparar las [capturas de escritorio, 760 px y 420 px](docs/capturas-finales/README.md), todas generadas con datos de prueba.
+
 ## Partidas y preferencias
 
 El monitor se configura en pantalla. Por defecto busca `Documents/Sports Interactive/Football Manager 26/games` del usuario actual. Podés seguir la partida más reciente o fijar un archivo.
@@ -59,11 +65,13 @@ Desde la carpeta del proyecto, con la instalación ya hecha:
 .\.venv\Scripts\python.exe -B -m unittest discover -s tests -v
 node --test tests/frontend.test.mjs
 node tests/browser.test.mjs
+node tools/take_final_screenshots.mjs
 ```
 
 Las pruebas de navegador requieren Node.js y Chrome, Edge o Chromium. Podés indicar el navegador con `CHROME_BIN` y el intérprete con `PYTHON_BIN`. Los artefactos temporales se guardan en `.tmp/browser-*` o en `TOUCHLINE_TEST_ARTIFACTS`.
 
 Las pruebas generan datos sintéticos y, cuando corresponde, usan **copias aisladas** de datos importados. No deben editar las partidas ni las preferencias originales.
+El último comando regenera las capturas de referencia en `docs/capturas-finales/` con un servidor y un perfil de navegador temporales.
 
 Inicio manual:
 

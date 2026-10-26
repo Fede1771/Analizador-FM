@@ -1,6 +1,5 @@
 import {spawn} from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
@@ -21,8 +20,9 @@ const candidates = [
 const browserExecutable = candidates.find(name => fs.existsSync(name));
 assert.ok(browserExecutable, 'Install Chromium/Chrome/Edge or set CHROME_BIN');
 
-fs.mkdirSync(path.join(root, '.tmp'), {recursive: true});
-const tempFolder = fs.mkdtempSync(path.join(root, '.tmp', 'screenshots-'));
+const tempRoot = path.join(root, '.tmp');
+fs.mkdirSync(tempRoot, {recursive: true});
+const tempFolder = fs.mkdtempSync(path.join(tempRoot, 'screenshots-'));
 const serverFile = path.join(tempFolder, `ui-server-${Date.now()}-${process.pid}.json`);
 const host = spawn(python, ['-B', path.join(root, 'tests', 'browser_host.py'), tempFolder, serverFile], {
   windowsHide: true,
@@ -42,7 +42,7 @@ for (let i = 0; i < 300; i++) {
 if (!hostReady) { host.kill(); throw new Error('Test server failed: ' + hostLog); }
 
 const {url} = JSON.parse(fs.readFileSync(serverFile, 'utf8'));
-const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'touchline-shots-'));
+const profile = fs.mkdtempSync(path.join(tempRoot, 'browser-profile-'));
 const chrome = spawn(browserExecutable, [
   '--headless=new',
   '--disable-gpu',
@@ -182,12 +182,23 @@ try {
 
   // 5. Ventana angosta (760x920) en Mi táctica
   await send('Emulation.setDeviceMetricsOverride', {width: 760, height: 920, deviceScaleFactor: 1, mobile: false});
+  assert.ok(await evaluate(`document.documentElement.scrollWidth <= window.innerWidth`), 'Mi táctica: no horizontal overflow at 760px');
   await snap('05-mi-tactica-ventana-angosta-760px.png');
 
   // 6. Ventana angosta (760x920) en Propuestas
   await evaluate(`location.hash='tactics'`);
   await wait(`document.querySelectorAll('.pitch-player').length===11`, 'propuestas 760px');
+  assert.ok(await evaluate(`document.documentElement.scrollWidth <= window.innerWidth`), 'Propuestas: no horizontal overflow at 760px');
   await snap('06-propuestas-ventana-angosta-760px.png');
+
+  // 7. Narrow mobile viewport: both tactical screens remain usable without sideways page scroll.
+  await send('Emulation.setDeviceMetricsOverride', {width: 420, height: 920, deviceScaleFactor: 1, mobile: false});
+  assert.ok(await evaluate(`document.documentElement.scrollWidth <= window.innerWidth`), 'Propuestas: no horizontal overflow at 420px');
+  await snap('09-propuestas-420px.png');
+  await evaluate(`location.hash='current'`);
+  await wait(`document.querySelector('#current-result') && document.querySelectorAll('.pitch-player').length===11`, 'current 420px');
+  assert.ok(await evaluate(`document.documentElement.scrollWidth <= window.innerWidth`), 'Mi táctica: no horizontal overflow at 420px');
+  await snap('10-mi-tactica-420px.png');
 
   console.log('ALL SCREENSHOTS CAPTURED SUCCESSFULLY');
 } finally {
@@ -201,6 +212,12 @@ try {
     });
   } catch {}
   if (host.exitCode === null) host.kill();
-  try { fs.rmSync(profile, {recursive: true, force: true}); } catch {}
-  try { fs.rmSync(tempFolder, {recursive: true, force: true}); } catch {}
+  const cleanTemporary = target => {
+    const relative = path.relative(tempRoot, path.resolve(target));
+    if (relative && relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative)) {
+      fs.rmSync(target, {recursive: true, force: true});
+    }
+  };
+  try { cleanTemporary(profile); } catch {}
+  try { cleanTemporary(tempFolder); } catch {}
 }

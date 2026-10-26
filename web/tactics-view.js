@@ -42,7 +42,7 @@ export function pitch(tactic, phase, byId) {
       const p=byId.get(l.uid), role=l[key];
       const alertSev = adviceMap.get(l.uid);
       const dot = alertSev ? `<span class="pitch-alert-dot dot-${esc(alertSev)}" title="Ajuste táctico"></span>` : '';
-      return `<button class="pitch-player ${role.position === 'GK' ? 'keeper' : ''}" data-player="${p.uid}" style="left:${l[phase][0]}%;top:${l[phase][1]}%" aria-label="${esc(p.name)}, ${esc(role.name)}, encaje ${number(role.score)}">${dot}<span class="shirt">${index+1}</span><strong>${esc(p.name.split(' ').slice(-1)[0])}</strong><small>${esc(role.role_abbrev)} · ${number(role.score,0)}</small></button>`;
+      return `<button class="pitch-player ${role.position === 'GK' ? 'keeper' : ''}" data-player="${p.uid}" style="left:${l[phase][0]}%;top:${l[phase][1]}%" aria-label="${esc(p.name)}, ${esc(role.name)}, encaje ${number(role.score)}">${dot}<span class="shirt" aria-hidden="true">${index+1}</span><span class="player-plate"><strong>${esc(p.name.split(' ').slice(-1)[0])}</strong><small><span>${esc(role.role_abbrev)}</span><b>${number(role.score,0)}</b></small></span></button>`;
     }).join('')}</div>`;
 }
 
@@ -141,7 +141,7 @@ export function tacticResult(tactic, state) {
   return `<div class="result-heading"><div><span class="eyebrow">Propuesta para tu plantel</span><h2>${esc(tactic.name)} <span class="muted">→ ${esc(tactic.defensive)} sin posesión</span></h2><p>${esc(tactic.fm26_style)} · Mentalidad ${esc(tactic.fm26_mentality)}</p></div>${score(tactic.score)}</div>
     <div class="decision-strip"><span><strong>${fit.natural_count}/11</strong> con familiaridad alta</span><span><strong>${fit.weak_count}</strong> posiciones a revisar</span><span><strong>${fit.recalls_count}</strong> ${fit.recalls_count===1?'cedido como alternativa':'cedidos distintos como alternativas'}</span></div>
     <div class="tactical-layout"><section class="panel pitch-panel"><div class="split"><h3>Once propuesto</h3><div class="segmented" role="group" aria-label="Fase de juego"><button id="phase-ip" data-phase="ip" aria-pressed="${phase==='ip'}">Con posesión</button><button id="phase-oop" data-phase="oop" aria-pressed="${phase==='oop'}">Sin posesión</button></div></div>${pitch(tactic,phase,byId)}</section>
-    <section class="panel"><h3>Jugador y función por puesto</h3><p class="muted">El puntaje del once combina 80 % con posesión y 20 % sin posesión. En la cancha se muestra el encaje de la fase elegida.</p><ol class="lineup">${tactic.lineup.map(l=>`<li><div>${playerButton(byId.get(l.uid))}<small>${esc(l[phase==='ip'?'in_possession':'out_of_possession'].name)} · familiaridad ${l.familiarity}/20</small></div>${score(l.score)}</li>`).join('')}</ol></section></div>
+    <section class="panel lineup-panel"><h3>Jugador y función por puesto</h3><p class="muted">Encaje del once: 80 % con posesión y 20 % sin posesión. La cancha muestra la fase elegida.</p><ol class="lineup">${tactic.lineup.map(l=>`<li><div>${playerButton(byId.get(l.uid))}<small>${esc(l[phase==='ip'?'in_possession':'out_of_possession'].name)} · familiaridad ${l.familiarity}/20</small></div>${score(l.score)}</li>`).join('')}</ol></section></div>
     ${zoneMap(tactic.coverage,phase)}
     <section class="panel"><h3>Decisiones para revisar</h3><p>${esc(fit.verdict)}</p>
     ${tactic.tactical_recommendations.length ? `<div class="advice-grid" style="margin: 16px 0;">${tactic.tactical_recommendations.map(a=>`

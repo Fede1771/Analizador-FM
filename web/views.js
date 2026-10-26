@@ -22,14 +22,9 @@ export function overview(state) {
 
   return `<div class="page-heading">
     <div>
-      <span class="eyebrow">Panel de control ejecutivo · ${esc(data.manager || 'Tu club')} · ${esc(date(data.date))}</span>
+      <span class="eyebrow">Centro del club · ${esc(data.manager || 'Tu club')} · ${esc(date(data.date))}</span>
       <h1>${esc(data.club)}</h1>
-      <p>Tu centro de mando: estado del partido, alertas de contratos y oportunidades de mercado.</p>
-    </div>
-    <div class="actions">
-      <button class="button primary" data-action="companion">⚡ Guía para FM</button>
-      <button class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
-      <button class="button" data-view="current">Ver mi táctica actual →</button>
+      <p>Tu plantel y las decisiones más relevantes, de un vistazo.</p>
     </div>
   </div>
 
@@ -37,7 +32,7 @@ export function overview(state) {
     <article class="exec-card exec-card-match">
       <div class="exec-card-header">
         <div class="exec-card-title">
-          <span class="exec-icon">⚽</span>
+          <span class="exec-icon" aria-hidden="true">01</span>
           <div>
             <h3>Resumen táctico del club</h3>
             <small>${state.currentResult ? 'Once actual revisado · ' + esc(state.currentResult.name) : first ? 'Propuesta recomendada · ' + esc(first.name) : 'Táctica activa'}</small>
@@ -47,7 +42,7 @@ export function overview(state) {
       </div>
       <div class="exec-card-body">
         <div class="exec-alert-box alert-match">
-          <span class="exec-alert-icon">⚡</span>
+          <span class="exec-alert-icon" aria-hidden="true">↗</span>
           <div>
             ${(() => {
               const audited = state.currentResult;
@@ -64,27 +59,26 @@ export function overview(state) {
       </div>
       <div class="exec-card-footer">
         <button class="button primary" data-view="current">Ver mi táctica actual →</button>
-        <button class="button" data-action="companion">⚡ Guía para FM</button>
       </div>
     </article>
 
     <article class="exec-card exec-card-contracts">
       <div class="exec-card-header">
         <div class="exec-card-title">
-          <span class="exec-icon">⚠️</span>
+          <span class="exec-icon" aria-hidden="true">02</span>
           <div>
             <h3>Contratos & Fugas</h3>
             <small>${(data.contract_alerts || []).length} contratos monitoreados</small>
           </div>
         </div>
         <span class="badge-time ${urgentContracts.length ? 'badge-danger' : 'badge-info'}">
-          ${urgentContracts.length ? `🔴 ${urgentContracts.length} en riesgo` : '🟢 En término'}
+          ${urgentContracts.length ? `${urgentContracts.length} en riesgo` : 'En término'}
         </span>
       </div>
       <div class="exec-card-body">
         ${urgentContracts.length ? `
           <div class="exec-alert-box alert-danger">
-            <span class="exec-alert-icon">🚨</span>
+            <span class="exec-alert-icon" aria-hidden="true">!</span>
             <div>
               <strong>${urgentContracts.length} futbolistas vencen en &lt; 10 meses</strong>
               <p>Riesgo de firma libre en enero (${esc(urgentContracts.slice(0, 2).map(a => a.player_name).join(', '))}${urgentContracts.length > 2 ? '…' : ''}).</p>
@@ -102,7 +96,7 @@ export function overview(state) {
     <article class="exec-card exec-card-scouting">
       <div class="exec-card-header">
         <div class="exec-card-title">
-          <span class="exec-icon">🔍</span>
+          <span class="exec-icon" aria-hidden="true">03</span>
           <div>
             <h3>Ojeo de Mercado</h3>
             <small>${scoutingCount} futbolistas evaluados en tu partida</small>
@@ -112,7 +106,7 @@ export function overview(state) {
       </div>
       <div class="exec-card-body">
         <div class="exec-alert-box alert-info">
-          <span class="exec-alert-icon">🎯</span>
+          <span class="exec-alert-icon" aria-hidden="true">◎</span>
           <div>
             <strong>Puesto a reforzar: ${esc(weakPos)}</strong>
             <p>Futbolistas destacados de otros clubes con encaje /100 según tu estilo de juego.</p>
@@ -127,7 +121,7 @@ export function overview(state) {
     <article class="exec-card exec-card-academy">
       <div class="exec-card-header">
         <div class="exec-card-title">
-          <span class="exec-icon">🌱</span>
+          <span class="exec-icon" aria-hidden="true">04</span>
           <div>
             <h3>Cantera y Cedidos</h3>
             <small>${data.loans.length} cedidos · ${youth.length} en inferiores</small>
@@ -159,7 +153,7 @@ export function tactics(state) {
   const {data,prefs,analysis,simulation} = state;
   const selected = prefs.formation==='auto' ? analysis?.requested_tactic || analysis?.tactics[0] : simulation;
   const pa=analysis?.prompt_analysis;
-  return `<div class="page-heading"><div><span class="eyebrow">Propuestas tácticas · Esquemas para tu plantel</span><h1>Propuestas</h1><p>Compará esquemas y evaluá la mejor propuesta para tu plantilla.</p></div><div class="actions"><button class="button primary" data-action="companion">⚡ Guía para FM</button><button class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button><button class="button" data-action="export">Exportar JSON</button></div></div>
+  return `<div class="page-heading"><div><span class="eyebrow">Propuestas tácticas · Esquemas para tu plantel</span><h1>Propuestas</h1><p>Compará esquemas y evaluá la mejor propuesta para tu plantilla.</p></div><div class="actions"><button class="button" data-action="copy-match-instructions">Copiar ajustes</button><button class="button" data-action="export">Exportar JSON</button></div></div>
     <section class="panel controls">
       <div class="control-grid">
         <label>Formación propuesta
@@ -175,7 +169,7 @@ export function tactics(state) {
         </label>
       </div>
       <details id="prompt-details" ${state.promptDraft ? 'open' : ''}>
-        <summary>💬 Idea de juego o pedido personalizado</summary>
+        <summary>Idea de juego o pedido personalizado</summary>
         <label for="prompt-input">Instrucción en lenguaje natural <small>Interpretación con reglas y estilos de FM26 · Ctrl + Enter</small></label>
         <textarea id="prompt-input" maxlength="2000" rows="2" placeholder="Ej.: posesión paciente, muchas ocasiones y solidez atrás...">${esc(state.promptDraft)}</textarea>
         <div class="actions">
@@ -577,7 +571,7 @@ export function scoutingView(state) {
 
   <div class="scouting-banner-strip">
     <div class="scouting-status-badge">
-      <span class="scanner-icon">📡</span>
+      <span class="scanner-icon" aria-hidden="true">◎</span>
       <div>
         <strong>${scoutingList.length} jugadores escaneados desde tu archivo .fm</strong>
         <small>Extracción directa de la partida guardada con atributos reales, contratos y roles FM26 calculados.</small>
@@ -642,7 +636,7 @@ export function scoutingView(state) {
             </div>
 
             <div class="scout-card-verdict">
-              <span class="verdict-icon">⚡</span>
+              <span class="verdict-icon" aria-hidden="true">↗</span>
               <span class="verdict-text">Recomendado para reforzar el puesto de <strong>${esc(pos(p.position_primary))}</strong> como <em>${esc(p.best_role)}</em>.</span>
             </div>
           </article>

@@ -112,8 +112,8 @@ export function renderDynamicChecklist(result, state) {
           <div class="checklist-status-pill status-ready"><span>0 pendientes</span></div>
         </div>
         <div class="checklist-actions-bar">
-          <button type="button" class="button primary" data-action="companion">⚡ Guía para FM</button>
-          <button type="button" class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
+          <button type="button" class="button primary" data-action="companion">Guía para FM</button>
+          <button type="button" class="button" data-action="copy-match-instructions">Copiar ajustes</button>
         </div>
       </div>
     `;
@@ -133,7 +133,7 @@ export function renderDynamicChecklist(result, state) {
     <div class="match-checklist-card">
       <div class="checklist-header">
         <div class="checklist-title-box">
-          <span class="checklist-icon">📋</span>
+          <span class="checklist-icon" aria-hidden="true">!</span>
           <div>
             <h4>Ajustes prioritarios para FM</h4>
             <small class="checklist-subtitle">Marcá los ajustes aplicados en la pantalla táctica de FM26.</small>
@@ -174,8 +174,8 @@ export function renderDynamicChecklist(result, state) {
       </div>
 
       <div class="checklist-actions-bar">
-        <button type="button" class="button primary" data-action="companion">⚡ Guía para FM</button>
-        <button type="button" class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
+        <button type="button" class="button primary" data-action="companion">Guía para FM</button>
+        <button type="button" class="button" data-action="copy-match-instructions">Copiar ajustes</button>
       </div>
     </div>
   `;
@@ -296,9 +296,7 @@ export function currentView(state) {
       <p>Evaluación de encaje y ajustes prioritarios para tu once titular actual.</p>
     </div>
     <div class="actions">
-      <button class="button primary" data-action="companion">⚡ Guía para FM</button>
-      <button class="button" data-action="copy-match-instructions">📋 Copiar ajustes</button>
-      <button class="button" data-action="reference-current">⚡ Cargar táctica guardada</button>
+      <button class="button" data-action="reference-current">Cargar táctica guardada</button>
       ${result?'<button class="button" data-action="export-current">Exportar revisión</button>':''}
     </div>
   </div>
@@ -307,7 +305,7 @@ export function currentView(state) {
 
   ${result ? `
     <section class="panel current-summary-panel" id="current-result">
-      <div class="split">
+      <div class="split current-summary-main">
         <div>
           <span class="eyebrow">Once titular confirmado</span>
           <h2 tabindex="-1">Revisión de ${esc(result.name)}</h2>
@@ -323,7 +321,7 @@ export function currentView(state) {
           ${result.unconfirmed_team_instructions===0?'✓ Órdenes colectivas confirmadas':`⚠ ${result.unconfirmed_team_instructions} órdenes colectivas sin confirmar`}
         </span>
       </div>
-      <p class="muted" style="margin: 8px 0 0;"><small>${esc(result.limits)}</small></p>
+      <details class="analysis-note"><summary>Cómo interpretar el índice y sus límites</summary><p>${esc(result.limits)}</p></details>
     </section>
 
     <div class="current-main-grid">

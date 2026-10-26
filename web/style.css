@@ -3,13 +3,13 @@
   color-scheme: dark;
   font-family: "Segoe UI", Inter, Arial, sans-serif;
   font-size: 16px;
-  --bg: #0b121b;
-  --panel: #121e2b;
-  --raised: #192938;
+  --bg: #0a141c;
+  --panel: #11222b;
+  --raised: #1a303b;
   --text: #edf4f8;
   --muted: #adbbc9;
-  --line: #344758;
-  --accent: #b0efd2;
+  --line: #314b54;
+  --accent: #aef0d1;
   --accent-ink: #102c21;
   --warning: #f8d999;
   --danger: #ffb5ba;
@@ -27,7 +27,7 @@ button:disabled { opacity: .6; cursor: progress; }
 button, input, select, textarea, a, summary { outline-offset: 4px; }
 :focus-visible { outline: 3px solid var(--accent); }
 h1,h2,h3,h4 { line-height: 1.25; margin: 0 0 .7em; font-weight: 650; }
-h1 { font-size: clamp(1.8rem, 3vw, 2.65rem); letter-spacing: -.045em; }
+h1 { font-size: clamp(2rem, 3vw, 2.8rem); letter-spacing: -.045em; }
 h2 { font-size: 1.4rem; letter-spacing: -.02em; }
 h3 { font-size: 1.1rem; }
 h4 { font-size: 1rem; }
@@ -199,8 +199,8 @@ dialog::backdrop { background: #030b13b8; backdrop-filter: blur(4px); }
 @media (max-width: 800px) {
   #sidebar { position: static; width: 100%; padding: 18px; border-bottom: 1px solid var(--line); }
   #sidebar .brand, .workspace-label, .local-badge { display: none; }
-  #nav { display: flex; overflow-x: auto; gap: 5px; }
-  #nav a { white-space: nowrap; padding: 10px; }
+  #nav { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); overflow: visible; gap: 4px; }
+  #nav a { white-space: normal; text-align: center; padding: 9px 5px; font-size: .77rem; line-height: 1.25; }
   .has-dataset .main-shell { margin-left: 0; }
   .mobile-brand { display: block; color: var(--text); text-decoration: none; font-weight: 700; font-size: 1.3rem; }
   #source-label { width: 100%; order: 3; }
@@ -2257,5 +2257,224 @@ body.companion-standalone #content {
 .squad-candidate-notice.notice-sell h3 {
   color: #fcd34d;
   margin: 0 0 6px;
+}
+
+/* Tactical studio: one visual hierarchy across the dashboard and both pitches. */
+.topbar { min-height: 68px; padding-block: 12px; background: #0d1b24; }
+.page-heading { margin-bottom: 16px; }
+.page-heading h1 { margin-bottom: 7px; }
+.page-heading p { max-width: 64ch; }
+.eyebrow { letter-spacing: .12em; }
+.button { border-radius: 9px; }
+.button.primary { box-shadow: 0 8px 22px #aef0d11c; }
+.button.accent { background: #1b3a37; color: var(--accent); border-color: #3b7064; }
+.score, .score-pill, .stat > strong { font-variant-numeric: tabular-nums; }
+
+/* Let the tactical recommendation lead; supporting subjects stay quieter. */
+.executive-dashboard-grid {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 14px;
+  margin: 16px 0 20px;
+}
+.exec-card {
+  background: #12232d;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  transition: border-color .15s ease, transform .15s ease;
+}
+.exec-card:hover { border-color: #5e897d; box-shadow: none; transform: translateY(-2px); }
+.exec-card-match { background: linear-gradient(145deg, #183c37, #122930 70%); border-color: #487c6d; }
+.exec-card-contracts, .exec-card-scouting, .exec-card-academy { border-top-width: 1px; }
+.exec-card-header { padding: 18px 20px 10px; border: 0; }
+.exec-card-title { align-items: flex-start; gap: 12px; }
+.exec-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #4b786d;
+  border-radius: 10px;
+  background: #21463d;
+  color: var(--accent);
+  font-size: .7rem;
+  font-weight: 750;
+  letter-spacing: .05em;
+}
+.exec-card-title h3 { color: var(--text); font-size: 1.05rem; }
+.exec-card-title small { line-height: 1.4; }
+.exec-card-body { padding: 8px 20px 16px; }
+.exec-alert-box,
+.exec-alert-box.alert-match,
+.exec-alert-box.alert-danger,
+.exec-alert-box.alert-info {
+  background: transparent;
+  border: 0;
+  padding: 4px 0;
+  color: var(--muted);
+}
+.exec-alert-icon { color: var(--accent); font-size: 1rem; font-weight: 800; }
+.exec-alert-box.alert-danger .exec-alert-icon { color: var(--danger); }
+.exec-alert-box strong { color: var(--text); font-size: .88rem; }
+.exec-alert-box p { color: var(--muted); font-size: .82rem; line-height: 1.5; }
+.exec-card-footer { padding: 0 20px 18px; background: transparent; border: 0; }
+.exec-card-match .score-pill { font-size: 1rem; border: 1px solid #6daf94; }
+.exec-card .badge-time,
+.exec-card .role-badge-subtle,
+.exec-card .extension-tag { white-space: nowrap; }
+.exec-card .role-badge-subtle,
+.exec-card .extension-tag,
+.role-badge-subtle {
+  background: #1c3737;
+  border-color: #3c6660;
+  color: #b7e7d2;
+}
+.stats-grid { gap: 10px; }
+.stat { padding: 13px 16px; background: #101f28; }
+.stat > strong { font-size: 1.5rem; margin: 3px 0; }
+.stat > span { min-height: 0; }
+
+/* A compact audit header makes the pitch the first substantial surface. */
+.current-summary-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px 18px;
+  padding: 16px 22px;
+  margin-bottom: 14px;
+  background: #132630;
+}
+.current-summary-main { grid-column: 1 / -1; }
+.current-summary-main h2 { margin-bottom: 2px; }
+.current-summary-panel .eyebrow { margin-bottom: 2px; }
+.status-summary-strip { grid-column: 1; gap: 8px; margin: 2px 0 0; }
+.status-pill { padding: 4px 9px; font-size: .76rem; }
+.analysis-note { grid-column: 2; margin: 0; }
+.analysis-note summary { padding: 3px 0; color: var(--muted); font-size: .78rem; font-weight: 500; }
+.analysis-note p { max-width: 75ch; margin: 4px 0 0; font-size: .8rem; }
+.analysis-note[open] { grid-column: 1 / -1; }
+.current-main-grid { grid-template-columns: minmax(0, 1.5fr) minmax(300px, .82fr); gap: 14px; }
+.current-priorities-panel { padding: 0; border: 0; background: transparent; }
+.current-priorities-panel .match-checklist-card {
+  margin: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #12232d;
+}
+.current-priorities-panel .checklist-item { border-radius: 9px; }
+.checklist-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #568576;
+  border-radius: 8px;
+  color: var(--accent);
+  font-size: .9rem;
+  font-weight: 800;
+}
+.checklist-status-pill.status-pending { color: var(--warning); border-color: #766944; background: #302c20; }
+.checklist-status-pill.status-ready { color: var(--accent); border-color: #568576; background: #18382e; }
+
+/* The player marker and its label form one legible unit on the field. */
+.pitch-panel, .current-pitch-panel { padding: 18px; background: linear-gradient(155deg, #142c34, #10232b); }
+.pitch-panel h3, .current-pitch-panel h2 { margin: 0; }
+.pitch { max-width: 720px; max-height: 760px; border-color: #78ae94; background: repeating-linear-gradient(to top, #173b30 0, #173b30 10%, #1b4235 10%, #1b4235 20%); box-shadow: inset 0 0 60px #071a1680; }
+.pitch::before, .pitch-line, .pitch-center, .pitch-area { border-color: #93b9a499; }
+.pitch-player { width: 21%; max-width: 110px; padding: 0; z-index: 1; }
+.pitch-player:hover, .pitch-player:focus-visible { z-index: 3; }
+.shirt { position: relative; z-index: 1; width: 32px; height: 32px; border-radius: 9px; box-shadow: 0 2px 10px #001c15a3; }
+.player-plate {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-top: -4px;
+  padding: 6px 5px 4px;
+  border: 1px solid #5c8a75;
+  border-radius: 8px;
+  background: #0a201cfa;
+  box-shadow: 0 5px 12px #001b14a6;
+}
+.pitch-player strong { display: block; margin: 0; padding: 0; border-radius: 0; background: transparent; font-size: .73rem; line-height: 1.25; }
+.pitch-player small { display: flex; justify-content: center; gap: 6px; padding: 0; border-radius: 0; background: transparent; color: #d6e9df; font-size: .64rem; }
+.pitch-player small b { color: var(--accent); font-weight: 800; }
+.pitch-player.keeper .player-plate { border-color: #bea778; }
+.pitch-direction { font-weight: 700; }
+.tactical-layout { grid-template-columns: minmax(0, 1.5fr) minmax(300px, .85fr); gap: 14px; }
+.lineup-panel { padding: 20px; }
+.lineup-panel > p { font-size: .8rem; line-height: 1.45; }
+.lineup-panel .lineup li { padding: 9px 0; }
+.lineup-panel .lineup li .score { font-size: 1rem; }
+.controls { padding: 18px 22px; margin-bottom: 10px; }
+.controls details { margin-top: 10px; padding-top: 10px; }
+.result-heading { margin-top: 16px; }
+.decision-strip { margin: 10px 0 16px; }
+
+/* Market and roster share the same quieter surfaces and accent. */
+.scouting-banner-strip, .squad-overcrowding-panel { background: #11232c; border-color: var(--line); border-radius: 12px; }
+.scanner-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: #1c3c35;
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+.scouting-status-badge strong { color: var(--accent); }
+.scout-card { background: #12232d; border-color: var(--line); box-shadow: none; }
+.scout-card:hover { border-color: #5e897d; }
+.pos-badge-primary { color: var(--accent-ink); }
+.attr-chip { background: #1b3337; border-color: #345b58; color: #d3eadd; }
+.scout-card-verdict { background: #1b3436; }
+.verdict-icon { color: var(--accent); font-weight: 800; }
+.overcrowding-card { background: #0f2028; border-color: var(--line); }
+
+@media (max-width: 1100px) {
+  .current-main-grid, .tactical-layout { grid-template-columns: 1fr; }
+  .pitch { max-width: 650px; }
+}
+@media (max-width: 800px) {
+  #sidebar { padding: 9px 18px; }
+  .topbar { min-height: 58px; padding: 10px 18px; }
+  #source-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  main { padding: 16px 18px; }
+  .page-heading { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; margin-bottom: 12px; }
+  .page-heading h1 { margin: 2px 0 0; }
+  .page-heading p { display: none; }
+  .page-heading .actions { width: auto; gap: 6px; }
+  .page-heading .actions .button { min-height: 36px; padding: 7px 10px; }
+  .current-summary-panel { grid-template-columns: 1fr; padding: 14px 16px; }
+  .current-summary-main, .status-summary-strip, .analysis-note { grid-column: 1; }
+  .current-summary-main h2 { font-size: 1.2rem; }
+  .analysis-note[open] { grid-column: 1; }
+  .pitch { max-width: 650px; }
+  .executive-dashboard-grid { grid-template-columns: 1fr; }
+  .controls { padding: 12px 16px; }
+  .controls .control-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .controls label { gap: 5px; font-size: .8rem; }
+  .controls select { padding: 8px 10px; font-size: .8rem; }
+  .controls details { margin-top: 6px; padding-top: 5px; }
+  .controls summary { font-size: .8rem; }
+  .result-heading { margin-top: 10px; }
+  .decision-strip { gap: 6px 16px; }
+}
+@media (max-width: 520px) {
+  #nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #nav a { font-size: .76rem; }
+  .page-heading { grid-template-columns: 1fr; }
+  .page-heading .actions { justify-content: flex-start; }
+  .topbar .actions { justify-content: flex-start; }
+  .topbar .button { min-height: 36px; }
+  .controls .control-grid { grid-template-columns: 1fr; }
+  .current-pitch-panel, .pitch-panel { padding: 10px; }
+  .pitch-player { width: 23%; }
+  .shirt { width: 27px; height: 27px; font-size: .72rem; }
+  .player-plate { padding: 5px 3px 3px; }
+  .pitch-player strong { font-size: .65rem; }
+  .pitch-player small { gap: 3px; font-size: .57rem; }
 }
 
