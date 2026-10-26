@@ -89,7 +89,7 @@ Las observaciones tácticas analizan hipótesis de coordinación colectiva basad
 
 Se muestran las once propiedades con posesión (amplitud, dirección y frecuencia del regate, carreras hacia adelante, libertad de movimientos, aguantar el balón, disparos, riesgo en pases, longitud de entrega, origen y estrategia de centros) y las cuatro propiedades sin posesión (presión, marca, entradas y objetivo de marca).
 
-Los bloqueos comprobados en las capturas se aplican a Central, Central con salida, Organizador retrasado, Organizador adelantado, Mediocentro organizador, Delantero de apoyo, Carrilero, Portero con salida y Portero líbero. La disponibilidad de otros roles se mantiene como desconocida hasta relevar capturas adicionales.
+Los 79 roles tienen un panel observado. Cada candado o control editable se considera comprobado únicamente cuando el puesto, costado y ámbito coinciden con esa evidencia; también se contrasta la cantidad de jugadores del mismo puesto si está documentada (por ejemplo, el costado derecho de tres centrales o de un doble pivote). Los contextos distintos mantienen disponibilidad no verificada y no reciben candados ni valores automáticos por extrapolación. Los valores que confirme el usuario se conservan, aunque su disponibilidad no esté verificada.
 
 ## Modelo del mapa
 

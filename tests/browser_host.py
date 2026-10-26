@@ -14,6 +14,7 @@ from fixtures import dataset
 from fm_app.server import create_app_server,Handler
 from fm_app.contracts import cache_key
 from fm_app.analysis import analyze
+from fm_app.storage import atomic_json
 
 temp=TemporaryDirectory(prefix='touchline-ui-')
 server=create_app_server(port=0,storage=Path(temp.name)/'imports',config_file=Path(temp.name)/'sync.json',start_watcher=False)
@@ -27,6 +28,12 @@ server.test_counts={}
 class TestHandler(Handler):
     def do_POST(self):
         self.server.test_counts[self.path]=self.server.test_counts.get(self.path,0)+1
+        if self.path=='/__test/legacy-preferences':
+            if not self.trusted() or self.headers.get('X-FM-App')!='1':
+                return self.reply(403,{})
+            # Deliberately bypass new validation to model an upgrade from old data.
+            atomic_json(server.state.storage/'preferences.json', {original['career_id']: self.body()})
+            return self.reply(200,{})
         if self.path=='/__test/change':
             if not self.trusted() or self.headers.get('X-FM-App')!='1':
                 return self.reply(403,{})

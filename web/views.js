@@ -1,6 +1,6 @@
 import {esc, date, number, score, playerButton, groupName, pos} from './format.js';
 import {filteredPlayers} from './session.js';
-import {formationCards, tacticResult, rolePlan} from './tactics-view.js';
+import {formationCards, tacticResult, rolePlan, supportRunsRecovery} from './tactics-view.js';
 
 export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',contracts:'Contratos',scouting:'Ojeo',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
 
@@ -187,7 +187,7 @@ export function tactics(state) {
     </section>
     ${analysis?.tactics.length?`<details class="ranking"><summary>Comparar las tres mejores · ${analysis.evaluated_formations} esquemas evaluados</summary>${formationCards(analysis.tactics,selected?.id)}</details>`:''}
     ${state.error?`<div class="notice warning" role="alert">${esc(state.error)} <button class="text-button" data-action="retry">Reintentar</button></div>`:''}
-    ${selected?tacticResult(selected,state):state.busy?'<div class="panel skeleton" role="status">Calculando tu propuesta…</div>':'<section class="panel empty"><h2>No hay un once completo</h2><p>Necesitás al menos once jugadores disponibles en el grupo principal. Revisá tus exclusiones y la asignación de grupos.</p><button class="button" data-action="groups">Configurar grupos</button></section>'}`;
+    ${selected?tacticResult(selected,state):state.busy?'<div class="panel skeleton" role="status">Calculando tu propuesta…</div>':state.error?.includes('Carreras de apoyo')?supportRunsRecovery(data,prefs,state.overrideDraft):'<section class="panel empty"><h2>No hay un once completo</h2><p>Necesitás al menos once jugadores disponibles en el grupo principal. Revisá tus exclusiones y la asignación de grupos.</p><button class="button" data-action="groups">Configurar grupos</button></section>'}`;
 }
 
 function toolbar(state, kind) {

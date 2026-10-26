@@ -6,7 +6,7 @@ import sys
 
 from fixtures import dataset
 from fm_app.current_tactic import audit_tactic, extract_stored_tactics
-from fm_app.fm26 import ROLES, PI, PLAYER_MENU, SCREENSHOT_LOCKS, player_instructions
+from fm_app.fm26 import ROLES, PI, PLAYER_MENU, SCREENSHOT_LOCKS, OBSERVED_CONTEXTS, player_instructions
 from fm_app.recommendations import simulate_formation
 from fm_app.spatial import coverage
 import app_desktop
@@ -48,7 +48,7 @@ class CurrentTacticTests(unittest.TestCase):
                 with self.assertRaises(ValueError):audit_tactic(self.data,plan)
 
     def test_individual_role_locks_cannot_be_contradicted(self):
-        plan=self.plan();row=next(r for r in plan['lineup'] if r['ip_position']=='DC')
+        plan=self.plan();row=next(r for r in reversed(plan['lineup']) if r['ip_position']=='DC')
         row['ip_role']='centre_back_ip';row['instructions']={'forward_runs_ip':'Make More Runs'}
         with self.assertRaisesRegex(ValueError,'bloqueada'):audit_tactic(self.data,plan)
 
@@ -60,7 +60,7 @@ class CurrentTacticTests(unittest.TestCase):
 
     def test_current_role_is_not_silently_optimized(self):
         plan=self.plan();row=next(r for r in plan['lineup'] if r['ip_position']=='STC')
-        row['ip_role']='deep_lying_forward_ip';result=audit_tactic(self.data,plan)
+        row['ip_role']='deep_lying_forward_ip';row['instructions']={'hold_up_ball_ip':'Yes'};result=audit_tactic(self.data,plan)
         after=next(r for r in result['lineup'] if r['uid']==row['uid'])
         self.assertEqual(after['in_possession']['id'],'deep_lying_forward_ip')
         self.assertEqual(next(i for i in after['in_possession']['instructions'] if i['id']=='hold_up_ball_ip')['value_en'],'Yes')
@@ -68,7 +68,7 @@ class CurrentTacticTests(unittest.TestCase):
     def test_complete_outfield_menu_and_observed_locks(self):
         p=self.data['players'][2]
         for role in ROLES.values():
-            instructions=player_instructions(p,role)
+            instructions=player_instructions(p,role,OBSERVED_CONTEXTS.get(role['id'],{}).get('requirements'))
             self.assertEqual([i['id'] for i in instructions],PLAYER_MENU[role['phase']])
             for i in instructions:
                 if i['value_en'] is not None:

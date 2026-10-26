@@ -14,8 +14,10 @@
 | `fm_app/tactics.py` | Catálogo único de puestos/fases/coordenadas, estilos e interpretación de pedidos |
 | `fm_app/recommendations.py` | Puntuación, asignación global, constructor compartido, cobertura y desarrollo |
 | `fm_app/fm26.py` | Catálogo de roles, localización e instrucciones |
+| `fm_app/instruction_rules.py` | Compatibilidad de desdobles y correspondencia entre contexto actual y evidencia de instrucciones |
 | `web/api.js` | HTTP con timeout/cancelación y control de respuestas anteriores |
 | `web/session.js` | Preferencias, reconciliación de jugadores/grupos y filtros |
+| `web/instruction-context.js` | Correspondencia de puesto, costado y ámbito en el editor individual |
 | `web/views.js`, `web/tactics-view.js` | Presentación del club y de las propuestas tácticas |
 | `web/app.js` | Eventos, navegación y coordinación de actualizaciones |
 
@@ -29,6 +31,8 @@
 - Los candidatos cedidos se cuentan por identificador único. Una misma persona puede ser alternativa para varios puestos, pero no resolverlos a la vez. Las condiciones de regreso no se verifican.
 - Las estadísticas desconocidas conservan `null`, mientras que cero representa un dato conocido. La extracción filtra por jugador y club de destino.
 - La caché usa dataset, estilo, grupo, exclusiones ordenadas, pedido, ajustes ordenados y formación. La versión del motor invalida los bundles anteriores.
+- La compatibilidad de los desdobles se valida sobre la combinación efectiva de estilo, pedido y ajustes. Un ajuste parcial no puede producir una pareja incompatible con el valor base del otro eje.
+- Las restricciones observadas solo se aplican cuando coincide el puesto, costado y ámbito documentados, incluida la cantidad de jugadores del mismo puesto si la evidencia la especifica. Los contextos desconocidos conservan su estado no verificado.
 
 ## Ciclo de importación
 
@@ -45,6 +49,8 @@ El transporte captura el estado y libera su bloqueo antes de consultar el monito
 La identidad de preferencias deriva del UID del club y el UID del manager. Las copias y autoguardados de esa combinación comparten preferencias. El identificador del dataset deriva del contenido de un guardado y separa resultados entre versiones.
 
 Las preferencias se guardan en el servicio local y también en almacenamiento del navegador como respaldo. Se reconcilian los grupos y los identificadores de jugadores antes de reutilizarlas. Todos los resultados se descartan al cambiar dataset o parámetros. Las solicitudes anteriores se cancelan y sus respuestas no se publican.
+
+Una pareja antigua de desdobles incompatible se conserva para permitir su corrección selectiva desde Propuestas, incluso sin un análisis calculado. Solo se persisten las modificaciones después de validar el resultado; no se restablecen otras instrucciones para resolver el conflicto. Los mapas por UID de la caché se normalizan al restaurarlos desde JSON, incluidos los mapas anidados en propuestas.
 
 La retención se ejecuta después de un éxito y protege siempre la copia activa. Solo procesa nombres UUID válidos contenidos en la raíz de importaciones; ignora carpetas ajenas y enlaces simbólicos. Sus límites se configuran sin ejecutar una eliminación inmediata.
 

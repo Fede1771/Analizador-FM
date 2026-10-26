@@ -2,6 +2,7 @@
 
 from collections import Counter
 from fm_app.spatial import coverage
+from fm_app.instruction_rules import position_context
 
 
 
@@ -549,7 +550,7 @@ TACTICAL_BADGE = {
 
 
 
-def explanation(player,choice,style):
+def explanation(player,choice,style,context=None):
 
     r=ROLES[choice['id']]; a=player['attributes']; position=choice['position']
 
@@ -611,7 +612,7 @@ def explanation(player,choice,style):
 
             'reasons':reasons,'comparison':comparison,'warnings':warnings,
 
-            'instructions':player_instructions(player,r),
+            'instructions':player_instructions(player,r,context),
 
             'behaviours':r['player_instructions'],
             'behaviors':r.get('behaviors', []),
@@ -1100,7 +1101,9 @@ class AnalysisContext:
         for index, uid, _ in sorted(picked):
             p, spec, prof = self.byid[uid], slots[index], self.profiles[uid]
             ip, oop, value = self.evaluate(p, spec)
-            ip_ex, oop_ex = explanation(p, ip, self.style), explanation(p, oop, self.style)
+            ip_context = position_context([s['ip_position'] for s in slots], index, xs=[s['ip'][0] for s in slots])
+            oop_context = position_context([s['oop_position'] for s in slots], index, xs=[s['oop'][0] for s in slots])
+            ip_ex, oop_ex = explanation(p, ip, self.style, ip_context), explanation(p, oop, self.style, oop_context)
             fam = min(p['positions'].get(spec['ip_position'].lower(), 1), p['positions'].get(spec['oop_position'].lower(), 1))
             lineup.append({'uid': uid, 'slot_id': spec['id'], 'slot_index': index,
                 'role': ip_ex['name'], 'role_id': ip['id'], 'score': round(value, 1),

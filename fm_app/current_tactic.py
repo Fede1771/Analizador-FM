@@ -1,6 +1,7 @@
 """Stored tactic provenance and evaluation of the user's explicitly confirmed plan."""
 from dataclasses import asdict
-from fm_app.fm26 import ROLES, PI, TI, PLAYER_MENU, SCREENSHOT_LOCKS, EDITABLE_GROUPS, OBSERVED_CONTEXTS, instruction
+from fm_app.fm26 import ROLES, PI, TI, PLAYER_MENU, instruction, instruction_availability
+from fm_app.instruction_rules import position_context
 from fm_app.tactics import STYLES
 from fm_app.contracts import check_support_runs_compatibility
 from fm_app.recommendations import role_score, explanation
@@ -99,17 +100,21 @@ def audit_tactic(dataset, params):
             phase_label = 'Con posesión (CP)' if phase == 'ip' else 'Sin posesión (SP)'
             value=role_score(p,role_id,style,position);values.append(value)
             alternatives=sorted([(rid,role_score(p,rid,style,position)) for rid,ref in ROLES.items() if ref['phase']==r['phase'] and position in ref['positions'] and rid!=role_id],key=lambda v:(-v[1],v[0]))[:2]
-            plan=explanation(p,{'id':role_id,'score':value,'position':position,'alternatives':[]},style)
+            context = position_context([r[phase+'_position'] for r in rows], index, row.get('instruction_scope','Posición'))
+            plan=explanation(p,{'id':role_id,'score':value,'position':position,'alternatives':[]},style,context)
             plan['comparison']='Rol confirmado por vos. Las alternativas siguientes comparan atributos; revisá su función antes de cambiarlas.'
             plan['alternatives']=[{'id':rid,'name':ROLES[rid]['name'],'score':s} for rid,s in alternatives]
             chosen=[]
             menu=PLAYER_MENU[r['phase']]
             for instruction_id in menu:
-                locked=SCREENSHOT_LOCKS.get(role_id,{}).get(instruction_id)
+                availability = instruction_availability(role_id, instruction_id, context)
+                locked = availability['locked_value'] if availability['locked'] else None
                 selected=supplied.get(instruction_id)
                 if locked is not None and selected is not None and selected!=locked:raise ValueError(f'{p["name"]}: {instruction_id} está bloqueada por el rol.')
                 if selected is not None or locked is not None:
-                    chosen.append(instruction('player',instruction_id,selected if selected is not None else locked,'Valor confirmado por vos.' if selected is not None else 'Valor bloqueado comprobado en las capturas.','confirmed' if selected is not None else 'role'))
+                    item = instruction('player',instruction_id,selected if selected is not None else locked,'Valor confirmado por vos.' if selected is not None else 'Valor bloqueado comprobado en las capturas.','confirmed' if selected is not None else 'role')
+                    item.update(availability)
+                    chosen.append(item)
             plan['instructions']=chosen
             plan['unconfirmed_instructions']=len(menu)-len(chosen)
             plan['behaviors']=r.get('behaviors',[])

@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import unittest
 from fixtures import dataset
 from fm_app.current_tactic import audit_tactic
-from fm_app.fm26 import ROLES, PI, TI, SCREENSHOT_LOCKS, EDITABLE_GROUPS, PLAYER_MENU, player_instructions
+from fm_app.fm26 import ROLES, PI, TI, SCREENSHOT_LOCKS, EDITABLE_GROUPS, PLAYER_MENU, OBSERVED_CONTEXTS, player_instructions
 from fm_app.recommendations import simulate_formation, role_score
 from fm_app.tactics import STYLES
 
@@ -87,7 +87,7 @@ class FM26ReconstructionAcceptanceTests(unittest.TestCase):
         p = self.data['players'][2]
         for rid in ('wide_centre_back_ip', 'overlapping_centre_back_ip', 'box_to_box_midfielder_ip'):
             r = ROLES[rid]
-            instructions = player_instructions(p, r)
+            instructions = player_instructions(p, r, OBSERVED_CONTEXTS.get(r['id'], {}).get('requirements'))
             hold = next(i for i in instructions if i['id'] == 'hold_up_ball_ip')
             self.assertTrue(hold['locked'])
             self.assertEqual(hold['locked_value'], 'No')
@@ -122,7 +122,7 @@ class FM26ReconstructionAcceptanceTests(unittest.TestCase):
         p = self.data['players'][2]
         # Ball playing goalkeeper locks passing_risk_ip to Take More Risks
         bpg = ROLES['ball_playing_goalkeeper_ip']
-        bpg_insts = player_instructions(p, bpg)
+        bpg_insts = player_instructions(p, bpg, OBSERVED_CONTEXTS.get(bpg['id'], {}).get('requirements'))
         risk = next(i for i in bpg_insts if i['id'] == 'passing_risk_ip')
         self.assertTrue(risk['locked'])
         self.assertFalse(risk['editable'])
@@ -135,7 +135,7 @@ class FM26ReconstructionAcceptanceTests(unittest.TestCase):
 
         # For false_nine_ip, forward_runs_ip is locked while passing_directness_ip is editable
         fn = ROLES['false_nine_ip']
-        fn_insts = player_instructions(p, fn)
+        fn_insts = player_instructions(p, fn, OBSERVED_CONTEXTS.get(fn['id'], {}).get('requirements'))
         fn_runs = next(i for i in fn_insts if i['id'] == 'forward_runs_ip')
         self.assertTrue(fn_runs['locked'])
         self.assertFalse(fn_runs['editable'])
@@ -155,13 +155,13 @@ class FM26ReconstructionAcceptanceTests(unittest.TestCase):
         """7. El menú de Portero con salida permite las dos dimensiones editables observadas y conserva las restricciones documentadas. El de Portero líbero no bloquea Entradas por inferencia."""
         p = self.data['players'][2]
         bpg = ROLES['ball_playing_goalkeeper_ip']
-        bpg_insts = player_instructions(p, bpg)
+        bpg_insts = player_instructions(p, bpg, OBSERVED_CONTEXTS.get(bpg['id'], {}).get('requirements'))
         editable_ids = [i['id'] for i in bpg_insts if i['editable']]
         self.assertIn('dribbling_frequency_ip', editable_ids)
         self.assertIn('passing_directness_ip', editable_ids)
 
         sk = ROLES['sweeper_keeper_oop']
-        sk_insts = player_instructions(p, sk)
+        sk_insts = player_instructions(p, sk, OBSERVED_CONTEXTS.get(sk['id'], {}).get('requirements'))
         tackling = next(i for i in sk_insts if i['id'] == 'tackling_oop')
         # Tackling is not locked on Sweeper Keeper!
         self.assertFalse(tackling['locked'])

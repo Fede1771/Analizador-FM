@@ -1,6 +1,7 @@
 """Validation and canonical keys shared by HTTP, imports and persisted preferences."""
-from fm_app.tactics import ATTRS, STYLES, FORMATIONS_BY_ID
-from fm_app.fm26 import TI
+from fm_app.tactics import ATTRS, STYLES, FORMATIONS_BY_ID, parse_tactical_prompt
+from fm_app.fm26 import TI, effective_team_plan
+from fm_app.instruction_rules import check_support_runs_compatibility
 
 ACTIVE_STATES = frozenset(('uploading', 'copying', 'reading', 'analyzing'))
 MAX_SAVE = 400 * 1024 * 1024
@@ -65,35 +66,6 @@ def clean_player(player):
     return result
 
 
-SUPPORT_RUNS_SIDES = {
-    'Overlap - Balanced': frozenset(),
-    'Overlap - Left': frozenset({'L'}),
-    'Overlap - Right': frozenset({'R'}),
-    'Overlap - Both Flanks': frozenset({'L', 'R'}),
-    'Underlap - Balanced': frozenset(),
-    'Underlap - Left': frozenset({'L'}),
-    'Underlap - Right': frozenset({'R'}),
-    'Underlap - Both Flanks': frozenset({'L', 'R'}),
-}
-
-
-def check_support_runs_compatibility(overlap, underlap):
-    if not overlap or not underlap:
-        return True, None
-    o_sides = SUPPORT_RUNS_SIDES.get(overlap, frozenset())
-    u_sides = SUPPORT_RUNS_SIDES.get(underlap, frozenset())
-    conflict = o_sides & u_sides
-    if not conflict:
-        return True, None
-    if conflict == frozenset({'L', 'R'}):
-        return False, 'Incompatibilidad en Carreras de apoyo: al seleccionar ambas bandas en un eje, el otro debe ser Equilibrado.'
-    if 'L' in conflict:
-        return False, 'Incompatibilidad en Carreras de apoyo: no es posible doblar por banda y por dentro en la banda izquierda simultáneamente.'
-    if 'R' in conflict:
-        return False, 'Incompatibilidad en Carreras de apoyo: no es posible doblar por banda y por dentro en la banda derecha simultáneamente.'
-    return False, 'Incompatibilidad en Carreras de apoyo observada en FM26.'
-
-
 def validate_overrides(value):
     if not isinstance(value, dict) or len(value) > len(TI):
         raise ValueError('Los ajustes tácticos deben ser un objeto.')
@@ -126,6 +98,9 @@ def analysis_parameters(params, data, simulate=False):
     if not isinstance(prompt, str) or len(prompt) > 2000:
         raise ValueError('El pedido táctico admite hasta 2000 caracteres.')
     overrides = validate_overrides(params.get('overrides', {}))
+    parsed = parse_tactical_prompt(prompt) if prompt.strip() else None
+    combined = {**(parsed['team_overrides'] if parsed else {}), **overrides}
+    effective_team_plan(parsed['recommended_style'] if parsed else style, combined)
     formation = params.get('formation', '352')
     if simulate and (not isinstance(formation, str) or formation not in FORMATIONS_BY_ID):
         raise ValueError('Formación desconocida.')

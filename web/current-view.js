@@ -1,6 +1,7 @@
 import {esc,number,score,pos} from './format.js';
 import {rolePlan,pitch,checkSupportRunsConflict} from './tactics-view.js';
 import {zoneMap} from './zones-view.js';
+import {matchesObservedContext} from './instruction-context.js';
 
 export function reconcileCurrentDraft(data,saved) {
   if(!saved||!Array.isArray(saved.lineup)||saved.lineup.length!==11)return data.club==='Liverpool'?referenceDraft(data):freshDraft(data);
@@ -425,7 +426,7 @@ export function currentView(state) {
               let selectedVal = row.instructions[id];
               let titleAttr = '';
 
-              if (ctx) {
+              if (matchesObservedContext(ctx, d.lineup, index, phase)) {
                 if (id in ctx.locked_values) {
                   isDisabled = true;
                   const lockedVal = ctx.locked_values[id];
@@ -445,7 +446,7 @@ export function currentView(state) {
                   lockBadge = `<span class="inst-badge-unverified" ${titleAttr}>❓ Disponibilidad no verificada</span>`;
                 }
               } else {
-                titleAttr = 'title="Disponibilidad no verificada en capturas para este rol (edición permitida en borrador)"';
+                titleAttr = 'title="Disponibilidad no verificada para este puesto, costado y ámbito (edición permitida en borrador)"';
                 lockBadge = `<span class="inst-badge-unverified" ${titleAttr}>❓ Disponibilidad no verificada</span>`;
               }
 

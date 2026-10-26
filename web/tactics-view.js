@@ -112,7 +112,7 @@ export function instructions(tactic, data, prefs, draft = {}) {
     }).join('');
 
     return `<article class="instruction"><label for="override-${item.id}">${esc(item.property)} ${helperNote} <small>${origin}</small></label>
-      <select id="override-${item.id}" data-override="${item.id}" data-applied="${esc(applied)}">${opts}</select>
+      <select id="override-${item.id}" data-override="${item.id}" data-applied="${esc(applied ?? '')}">${selected == null ? '<option value="" selected disabled>Elegí un valor para este eje</option>' : ''}${opts}</select>
       <p>${esc(item.reason)}</p></article>`;
   };
   return `<details class="panel"><summary>Instrucciones de equipo · ${tactic.instructions.length} ajustes</summary><p class="muted">Las etiquetas proceden del catálogo FM26; las elecciones y el índice de encaje son recomendaciones de Touchline.</p>
@@ -123,6 +123,16 @@ export function instructions(tactic, data, prefs, draft = {}) {
     ${pendingCount ? `<p class="notice" data-pending-overrides role="status">Tenés ${pendingCount} ${pendingCount === 1 ? 'cambio sin aplicar' : 'cambios sin aplicar'}. Revisá los valores y pulsá “Aplicar ajustes” para actualizar la propuesta.</p>` : ''}
     <div class="instruction-grid">${['in_possession', 'out_of_possession'].map(phase => `<section><h3>${phase === 'in_possession' ? 'Con posesión' : 'Sin posesión'}</h3>${tactic.instructions.filter(item => item.phase === phase).map(instruction).join('')}</section>`).join('')}</div>
     <div class="actions"><button class="button primary" data-action="apply-overrides">Aplicar ajustes</button><button class="button" data-action="clear-overrides">Restablecer ajustes manuales</button></div></details>`;
+}
+
+export function supportRunsRecovery(data, prefs, draft = {}) {
+  const items = ['overlap_ip', 'underlap_ip'].map(id => ({
+    id, property: data.tactic_editor.team_properties[id], phase: 'in_possession',
+    value_en: prefs.overrides[id], reason: 'Revisá este eje para obtener una combinación compatible.'
+  }));
+  return `<section class="panel" data-support-recovery><h2>Corregí los desdobles guardados</h2>
+    <p>Los valores se conservan. Ajustá un eje y aplicá los cambios para volver a calcular; las demás instrucciones y preferencias se mantienen.</p>
+    ${instructions({instructions: items}, data, prefs, draft).replace('<details class="panel">', '<details class="panel" open>')}</section>`;
 }
 
 export function tacticResult(tactic, state) {

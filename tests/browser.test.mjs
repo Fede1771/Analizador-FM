@@ -43,13 +43,16 @@ try {
   socket=new WebSocket(target.webSocketDebuggerUrl);
   await new Promise((resolve,reject)=>{socket.addEventListener('open',resolve,{once:true});socket.addEventListener('error',reject,{once:true});});
   let sequence=0;const pending=new Map();const errors=[];
+  let expectingLegacyConflict=false;
   socket.addEventListener('message',event=>{
     const value=JSON.parse(event.data);
     if(value.id){const callback=pending.get(value.id);if(callback){pending.delete(value.id);value.error?callback.reject(new Error(value.error.message)):callback.resolve(value.result);}}
     if(value.method==='Runtime.exceptionThrown')errors.push(value.params.exceptionDetails.exception?.description||value.params.exceptionDetails.text);
     if(value.method==='Log.entryAdded'&&value.params.entry.level==='error') {
       const entry=value.params.entry;
-      if(!(entry.url?.includes('/api/simulate')&&entry.text.includes('400')))errors.push(entry.text);
+      const expectedValidation = entry.text.includes('400') &&
+        (entry.url?.includes('/api/simulate') || (expectingLegacyConflict && entry.url?.includes('/api/analyze')));
+      if(!expectedValidation)errors.push(entry.text);
     }
   });
   function send(method,params={}){return new Promise((resolve,reject)=>{const id=++sequence;pending.set(id,{resolve,reject});socket.send(JSON.stringify({id,method,params}));});}
@@ -140,6 +143,35 @@ try {
     const overlapReenabled = await evaluate(`Array.from(document.querySelectorAll('#override-overlap_ip option')).filter(o => o.disabled).length`);
     assert.equal(overlapReenabled, 0);
   });
+  await check('partial support overrides cannot conflict with the base style',async()=>{
+    const data=await (await fetch(url+'/api/data')).json();
+    const response=await fetch(url+'/api/simulate',{method:'POST',headers:{'Content-Type':'application/json','X-FM-App':'1'},body:JSON.stringify({dataset_id:data.id,style:'press',formation:'433',overrides:{underlap_ip:'Underlap - Left'}})});
+    assert.equal(response.status,400);
+    assert.ok((await response.json()).error.includes('Carreras de apoyo'));
+  });
+  await check('legacy incompatible preferences can be repaired selectively and reopened',async()=>{
+    const saved=await (await fetch(url+'/api/preferences')).json();
+    const legacy={...saved,overrides:{...saved.overrides,tempo:'Much Lower',overlap_ip:'Overlap - Left',underlap_ip:'Underlap - Left'}};
+    expectingLegacyConflict=true;
+    await fetch(url+'/__test/legacy-preferences',{method:'POST',headers:{'Content-Type':'application/json','X-FM-App':'1'},body:JSON.stringify(legacy)});
+    await send('Page.reload');
+    await wait(`document.querySelector('[data-support-recovery]')`,'legacy recovery controls');
+    assert.equal(await evaluate(`document.querySelector('#override-overlap_ip').value`),'Overlap - Left');
+    assert.equal(await evaluate(`document.querySelector('#override-underlap_ip').value`),'Underlap - Left');
+    assert.equal(await evaluate(`document.querySelector('#content').textContent.includes('No hay un once completo')`),false);
+    await set('#override-underlap_ip','Underlap - Right');
+    await evaluate(`document.querySelector('[data-action="apply-overrides"]').click()`);await ready();
+    await wait(`fetch('/api/preferences').then(r=>r.json()).then(p=>p.overrides.underlap_ip==='Underlap - Right')`,'repaired preferences persisted');
+    const repaired=await (await fetch(url+'/api/preferences')).json();
+    expectingLegacyConflict=false;
+    assert.equal(repaired.overrides.tempo,'Much Lower');
+    assert.equal(repaired.overrides.overlap_ip,'Overlap - Left');
+    assert.deepEqual(repaired.labels,saved.labels);
+    await send('Page.reload');await ready();
+    assert.equal(await evaluate(`document.querySelector('#override-underlap_ip').value`),'Underlap - Right');
+    await fetch(url+'/api/preferences',{method:'POST',headers:{'Content-Type':'application/json','X-FM-App':'1'},body:JSON.stringify(saved)});
+    await send('Page.reload');await ready();
+  });
   await check('player plan dialog',async()=>{await evaluate(`document.querySelector('.pitch-player').click()`);assert.ok(await evaluate(`document.querySelector('#dialog').open`));assert.equal(await evaluate(`document.querySelectorAll('.role-plan').length`),2);await evaluate(`document.querySelector('#dialog-close').click()`);});
   await check('loan search and sort',async()=>{await navigate('loans');await wait(`document.querySelector('#search')`,'loans');await set('#search','200','input');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);await set('#sort-order','age');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);});
   await check('contracts view displays alerts and filtering',async()=>{
@@ -209,6 +241,24 @@ try {
     await send('Page.reload');await wait(`document.querySelector('#current-player-0') && !document.querySelector('#current-player-0').dataset.reloading`,'restored draft');
     assert.equal(await evaluate(`document.querySelector('#current-player-0').value`),String(uid));
     assert.equal(await evaluate(`document.querySelector('#current-confirm').checked`),false);
+    await navigate('tactics');await ready();
+  });
+  await check('individual locks follow the observed position and scope',async()=>{
+    await navigate('current');await wait(`document.querySelector('#current-ip-position-4')`,'role context editor');
+    await set('#current-ip-position-4','DR');
+    await set('#current-ip-role-4','playmaking_wing_back_ip');
+    await set('#current-scope-4','Posición');
+    assert.equal(await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').disabled`),true);
+    await set('#current-scope-4','Personalizada');
+    assert.equal(await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').disabled`),false);
+    assert.ok(await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').closest('label').textContent.includes('Disponibilidad no verificada')`));
+    await set('#current-pi-4-hold_up_ball_ip','Yes');
+    await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').dataset.awaitReload='yes'`);
+    await send('Page.reload');await wait(`document.querySelector('#current-pi-4-hold_up_ball_ip') && !document.querySelector('#current-pi-4-hold_up_ball_ip').dataset.awaitReload`,'personal instruction restored');
+    assert.equal(await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').value`),'Yes');
+    await set('#current-ip-position-4','WBL');await set('#current-ip-role-4','playmaking_wing_back_ip');
+    await set('#current-scope-4','Posición');
+    assert.equal(await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').disabled`),false);
     await navigate('tactics');await ready();
   });
   await check('proposal coverage has 25 zones in both phases',async()=>{
