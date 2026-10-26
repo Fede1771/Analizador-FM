@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 
 # 1. Patch recommendations.py
 rec_path = ROOT / 'fm_app' / 'recommendations.py'

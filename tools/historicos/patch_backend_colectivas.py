@@ -1,7 +1,7 @@
 """Updates fm_app/fm26.py, fm_app/contracts.py, and fm_app/current_tactic.py with collective rules and validation."""
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 
 # 1. Update fm_app/fm26.py
 fm26_path = ROOT / 'fm_app' / 'fm26.py'

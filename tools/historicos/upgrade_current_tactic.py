@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-ct_path = Path(__file__).resolve().parent.parent / 'fm_app' / 'current_tactic.py'
+ct_path = Path(__file__).resolve().parents[2] / 'fm_app' / 'current_tactic.py'
 text = ct_path.read_text(encoding='utf-8')
 
 import re

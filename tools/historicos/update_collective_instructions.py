@@ -2,7 +2,7 @@
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 SURVEY_DIR = ROOT / 'docs' / 'relevamiento-fm26-2026-10-25'
 
 vc = json.load(open(SURVEY_DIR / 'verificacion-colectivas.json', encoding='utf-8'))

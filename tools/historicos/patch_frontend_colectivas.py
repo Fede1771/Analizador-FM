@@ -1,7 +1,7 @@
 """Updates web/tactics-view.js, web/current-view.js, and web/app.js for collective instructions reactivity."""
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 
 # 1. Update web/tactics-view.js
 tactics_view_path = ROOT / 'web' / 'tactics-view.js'

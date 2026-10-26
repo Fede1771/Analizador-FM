@@ -2,7 +2,7 @@
 and cleans remaining hardcoded names in advice."""
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 
 # 1. Update fm_app/fm26.py
 fm26_path = ROOT / 'fm_app' / 'fm26.py'

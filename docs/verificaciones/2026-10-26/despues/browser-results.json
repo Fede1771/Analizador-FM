@@ -1,0 +1,32 @@
+{
+  "passed": [
+    "startup and overview",
+    "unified tactics and eleven players",
+    "formation simulation and localized controls",
+    "pending instructions survive phase changes and navigation",
+    "returning to applied instruction removes pending change",
+    "reset manual instructions discards the pending draft",
+    "avoiding possession loss keeps short passing in the UI",
+    "negative pressure request",
+    "pressing request retains counterpress",
+    "collective instructions options and support runs mutual exclusions",
+    "partial support overrides cannot conflict with the base style",
+    "legacy incompatible preferences can be repaired selectively and reopened",
+    "player plan dialog",
+    "loan search and sort",
+    "contracts view displays alerts and filtering",
+    "scouting view displays position pills and scouted targets",
+    "squad view displays overcrowding recommendations and status badges",
+    "companion mini-hud dialog and match instructions",
+    "preferences survive a new save",
+    "desktop layout",
+    "responsive layout and keyboard focus",
+    "current tactic keeps chosen lineup and evaluates both phases",
+    "individual locks follow the observed position and scope",
+    "proposal coverage has 25 zones in both phases",
+    "insufficient squad stops without retry loop",
+    "welcome and synchronization settings",
+    "application can close from welcome"
+  ],
+  "errors": []
+}

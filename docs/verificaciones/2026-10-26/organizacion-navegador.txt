@@ -1,0 +1,29 @@
+PASS startup and overview
+PASS unified tactics and eleven players
+PASS formation simulation and localized controls
+PASS pending instructions survive phase changes and navigation
+PASS returning to applied instruction removes pending change
+PASS reset manual instructions discards the pending draft
+PASS avoiding possession loss keeps short passing in the UI
+PASS negative pressure request
+PASS pressing request retains counterpress
+PASS collective instructions options and support runs mutual exclusions
+PASS partial support overrides cannot conflict with the base style
+PASS legacy incompatible preferences can be repaired selectively and reopened
+PASS player plan dialog
+PASS loan search and sort
+PASS contracts view displays alerts and filtering
+PASS scouting view displays position pills and scouted targets
+PASS squad view displays overcrowding recommendations and status badges
+PASS companion mini-hud dialog and match instructions
+PASS preferences survive a new save
+PASS desktop layout
+PASS responsive layout and keyboard focus
+PASS current tactic keeps chosen lineup and evaluates both phases
+PASS individual locks follow the observed position and scope
+PASS proposal coverage has 25 zones in both phases
+PASS insufficient squad stops without retry loop
+PASS welcome and synchronization settings
+PASS application can close from welcome
+{"passed":27,"errors":0}
+Browser artifacts: C:\Users\feder\Documents\Codigos varios y emprendimientos\Analizador FM\.tmp\browser-GSEpor

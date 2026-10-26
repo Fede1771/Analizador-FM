@@ -1,0 +1,38 @@
+...........................Fall� la copia de la partida
+Traceback (most recent call last):
+  File "C:\Users\feder\Documents\Codigos varios y emprendimientos\Analizador FM\fm_app\jobs.py", line 117, in _copy_and_import
+    shutil.copy2(path, target)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\feder\AppData\Local\Programs\Python\Python314\Lib\unittest\mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\feder\AppData\Local\Programs\Python\Python314\Lib\unittest\mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\feder\AppData\Local\Programs\Python\Python314\Lib\unittest\mock.py", line 1241, in _execute_mock_call
+    raise effect
+PermissionError: copy failed
+...Fall� la importaci�n
+Traceback (most recent call last):
+  File "C:\Users\feder\Documents\Codigos varios y emprendimientos\Analizador FM\fm_app\jobs.py", line 154, in import_save
+    self._extract(source, folder)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\feder\AppData\Local\Programs\Python\Python314\Lib\unittest\mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\feder\AppData\Local\Programs\Python\Python314\Lib\unittest\mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\feder\AppData\Local\Programs\Python\Python314\Lib\unittest\mock.py", line 1241, in _execute_mock_call
+    raise effect
+ValueError: incompatible
+.....Fall� la copia de la partida
+Traceback (most recent call last):
+  File "C:\Users\feder\Documents\Codigos varios y emprendimientos\Analizador FM\fm_app\jobs.py", line 119, in _copy_and_import
+    raise ValueError('La partida cambi� durante la copia. Esper� a que FM termine de guardar.')
+ValueError: La partida cambi� durante la copia. Esper� a que FM termine de guardar.
+.............................................................
+----------------------------------------------------------------------
+Ran 96 tests in 50.820s
+
+OK

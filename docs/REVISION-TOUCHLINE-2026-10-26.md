@@ -69,11 +69,15 @@ Los tests con datos reales usan copias temporales de los datos importados de Liv
 
 ## Evidencia disponible en esta carpeta del proyecto
 
-- `.tmp/revision-2026-10-26/python-tests.log`: ejecución final de la suite Python.
-- `.tmp/revision-2026-10-26/browser-tests.log`: 24 recorridos de navegador.
-- `.tmp/revision-2026-10-26/browser-audit/audit-observations.json`: resultados de las reproducciones.
-- `.tmp/revision-2026-10-26/browser-audit/legacy-conflict.png`: pantalla sin controles de recuperación.
-- `.tmp/browser-spXiiG/`: capturas de los flujos habituales con datos sintéticos.
-- `.tmp/revision-2026-10-26/prepare_browser_audit.py`: preparación del recorrido adicional, sin modificar los tests ni el código de producción.
+- `docs/verificaciones/2026-10-26/antes-python.txt`: ejecución de la suite Python anterior a las correcciones.
+- `docs/verificaciones/2026-10-26/antes-navegador.txt`: 24 recorridos de navegador anteriores.
+- `docs/verificaciones/2026-10-26/observaciones-antes.json`: resultados de las reproducciones.
+- `docs/verificaciones/2026-10-26/conflicto-antes.png`: pantalla sin controles de recuperación.
+- `docs/verificaciones/2026-10-26/antes/`: capturas de los flujos habituales con datos sintéticos anteriores.
+- `docs/verificaciones/2026-10-26/reproduccion-historica.py`: preparación histórica del recorrido adicional.
+- `docs/verificaciones/2026-10-26/despues-python.txt` y `despues-navegador.txt`: 96 pruebas Python y 27 recorridos de navegador correctos después de las correcciones.
+- `docs/verificaciones/2026-10-26/despues/`: resultados estructurados y capturas posteriores.
+
+Las evidencias se conservaron fuera de `.tmp/` antes de limpiar los archivos temporales del proyecto.
 
 La conclusión es conservar la integración y las mejoras actuales, corregir estos casos puntuales y volver a ejecutar las comprobaciones afectadas. El cierre del relevamiento de FM no significa que estos defectos de implementación estén resueltos.

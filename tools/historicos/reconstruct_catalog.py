@@ -6,7 +6,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 SURVEY_DIR = ROOT / 'docs' / 'relevamiento-fm26-2026-10-25'
 

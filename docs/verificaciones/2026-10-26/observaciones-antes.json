@@ -1,0 +1,34 @@
+{
+  "partial_override": {
+    "http_status": 200,
+    "values": [
+      {
+        "id": "overlap_ip",
+        "value": "Overlap - Both Flanks"
+      },
+      {
+        "id": "underlap_ip",
+        "value": "Underlap - Left"
+      }
+    ]
+  },
+  "legacy_conflict": {
+    "error": "Incompatibilidad en Carreras de apoyo: no es posible doblar por banda y por dentro en la banda izquierda simultáneamente. Reintentar",
+    "overlap_select": false,
+    "underlap_select": false,
+    "clear_button": false,
+    "text": true
+  },
+  "unverified_context": {
+    "position": "WBL",
+    "scope": "Personalizada",
+    "disabled": true,
+    "label": "Aguantar el balón · CP 🔒 Bloqueado comprobado\n                  \n                    Sin confirmarSíNo"
+  },
+  "reset_workaround": {
+    "overrides": {},
+    "labels": {
+      "0": "Grupo conservado"
+    }
+  }
+}

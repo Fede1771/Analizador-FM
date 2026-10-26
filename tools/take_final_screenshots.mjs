@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 
 const testDirectory = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(testDirectory, '..');
-const outDir = path.join(root, 'capturas-finales');
+const outDir = path.join(root, 'docs', 'capturas-finales');
 fs.mkdirSync(outDir, {recursive: true});
 
 const python = process.env.PYTHON_BIN || path.join(root, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
@@ -21,6 +21,7 @@ const candidates = [
 const browserExecutable = candidates.find(name => fs.existsSync(name));
 assert.ok(browserExecutable, 'Install Chromium/Chrome/Edge or set CHROME_BIN');
 
+fs.mkdirSync(path.join(root, '.tmp'), {recursive: true});
 const tempFolder = fs.mkdtempSync(path.join(root, '.tmp', 'screenshots-'));
 const serverFile = path.join(tempFolder, `ui-server-${Date.now()}-${process.pid}.json`);
 const host = spawn(python, ['-B', path.join(root, 'tests', 'browser_host.py'), tempFolder, serverFile], {

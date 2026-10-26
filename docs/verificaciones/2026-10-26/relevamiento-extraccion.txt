@@ -1,0 +1,170 @@
+{"records": 1680, "missing_spanish": 151, "path": "C:\\Users\\feder\\Documents\\Codigos varios y emprendimientos\\Analizador FM\\docs\\relevamiento-fm26-2026-10-25\\textos-instalacion.json"}
+696020 The Goalkeeper can distribute the ball in many ways depending on the team's playing s | El portero puede distribuir el balón de muchas maneras, dependiendo de la estrategia
+696021 The main job of the Centre-Back is to provide protection to the team, being in a posi | La tarea principal del central es proteger al equipo, situándose en una posición que
+696022 The Full-Back is a key player in modern football, having to supplement their traditio | El lateral es un jugador clave en el fútbol moderno, ya que debe complementar sus fun
+696023 The Wing-Back combines the responsibilities of a Full-Back and a Winger, providing wi | El carrilero combina las responsabilidades de un lateral y un extremo, proporcionando
+696024 The Defensive Midfielder's main responsibility is to position themselves in front of  | La principal responsabilidad del mediocentro es colocarse delante de la defensa del e
+696025 The Half Back is a defensive midfielder who looks to drop into their team's defensive | El medio cierre es un mediocampista defensivo que busca retrasarse e integrarse en la
+696026 The Central Midfielder is responsible for providing an industrious and versatile link | El mediocampista es responsable de ofrecer un vínculo trabajador y versátil entre la
+696027 The Wide Midfielder is a wide player who tends to support the attack from deeper than | El mediocampista de banda es un jugador de banda que suele apoyar el ataque desde zon
+696028 The Winger is expected to provide width throughout the attack, looking to stretch the | Se espera que el extremo aporte amplitud durante todo el ataque, intentando estirar l
+696029 The Inside Forward is a wide role that aims to frequently drift inside into the half- | El delantero por dentro es un jugador de banda cuya función principal es cerrarse hac
+696030 The Attacking Midfielder is an offensive role which looks to operate between the oppo | El mediapunta es un rol ofensivo que busca operar entre la línea defensiva y la línea
+696031 The Channel Midfielder looks to primarily make supporting runs into wide areas, often | El mediocampista entre líneas busca principalmente hacer desmarques de apoyo hacia la
+696032 The Deep-Lying Forward's main function is to link the attack to the midfield.
+
+They a | La función principal del delantero de apoyo es conectar el ataque con el mediocampo.
+
+696033 The Centre Forward, also typically known as the classic "Number 9" is expected to lea | El delantero centro, también conocido como el clásico "Número 9"\, es quien se encarg
+696034 The Ball Playing Goalkeeper looks to play an active role in their team's build-up pla | El portero con salida de balón busca desempeñar un papel activo en la construcción de
+696035 The No-Nonsense Goalkeeper adopts a cautious approach, preferring to stay nearer to t | El portero con criterio adopta un planteamiento cauto, ya que prefiere quedarse más c
+696036 The main job of the Advanced Centre-Back is to provide protection to the team, being  | La principal tarea del Central avanzado es proteger al equipo, colocándose en una pos
+696037 The main job of the Ball-Playing Centre-Back is to provide protection to the team, be | La principal tarea del Central con buen juego de pies es proteger al equipo, colocánd
+696038 The main job of the Wide Centre-Back is to provide protection to the team, being in a | La principal tarea del Central lateral es brindar protección al equipo, colocándose e
+696039 The main job of the Overlapping Centre-Back is to provide protection to the team, bei | La tarea principal del Central que dobla es proteger al equipo, situándose en una pos
+696040 The Deep-Lying Playmaker operates in the space between the defence and the midfield a | El Pivote organizador opera en el espacio entre la defensa y el centro del campo, con
+696041 Playing in central midfield, the Ball-Winning Midfielder's main function is to close  | Actuando en el centro del campo, la principal misión del mediocampista recuperador es
+696042 The non-stop dynamism of the Box-to-Box Midfielder enables them to contribute greatly | El dinamismo constante del mediocampista todoterreno le permite contribuir significat
+696043 This is the modern interpretation of the Mezzala, a central player that likes to drif | Esta es la interpretación moderna del Mezzala, un jugador central al que le gusta mov
+696044 The Wide Central Midfielder is a supporting role typically utilised at the side of a  | El mediocampista escorado es habitualmente un rol de apoyo que se utiliza en un costa
+696045 The Inside Winger is a wide role that aims to frequently drift inside into the half-s | El extremo por dentro es un rol de banda que busca habitualmente meterse hacia dentro
+696046 The Advanced Playmaker is a creative role which looks to operate high up the pitch be | El organizador adelantado es un rol creativo que busca operar en zonas avanzadas del
+696047 A Target Forward looks to use their physicality and height to disrupt the opposition' | Un delantero objetivo trata de aprovechar su físico y altura para molestar a la defen
+696049 The Poacher sits on the shoulder of the last defender looking to break the defensive  | El ariete juega al límite de la línea defensiva rival, buscando constantemente romper
+696050 The main job of the No-Nonsense Centre-Back is to provide protection to the team, bei | La función principal del central práctico es dar protección al equipo, colocándose en
+696051 The Channel Forward is a high-energy role that looks to constantly be a thorn in defe | El delantero entre líneas tiene un rol de alta intensidad que busca ser una molestia
+696052 The player with a Free Role is given full creative license, allowing them to roam fro | El jugador con libertad de movimientos tiene licencia creativa total, lo que le permi
+696053 The Regista is a more aggressive version of the deep-lying playmaker suitable for pos | El Regista es una versión más agresiva del Pivote organizador, ideal para sistemas ba
+696055 The Advanced Wing-Back positions more aggressively than a traditional Wing-Back, look | Con un posicionamiento más agresivo que el de un Carrilero tradicional, la posición d
+696056 The Enganche is the side's prime creator, a hook that joins midfield and attack and o | El Enganche es el principal generador de juego del equipo, un enlace que une el medio
+696057 The False Nine is an unconventional centre - forward who regularly drops between the  | El Falso Nueve es un delantero centro poco convencional, que suele moverse entre líne
+696058 The Second Striker operates as one of the team's main goalscoring threats.
+
+In early  | El Segundo delantero actúa como una de las principales amenazas ofensivas del equipo.
+696059 The Playmaking Winger will act as the team's primary source of creativity, starting f | The Playmaking Winger will act as the team's primary source of creativity, starting f
+696060 The Inside Wing-Back looks to move into central areas of the pitch as their team prog | El carrilero por dentro intenta moverse hacia zonas centrales del campo a medida que
+696061 Similar to the Inverted Wing-Back, the Playmaking Wing-Back will look to move into ce | De manera similar al carrilero inverso, el carrilero organizador intentará desplazars
+696062 The Inside Full-Back is a specialist role that moves to become an extra central defen | El lateral por dentro es un rol especializado que implica convertirse en un defensor
+696063 The Wide Forward is expected to provide width throughout the attack, looking to stret | Se espera que el delantero escorado dé amplitud al ataque, posicionándose cerca de la
+696064 The Box-to-Box Playmaker is the heartbeat of their team, looking to be a creative out | El organizador todoterreno es el pulmón del equipo, tratando de dar una salida creati
+696065 The Line Keeper is a Goalkeeper who primarily looks to stay within the confines of th | El Portero bajo palos es un guardameta que se mantiene principalmente dentro de los l
+696066 The main job of the Centre-Back is to stop the opposing attackers from playing and to | El principal trabajo del Central es tratar de frenar a los delanteros rivales y sacar
+696067 As a Cover, the Centre-Back is asked to adopt a more cautious approach, holding their | Como Cobertura, se pide al Central que adopte un planteamiento más cauto, manteniendo
+696068 As a Stopper, the Centre-Back is asked to be more willing to step out from their posi | Como Tapón, se pide al Central que salga más de su posición para incomodar y enfrenta
+696069 The main job of the Wide Centre-Back is to stop opposing attackers from creating chan | La principal tarea del Central lateral es evitar que los atacantes rivales generen oc
+696070 As a Cover, the Wide Centre-Back is asked to adopt a more cautious approach, holding  | Como cobertura, se pide al central lateral que adopte un planteamiento más cauto, man
+696071 As a Stopper, the Wide Centre-Back is asked to be more willing to step out from their | Como tapón, se pide al central que salga más de su posición para incomodar y enfrenta
+696072 The main job of a Full-Back is to defend the wide areas as part of the team's backlin | La principal tarea de un lateral es defender las bandas como parte de la línea defens
+696073 As a Holder, the Full-Back is asked to hold a deeper position while their team is def | Como contención, se le pide al lateral que mantenga una posición más retrasada mientr
+696074 As a Presser, the Full-Back is asked to actively engage opposition wide players high  | Como presionante, se le pide al lateral que presione arriba a los jugadores de banda
+696075 The Wing-Back is expected to defend the wide areas for their team.
+
+Compared to tradi | Se espera que el Carrilero defienda las zonas laterales para su equipo.
+
+En comparaci
+696076 As a Holder, the Wing-Back is asked to hold a deeper position while their team is def | Como Contención, al Carrilero se le pide mantener una posición más retrasada mientras
+696077 As a Presser, the Wing-Back is asked to aggressively engage opposition wide players h | Como Presionante, al Carrilero se le pide presionar arriba de forma agresiva a los ju
+696078 The Defensive Midfielder's main responsibility out of possession is position themselv | La principal responsabilidad del Mediocentro cuando no tiene el balón es colocarse de
+696079 As a Dropper, the Defensive Midfielder will look to move back into the defensive line | Como Incrustado, el Mediocentro buscará retroceder e incrustarse en la línea defensiv
+696080 As a Screener, the Defensive Midfielder's main responsibility is to defend the space  | Como Pantalla, la principal responsabilidad del mediocampista es proteger el espacio
+696081 As a Presser, the Defensive Midfielder is tasked with stepping forward from their pos | Como Presionante, al mediocampista se le asigna la tarea de adelantarse desde su posi
+696082 As a Wide Cover, the Defensive Midfielder is asked to provide defensive support in wi | Como Cobertura por banda, se pide al mediocampista que brinde apoyo defensivo en las
+696083 The Central Midfielder looks to provide protection in the middle of the pitch, often  | El mediocampista central trata de ofrecer protección en el centro del campo, intentan
+696084 As a Screener, the Central Midfielder tries not to be drawn out from their position t | Como Pantalla, el mediocampista central trata de no alejarse demasiado de su posición
+696085 As a Presser, the Central Midfielder is encouraged to step forward more often from th | Como Presionante, al Mediocampista se le anima a adelantarse desde su posición para a
+696086 As a Wide Cover, the Central Midfielder is asked to provide defensive support in wide | Como Cobertura por banda, se pide al Mediocampista que brinde apoyo defensivo en las
+696087 As a Tracker, the Wide Midfielder is instructed to track back defensively as the oppo | Como Rastreador, al Mediocampista de banda se le indica que retroceda defensivamente
+696088 The Wide Midfielder provides a balance between defensive protection against wide atta | El Mediocampista de banda ofrece un equilibrio entre la protección defensiva frente a
+696089 As a Wide Outlet, the Wide Midfielder is asked to avoid tracking back to help out the | Como Recurso Ofensivo por Banda, se solicita al Mediocampista de banda que evite baja
+696090 The Attacking Midfielder looks to defend central areas of the pitch, often being task | El mediapunta se encarga de defender las zonas centrales del campo y, a menudo, tiene
+696091 As a Central Outlet, the Attacking Midfielder is asked to avoid tracking back to help | Como Salida central, se pide al mediapunta que no retroceda tanto para ayudar a los d
+696092 As a Splitting Outlet, the Attacking Midfielder is asked to avoid tracking back to he | Con Ruptura con salida, se solicita al mediapunta que evite bajar para ayudar a los d
+696093 As a Tracker, the Attacking Midfielder is instructed to track back defensively as the | Como Rastreador, se indica al mediapunta que retroceda defensivamente cuando el equip
+696094 As an Inside Outlet, the Winger is asked to avoid tracking back to help out the Full- | Como Extremo por dentro con salida, se solicita al extremo que evite bajar para ayuda
+696095 The Winger primarily looks to defend the wide areas of the pitch, looking to find a b | El Extremo se centra principalmente en defender las zonas laterales del campo, buscan
+696096 As a Tracker, the Winger is instructed to track back defensively as the opposition ad | Como Rastreador, al Extremo se le indica que retroceda defensivamente cuando el equip
+696097 As a Wide Outlet, the Winger is asked to avoid tracking back to help out the Full-Bac | Siendo Escorado con salida, se le solicita al Extremo que evite bajar para ayudar al
+696098 As a Central Outlet, the Centre Forward is asked to avoid tracking back to help out t | Cuando tiene salida central, se solicita al Delantero centro que evite bajar para ayu
+696099 As a Splitting Outlet, the Centre Forward is asked to avoid tracking back to help out | Con Ruptura con salida, se solicita al Delantero centro que evite bajar para ayudar a
+696100 As a Tracker, the Centre Forward is instructed to track back defensively as the oppos | Como Rastreador, al Delantero centro se le indica que retroceda defensivamente cuando
+696101 This mentality is best employed for matches that you are favourites to lose and in wh | Esta mentalidad se emplea principalmente en partidos donde se prevé que tu equipo sea
+696102 This mentality is best employed for matches in which you expect to lose the battle fo | Esta mentalidad es más adecuada para partidos en los que esperas perder la batalla po
+696103 This mentality is best employed for matches that the team are expected to lose and in | Esta mentalidad se emplea principalmente en partidos donde se prevé que el equipo sea
+696104 This mentality is best employed for matches in which the team expects to lose the bat | Esta mentalidad es más adecuada para partidos en los que el equipo espera perder la b
+696105 The player will look to stand in front of the goalkeeper and obscure their view at at | El jugador intentará colocarse delante del portero y obstaculizar su visión en los ti
+696106 The player will look to stand in front of the goalkeeper and disrupt their ability to | El jugador intentará colocarse delante del portero y molestar para que no pueda hacer
+696107 The player will look to stand in front of the goalkeeper and disrupt their ability to | El jugador intentará colocarse delante del portero y molestar para que no pueda hacer
+696108 This will instruct free-kick takers to aim predominantly for the team-mate identified | Esto indicará a los lanzadores de tiros libres que apunten principalmente hacia el co
+696109 Distribute To Full-Backs asks the goalkeeper to primarily seek out the full-backs whe | Al elegir la opción "Distribuir a los laterales", el portero buscará en primer lugar
+696110 Distribute To Centre-Backs asks the goalkeeper to primarily seek out the centre-backs | Al elegir la opción "Distribuir a los centrales", el portero buscará en primer lugar
+696111 Distribute To Playmaker asks the goalkeeper to primarily seek out the team's designat | Al elegir la opción "Distribuir al organizador", el portero buscará en primer lugar a
+696112 Distribute To Flanks asks the goalkeeper to primarily seek out wide areas when distri | Al elegir la opción "Distribuir a las bandas", el portero buscará en primer lugar a l
+696113 Distribute Over Opposition Defence asks the goalkeeper to look to deliver the ball ov | Al elegir la opción "Distribuir por encima de la defensa rival", el portero buscará e
+696114 Roll It Out asks the goalkeeper to roll the ball out to a nearby player when distribu | Al elegir la opción "Pasar con la mano", el portero envía la pelota rodando a un juga
+696115 Take Short Kicks asks the goalkeeper to pass short when distributing the ball. | Golpear en corto hace que el portero realice un pase en corto cuando distribuye el ba
+696116 The team should only contain one . | El equipo solo puede contener un .
+696117 The team should not have {an} while {an} is in use. | El equipo no debería tener un  mientras esté utilizando un .
+696118 Given the current formation, the team should not feature {an} with {an}. | Dada la formación actual, el equipo no debería hacer jugar a un  junto con un .
+696119 The  role looks to drop in to a centre-back position as we attack, but we already hav | El rol de  consiste en bajar a la posición de central durante el ataque, pero con tre
+696120 The team should not have {an} when only one defensive midfielder is in use. We should | El equipo no debería tener un  cuando se está utilizando solo un mediocentro. En camb
+696121 The team should not use {an} when there is an attacking midfielder positioned further | El equipo no debería utilizar un  cuando hay un mediapunta colocado más adelante, ya
+696122 By using {an} in this current position, we have no player offering width on that flan | Al utilizar un  en su posición actual, no tenemos ningún jugador que aporte amplitud
+696123 There should be no {an} when two central midfielders and one defensive midfielder are | No debería haber un  cuando ya hay dos mediocampistas y un mediocentro que forman par
+696124 Two inverting wide roles should not be used on the same side of the pitch. | No se deberían utilizar dos roles de banda inversos en el mismo lado del campo.
+696125 An attacking inverting wide role and an attacking central midfielder should not be us | No se deberían utilizar un rol ofensivo de banda inverso y un mediocampista ofensivo
+696126 We could benefit from using a combination of Stopping and Covering roles in central d | Podría beneficiarnos el utilizar una combinación de roles de Tapón y Contención en el
+696127 The team has too many players in outlet roles, which could leave us short defensively | El equipo tiene demasiados jugadores en roles de salida, lo cual podría dejarnos algo
+696128 The team has too many players in Screening or Holding roles, which will impact our ab | El equipo tiene demasiados jugadores en roles de Contención, y eso influirá en nuestr
+696129 We have too many pressing roles in the team, which leaves us short on numbers at the  | Tenemos demasiados roles presionantes en el equipo, lo cual nos deja con menos efecti
+696130 The team has too many players in tracking roles for the current setup. This could lea | El equipo tiene demasiados jugadores en roles itinerantes con la táctica actual. Esto
+696131 The team has too many players in dropper roles for the current setup. If too many pla | El equipo tiene demasiados jugadores en roles defensivos con la táctica actual. Si ha
+696132 We would recommend only having one tracker role in the current setup. By having too m | Recomendaríamos tener únicamente un rol itinerante en la táctica actual. Si tenemos d
+696133 We would recommend only having one wide covering midfielder in the current setup. By  | Recomendaríamos tener únicamente un mediocampista escorado de cobertura en la táctica
+696136 A serious error was encountered and the application will now close. An error report w | Se encontró un error serio y la aplicación se cerrará. Se subirá un informe sobre el
+696137 IOW | EDS
+696138 Inside Outlet Winger | Extremo por dentro con salida
+696139 Requirements recommendation | Recomendaciones de requisitos
+696140 Should be put on an individual training regime to improve  Out of Possession skill se | Debería tener un entrenamiento individual para mejorar su nivel sin posesión como .
+696141 Should train as {an} | Debería entrenar como
+696144 will be due  if  wins the . | {El}{puede} cobrar  si  gana {el}.
+696145 Centre-Back | Central
+696146 Inside full-back | Lateral por dentro
+696147 Inside forward | Delantero por dentro
+696148 channel midfielder | mediocampista que cae a banda
+696149 centre forward | delantero centro
+696150 ball-playing goalkeeper | portero con juego de pies
+696151 no-nonsense goalkeeper | portero con criterio
+696152 advanced centre-back | central avanzado
+696153 ball-playing centre-back | central con buen juego de pies
+696154 overlapping centre-back | central que dobla
+696155 channel forward | delantero que cae a banda
+696156 Wide Forward | Delantero escorado
+696157 Box-to-Box Playmaker | Organizador todoterreno
+696158 Inside Winger | Extremo por dentro
+696159 Sweeper Keeper | Portero cierre
+696160 Line-Holding Keeper | Portero que se queda bajo palos
+696161 Stopping Centre-Back | Central defensivo
+696162 Covering Centre-Back | Central de cobertura
+696163 Stopping Wide Centre-Back | Central defensivo escorado
+696164 Covering Wide Centre-Back | Central de cobertura escorado
+696165 Pressing Full-Back | Lateral presionante
+696166 Holding Full-Back | Lateral defensivo
+696167 Pressing Wing-Back | Carrilero presionante
+696168 Dropping Defensive Midfielder | Mediocentro defensivo atrasado
+696169 Pressing Defensive Midfielder | Mediocampista defensivo presionante
+696170 Screening Defensive Midfielder | Mediocampista defensivo de contención
+696171 Wide Covering Defensive Midfielder | Mediocampista defensivo escorado de cobertura
+696172 Pressing Central Midfielder | Mediocampista presionante
+696173 Screening Central Midfielder | Mediocampista de contención
+696174 Wide Covering Central Midfielder | Mediocentro escorado de cobertura
+696175 Tracking Attacking Midfielder | Mediapunta itinerante
+696176 Central Outlet Attacking Midfielder | Mediapunta central con salida
+696177 Splitting Outlet Attacking Midfielder | Mediapunta de ruptura con salida
+696178 Tracking Wide Midfielder | Mediocampista de banda itinerante
+696179 Wide Outlet Wide Midfielder | Mediocampista escorado con salida
+696180 Tracking Winger | Extremo itinerante
+696181 Inside Outlet Winger | Extremo por dentro con salida
+696182 Wide Outlet Winger | Extremo escorado con salida
+696183 Tracking Centre Forward | Delantero centro itinerante
+696184 Central Outlet Centre Forward | Delantero centro con salida
+696185 Splitting Outlet Centre Forward | Delantero centro de ruptura con salida

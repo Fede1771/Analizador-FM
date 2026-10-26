@@ -1,12 +1,19 @@
-"""Update fm_app/fm26.py with comprehensive 79 roles pools, observed locks, and sub-position support."""
+"""Applies precise FM26 catalog upgrades to fm_app/fm26.py using exact index boundaries."""
 
-import re
 from pathlib import Path
 
-fm26_path = Path(__file__).resolve().parent.parent / 'fm_app' / 'fm26.py'
+fm26_path = Path(__file__).resolve().parents[2] / 'fm_app' / 'fm26.py'
 text = fm26_path.read_text(encoding='utf-8')
 
-# 1. Update IP_POOLS and OOP_POOLS
+pos_pools = text.find('IP_POOLS={')
+pos_record = text.find('def record(role_id):')
+pos_role_ids = text.find('ROLE_IDS=')
+pos_pi = text.find('def player_instructions(player,role):')
+pos_team_plans = text.find('TEAM_PLANS={')
+pos_role_abbrev = text.find('ROLE_ABBREV = {')
+
+assert -1 not in (pos_pools, pos_record, pos_role_ids, pos_pi, pos_team_plans, pos_role_abbrev)
+
 new_pools = """IP_POOLS = {
     'GK': ['goalkeeper', 'ball_playing_goalkeeper', 'no_nonsense_goalkeeper'],
     'DC': ['centre_back', 'advanced_centre_back', 'ball_playing_centre_back', 'no_nonsense_center_back', 'wide_centre_back', 'overlapping_centre_back'],
@@ -39,128 +46,10 @@ OOP_POOLS = {
     'ML': ['wide_midfielder', 'tracking_wide_midfielder', 'wide_outlet_wide_midfielder'],
     'MR': ['wide_midfielder', 'tracking_wide_midfielder', 'wide_outlet_wide_midfielder'],
     'STC': ['centre_forward', 'tracking_centre_forward', 'central_outlet_centre_forward', 'splitting_outlet_centre_forward'],
-}"""
+}
 
-pattern_pools = r'IP_POOLS\s*=\s*\{.*?\n\}\n+OOP_POOLS\s*=\s*\{.*?\n\}'
-text = re.sub(pattern_pools, new_pools, text, flags=re.DOTALL)
-
-# 2. Update record function to include subpositions, behaviors and rich data
-new_record = """def record(role_id):
-    raw = REFERENCES[role_id]
-    stem = role_id.rsplit('_', 1)[0]
-    pos = raw['position'] if isinstance(raw['position'], list) else [raw['position']]
-    positions = [p for value in pos for p in (POSITION_MAP[value] if value in POSITION_MAP else [value])]
-    attrs = [ATTRIBUTE_MAP.get(a, a.lower().replace(' ', '_')) for a in raw['key_attributes']]
-    local = LOCALE['roles'].get(role_id) or LOCALE['roles'][stem]
-    verified = local.get('runtime_verified', False) or local.get('menu_verified_es', False)
-    status = ('Español latinoamericano · verificado en menú de FM26 ' + LOCALE['game_version']) if verified else ('Español latinoamericano · archivo de FM26 ' + LOCALE['game_version'])
-    src = local.get('verified_source', LOCALE['source'])
-    behaviors = raw.get('behaviors') or local.get('behaviors') or []
-    subposition_rule = raw.get('subposition_rule')
-    locked_runtime = raw.get('locked_instructions_runtime')
-    abbreviation = ROLE_ABBREV.get(role_id, raw.get('abbreviation', 'ROL'))
-    return {
-        **raw,
-        'name': local['text'],
-        'positions': positions,
-        'weights': {a: 1 for a in attrs},
-        'english': raw['role_name'],
-        'spanish_status': status,
-        'spanish_source': src,
-        'menu_verified_es': verified,
-        'behaviors': behaviors,
-        'subposition_rule': subposition_rule,
-        'locked_instructions_runtime': locked_runtime,
-        'abbreviation': abbreviation,
-        'localization': {**local, 'locale': LOCALE['locale'], 'steam_build': LOCALE['steam_build']}
-    }"""
-
-pattern_record = r'def record\(role_id\):.*?\n\n\n\n\nROLE_IDS'
-text = re.sub(pattern_record, new_record + "\n\n\n\n\nROLE_IDS", text, flags=re.DOTALL)
-
-# 3. Update SCREENSHOT_LOCKS and player_instructions
-new_locks_and_pi = """# Runtime locks and contexts dynamically loaded from empirical survey matrix
-SCREENSHOT_LOCKS = {item['role']: dict(item['locked_values']) for item in CATALOG.get('observed_instruction_contexts', [])}
-EDITABLE_GROUPS = {item['role']: list(item['editable_groups']) for item in CATALOG.get('observed_instruction_contexts', [])}
-OBSERVED_CONTEXTS = {item['role']: item for item in CATALOG.get('observed_instruction_contexts', [])}
-
-
-def player_instructions(player, role):
-    a = player['attributes']
-    phase = role['phase']
-    stem = role['id'].rsplit('_', 1)[0]
-    builtin = role.get('player_instructions', [])
-    result = []
-
-    def add(key, value, why, base=False):
-        result.append(instruction('player', key, value, why, 'role' if base else 'standard' if value in ('Standard', 'Follow Tactical Position', 'No') else 'adjustment'))
-
-    if phase == 'in_possession':
-        more = 'Take More Risks' in builtin
-        fewer = 'Take Fewer Risks' in builtin
-        value = 'Take More Risks' if more else 'Take Fewer Risks' if fewer or min(a['passing'], a['decisions']) < 11 else 'Standard'
-        add('passing_risk_ip', value, f'Pases {a["passing"]}, visión {a["vision"]} y decisiones {a["decisions"]}. ' + ('El rol ya pide ese nivel de riesgo; no agregar la orden contraria.' if more or fewer else 'Se limita el riesgo si pases o decisiones están por debajo de 11; en el resto se mantiene el comportamiento del rol.'), more or fewer)
-        if 'GK' not in role['positions']:
-            dribble = 'Dribble More' if ('Dribble More Often' in builtin or (stem in ('winger', 'inside_winger', 'inside_forward', 'wide_forward') and min(a['dribbling'], a['acceleration']) >= 13)) else 'Dribble Less' if a['dribbling'] < 11 or any('dribble less' in s.lower() for s in builtin) else 'Standard'
-            add('dribbling_frequency_ip', dribble, f'Regate {a["dribbling"]} y aceleración {a["acceleration"]}: ' + ('aprovechar el uno contra uno.' if dribble == 'Dribble More' else 'reducir pérdidas en la conducción.' if dribble == 'Dribble Less' else 'conservar la elección de conducción del rol.'), 'Dribble More Often' in builtin or any('dribble less' in s.lower() for s in builtin))
-    else:
-        press = 'More Often' if (stem.startswith('pressing_') or stem in ('sweeper_keeper',) or min(a['work_rate'], a['stamina']) >= 14) else 'Less Often' if max(a['work_rate'], a['stamina']) < 10 else 'Standard'
-        add('pressing_oop', press, f'Sacrificio {a["work_rate"]}, resistencia {a["stamina"]} y anticipación {a["anticipation"]}: ' + ('el rol sale a presionar; necesita cobertura detrás.' if press == 'More Often' else 'proteger la posición antes de perseguir al portador.' if press == 'Less Often' else 'coordinar la presión con el bloque.'), press != 'Standard')
-        ease = a['tackling'] < 11 or a['aggression'] >= 16
-        add('tackling_oop', 'Ease Off Tackles' if ease else 'Standard', f'Entradas {a["tackling"]} y agresividad {a["aggression"]}: ' + ('evitar entradas precipitadas; no elimina el riesgo de faltas.' if ease else 'mantener la dureza normal; no sumar agresividad sin necesidad.'))
-
-    known = {i['id']: i for i in result}
-    for key in PLAYER_MENU[phase]:
-        if key not in known:
-            value = 'Follow Tactical Position' if key == 'freedom_of_movement_ip' else 'No' if key == 'hold_up_ball_ip' else 'Standard'
-            item = instruction('player', key, value, 'Mantener el valor normal salvo que el plan colectivo requiera un cambio.', 'standard')
-            result.append(item)
-
-    has_context = role['id'] in SCREENSHOT_LOCKS
-    locks = SCREENSHOT_LOCKS.get(role['id'], {})
-    editable_list = EDITABLE_GROUPS.get(role['id'], [])
-    ctx = OBSERVED_CONTEXTS.get(role['id'], {})
-
-    for i in result:
-        key = i['id']
-        if has_context:
-            if key in locks:
-                i['locked'] = True
-                i['editable'] = False
-                locked_val = locks[key]
-                i['locked_value'] = locked_val
-                i['availability_source'] = f"Capturas del menú FM26 ({ctx.get('evidence', '')})"
-                if locked_val is not None:
-                    i.update(instruction('player', key, locked_val, 'Valor bloqueado por el rol en las capturas: cambiar el rol para modificarlo.', 'role'))
-                else:
-                    i['value_en'] = None
-                    i['value'] = 'Desconocido (tapado por ayuda emergente en FM26)'
-                    i['origin'] = 'role'
-                    i['reason'] = 'Valor bloqueado en el juego pero tapado en las capturas por ayuda emergente.'
-            elif key in editable_list:
-                i['locked'] = False
-                i['editable'] = True
-                i['locked_value'] = None
-                i['availability_source'] = f"Control editable comprobado en capturas FM26 ({ctx.get('evidence', '')})"
-            else:
-                i['locked'] = False
-                i['editable'] = True
-                i['locked_value'] = None
-                i['availability_source'] = f"Control observado en FM26 ({ctx.get('evidence', '')})"
-        else:
-            i['locked'] = None
-            i['editable'] = None
-            i['locked_value'] = None
-            i['availability_source'] = 'Disponibilidad no comprobada en las capturas de este rol'
-
-    result.sort(key=lambda item: PLAYER_MENU[phase].index(item['id']))
-    return result"""
-
-pattern_pi_block = r'def player_instructions\(player,role\):.*?\nSCREENSHOT_LOCKS\s*=\s*\{.*?\n\}'
-text = re.sub(pattern_pi_block, new_locks_and_pi, text, flags=re.DOTALL)
-
-# 4. Update ROLE_ABBREV dictionary to include all 79 roles
-ROLE_ABBREV_DICT = """ROLE_ABBREV = {
+# Official FM26 Spanish role abbreviations (as shown in match engine and tactical menus)
+ROLE_ABBREV = {
     'goalkeeper_ip': 'POR',
     'ball_playing_goalkeeper_ip': 'PCS',
     'no_nonsense_goalkeeper_ip': 'POR',
@@ -240,10 +129,130 @@ ROLE_ABBREV_DICT = """ROLE_ABBREV = {
     'tracking_centre_forward_oop': 'DLC',
     'central_outlet_centre_forward_oop': 'DLC',
     'splitting_outlet_centre_forward_oop': 'DLR'
-}"""
+}
+"""
 
-pattern_role_abbrev = r'ROLE_ABBREV\s*=\s*\{.*?\n\}'
-text = re.sub(pattern_role_abbrev, ROLE_ABBREV_DICT, text, flags=re.DOTALL)
+new_record = """def record(role_id):
+    raw = REFERENCES[role_id]
+    stem = role_id.rsplit('_', 1)[0]
+    pos = raw['position'] if isinstance(raw['position'], list) else [raw['position']]
+    positions = [p for value in pos for p in (POSITION_MAP[value] if value in POSITION_MAP else [value])]
+    attrs = [ATTRIBUTE_MAP.get(a, a.lower().replace(' ', '_')) for a in raw['key_attributes']]
+    local = LOCALE['roles'].get(role_id) or LOCALE['roles'][stem]
+    verified = local.get('runtime_verified', False) or local.get('menu_verified_es', False)
+    status = ('Español latinoamericano · verificado en menú de FM26 ' + LOCALE['game_version']) if verified else ('Español latinoamericano · archivo de FM26 ' + LOCALE['game_version'])
+    src = local.get('verified_source', LOCALE['source'])
+    behaviors = raw.get('behaviors') or local.get('behaviors') or []
+    subposition_rule = raw.get('subposition_rule')
+    locked_runtime = raw.get('locked_instructions_runtime')
+    abbreviation = ROLE_ABBREV.get(role_id, raw.get('abbreviation', 'ROL'))
+    return {
+        **raw,
+        'name': local['text'],
+        'positions': positions,
+        'weights': {a: 1 for a in attrs},
+        'english': raw['role_name'],
+        'spanish_status': status,
+        'spanish_source': src,
+        'menu_verified_es': verified,
+        'behaviors': behaviors,
+        'subposition_rule': subposition_rule,
+        'locked_instructions_runtime': locked_runtime,
+        'abbreviation': abbreviation,
+        'localization': {**local, 'locale': LOCALE['locale'], 'steam_build': LOCALE['steam_build']}
+    }
+"""
 
-fm26_path.write_text(text, encoding='utf-8')
-print('fm_app/fm26.py updated successfully!')
+new_pi_and_locks = """PLAYER_MENU = {
+    'in_possession': ['attacking_width_ip', 'dribbling_direction_ip', 'dribbling_frequency_ip', 'forward_runs_ip', 'freedom_of_movement_ip', 'hold_up_ball_ip', 'shoot_ip', 'passing_risk_ip', 'passing_directness_ip', 'cross_from_ip', 'crossing_strategy_ip'],
+    'out_of_possession': ['pressing_oop', 'marking_oop', 'tackling_oop', 'marking_target_oop']
+}
+
+SCREENSHOT_LOCKS = {item['role']: dict(item['locked_values']) for item in CATALOG.get('observed_instruction_contexts', [])}
+EDITABLE_GROUPS = {item['role']: list(item['editable_groups']) for item in CATALOG.get('observed_instruction_contexts', [])}
+OBSERVED_CONTEXTS = {item['role']: item for item in CATALOG.get('observed_instruction_contexts', [])}
+
+
+def player_instructions(player, role):
+    a = player['attributes']
+    phase = role['phase']
+    stem = role['id'].rsplit('_', 1)[0]
+    builtin = role.get('player_instructions', [])
+    result = []
+
+    def add(key, value, why, base=False):
+        result.append(instruction('player', key, value, why, 'role' if base else 'standard' if value in ('Standard', 'Follow Tactical Position', 'No') else 'adjustment'))
+
+    if phase == 'in_possession':
+        more = 'Take More Risks' in builtin
+        fewer = 'Take Fewer Risks' in builtin
+        value = 'Take More Risks' if more else 'Take Fewer Risks' if fewer or min(a['passing'], a['decisions']) < 11 else 'Standard'
+        add('passing_risk_ip', value, f'Pases {a["passing"]}, visión {a["vision"]} y decisiones {a["decisions"]}. ' + ('El rol ya pide ese nivel de riesgo; no agregar la orden contraria.' if more or fewer else 'Se limita el riesgo si pases o decisiones están por debajo de 11; en el resto se mantiene el comportamiento del rol.'), more or fewer)
+        if 'GK' not in role['positions']:
+            dribble = 'Dribble More' if ('Dribble More Often' in builtin or (stem in ('winger', 'inside_winger', 'inside_forward', 'wide_forward') and min(a['dribbling'], a['acceleration']) >= 13)) else 'Dribble Less' if a['dribbling'] < 11 or any('dribble less' in s.lower() for s in builtin) else 'Standard'
+            add('dribbling_frequency_ip', dribble, f'Regate {a["dribbling"]} y aceleración {a["acceleration"]}: ' + ('aprovechar el uno contra uno.' if dribble == 'Dribble More' else 'reducir pérdidas en la conducción.' if dribble == 'Dribble Less' else 'conservar la elección de conducción del rol.'), 'Dribble More Often' in builtin or any('dribble less' in s.lower() for s in builtin))
+    else:
+        press = 'More Often' if (stem.startswith('pressing_') or stem in ('sweeper_keeper',) or min(a['work_rate'], a['stamina']) >= 14) else 'Less Often' if max(a['work_rate'], a['stamina']) < 10 else 'Standard'
+        add('pressing_oop', press, f'Sacrificio {a["work_rate"]}, resistencia {a["stamina"]} y anticipación {a["anticipation"]}: ' + ('el rol sale a presionar; necesita cobertura detrás.' if press == 'More Often' else 'proteger la posición antes de perseguir al portador.' if press == 'Less Often' else 'coordinar la presión con el bloque.'), press != 'Standard')
+        ease = a['tackling'] < 11 or a['aggression'] >= 16
+        add('tackling_oop', 'Ease Off Tackles' if ease else 'Standard', f'Entradas {a["tackling"]} y agresividad {a["aggression"]}: ' + ('evitar entradas precipitadas; no elimina el riesgo de faltas.' if ease else 'mantener la dureza normal; no sumar agresividad sin necesidad.'))
+
+    known = {i['id']: i for i in result}
+    for key in PLAYER_MENU[phase]:
+        if key not in known:
+            value = 'Follow Tactical Position' if key == 'freedom_of_movement_ip' else 'No' if key == 'hold_up_ball_ip' else 'Standard'
+            item = instruction('player', key, value, 'Mantener el valor normal salvo que el plan colectivo requiera un cambio.', 'standard')
+            result.append(item)
+
+    has_context = role['id'] in SCREENSHOT_LOCKS
+    locks = SCREENSHOT_LOCKS.get(role['id'], {})
+    editable_list = EDITABLE_GROUPS.get(role['id'], [])
+    ctx = OBSERVED_CONTEXTS.get(role['id'], {})
+
+    for i in result:
+        key = i['id']
+        if has_context:
+            if key in locks:
+                i['locked'] = True
+                i['editable'] = False
+                locked_val = locks[key]
+                i['locked_value'] = locked_val
+                i['availability_source'] = f"Capturas del menú FM26 ({ctx.get('evidence', '')})"
+                if locked_val is not None:
+                    i.update(instruction('player', key, locked_val, 'Valor bloqueado por el rol en las capturas: cambiar el rol para modificarlo.', 'role'))
+                else:
+                    i['value_en'] = None
+                    i['value'] = 'Desconocido (tapado por ayuda emergente en FM26)'
+                    i['origin'] = 'role'
+                    i['reason'] = 'Valor bloqueado en el juego pero tapado en las capturas por ayuda emergente (pendiente de certificación).'
+            elif key in editable_list:
+                i['locked'] = False
+                i['editable'] = True
+                i['locked_value'] = None
+                i['availability_source'] = f"Control editable comprobado en capturas FM26 ({ctx.get('evidence', '')})"
+            else:
+                i['locked'] = False
+                i['editable'] = True
+                i['locked_value'] = None
+                i['availability_source'] = f"Control observado en FM26 ({ctx.get('evidence', '')})"
+        else:
+            i['locked'] = None
+            i['editable'] = None
+            i['locked_value'] = None
+            i['availability_source'] = 'Disponibilidad no comprobada en las capturas de este rol'
+
+    result.sort(key=lambda item: PLAYER_MENU[phase].index(item['id']))
+    return result
+"""
+
+reassembled = (
+    text[:pos_pools]
+    + new_pools + "\n\n"
+    + new_record + "\n\n"
+    + text[pos_role_ids:pos_pi]
+    + new_pi_and_locks + "\n\n"
+    + text[pos_team_plans:pos_role_abbrev]
+)
+
+fm26_path.write_text(reassembled, encoding='utf-8')
+print('Successfully reassembled fm26.py with exact boundaries!')
