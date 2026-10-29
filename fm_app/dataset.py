@@ -5,7 +5,7 @@ from fm_app.tactics import ATTRS, STYLES, FORMATION_CATALOG
 from fm_app.fm26 import ROLES, CATALOG, LOCALE, TI, PI, PLAYER_MENU, SCREENSHOT_LOCKS, EDITABLE_GROUPS, OBSERVED_CONTEXTS, instruction
 from fm_app.contracts import clean_player, get_transfer_window_status
 from pathlib import Path
-from fm_app.current_tactic import POSITIONS
+from fm_app.current_tactic import POSITIONS, refresh_stored_tactics
 
 LIVERPOOL_REF = json.loads((Path(__file__).parent / 'data/liverpool_reference.json').read_text(encoding='utf-8'))
 
@@ -142,7 +142,7 @@ def load_dataset(folder):
                               'spanish_note':'Etiquetas extraídas de Español latinoamericano de FM26 26.3.2. Se conservan variantes por contexto; las vinculaciones con cada vista del menú no están todas comprobadas visualmente.',
                               'localization':{k:LOCALE[k] for k in ('locale','language','game_version','steam_build','source','sha256','verification')},
                               'sources':['https://fmsidekick.com/database/roles','https://fmsidekick.com/database/player_instructions','https://fmsidekick.com/database/team_instructions','https://fm.guidetofootball.com/fm26/roles/']},
-            'stored_tactics':json.loads((folder/'tactics.json').read_text(encoding='utf-8')) if (folder/'tactics.json').exists() else {'available':False,'records':[],'limitations':'Esta importación todavía no contiene la lectura táctica. Volvé a sincronizar el guardado para recuperarla. Podés confirmar tu táctica manualmente.'},
+            'stored_tactics':refresh_stored_tactics(json.loads((folder/'tactics.json').read_text(encoding='utf-8'))) if (folder/'tactics.json').exists() else {'available':False,'records':[],'limitations':'Esta importación todavía no contiene la lectura táctica. Volvé a sincronizar el guardado para recuperarla. Podés confirmar tu táctica manualmente.'},
             'liverpool_reference': LIVERPOOL_REF if report['club']['name'] == 'Liverpool' else None,
             'tactic_editor':{'positions':list(POSITIONS),
                 'formations':FORMATION_CATALOG,'locks':SCREENSHOT_LOCKS,

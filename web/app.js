@@ -323,19 +323,24 @@ document.addEventListener('change',event=>{
         state.currentDraft=input.value?storedDraft(state.data,input.value):freshDraft(state.data);
       } else if(input.dataset.row!==undefined) {
         const row=draft.lineup[Number(input.dataset.row)];
-        if(input.dataset.pi){if(input.value)row.instructions[input.dataset.pi]=input.value;else delete row.instructions[input.dataset.pi];}
+        row.instruction_sources=row.instruction_sources||{};
+        if(input.dataset.pi){
+          if(input.value){row.instructions[input.dataset.pi]=input.value;row.instruction_sources[input.dataset.pi]='manual';}
+          else{delete row.instructions[input.dataset.pi];delete row.instruction_sources[input.dataset.pi];}
+        }
         else {row[field]=field==='uid'?Number(input.value)||'':input.value;
           if(field.endsWith('_position')){row[field.replace('_position','_role')]='';row[field.replace('_position','_side')]=null;}
           if(field.endsWith('_role')) {
             const phase=field==='ip_role'?'in_possession':'out_of_possession';
-            for(const key of Object.keys(row.instructions))if(state.data.tactic_editor.player_options[key]?.phase===phase)delete row.instructions[key];
+            for(const key of Object.keys(row.instructions))if(state.data.tactic_editor.player_options[key]?.phase===phase){delete row.instructions[key];delete row.instruction_sources[key];}
           }
         }
       } else if(input.dataset.team) {
         const key = input.dataset.team;
         const val = input.value;
-        if(val) draft.team[key] = val;
-        else delete draft.team[key];
+        draft.team_sources = draft.team_sources || {};
+        if(val) { draft.team[key] = val; draft.team_sources[key] = 'manual'; }
+        else { delete draft.team[key]; delete draft.team_sources[key]; }
       }
       else draft[field]=input.value;
       saveCurrentDraft();render();return;

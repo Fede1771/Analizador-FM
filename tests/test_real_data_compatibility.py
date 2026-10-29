@@ -278,6 +278,69 @@ class RealDataCompatibilityTests(unittest.TestCase):
             res = validate_overrides({'pressing_trap_oop': val})
             self.assertEqual(res['pressing_trap_oop'], val)
 
+    def test_real_saved_tactics_decode_all_roles_permutations_and_instructions(self):
+        """Verifies real save tactic decoding against FM26 screenshots and across multiple clubs."""
+        from fm_app.dataset import LIVERPOOL_REF
+        dataset = load_dataset(self.isolated_path / 'output')
+        records = dataset['stored_tactics']['records']
+        self.assertGreater(len(records), 0)
+        primary = records[0]
+        self.assertTrue(primary['positions_available'])
+        self.assertEqual(primary['decode_warnings'], [])
+        self.assertEqual(len(primary['team_instructions']), 28)
+        self.assertEqual(len(primary['lineup']), 11)
+        for slot in primary['lineup']:
+            self.assertIn(slot['ip_role'], ROLES)
+            self.assertIn(slot['oop_role'], ROLES)
+            self.assertEqual(len(slot['instructions']), 15)
+
+        if dataset['club'] == 'Liverpool' and LIVERPOOL_REF:
+            # Verify the 26 original screenshot team instructions match, and the 2 newly decoded
+            # fields match the documented screenshot values (Narrower and Get Stuck In)
+            for k, v in LIVERPOOL_REF['team'].items():
+                if k not in ('attacking_width_ip', 'tackling_oop'):
+                    self.assertEqual(primary['team_instructions'][k], v, f'Team instruction {k}')
+            self.assertEqual(primary['team_instructions']['attacking_width_ip'], 'Narrower')
+            self.assertEqual(primary['team_instructions']['tackling_oop'], 'Get Stuck In')
+            # Verify the 3-cycle OOP permutation (MC->AMC, AMR->MR, AML->ML)
+            self.assertEqual(primary['lineup'][7]['ip_position'], 'MC')
+            self.assertEqual(primary['lineup'][7]['oop_position'], 'AMC')
+            self.assertEqual(primary['lineup'][8]['ip_position'], 'AMR')
+            self.assertEqual(primary['lineup'][8]['oop_position'], 'MR')
+            self.assertEqual(primary['lineup'][9]['ip_position'], 'AML')
+            self.assertEqual(primary['lineup'][9]['oop_position'], 'ML')
+            self.assertEqual(primary['lineup'][10]['oop_role'], 'centre_forward_oop')
+
+        # Audit the decoded tactic directly as storedDraft would send it
+        plan = {
+            'confirmed': True,
+            'name': primary['name'],
+            'style': 'possession',
+            'stored_id': primary['id'],
+            'team': dict(primary['team_instructions']),
+            'team_sources': {k: 'save' for k in primary['team_instructions']},
+            'lineup': primary['lineup'],
+        }
+        audited = audit_tactic(dataset, plan)
+        self.assertEqual(audited['unconfirmed_player_instructions'], 0)
+        self.assertEqual(audited['unconfirmed_team_instructions'], 0)
+        self.assertEqual({i['id']: i['value_en'] for i in audited['team_instructions']}, primary['team_instructions'])
+        self.assertTrue(all(i['origin'] == 'save' for i in audited['team_instructions']))
+
+        # Also verify any other real import directories in data/imports/ decode with zero warnings
+        for import_dir in (ROOT / 'data' / 'imports').glob('*/output'):
+            if not (import_dir / 'tactics.json').exists() or not (import_dir / 'players.json').exists():
+                continue
+            with tempfile.TemporaryDirectory(prefix='touchline-multi-club-') as tmp:
+                tmp_out = Path(tmp) / 'output'
+                shutil.copytree(import_dir, tmp_out)
+                other_ds = load_dataset(tmp_out)
+                for rec in other_ds['stored_tactics']['records']:
+                    if rec.get('positions_available'):
+                        self.assertEqual(rec['decode_warnings'], [], f"Warnings in {other_ds['club']} ({rec['name']})")
+                        self.assertEqual(len(rec['team_instructions']), 28)
+                        self.assertTrue(all(len(s['instructions']) == 15 for s in rec['lineup']))
+
 
 if __name__ == '__main__':
     unittest.main()

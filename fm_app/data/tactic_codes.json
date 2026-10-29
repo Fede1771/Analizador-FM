@@ -1,7 +1,8 @@
 {
   "metadata_version": 31,
   "metadata_sha256": "52287eadeb07d3d222c9e370e64f308260934911807e2073fb0e72f49c273213",
-  "source": "FM26 Unity enums: PositionMask, FM.UI.InPossessionRole, FM.UI.OutOfPossessionRole",
+  "source": "FM26 Unity enums & game_plugin.dll: PositionMask, FM.UI.InPossessionRole, FM.UI.OutOfPossessionRole, FM.UI.PlayerInstruction, FM.UI.TacticTeamInstructions",
+  "duty_mask": 115343360,
   "position_masks": {
     "None": 0,
     "Goalkeeper": 1,
@@ -107,6 +108,669 @@
       "8796093022208": "tracking_centre_forward_oop",
       "17592186044416": "central_outlet_centre_forward_oop",
       "35184372088832": "splitting_outlet_centre_forward_oop"
+    }
+  },
+  "player_instructions": {
+    "1": {
+      "id": "passing_directness_ip",
+      "value": "Shorter",
+      "enum": "PI_PASS_SHORTER"
+    },
+    "2": {
+      "id": "passing_directness_ip",
+      "value": "More Direct",
+      "enum": "PI_PASS_MORE_DIRECT"
+    },
+    "3": {
+      "id": "passing_risk_ip",
+      "value": "Take More Risks",
+      "enum": "PI_TAKE_MORE_RISKS"
+    },
+    "4": {
+      "id": "passing_risk_ip",
+      "value": "Take Fewer Risks",
+      "enum": "PI_TAKE_FEWER_RISKS"
+    },
+    "7": {
+      "id": "cross_from_ip",
+      "value": "Cross From Deep",
+      "enum": "PI_CROSS_FROM_DEEP"
+    },
+    "8": {
+      "id": "cross_from_ip",
+      "value": "Byline",
+      "enum": "PI_CROSS_FROM_BYLINE"
+    },
+    "9": {
+      "id": "crossing_strategy_ip",
+      "value": "Near Post",
+      "enum": "PI_CROSS_TO_NEAR_POST"
+    },
+    "10": {
+      "id": "crossing_strategy_ip",
+      "value": "Far Post",
+      "enum": "PI_CROSS_TO_FAR_POST"
+    },
+    "11": {
+      "id": "crossing_strategy_ip",
+      "value": "Centre",
+      "enum": "PI_CROSS_TO_CENTRE"
+    },
+    "12": {
+      "id": "crossing_strategy_ip",
+      "value": "Target Forward",
+      "enum": "PI_CROSS_TO_TARGET_MAN"
+    },
+    "13": {
+      "id": "dribbling_frequency_ip",
+      "value": "Dribble More",
+      "enum": "PI_DRIBBLE_MORE"
+    },
+    "14": {
+      "id": "dribbling_frequency_ip",
+      "value": "Dribble Less",
+      "enum": "PI_DRIBBLE_LESS"
+    },
+    "15": {
+      "id": "dribbling_direction_ip",
+      "value": "Run Wide With Ball",
+      "enum": "PI_RUN_WIDE_WITH_BALL"
+    },
+    "16": {
+      "id": "dribbling_direction_ip",
+      "value": "Cut Inside With Ball",
+      "enum": "PI_CUT_INSIDE_WITH_BALL"
+    },
+    "17": {
+      "id": "hold_up_ball_ip",
+      "value": "Yes",
+      "enum": "PI_HOLD_UP_BALL"
+    },
+    "18": {
+      "id": "shoot_ip",
+      "value": "Shoot More Often",
+      "enum": "PI_SHOOT_MORE"
+    },
+    "19": {
+      "id": "shoot_ip",
+      "value": "Shoot Less Often",
+      "enum": "PI_SHOOT_LESS"
+    },
+    "22": {
+      "id": "forward_runs_ip",
+      "value": "Make More Runs",
+      "enum": "PI_GET_FORWARD_OFTEN"
+    },
+    "23": {
+      "id": "forward_runs_ip",
+      "value": "Make Fewer Runs",
+      "enum": "PI_HOLD_POSITION"
+    },
+    "24": {
+      "id": "freedom_of_movement_ip",
+      "value": "Roam From Position",
+      "enum": "PI_ROAM_FROM_POSITION"
+    },
+    "25": {
+      "id": "attacking_width_ip",
+      "value": "Stay Wider",
+      "enum": "PI_STAY_WIDER"
+    },
+    "26": {
+      "id": "attacking_width_ip",
+      "value": "Sit Narrower",
+      "enum": "PI_PLAY_NARROW"
+    },
+    "27": {
+      "id": "attacking_width_ip",
+      "value": "Move Into Channels",
+      "enum": "PI_MOVE_INTO_CHANNELS"
+    },
+    "29": {
+      "id": "pressing_oop",
+      "value": "More Often",
+      "enum": "PI_HIGHER_PRESSING_INTENSITY"
+    },
+    "30": {
+      "id": "pressing_oop",
+      "value": "Less Often",
+      "enum": "PI_LOWER_PRESSING_INTENSITY"
+    },
+    "31": {
+      "id": "tackling_oop",
+      "value": "Tackle Harder",
+      "enum": "PI_GET_STUCK_IN"
+    },
+    "32": {
+      "id": "tackling_oop",
+      "value": "Ease Off Tackles",
+      "enum": "PI_STAY_ON_FEET"
+    },
+    "33": {
+      "id": "marking_oop",
+      "value": "Mark Tighter",
+      "enum": "PI_MARK_TIGHTER"
+    },
+    "34": {
+      "id": "marking_target_oop",
+      "value": "Mark Specific",
+      "enum": "PI_MARK_SPECIFIC_PLAYER"
+    },
+    "35": {
+      "id": "marking_target_oop",
+      "value": "Mark Position",
+      "enum": "PI_MARK_SPECIFIC_POSITION"
+    }
+  },
+  "player_instruction_defaults": {
+    "attacking_width_ip": "Standard",
+    "dribbling_direction_ip": "Standard",
+    "dribbling_frequency_ip": "Standard",
+    "forward_runs_ip": "Standard",
+    "freedom_of_movement_ip": "Follow Tactical Position",
+    "hold_up_ball_ip": "No",
+    "shoot_ip": "Standard",
+    "passing_risk_ip": "Standard",
+    "passing_directness_ip": "Standard",
+    "cross_from_ip": "Standard",
+    "crossing_strategy_ip": "Standard",
+    "pressing_oop": "Standard",
+    "marking_oop": "Standard",
+    "tackling_oop": "Standard",
+    "marking_target_oop": "Standard"
+  },
+  "team_instructions": {
+    "passing_directness": {
+      "enum_id": 1,
+      "enum_name": "PassingDirectness",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 4,
+          "value": "Much Shorter"
+        },
+        {
+          "bit": 3,
+          "value": "Shorter"
+        },
+        {
+          "bit": 2,
+          "value": "More Direct"
+        },
+        {
+          "bit": 1,
+          "value": "Much More Direct"
+        }
+      ]
+    },
+    "tempo": {
+      "enum_id": 21,
+      "enum_name": "Tempo",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 49,
+          "value": "Much Lower"
+        },
+        {
+          "bit": 48,
+          "value": "Lower"
+        },
+        {
+          "bit": 47,
+          "value": "Higher"
+        },
+        {
+          "bit": 46,
+          "value": "Much Higher"
+        }
+      ]
+    },
+    "attacking_transition_ip": {
+      "enum_id": 3,
+      "enum_name": "AttackingTransition",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 55,
+          "value": "Hold Shape"
+        },
+        {
+          "bit": 54,
+          "value": "Counter-Attack"
+        }
+      ]
+    },
+    "attacking_width_ip": {
+      "enum_id": 4,
+      "enum_name": "TeamWidth",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 53,
+          "value": "Much Narrower"
+        },
+        {
+          "bit": 52,
+          "value": "Narrower"
+        },
+        {
+          "bit": 51,
+          "value": "Wider"
+        },
+        {
+          "bit": 50,
+          "value": "Much Wider"
+        }
+      ]
+    },
+    "creative_freedom_ip": {
+      "enum_id": 5,
+      "enum_name": "CreativeFreedom",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 20,
+          "value": "More Disciplined"
+        },
+        {
+          "bit": 19,
+          "value": "More Expressive"
+        }
+      ]
+    },
+    "play_for_set_pieces_ip": {
+      "enum_id": 6,
+      "enum_name": "PlayForSetPieces",
+      "default": "Keep Ball in Play",
+      "bits": [
+        {
+          "bit": 18,
+          "value": "Play for Set Pieces"
+        }
+      ]
+    },
+    "time_wasting": {
+      "enum_id": 7,
+      "enum_name": "TimeWasting",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 79,
+          "value": "Less Often"
+        },
+        {
+          "bit": 78,
+          "value": "More Often"
+        }
+      ]
+    },
+    "line_of_engagement_oop": {
+      "enum_id": 8,
+      "enum_name": "LineOfEngagement",
+      "default": "Mid Block",
+      "bits": [
+        {
+          "bit": 63,
+          "value": "Low Block"
+        },
+        {
+          "bit": 62,
+          "value": "Mid Block"
+        },
+        {
+          "bit": 61,
+          "value": "High Press"
+        }
+      ]
+    },
+    "defensive_line_oop": {
+      "enum_id": 9,
+      "enum_name": "DefensiveLine",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 59,
+          "value": "Much Lower"
+        },
+        {
+          "bit": 58,
+          "value": "Lower"
+        },
+        {
+          "bit": 57,
+          "value": "Higher"
+        },
+        {
+          "bit": 56,
+          "value": "Much Higher"
+        }
+      ]
+    },
+    "trigger_press_oop": {
+      "enum_id": 10,
+      "enum_name": "PressingTrigger",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 68,
+          "value": "Much Less Often"
+        },
+        {
+          "bit": 67,
+          "value": "Less Often"
+        },
+        {
+          "bit": 66,
+          "value": "More Often"
+        },
+        {
+          "bit": 65,
+          "value": "Much More Often"
+        }
+      ]
+    },
+    "defensive_transition_oop": {
+      "enum_id": 11,
+      "enum_name": "DefensiveTransition",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 71,
+          "value": "Regroup"
+        },
+        {
+          "bit": 70,
+          "value": "Counter-Press"
+        }
+      ]
+    },
+    "tackling_oop": {
+      "enum_id": 12,
+      "enum_name": "Tackling",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 73,
+          "value": "Stay On Feet"
+        },
+        {
+          "bit": 72,
+          "value": "Get Stuck In"
+        }
+      ]
+    },
+    "defensive_line_behaviour_oop": {
+      "enum_id": 15,
+      "enum_name": "DefensiveLineBehaviour",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 76,
+          "value": "Step Up More"
+        },
+        {
+          "bit": 77,
+          "value": "Drop Off More"
+        }
+      ]
+    },
+    "gk_distribution_ip": {
+      "enum_id": 16,
+      "enum_name": "GoalkeeperDistributionTarget",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 35,
+          "value": "Center-Backs"
+        },
+        {
+          "bit": 36,
+          "value": "Full-Backs"
+        },
+        {
+          "bit": 37,
+          "value": "Flanks"
+        },
+        {
+          "bit": 39,
+          "value": "Playmaker"
+        },
+        {
+          "bit": 40,
+          "value": "Target Forward"
+        },
+        {
+          "bit": 38,
+          "value": "Over Opposition Defense"
+        }
+      ]
+    },
+    "gk_distribution_speed_ip": {
+      "enum_id": 17,
+      "enum_name": "GoalkeeperDistributionSpeed",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 43,
+          "value": "Slow Pace Down"
+        },
+        {
+          "bit": 42,
+          "value": "Distribute Quickly"
+        }
+      ]
+    },
+    "patience_ip": {
+      "enum_id": 18,
+      "enum_name": "Patience",
+      "default": "Standard",
+      "bits": [
+        {
+          "bit": 9,
+          "value": "Hit Early Crosses"
+        },
+        {
+          "bit": 17,
+          "value": "Work Ball Into Box"
+        }
+      ]
+    },
+    "dribbling_ip": {
+      "enum_id": 19,
+      "enum_name": "Dribbling",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 14,
+          "value": "Discourage"
+        },
+        {
+          "bit": 13,
+          "value": "Encourage"
+        }
+      ]
+    },
+    "pass_reception_ip": {
+      "enum_id": 20,
+      "enum_name": "PassReception",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 6,
+          "value": "Pass to Feet"
+        },
+        {
+          "bit": 5,
+          "value": "Pass Into Space"
+        }
+      ]
+    },
+    "cross_engagement_oop": {
+      "enum_id": 22,
+      "enum_name": "CrossEngagement",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 82,
+          "value": "Stop Crosses"
+        },
+        {
+          "bit": 83,
+          "value": "Invite Crosses"
+        }
+      ]
+    },
+    "short_goalkeeper_distribution_oop": {
+      "enum_id": 23,
+      "enum_name": "PreventShortGKDistribution",
+      "default": "No",
+      "bits": [
+        {
+          "bit": 69,
+          "value": "Yes"
+        }
+      ]
+    },
+    "build_up_strategy_ip": {
+      "enum_id": 24,
+      "enum_name": "BuildUpStrategy",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 7,
+          "value": "Play Through Press"
+        },
+        {
+          "bit": 8,
+          "value": "Bypass Press"
+        }
+      ]
+    },
+    "pressing_trap_oop": {
+      "enum_id": 25,
+      "enum_name": "PressingTrap",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 80,
+          "value": "Trap Inside"
+        },
+        {
+          "bit": 81,
+          "value": "Trap Outside"
+        }
+      ]
+    },
+    "crossing_style_ip": {
+      "enum_id": 26,
+      "enum_name": "CrossingStyle",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 10,
+          "value": "Floated Crosses"
+        },
+        {
+          "bit": 11,
+          "value": "Whipped Crosses"
+        },
+        {
+          "bit": 12,
+          "value": "Low Crosses"
+        }
+      ]
+    },
+    "shots_from_distance_ip": {
+      "enum_id": 27,
+      "enum_name": "ShotsFromDistance",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 16,
+          "value": "Discourage"
+        },
+        {
+          "bit": 15,
+          "value": "Encourage"
+        }
+      ]
+    },
+    "underlap_ip": {
+      "enum_id": 28,
+      "enum_name": "SupportingRuns",
+      "default": "Underlap - Balanced",
+      "bits": [
+        {
+          "bit": 29,
+          "value": "Underlap - Left"
+        },
+        {
+          "bit": 30,
+          "value": "Underlap - Right"
+        },
+        {
+          "bit": 28,
+          "value": "Underlap - Both Flanks"
+        }
+      ]
+    },
+    "goal_kicks_ip": {
+      "enum_id": 29,
+      "enum_name": "GoalKicks",
+      "default": "Mixed",
+      "bits": [
+        {
+          "bit": 44,
+          "value": "Short"
+        },
+        {
+          "bit": 45,
+          "value": "Long"
+        }
+      ]
+    },
+    "progress_through_ip": {
+      "enum_id": 30,
+      "enum_name": "ProgressThrough",
+      "default": "Balanced",
+      "bits": [
+        {
+          "bit": 23,
+          "value": "Middle"
+        },
+        {
+          "bit": 21,
+          "value": "Left"
+        },
+        {
+          "bit": 22,
+          "value": "Right"
+        },
+        {
+          "bit": 24,
+          "value": "Both Flanks"
+        }
+      ]
+    },
+    "overlap_ip": {
+      "enum_id": 31,
+      "enum_name": "SupportingRunsSecondary",
+      "default": "Overlap - Balanced",
+      "bits": [
+        {
+          "bit": 26,
+          "value": "Overlap - Left"
+        },
+        {
+          "bit": 27,
+          "value": "Overlap - Right"
+        },
+        {
+          "bit": 25,
+          "value": "Overlap - Both Flanks"
+        }
+      ]
     }
   }
 }

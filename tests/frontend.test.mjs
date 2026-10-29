@@ -4,8 +4,8 @@ import {reconcile,preferenceKey,contextKey,filteredPlayers} from '../web/session
 import {RequestGate} from '../web/api.js';
 import {date,esc} from '../web/format.js';
 import {matchesObservedContext} from '../web/instruction-context.js';
-import {supportRunsRecovery} from '../web/tactics-view.js';
-import {storedDraft,reconcileCurrentDraft,draftPitch} from '../web/current-view.js';
+import {supportRunsRecovery,rolePlan} from '../web/tactics-view.js';
+import {storedDraft,reconcileCurrentDraft,draftPitch,currentView,CURRENT_READER_VERSION} from '../web/current-view.js';
 
 const data={id:'save1',career_id:'career',default_primary_slot:0,slots:[0,1],styles:{possession:{},press:{}},players:[{uid:1,name:'Álvarez',team_slot:0,natural_positions:['STC'],age:23},{uid:2,name:'Gómez',team_slot:1,natural_positions:['MC'],age:18}],formations_catalog:[{id:'352'}],instruction_options:{tempo:[{value:'Lower'}]}};
 
@@ -90,4 +90,100 @@ test('draft pitch renders eleven editable slots before an audit, including missi
   assert.notEqual(ip,oop);
   const dc=Array.from(ip.matchAll(/style="left:([\d.]+)%;top:76%"/g),m=>m[1]);
   assert.deepEqual(dc,['38','62']);
+});
+
+test('storedDraft and reconcileCurrentDraft load decoded instructions, preserve manual overrides across upgrades/saves, and never mix careers',()=>{
+  const club=brightonData();
+  club.slot_labels={0:'Titulares',1:'Suplentes'};
+  club.instruction_options={tempo:[{value:'Lower',label:'Bajo'},{value:'Higher',label:'Alto'}],passing_directness:[{value:'Shorter',label:'Corto'}]};
+  club.tactic_editor.roles={
+    goalkeeper_ip:{phase:'in_possession',positions:['GK'],name:'Portero',abbreviation:'POR'},
+    goalkeeper_oop:{phase:'out_of_possession',positions:['GK'],name:'Portero',abbreviation:'POR'},
+  };
+  club.tactic_editor.player_options={
+    passing_directness_ip:{phase:'in_possession',label:'Pases',options:[{value:'Shorter',label:'Más cortos'},{value:'Standard',label:'Estándar'}]},
+  };
+  club.stored_tactics.records[1].team_instructions={tempo:'Higher',passing_directness:'Shorter'};
+  club.stored_tactics.records[1].lineup[0].ip_role='goalkeeper_ip';
+  club.stored_tactics.records[1].lineup[0].oop_role='goalkeeper_oop';
+  club.stored_tactics.records[1].lineup[0].instructions={passing_directness_ip:'Standard'};
+  club.stored_tactics.records[1].lineup[0].instruction_sources={passing_directness_ip:'role'};
+
+  const initial=storedDraft(club);
+  assert.equal(initial.reader_version,CURRENT_READER_VERSION);
+  assert.deepEqual(initial.team,{tempo:'Higher',passing_directness:'Shorter'});
+  assert.deepEqual(initial.team_sources,{tempo:'save',passing_directness:'save'});
+  assert.equal(initial.lineup[0].instructions.passing_directness_ip,'Standard');
+  assert.equal(initial.lineup[0].instruction_sources.passing_directness_ip,'role');
+
+  // Legacy v2 draft from same career with manual overrides preserves manual edits while loading newly decoded fields
+  const v2Saved={
+    ...initial,
+    reader_version:2,
+    team:{tempo:'Lower'},
+    lineup:initial.lineup.map((r,i)=>i===0?{...r,instructions:{passing_directness_ip:'Shorter'}}:{...r,instructions:{}}),
+  };
+  const upgraded=reconcileCurrentDraft(club,v2Saved);
+  assert.equal(upgraded.reader_version,CURRENT_READER_VERSION);
+  assert.equal(upgraded.team.tempo,'Lower');
+  assert.equal(upgraded.team_sources.tempo,'manual');
+  assert.equal(upgraded.team.passing_directness,'Shorter');
+  assert.equal(upgraded.team_sources.passing_directness,'save');
+  assert.equal(upgraded.lineup[0].instructions.passing_directness_ip,'Shorter');
+  assert.equal(upgraded.lineup[0].instruction_sources.passing_directness_ip,'manual');
+
+  // Newer save of the same career preserves manual overrides
+  const nextSave={...club,id:'save2'};
+  const afterNewSave=reconcileCurrentDraft(nextSave,upgraded);
+  assert.equal(afterNewSave.source_dataset_id,'save2');
+  assert.equal(afterNewSave.team.tempo,'Lower');
+  assert.equal(afterNewSave.team_sources.tempo,'manual');
+  assert.equal(afterNewSave.lineup[0].instructions.passing_directness_ip,'Shorter');
+  assert.equal(afterNewSave.lineup[0].instruction_sources.passing_directness_ip,'manual');
+
+  // Different career_id or unrelated player UIDs never mix careers
+  const otherCareerDraft={...upgraded,career_id:'other-career',team:{tempo:'Lower'}};
+  const fromOtherCareer=reconcileCurrentDraft(club,otherCareerDraft);
+  assert.equal(fromOtherCareer.team.tempo,'Higher');
+  assert.equal(fromOtherCareer.team_sources.tempo,'save');
+});
+
+test('currentView and rolePlan separate value provenance badges from control availability badges',()=>{
+  const club=brightonData();
+  club.slot_labels={0:'Titulares',1:'Suplentes'};
+  club.instruction_options={tempo:[{value:'Higher',label:'Alto'}]};
+  club.tactic_editor.team_properties={tempo:'Ritmo de juego'};
+  club.tactic_editor.roles={
+    goalkeeper_ip:{phase:'in_possession',positions:['GK'],name:'Portero',abbreviation:'POR'},
+    goalkeeper_oop:{phase:'out_of_possession',positions:['GK'],name:'Portero',abbreviation:'POR'},
+  };
+  club.tactic_editor.player_options={
+    passing_directness_ip:{phase:'in_possession',label:'Pases',options:[{value:'Shorter',label:'Más cortos'},{value:'Standard',label:'Estándar'}]},
+    shooting_distance_ip:{phase:'in_possession',label:'Disparo',options:[{value:'Standard',label:'Estándar'}]},
+  };
+  club.stored_tactics.records[1].team_instructions={tempo:'Higher'};
+  club.stored_tactics.records[1].lineup[0].ip_role='goalkeeper_ip';
+  club.stored_tactics.records[1].lineup[0].oop_role='goalkeeper_oop';
+  club.stored_tactics.records[1].lineup[0].instructions={passing_directness_ip:'Shorter',shooting_distance_ip:'Standard'};
+  club.stored_tactics.records[1].lineup[0].instruction_sources={passing_directness_ip:'save',shooting_distance_ip:'role'};
+
+  const draft=storedDraft(club);
+  const byId=new Map(club.players.map(p=>[p.uid,p]));
+  const html=currentView({data:club,currentDraft:draft,currentResult:null,phase:'ip',byId,uploadBusy:false,currentBusy:false});
+  assert.ok(html.includes('📥 Leído del guardado'));
+  assert.ok(html.includes('🔒 Definido por el rol'));
+  assert.ok(html.includes('❓ Disponibilidad no verificada'));
+
+  const planHtml=rolePlan({
+    phase:'in_possession',position:'GK',name:'Portero',english:'Goalkeeper',score:75,
+    reasons:['Buen encaje'],warnings:[],comparison:'',spanish_status:'',source:'https://example.com',
+    instructions:[
+      {property:'Pases',value:'Más cortos',origin:'save',availability_status:'unverified',reason:'Leído del guardado'},
+      {property:'Disparo',value:'Estándar',origin:'adjustment',availability_status:'editable_verified',reason:'Recomendado'},
+    ],
+  });
+  assert.ok(planHtml.includes('📥 Leído del guardado'));
+  assert.ok(planHtml.includes('❓ Disponibilidad no verificada'));
+  assert.ok(planHtml.includes('💡 Recomendación'));
+  assert.ok(planHtml.includes('⚙️ Editable comprobado'));
 });

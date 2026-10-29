@@ -3,30 +3,76 @@ import {rolePlan,pitch,checkSupportRunsConflict} from './tactics-view.js';
 import {zoneMap} from './zones-view.js';
 import {matchesObservedContext} from './instruction-context.js';
 
+export const CURRENT_READER_VERSION = 3;
+
 export function reconcileCurrentDraft(data,saved) {
   const imported=data.stored_tactics?.records?.some(r=>r.positions_available);
-  if(!saved||!Array.isArray(saved.lineup)||saved.lineup.length!==11||(imported&&saved.reader_version!==2)||(saved.source==='save'&&saved.source_dataset_id!==data.id))return storedDraft(data);
-  const base=freshDraft(data,saved.formation),editor=data.tactic_editor;
-  const ids=new Set(data.players.map(p=>p.uid));
+  if(!saved||!Array.isArray(saved.lineup)||saved.lineup.length!==11||saved.reader_version===0)return storedDraft(data);
+  const ids=new Set((data.players||[]).map(p=>p.uid));
+  if(saved.career_id&&data.career_id&&saved.career_id!==data.career_id)return storedDraft(data);
+  if(!saved.career_id) {
+    const savedUids=saved.lineup.map(r=>r?.uid).filter(Boolean);
+    if(savedUids.length>0&&!savedUids.some(uid=>ids.has(uid)))return storedDraft(data);
+  }
+  const editor=data.tactic_editor||{};
+  const teamOpts=data.instruction_options||{};
+  const playerOpts=editor.player_options||{};
+  const needsSaveRefresh=(imported&&saved.reader_version!==CURRENT_READER_VERSION)||(saved.source==='save'&&saved.source_dataset_id!==data.id);
+  if(needsSaveRefresh&&(saved.source==='save'||saved.stored_id)) {
+    const refreshed=storedDraft(data,saved.stored_id);
+    if(data.styles?.[saved.style])refreshed.style=saved.style;
+    const savedTeam=saved.team||{}, savedTeamSrc=saved.team_sources||{};
+    for(const [id,v] of Object.entries(savedTeam)) {
+      if(teamOpts[id]?.some(o=>o.value===v)&&(saved.reader_version<CURRENT_READER_VERSION||savedTeamSrc[id]==='manual')) {
+        refreshed.team[id]=v;
+        refreshed.team_sources[id]='manual';
+      }
+    }
+    refreshed.lineup=refreshed.lineup.map((row,index)=>{
+      const old=saved.lineup[index]||{};
+      if(old.instruction_scope==='Personalizada')row.instruction_scope='Personalizada';
+      if(old.marking_target_player&&!row.marking_target_player)row.marking_target_player=old.marking_target_player;
+      if(old.marking_target_position&&!row.marking_target_position)row.marking_target_position=old.marking_target_position;
+      const oldInst=old.instructions||{}, oldSrc=old.instruction_sources||{};
+      for(const [id,v] of Object.entries(oldInst)) {
+        const opt=playerOpts[id];
+        if(!opt?.options?.some(o=>o.value===v))continue;
+        const phase=opt.phase==='in_possession'?'ip':'oop';
+        const sameRole=!old[phase+'_role']||!row[phase+'_role']||old[phase+'_role']===row[phase+'_role'];
+        if(sameRole&&(saved.reader_version<CURRENT_READER_VERSION||oldSrc[id]==='manual')) {
+          row.instructions[id]=v;
+          row.instruction_sources[id]='manual';
+        }
+      }
+      return row;
+    });
+    return refreshed;
+  }
+  const base=freshDraft(data,saved.formation);
   base.name=typeof saved.name==='string'?saved.name.slice(0,100):base.name;
-  base.style=data.styles[saved.style]?saved.style:'possession';
-  base.stored_id=data.stored_tactics.records.some(r=>r.id===saved.stored_id)?saved.stored_id:'';
-  for(const key of ['source','source_dataset_id','reader_version','formation_ip','formation_oop'])base[key]=saved[key];
+  base.style=data.styles?.[saved.style]?saved.style:'possession';
+  base.stored_id=data.stored_tactics?.records?.some(r=>r.id===saved.stored_id)?saved.stored_id:'';
+  for(const key of ['source','source_dataset_id','formation_ip','formation_oop'])if(saved[key]!==undefined)base[key]=saved[key];
+  base.career_id=data.career_id||saved.career_id||'';
+  base.reader_version=CURRENT_READER_VERSION;
   if(saved.formation==='stored')base.formation='stored';
-  const savedTeam = saved.team || {};
-  base.team=Object.fromEntries(Object.entries(savedTeam).filter(([id,v])=>data.instruction_options[id]?.some(o=>o.value===v)));
+  const savedTeam = saved.team || {}, savedTeamSrc = saved.team_sources || {};
+  base.team=Object.fromEntries(Object.entries(savedTeam).filter(([id,v])=>teamOpts[id]?.some(o=>o.value===v)));
+  base.team_sources=Object.fromEntries(Object.keys(base.team).map(id=>[id,savedTeamSrc[id]||(saved.source==='save'&&saved.reader_version===CURRENT_READER_VERSION?'save':'manual')]));
   base.lineup=base.lineup.map((row,index)=>{
     const old=saved.lineup[index]||{};row.uid=ids.has(old.uid)?old.uid:'';
     for(const phase of ['ip','oop']) {
-      if(editor.positions.includes(old[phase+'_position']))row[phase+'_position']=old[phase+'_position'];
+      if(editor.positions?.includes(old[phase+'_position']))row[phase+'_position']=old[phase+'_position'];
       row[phase+'_side']=['left','right','centre'].includes(old[phase+'_side'])?old[phase+'_side']:null;
-      const role=editor.roles[old[phase+'_role']];
+      const role=editor.roles?.[old[phase+'_role']];
       if(role?.phase===(phase==='ip'?'in_possession':'out_of_possession')&&role.positions.includes(row[phase+'_position']))row[phase+'_role']=old[phase+'_role'];
     }
     row.instruction_scope = old.instruction_scope || 'Posición';
     row.marking_target_player = old.marking_target_player || '';
     row.marking_target_position = old.marking_target_position || '';
-    row.instructions=Object.fromEntries(Object.entries(old.instructions||{}).filter(([id,v])=>editor.player_options[id]?.options.some(o=>o.value===v)));
+    const oldSrc=old.instruction_sources||{};
+    row.instructions=Object.fromEntries(Object.entries(old.instructions||{}).filter(([id,v])=>playerOpts[id]?.options?.some(o=>o.value===v)));
+    row.instruction_sources=Object.fromEntries(Object.keys(row.instructions).map(id=>[id,oldSrc[id]||'manual']));
     return row;
   });
   return base;
@@ -34,8 +80,8 @@ export function reconcileCurrentDraft(data,saved) {
 
 export function freshDraft(data,formation='433') {
   const form=data.tactic_editor.formations.find(f=>f.id===formation)||data.tactic_editor.formations[0];
-  return {formation:form.id,name:'Mi táctica',stored_id:'',style:'possession',confirmed:false,team:{},
-    lineup:form.slots.map(slot=>({uid:'',ip_position:slot.ip_position,oop_position:slot.oop_position,ip_role:'',oop_role:'',instruction_scope:'Posición',marking_target_player:'',marking_target_position:'',instructions:{}}))};
+  return {formation:form.id,name:'Mi táctica',stored_id:'',style:'possession',confirmed:false,career_id:data.career_id||'',reader_version:CURRENT_READER_VERSION,team:{},team_sources:{},
+    lineup:form.slots.map(slot=>({uid:'',ip_position:slot.ip_position,oop_position:slot.oop_position,ip_role:'',oop_role:'',instruction_scope:'Posición',marking_target_player:'',marking_target_position:'',instructions:{},instruction_sources:{}}))};
 }
 
 export function storedDraft(data,storedId='') {
@@ -44,9 +90,18 @@ export function storedDraft(data,storedId='') {
   const draft=freshDraft(data);
   if(selected){draft.stored_id=selected.id;draft.name=selected.name;}
   if(selected?.positions_available&&selected.lineup?.length===11) {
-    const ids=new Set(data.players.map(p=>p.uid));
-    draft.lineup=selected.lineup.map(row=>({...row,uid:ids.has(row.uid)?row.uid:'',instructions:{},marking_target_player:'',marking_target_position:''}));
-    Object.assign(draft,{formation:'stored',source:'save',source_dataset_id:data.id,reader_version:2,formation_ip:selected.formation_ip,formation_oop:selected.formation_oop});
+    const ids=new Set((data.players||[]).map(p=>p.uid)), editor=data.tactic_editor||{};
+    const teamOpts=data.instruction_options||{}, playerOpts=editor.player_options||{};
+    const rawTeam=selected.team_instructions||selected.team||{};
+    draft.team=Object.fromEntries(Object.entries(rawTeam).filter(([id,v])=>!teamOpts[id]||teamOpts[id]?.some(o=>o.value===v)));
+    draft.team_sources=Object.fromEntries(Object.keys(draft.team).map(id=>[id,'save']));
+    draft.lineup=selected.lineup.map(row=>{
+      const rawInst=row.instructions||{}, rawSrc=row.instruction_sources||{};
+      const instructions=Object.fromEntries(Object.entries(rawInst).filter(([id,v])=>!playerOpts[id]||playerOpts[id]?.options?.some(o=>o.value===v)));
+      const instruction_sources=Object.fromEntries(Object.keys(instructions).map(id=>[id,rawSrc[id]||'save']));
+      return {...row,uid:ids.has(row.uid)?row.uid:'',instruction_scope:row.instruction_scope||'Posición',instructions,instruction_sources,marking_target_player:row.marking_target_player||'',marking_target_position:row.marking_target_position||''};
+    });
+    Object.assign(draft,{formation:'stored',source:'save',source_dataset_id:data.id,career_id:data.career_id||'',reader_version:CURRENT_READER_VERSION,formation_ip:selected.formation_ip,formation_oop:selected.formation_oop});
   }
   return draft;
 }
@@ -308,7 +363,7 @@ export function currentView(state) {
         <button data-phase="oop" aria-pressed="${state.phase==='oop'}">Sin posesión (SP)</button>
       </div>
     </div>
-    <p class="notice">${d.source==='save'?'Posiciones y roles recuperados del guardado; los jugadores son la selección guardada de este equipo. Revisá las instrucciones pendientes antes de confirmar el análisis.':'Completá tu táctica manualmente o cargala desde la partida. Las importaciones antiguas se vuelven a leer al pulsar el botón de carga.'} Tocá un puesto para editarlo.</p>
+    <p class="notice">${d.source==='save'?'Posiciones, roles e instrucciones individuales y colectivas recuperados del guardado; los jugadores son la selección guardada de este equipo. Podés revisar o ajustar cualquier orden antes de confirmar el análisis.':'Completá tu táctica manualmente o cargala desde la partida. Las importaciones antiguas se vuelven a leer al pulsar el botón de carga.'} Tocá un puesto para editarlo.</p>
     ${(stored.records.find(r=>r.id===d.stored_id)?.decode_warnings||[]).length?`<details class="notice warning"><summary>Hay roles o puestos pendientes de confirmar</summary><ul>${stored.records.find(r=>r.id===d.stored_id).decode_warnings.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></details>`:''}
     ${draftPitch(d,state.phase,state.byId,editor)}
   </section>`:''}
@@ -422,7 +477,7 @@ export function currentView(state) {
         </div>
         <details id="current-instructions-${index}">
           <summary>Instrucciones individuales actuales (${row.instruction_scope || 'Posición'})</summary>
-          <p class="muted">Confirmá solo las órdenes que podés cotejar en FM. Los candados 🔒 proceden de las capturas comprobadas en FM26; los controles ⚙️ son los editables observados.</p>
+          <p class="muted">Cada instrucción distingue el <strong>origen del valor</strong> (📥 leído del guardado, 🔒 definido por el rol, ✍️ confirmado manualmente o sin confirmar) de la <strong>disponibilidad del control en FM26</strong> (🔒 bloqueado comprobado, ⚙️ editable comprobado o ❓ disponibilidad no verificada).</p>
           <div class="instruction-grid">
             ${Object.entries(editor.player_options).map(([id,v])=>{
               const phase = v.phase === 'in_possession' ? 'ip' : 'oop';
@@ -432,6 +487,7 @@ export function currentView(state) {
               let lockBadge = '';
               let isDisabled = false;
               let selectedVal = row.instructions[id];
+              const instSource = row.instruction_sources?.[id];
               let titleAttr = '';
 
               if (matchesObservedContext(ctx, d.lineup, index, phase)) {
@@ -450,13 +506,25 @@ export function currentView(state) {
                   titleAttr = `title="Editable comprobado en FM26 (${ctx.evidence})"`;
                   lockBadge = `<span class="inst-badge-edit" ${titleAttr}>⚙️ Editable comprobado</span>`;
                 } else {
-                  titleAttr = 'title="Disponibilidad no verificada en FM para este contexto específico (edición permitida en borrador)"';
+                  titleAttr = 'title="Disponibilidad del control no verificada en FM para este contexto específico (edición permitida en borrador)"';
                   lockBadge = `<span class="inst-badge-unverified" ${titleAttr}>❓ Disponibilidad no verificada</span>`;
                 }
               } else {
-                titleAttr = 'title="Disponibilidad no verificada para este puesto, costado y ámbito (edición permitida en borrador)"';
+                titleAttr = 'title="Disponibilidad del control no verificada para este puesto, costado y ámbito (edición permitida en borrador)"';
                 lockBadge = `<span class="inst-badge-unverified" ${titleAttr}>❓ Disponibilidad no verificada</span>`;
               }
+
+              const originBadge = isDisabled && selectedVal
+                ? '<span class="inst-badge-origin origin-role" title="Valor fijo impuesto por el rol en FM26">🔒 Definido por el rol</span>'
+                : selectedVal && instSource === 'manual'
+                ? '<span class="inst-badge-origin origin-manual" title="Valor confirmado o editado manualmente por vos">✍️ Confirmado manualmente</span>'
+                : selectedVal && instSource === 'save'
+                ? '<span class="inst-badge-origin origin-save" title="Valor activo leído directamente del archivo de guardado (.fm)">📥 Leído del guardado</span>'
+                : selectedVal && instSource === 'role'
+                ? '<span class="inst-badge-origin origin-role" title="Valor base del rol en la partida (sin modificador activo en el guardado)">🔒 Definido por el rol</span>'
+                : selectedVal
+                ? '<span class="inst-badge-origin origin-manual" title="Valor confirmado manualmente">✍️ Confirmado manualmente</span>'
+                : '<span class="inst-badge-origin origin-empty" title="El valor de esta instrucción aún no fue confirmado">Valor sin confirmar</span>';
 
               const isMarkingOop = (id === 'marking_target_oop');
               const currentMarkingVal = selectedVal ?? row.instructions['marking_target_oop'];
@@ -481,7 +549,7 @@ export function currentView(state) {
               }
 
               return `<div>
-                <label>${esc(v.label)} · ${phase==='ip'?'CP':'SP'} ${lockBadge}
+                <label>${esc(v.label)} · ${phase==='ip'?'CP':'SP'} ${originBadge} ${lockBadge}
                   <select id="current-pi-${index}-${id}" data-current="instruction" data-row="${index}" data-pi="${id}" ${isDisabled ? 'disabled' : ''}>
                     ${options(v.options, selectedVal)}
                   </select>
@@ -568,7 +636,12 @@ export function currentView(state) {
             : id === 'gk_distribution_ip'
             ? ' <small style="color:var(--text-muted);">(Destino colectivo único)</small>'
             : '';
-          return `<label>${esc(editor.team_properties[id])}${note}<select id="current-team-${id}" data-current="team" data-team="${id}"><option value="">Sin confirmar</option>${filteredOpts.map(o => `<option value="${esc(o.value)}" ${d.team[id] === o.value ? 'selected' : ''} ${o.disabled ? 'disabled' : ''}>${esc(o.label)}${o.reasonMsg || ''}</option>`).join('')}</select></label>`;
+          const teamOriginBadge = d.team[id]
+            ? (d.team_sources?.[id] === 'save'
+              ? ' <span class="inst-badge-origin origin-save" title="Valor colectivo leído directamente del archivo de guardado (.fm)">📥 Leído del guardado</span>'
+              : ' <span class="inst-badge-origin origin-manual" title="Valor colectivo confirmado o editado manualmente por vos">✍️ Confirmado manualmente</span>')
+            : ' <span class="inst-badge-origin origin-empty">Valor sin confirmar</span>';
+          return `<label>${esc(editor.team_properties[id])}${note}${teamOriginBadge}<select id="current-team-${id}" data-current="team" data-team="${id}"><option value="">Sin confirmar</option>${filteredOpts.map(o => `<option value="${esc(o.value)}" ${d.team[id] === o.value ? 'selected' : ''} ${o.disabled ? 'disabled' : ''}>${esc(o.label)}${o.reasonMsg || ''}</option>`).join('')}</select></label>`;
         }).join('')}
       </div>
     </details>

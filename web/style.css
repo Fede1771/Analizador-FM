@@ -1890,6 +1890,40 @@ body.companion-standalone #content {
   padding: 1px 4px;
   margin-left: 4px;
 }
+.inst-badge-origin {
+  display: inline-block;
+  font-size: 0.68rem;
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 4px;
+  font-weight: 600;
+}
+.inst-badge-origin.origin-save {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+.inst-badge-origin.origin-manual {
+  color: #a7f3d0;
+  background: rgba(52, 211, 153, 0.14);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+.inst-badge-origin.origin-role {
+  color: #c4b5fd;
+  background: rgba(167, 139, 250, 0.14);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+}
+.inst-badge-origin.origin-rec {
+  color: #fde68a;
+  background: rgba(251, 191, 36, 0.14);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+.inst-badge-origin.origin-empty {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  font-weight: 500;
+}
 .marking-sub-input {
   margin-top: 6px;
   padding: 6px 10px;

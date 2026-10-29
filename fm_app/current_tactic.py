@@ -11,6 +11,32 @@ MENTALITIES={1:'Muy defensiva',2:'Defensiva',3:'Cauta',4:'Equilibrada',5:'Positi
 POSITIONS={'GK':(50,91),'DL':(13,70),'DR':(87,70),'DC':(50,76),'WBL':(12,58),'WBR':(88,58),'DM':(50,58),'MC':(50,44),'ML':(14,45),'MR':(86,45),'AMC':(50,33),'AML':(15,25),'AMR':(85,25),'STC':(50,19)}
 
 
+TACTIC_LIMITATIONS = (
+    'Esquema de ambas fases, titulares seleccionados, roles activos e instrucciones individuales '
+    '(ámbito Posición) y colectivas leídos de la partida. Si hay varias copias tácticas, elegí la que usás en FM. '
+    'Limitación: en marca específica a jugador o puesto rival, el objetivo puntual debe indicarse manualmente; '
+    'las órdenes personalizadas por jugador fuera del bloque del rol pueden confirmarse en el editor.'
+)
+
+
+def refresh_stored_tactics(stored_tactics):
+    from fm_app.tactic_reader import decode_record
+    if not isinstance(stored_tactics, dict) or not isinstance(stored_tactics.get('records'), list):
+        return stored_tactics
+    upgraded = []
+    for rec in stored_tactics['records']:
+        if isinstance(rec, dict) and isinstance(rec.get('raw'), dict) and rec['raw'].get('slots'):
+            existing_lineup = rec.get('lineup')
+            selection = [row.get('uid') for row in existing_lineup] if isinstance(existing_lineup, list) and len(existing_lineup) == 11 else None
+            upgraded.append(decode_record(rec, selection))
+        else:
+            upgraded.append(rec)
+    result = {**stored_tactics, 'records': upgraded}
+    if result.get('available'):
+        result['limitations'] = TACTIC_LIMITATIONS
+    return result
+
+
 def extract_stored_tactics(career, club_uid):
     from fm_app.tactic_reader import decode_record, read_team_selections, TACTIC_SCHEMA_VERSION
     tactics = [t for t in career.tactics() if t.club_uid == club_uid]
@@ -31,7 +57,7 @@ def extract_stored_tactics(career, club_uid):
     return {'available':True,'schema_version':TACTIC_SCHEMA_VERSION,'records':records,
         'active_identified':len(first_team)==1,'active_id':first_team[0]['id'] if len(first_team)==1 else None,
         'selection_error':selection_error,
-        'limitations':'Posiciones y roles leídos de la partida. El once es la selección guardada del equipo. Si hay varias copias, elegí la que usás en FM. Las instrucciones individuales y colectivas aún requieren confirmación manual.'}
+        'limitations':TACTIC_LIMITATIONS}
 
 
 def coordinates(rows, key):
@@ -99,6 +125,7 @@ def audit_tactic(dataset, params):
         values=[]
         supplied=row.get('instructions',{})
         if not isinstance(supplied,dict):raise ValueError('Instrucciones individuales no válidas.')
+        sources=row.get('instruction_sources') if isinstance(row.get('instruction_sources'),dict) else {}
         for key,value in supplied.items():
             if key not in PI or value not in PI[key]['options']:
                 raise ValueError(f'{p["name"]}: Instrucción individual no válida ({key}={value}).')
@@ -126,7 +153,20 @@ def audit_tactic(dataset, params):
                 selected=supplied.get(instruction_id)
                 if locked is not None and selected is not None and selected!=locked:raise ValueError(f'{p["name"]}: {instruction_id} está bloqueada por el rol.')
                 if selected is not None or locked is not None:
-                    item = instruction('player',instruction_id,selected if selected is not None else locked,'Valor confirmado por vos.' if selected is not None else 'Valor bloqueado comprobado en las capturas.','confirmed' if selected is not None else 'role')
+                    src = sources.get(instruction_id)
+                    if locked is not None and (selected is None or src != 'manual'):
+                        origin = 'role'
+                        reason = 'Valor bloqueado comprobado en las capturas.'
+                    elif src == 'role':
+                        origin = 'role'
+                        reason = 'Valor definido por el rol en la partida guardada.'
+                    elif src == 'save':
+                        origin = 'save'
+                        reason = 'Valor leído de la partida guardada.'
+                    else:
+                        origin = 'confirmed'
+                        reason = 'Valor confirmado por vos.'
+                    item = instruction('player',instruction_id,selected if selected is not None else locked,reason,origin)
                     item.update(availability)
                     chosen.append(item)
             plan['instructions']=chosen
@@ -310,9 +350,11 @@ def audit_tactic(dataset, params):
             'action':'Alternar con «Reagruparse» para cuidar la estamina',
             'chips':['Fase: Sin posesión (SP)', 'Transición: Contrapresión', 'Cuidado físico']
         })
+    team_sources = params.get('team_sources') if isinstance(params.get('team_sources'), dict) else {}
+    team_items = [instruction('team', k, v, 'Valor colectivo leído de la partida guardada.' if team_sources.get(k) == 'save' else 'Valor colectivo confirmado por vos.', 'save' if team_sources.get(k) == 'save' else 'confirmed') for k, v in team.items()]
     count=sum(x[k]['unconfirmed_instructions'] for x in lineup for k in ('in_possession','out_of_possession'))
     return {'dataset_id':dataset['id'],'name':str(params.get('name','Mi táctica'))[:100], 'style':style,
-        'score':round(sum(x['score'] for x in lineup)/11,1),'lineup':lineup,'advice':advice,
+        'score':round(sum(x['score'] for x in lineup)/11,1),'lineup':lineup,'team_instructions':team_items,'advice':advice,
         'coverage':coverage(lineup,by_id,team),'unconfirmed_player_instructions':count,
         'unconfirmed_team_instructions':len(TI)-len(team),
         'limits':'Ponderación analítica propia de Touchline (80% CP / 20% SP) basada en encaje de atributos y familiaridad posicional. No representa probabilidades deportivas ni pesos internos del motor de partidos de FM26. Las órdenes sin confirmar no se sustituyen por propuestas. Mentalidad, rival y movimientos dinámicos no están modelados.'}

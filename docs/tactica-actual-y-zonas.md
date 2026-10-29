@@ -1,6 +1,6 @@
 # Táctica actual, instrucciones individuales y cobertura por zonas
 
-Actualización: 29/10/2026. Lectura táctica v2, instalador 1.0.1.
+Actualización: 29/10/2026. Lectura táctica v3, instalador 1.0.2.
 
 ## Datos leídos y datos confirmados
 
@@ -8,7 +8,7 @@ Actualización: 29/10/2026. Lectura táctica v2, instalador 1.0.1.
 
 El lector recupera los primeros once selectores de la selección guardada del equipo y los resuelve contra el índice de jugadores de esa misma partida. Conserva los huecos y los costados de los puestos centrales. Vincula las fases por `out_of_possession_position_index`, comprobando que sea una permutación completa. Ni el nombre del club ni el nombre de la táctica determinan el esquema o los jugadores. El archivo de Brighton del 31/05/2026 devuelve 11 seleccionados, 4-2-3-1 con balón y 4-1-4-1 sin balón.
 
-Las traducciones de rol se aplican solamente si el código existe y el rol es compatible con el puesto. Los códigos incompatibles quedan pendientes; no se sustituyen por roles recomendados. Las instrucciones individuales y colectivas continúan sin descifrar y requieren carga manual. Si hay varias copias del primer equipo, el lector no puede distinguir cuál está activa: se ofrece elegirla explícitamente. Una sola copia se selecciona automáticamente. La vinculación y los códigos recuperados deben cotejarse en FM antes de confirmar el análisis.
+Las traducciones de rol se leen reconstruyendo la palabra de 64 bits del pie de cada `_SlotBlock` (`settings[-1].second_bits_high | (trail_bits << 32)`) y aplicando `~DUTY_MASK` (`0x06E00000`), evitando confundir la entrada 0 del historial de `TacticSettingUnit` (`role_bits`) con el rol activo. Las 15 instrucciones individuales por puesto se decodifican desde la máscara `pi_mask` (`head_byte | (first_bits << 8)`) de la entrada de `settings` cuyo rol coincide con el rol activo, y las 28 instrucciones colectivas se decodifican desde el vector de 96 bits `team_instruction_06..17`. Cuando una estructura de prueba no incluye bloques binarios de ajustes, las instrucciones permanecen vacías sin inventar valores por defecto. Si hay varias copias del primer equipo, se selecciona la primera por defecto y se ofrece cambiarla en el selector de copias guardadas.
 
 El extractor escribe `output/tactics.json` con `schema_version: 2` y conserva el detalle bruto para diagnóstico. Si un bloque no es compatible, se conserva la extracción de jugadores y se permite cargar la táctica manualmente. «Cargar táctica de la partida» actualiza las importaciones anteriores a partir de su copia local `.fm`, en segundo plano y sin depender de la carpeta monitoreada ni de otro guardado en FM. Se conserva el último análisis si la actualización falla.
 

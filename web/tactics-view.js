@@ -13,12 +13,21 @@ export function rolePlan(role) {
     <p>${esc(role.tactical_summary || role.reasons.at(-1))}</p><ul>${role.reasons.slice(0,3).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
     ${role.warnings.length ? `<p class="notice warning">${esc(role.warnings.join(' '))}</p>` : ''}
     <details><summary>Instrucciones individuales y alternativas</summary>${role.instructions.map(i=>{
+      const originBadge = i.origin === 'save'
+        ? '<span class="inst-badge-origin origin-save" title="Valor activo leído del guardado (.fm)">📥 Leído del guardado</span>'
+        : i.origin === 'confirmed'
+        ? '<span class="inst-badge-origin origin-manual" title="Valor confirmado manualmente">✍️ Confirmado manualmente</span>'
+        : i.origin === 'role'
+        ? '<span class="inst-badge-origin origin-role" title="Valor definido por el rol">🔒 Definido por el rol</span>'
+        : (i.origin === 'adjustment' || i.origin === 'standard')
+        ? '<span class="inst-badge-origin origin-rec" title="Recomendación calculada por Touchline">💡 Recomendación</span>'
+        : '';
       const statusBadge = i.availability_status === 'locked_verified' || i.locked
         ? (i.locked_value == null ? '<span class="inst-badge-masked">🔒 Bloqueado (tapado)</span>' : '<span class="inst-badge-lock">🔒 Bloqueado comprobado</span>')
         : (i.availability_status === 'editable_verified' || (i.editable && i.locked === false && i.availability_status !== 'unverified')
           ? '<span class="inst-badge-edit">⚙️ Editable comprobado</span>'
-          : '<span class="inst-badge-unverified" title="Disponibilidad no verificada en FM (no comprobado en este contexto)">❓ Disponibilidad no verificada</span>');
-      return `<article class="instruction"><strong>${esc(i.property)}: ${esc(i.value ?? 'No asignado')} ${statusBadge}</strong><p>${esc(i.reason)}</p><small>${esc(i.availability_source || '')}</small></article>`;
+          : '<span class="inst-badge-unverified" title="Disponibilidad del control no verificada en FM (no comprobado en este contexto)">❓ Disponibilidad no verificada</span>');
+      return `<article class="instruction"><strong>${esc(i.property)}: ${esc(i.value ?? 'No asignado')} ${originBadge} ${statusBadge}</strong><p>${esc(i.reason)}</p><small>${esc(i.availability_source || '')}</small></article>`;
     }).join('')}
     ${role.unconfirmed_instructions?`<p class="muted">${role.unconfirmed_instructions} instrucciones de esta fase sin confirmar. Las que se muestran proceden de tu carga o de bloqueos comprobados del rol.</p>`:''}
     <p>${esc(role.comparison)}</p><p class="muted">${esc(role.spanish_status)}</p><a href="${esc(role.source)}" target="_blank" rel="noreferrer">Referencia del rol ↗</a></details></section>`;
