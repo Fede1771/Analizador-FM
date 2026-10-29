@@ -146,7 +146,7 @@ export function overview(state) {
     ${stat('Cedidos',data.loans.length,'Alternativas para seguimiento')}
   </div>
 
-  ${first?`<div class="section-heading" style="margin-top: 24px;"><h2>Las tres propuestas con mayor encaje</h2><span class="muted">Comparadas entre ${analysis.evaluated_formations} esquemas</span></div>${formationCards(analysis.tactics,null)}`:''}`;
+  ${first?`<div class="section-heading" style="margin-top: 24px;"><h2>Las tres propuestas con mayor encaje</h2><span class="muted">Comparadas entre ${analysis.evaluated_formations} esquemas</span></div>${formationCards(analysis.tactics,null)}`:state.busy?`<div class="panel skeleton" role="status" aria-label="Calculando propuestas tácticas"><div class="skeleton-bar short"></div><div class="skeleton-bar medium"></div></div>`:''}`;
 }
 
 export function tactics(state) {
@@ -181,7 +181,7 @@ export function tactics(state) {
     </section>
     ${analysis?.tactics.length?`<details class="ranking"><summary>Comparar las tres mejores · ${analysis.evaluated_formations} esquemas evaluados</summary>${formationCards(analysis.tactics,selected?.id)}</details>`:''}
     ${state.error?`<div class="notice warning" role="alert">${esc(state.error)} <button class="text-button" data-action="retry">Reintentar</button></div>`:''}
-    ${selected?tacticResult(selected,state):state.busy?'<div class="panel skeleton" role="status">Calculando tu propuesta…</div>':state.error?.includes('Carreras de apoyo')?supportRunsRecovery(data,prefs,state.overrideDraft):'<section class="panel empty"><h2>No hay un once completo</h2><p>Necesitás al menos once jugadores disponibles en el grupo principal. Revisá tus exclusiones y la asignación de grupos.</p><button class="button" data-action="groups">Configurar grupos</button></section>'}`;
+    ${selected?tacticResult(selected,state):state.busy?'<div class="panel skeleton" role="status"><span class="muted">Calculando tu propuesta…</span><div class="skeleton-bar short"></div><div class="skeleton-bar medium"></div><div class="skeleton-pitch-box"></div></div>':state.error?.includes('Carreras de apoyo')?supportRunsRecovery(data,prefs,state.overrideDraft):'<section class="panel empty"><h2>No hay un once completo</h2><p>Necesitás al menos once jugadores disponibles en el grupo principal. Revisá tus exclusiones y la asignación de grupos.</p><button class="button" data-action="groups">Configurar grupos</button></section>'}`;
 }
 
 function toolbar(state, kind) {
