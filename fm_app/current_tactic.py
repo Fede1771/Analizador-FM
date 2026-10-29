@@ -92,7 +92,8 @@ POSITION_NAMES_ES = {
 
 
 def audit_tactic(dataset, params):
-    if params.get('confirmed') is not True:raise ValueError('Confirmá que el once, las posiciones y los roles coinciden con FM.')
+    if params.get('confirmed') is not True and params.get('source') != 'save':
+        raise ValueError('Confirmá que el once, las posiciones y los roles coinciden con FM.')
     style=params.get('style','possession')
     if style not in STYLES:raise ValueError('Estilo no válido.')
     rows=params.get('lineup')

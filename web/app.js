@@ -1,5 +1,5 @@
 import {api, upload, RequestGate} from './api.js';
-import {currentView, freshDraft, storedDraft, reconcileCurrentDraft} from './current-view.js';
+import {currentView, freshDraft, storedDraft, reconcileCurrentDraft, isDraftComplete} from './current-view.js';
 import {reconcile, preferenceKey, contextKey} from './session.js';
 import {esc, date} from './format.js';
 import {navigation, welcome, overview, tactics, contractsView, scoutingView, companionView, roster, methodology, playerRows, playerDialog, groupDialog, syncDialog} from './views.js';
@@ -124,12 +124,19 @@ async function loadDataset(provided) {
   if(!sameCareer) {
     try {state.currentDraft=JSON.parse(localStorage.getItem('touchline:current:'+data.career_id)||'null');}catch {state.currentDraft=null;}
   }
+  const hadSavedDraft = !sameCareer ? Boolean(localStorage.getItem('touchline:current:'+data.career_id)) : Boolean(state.currentDraft);
+  const savedConfirmed = state.currentDraft?.confirmed;
   state.currentDraft=reconcileCurrentDraft(data,state.currentDraft);
-  state.currentDraft.confirmed=false;
   state.data=data;state.byId=new Map([...data.players,...data.loans].map(p=>[p.uid,p]));
   state.prefs=reconcile(data,saved);state.promptDraft=state.prefs.prompt;
   state.analysis=null;state.simulation=null;state.overrideDraft={};state.filters.group='all';
   const dialog=$('#dialog');if(dialog.open)dialog.close();
+  if(isDraftComplete(state.currentDraft)&&(!hadSavedDraft||savedConfirmed)) {
+    state.currentDraft.confirmed=true;
+    auditCurrent();
+  } else {
+    state.currentDraft.confirmed=false;
+  }
   await refresh();
 }
 
@@ -184,16 +191,26 @@ function download(name, value, type='application/json') {
 }
 
 function navigate(view) {
-  state.view=navigation[view]?view:'overview';state.filters={query:'',group:'all',order:'score'};state.error='';render({focusHeading:true});
+  state.view=navigation[view]?view:'overview';state.filters={query:'',group:'all',order:'score'};state.error='';
+  if(state.view==='current'&&!state.currentResult&&!state.currentBusy&&isDraftComplete(state.currentDraft)) {
+    state.currentDraft.confirmed=true;
+    auditCurrent();
+  }
+  render({focusHeading:true});
 }
 
-function saveCurrentDraft() {
-  state.currentResult=null;state.currentError='';state.currentDraft.confirmed=false;state.currentVersion++;
+function saveCurrentDraft({clearResult=true}={}) {
+  if(clearResult) {
+    state.currentResult=null;
+    state.currentError='';
+    if(state.currentDraft) state.currentDraft.confirmed=false;
+  }
+  state.currentVersion++;
   try {localStorage.setItem('touchline:current:'+state.data.career_id,JSON.stringify(state.currentDraft));}catch{}
 }
 
 async function auditCurrent() {
-  if(state.currentBusy)return;
+  if(!state.data||state.currentBusy)return;
   const version=state.currentVersion, id=state.data.id;
   state.currentBusy=true;state.currentError='';render();
   try {
@@ -236,14 +253,27 @@ async function action(name, button) {
     return;
   }
   if(name==='close-dialog') { $('#dialog').close(); return; }
-  if(name==='audit-current')return auditCurrent();
+  if(name==='audit-current') {
+    if(state.currentDraft) state.currentDraft.confirmed = true;
+    return auditCurrent();
+  }
   if(name==='load-stored-current') {
     if(state.data.stored_tactics?.schema_version!==2) {
       if(state.uploadBusy)return;
       const result=await api('/api/tactics/refresh',{method:'POST',body:{dataset_id:state.data.id}});
       trackedJob=result.job_id;state.uploadBusy=true;state.currentError='';render();await poll();return;
     }
-    state.currentDraft=storedDraft(state.data,state.currentDraft?.stored_id);saveCurrentDraft();render();$('#current-preview')?.scrollIntoView({block:'start'});return;
+    state.currentDraft=storedDraft(state.data,state.currentDraft?.stored_id);
+    if(isDraftComplete(state.currentDraft)) {
+      state.currentDraft.confirmed=true;
+      saveCurrentDraft({clearResult:false});
+      await auditCurrent();
+    } else {
+      saveCurrentDraft();
+      render();
+      $('#current-preview')?.scrollIntoView({block:'start'});
+    }
+    return;
   }
   if(name==='export-current') {if(state.currentResult)download('touchline-mi-tactica.json',{draft:state.currentDraft,result:state.currentResult});return;}
   if(name==='shutdown') { await api('/api/shutdown',{method:'POST',body:{}}); stopped=true;gate.invalidate();$('#content').innerHTML='<h1>Touchline se cerró</h1><p>Podés cerrar esta pestaña.</p>';return; }
@@ -321,6 +351,12 @@ document.addEventListener('change',event=>{
         fresh.lineup.forEach((row,i)=>row.uid=before[i]?.uid||'');state.currentDraft={...fresh,name:draft.name,stored_id:draft.stored_id};
       } else if(field==='stored_id') {
         state.currentDraft=input.value?storedDraft(state.data,input.value):freshDraft(state.data);
+        if(isDraftComplete(state.currentDraft)) {
+          state.currentDraft.confirmed=true;
+          saveCurrentDraft({clearResult:false});
+          await auditCurrent();
+          return;
+        }
       } else if(input.dataset.row!==undefined) {
         const row=draft.lineup[Number(input.dataset.row)];
         row.instruction_sources=row.instruction_sources||{};
@@ -343,7 +379,8 @@ document.addEventListener('change',event=>{
         else { delete draft.team[key]; delete draft.team_sources[key]; }
       }
       else draft[field]=input.value;
-      saveCurrentDraft();render();return;
+      saveCurrentDraft({clearResult:true});
+      render();return;
     }
     if(input.dataset.companionCheck || input.dataset.auditCheck) {
       const key = input.dataset.companionCheck || input.dataset.auditCheck;

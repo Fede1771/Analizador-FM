@@ -5,6 +5,20 @@ import {matchesObservedContext} from './instruction-context.js';
 
 export const CURRENT_READER_VERSION = 3;
 
+export function isDraftComplete(draft) {
+  if(!draft||!Array.isArray(draft.lineup)||draft.lineup.length!==11)return false;
+  const uids=new Set();
+  let gkIp=0, gkOop=0;
+  for(const r of draft.lineup) {
+    if(!r.uid||typeof r.uid!=='number'||uids.has(r.uid))return false;
+    uids.add(r.uid);
+    if(!r.ip_position||!r.ip_role||!r.oop_position||!r.oop_role)return false;
+    if(r.ip_position==='GK')gkIp++;
+    if(r.oop_position==='GK')gkOop++;
+  }
+  return gkIp===1&&gkOop===1;
+}
+
 export function reconcileCurrentDraft(data,saved) {
   const imported=data.stored_tactics?.records?.some(r=>r.positions_available);
   if(!saved||!Array.isArray(saved.lineup)||saved.lineup.length!==11||saved.reader_version===0)return storedDraft(data);
@@ -211,6 +225,7 @@ export function renderDynamicChecklist(result, state) {
                   <span class="check-state-badge ${isDone ? 'state-done' : 'state-pending'}">${isDone ? '✓ Marcado como aplicado' : 'Pendiente en FM'}</span>
                 </div>
                 <span class="check-action-desc">${esc(item.action)}</span>
+                ${item.detail ? `<small class="check-detail-desc" style="display:block;color:var(--text-muted);font-size:0.8rem;margin-top:4px;line-height:1.3;">${esc(item.detail.length > 130 ? item.detail.slice(0, 127) + "…" : item.detail)}</small>` : ""}
               </div>
             </label>
           `;
@@ -366,6 +381,9 @@ export function currentView(state) {
     <p class="notice">${d.source==='save'?'Posiciones, roles e instrucciones individuales y colectivas recuperados del guardado; los jugadores son la selección guardada de este equipo. Podés revisar o ajustar cualquier orden antes de confirmar el análisis.':'Completá tu táctica manualmente o cargala desde la partida. Las importaciones antiguas se vuelven a leer al pulsar el botón de carga.'} Tocá un puesto para editarlo.</p>
     ${(stored.records.find(r=>r.id===d.stored_id)?.decode_warnings||[]).length?`<details class="notice warning"><summary>Hay roles o puestos pendientes de confirmar</summary><ul>${stored.records.find(r=>r.id===d.stored_id).decode_warnings.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></details>`:''}
     ${draftPitch(d,state.phase,state.byId,editor)}
+    <div class="preview-actions-bar" style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end;">
+      <button class="button primary" data-action="audit-current" ${d.lineup.filter(r=>r.uid).length!==11?'disabled':''}>Revisar mi táctica</button>
+    </div>
   </section>`:''}
 
   ${result ? `
@@ -407,10 +425,19 @@ export function currentView(state) {
     </div>
 
     ${result.advice && result.advice.length ? `
-      <details class="panel current-details-panel">
-        <summary>🔍 Ver todas las alertas y ajustes detallados (${result.advice.length})</summary>
+      <section class="panel current-details-panel" id="current-advice-details">
+        <div class="split">
+          <div>
+            <span class="eyebrow">Diagnóstico de errores y mejoras</span>
+            <h2>Alertas tácticas y mejoras individuales (${result.advice.length})</h2>
+            <p class="muted">Desajustes detectados en tu once, roles e instrucciones, con los cambios recomendados para corregirlos en FM26.</p>
+          </div>
+          <span class="status-pill ${result.advice.some(a=>a.severity==='danger')?'pill-pending':'pill-ok'}">
+            ${result.advice.filter(a=>a.severity==='danger').length ? `🔴 ${result.advice.filter(a=>a.severity==='danger').length} alertas críticas` : '✓ Sin alertas críticas'}
+          </span>
+        </div>
         ${renderGroupedAdvice(result, state)}
-      </details>
+      </section>
     ` : ''}
 
     ${zoneMap(result.coverage,state.phase)}

@@ -16,17 +16,17 @@ Leé tu partida, revisá tu esquema con y sin pelota y compará alternativas par
 4. **Cargá tu partida.** Usá **Importar partida**, arrastrá un archivo `.fm` o configurá la sincronización automática.
 5. **Entrá en Mi táctica** y pulsá **Cargar táctica de la partida**. Revisá el once y los datos cargados antes de confirmar el análisis.
 
-### Qué cambió en la versión 1.0.2
+### Qué cambió en la versión 1.0.3
 
-El lector táctico decodifica ahora la estructura binaria real de `tactics_man` en FM26, con independencia del club, del nombre de los jugadores y del nombre de la táctica:
+Touchline analiza y diagnostica de forma inmediata la táctica al cargarla desde la partida de Football Manager 26:
 
-- **Roles activos reales en ambas fases:** se lee la palabra de rol+tarea del pie de cada `_SlotBlock` (`settings[-1].second_bits_high | (trail_bits << 32)`) filtrando la máscara de tarea (`0x06E00000`), evitando confundir entradas antiguas del historial de `TacticSettingUnit` (`role_bits`) con el rol activo.
-- **Permutación entre fases (`out_of_possession_position_index`):** vincula cada titular con su puesto de destino sin posesión (`oop_slot = by_number[oop_index]`), soportando rotaciones y ciclos de tres o más puestos.
-- **Instrucciones individuales (`pi_mask`) y colectivas (`team_instruction_06..17`):** recupera las órdenes individuales del rol activo por puesto y las 28 dimensiones colectivas del equipo directamente del guardado.
-- **Separación de origen del valor y disponibilidad del control:** la interfaz diferencia explícitamente si un valor fue `📥 Leído del guardado`, `🔒 Definido por el rol`, `✍️ Confirmado manualmente` o `💡 Recomendación`, por separado de la evidencia sobre el control (`🔒 Bloqueado comprobado`, `⚙️ Editable comprobado`, `❓ Disponibilidad no verificada`).
-- **Conservación de ajustes manuales por carrera:** las órdenes confirmadas manualmente se preservan al actualizar el lector o sincronizar un nuevo guardado de la misma carrera, sin mezclar carreras distintas.
+- **Auditoría automática al cargar:** al abrir Touchline o pulsar **Cargar táctica de la partida**, si el once guardado cuenta con los 11 titulares y roles válidos, se ejecuta y presenta el diagnóstico de inmediato sin requerir confirmaciones manuales previas ni pasos redundantes.
+- **Visualización permanente de alertas y sugerencias:** el panel de diagnóstico detallado se despliega de forma prominente y abierta en pantalla principal bajo el campo de juego y la lista de comprobación de partido, en lugar de permanecer oculto en paneles cerrados.
+- **Detección de errores colectivos y riesgos:** identifica espacios a espaldas de la zaga (línea alta con centrales de ritmo moderado), sobrecarga física por contrapresión con baja resistencia media, desdobles incompatibles en la misma banda y presión alta sobre salida de portero.
+- **Diagnóstico individual por jugador:** advierte riesgos críticos de amarillas y expulsiones (entradas más fuertes con bajos atributos defensivos), desajustes posicionales (posiciones no naturales proponiendo el rol y puesto natural), optimizaciones de rol (+3 en atributos) y alternativas de recambio desde el plantel.
+- **Lista de comprobación con motivo táctico:** cada recomendación para el partido detalla su justificación táctica concreta.
 
-Consultá las [notas de la versión 1.0.2](docs/releases/1.0.2.md) para conocer las verificaciones y los límites de esta lectura.
+Consultá las [notas de la versión 1.0.3](docs/releases/1.0.3.md) para más detalles.
 
 ## Qué podés hacer
 
@@ -121,7 +121,7 @@ Las capturas son ejemplos de la interfaz. Los jugadores, las alertas y las opcio
 
 - **Plataforma:** aplicación de escritorio para Windows.
 - **Partidas:** archivos `.fm` de hasta 400 MB, compatibles con el lector de FM26. La importación actual requiere un único club gestionado.
-- **Lectura táctica 1.0.2:** verificada con FM26 26.3.2 y copias de partidas reales de Liverpool, Brighton y Manchester United. La compatibilidad con otros formatos o actualizaciones del juego depende del lector.
+- **Lectura táctica 1.0.3:** verificada con FM26 26.3.2 y copias de partidas reales de Liverpool, Brighton y Manchester United. La compatibilidad con otros formatos o actualizaciones del juego depende del lector.
 - **Procesamiento local:** las partidas se leen y analizan en tu PC; no se suben a servidores externos para realizar el análisis.
 - **Archivos originales:** Touchline trabaja sobre copias locales y conserva importaciones para poder restaurar el análisis. No escribe cambios en tu partida original.
 
@@ -133,7 +133,7 @@ En la versión instalada, los datos y registros se guardan en `%LOCALAPPDATA%\To
 | --- | --- |
 | No aparece mi partida | Comprobá la carpeta configurada o usá **Importar partida** para elegir el `.fm` directamente. |
 | Se carga otra carrera | Fijá el archivo que querés monitorear en la configuración de sincronización. |
-| Una importación anterior no muestra el esquema | Actualizá a 1.0.2 y pulsá **Cargar táctica de la partida**. Si ya no existe su copia local `.fm`, importá nuevamente el archivo. |
+| Una importación anterior no muestra el esquema | Actualizá a 1.0.3 y pulsá **Cargar táctica de la partida**. Si ya no existe su copia local `.fm`, importá nuevamente el archivo. |
 | Faltan titulares | Revisá si había puestos vacíos en la selección guardada de FM y guardá de nuevo después de completar el once. |
 | Marcaje a jugador o puesto específico | Cuando el guardado activa `Mark Specific` o `Mark Position`, indicá el nombre del jugador o el puesto rival en el subcontrol del editor. |
 | La partida resulta incompatible | Consultá el mensaje de error y el registro de extracción; el último análisis válido se conserva. |
@@ -164,10 +164,10 @@ Las pruebas del frontend requieren Node.js; las pruebas de navegador también re
 
 ### Generar el instalador
 
-La compilación requiere PyInstaller, WiX y la extensión `WixToolset.UI.wixext`. El MSI 1.0.2 se verificó con WiX 4.0.6 y su extensión 4.0.6.
+La compilación requiere PyInstaller, WiX y la extensión `WixToolset.UI.wixext`. El MSI 1.0.3 se verificó con WiX 4.0.6 y su extensión 4.0.6.
 
 ```powershell
-.\.venv\Scripts\python.exe -B tools/build_installer.py --version 1.0.2
+.\.venv\Scripts\python.exe -B tools/build_installer.py --version 1.0.3
 ```
 
 El resultado se guarda en `dist/Touchline-Analizador-FM26.msi`. Consultá las [herramientas de compilación y verificación](tools/README.md) para configurar `WIX_EXE` e inspeccionar el instalador.
@@ -177,6 +177,6 @@ El resultado se guarda en `dist/Touchline-Analizador-FM26.msi`. Consultá las [h
 - [Arquitectura](docs/arquitectura.md).
 - [Lectura táctica, instrucciones y cobertura por zonas](docs/tactica-actual-y-zonas.md).
 - [Referencia de FM26](docs/fm26-reference.md).
-- [Notas de la versión 1.0.2](docs/releases/1.0.2.md) y [1.0.1](docs/releases/1.0.1.md).
+- [Notas de la versión 1.0.3](docs/releases/1.0.3.md), [1.0.2](docs/releases/1.0.2.md) y [1.0.1](docs/releases/1.0.1.md).
 - [Scripts disponibles](scripts/README.md) y [herramientas auxiliares](tools/README.md).
 - [Índice completo de documentación](docs/README.md).

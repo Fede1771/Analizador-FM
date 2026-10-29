@@ -57,7 +57,7 @@ def build_pyinstaller():
     print("Compilación de PyInstaller completada con éxito.")
 
 
-def generate_wix_source(dist_dir: Path, out_wxs: Path, icon_path: Path, license_path: Path, version='1.0.2'):
+def generate_wix_source(dist_dir: Path, out_wxs: Path, icon_path: Path, license_path: Path, version='1.0.3'):
     print("=== PASO 2: Generando archivo fuente de WiX (.wxs) ===")
     dist_dir = dist_dir.resolve()
     
@@ -201,7 +201,7 @@ def build_msi(wxs_file: Path, msi_output: Path):
 def main():
     parser = argparse.ArgumentParser(description="Touchline Standalone Packaging & MSI Builder")
     parser.add_argument('--skip-pyinstaller', action='store_true', help="Omitir el paso de PyInstaller si dist/Touchline ya existe")
-    parser.add_argument('--version', default='1.0.2', help='Versión MSI (mayor.menor.revisión)')
+    parser.add_argument('--version', default='1.0.3', help='Versión MSI (mayor.menor.revisión)')
     args = parser.parse_args()
     if len(args.version.split('.')) != 3 or not all(p.isdigit() and 0 <= int(p) <= 65535 for p in args.version.split('.')):
         parser.error('La versión debe tener tres números entre 0 y 65535.')

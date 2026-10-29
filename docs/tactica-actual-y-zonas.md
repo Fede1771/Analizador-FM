@@ -1,6 +1,6 @@
 # Táctica actual, instrucciones individuales y cobertura por zonas
 
-Actualización: 29/10/2026. Lectura táctica v3, instalador 1.0.2.
+Actualización: 29/10/2026. Lectura táctica v3, instalador 1.0.3.
 
 ## Datos leídos y datos confirmados
 
