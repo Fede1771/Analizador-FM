@@ -1,12 +1,16 @@
 # Táctica actual, instrucciones individuales y cobertura por zonas
 
-Actualización: 24/10/2026. Motor Touchline 11.
+Actualización: 29/10/2026. Lectura táctica v2, instalador 1.0.1.
 
 ## Datos leídos y datos confirmados
 
-`fmsave 0.5.11` recupera copias de tácticas por equipo, sus nombres y mentalidad. Su modelo deja sin traducir posiciones, roles, instrucciones colectivas y los bloques de ajustes individuales. No expone el once seleccionado ni identifica la táctica activa. Nombre, estilo y uniones por equipo también requieren cotejo con el juego. No se utilizan los códigos desconocidos como si fueran instrucciones descifradas.
+`fmsave 0.5.11` recupera las copias tácticas por equipo. Touchline añade un adaptador para las máscaras de posición y las tablas de roles de FM26, extraídas de los enums `PositionMask`, `InPossessionRole` y `OutOfPossessionRole` de los recursos de Unity del juego. `scripts/generate_tactic_codes.py` permite regenerar la tabla incluida en `fm_app/data/tactic_codes.json`. No requiere tener FM instalado para utilizar el instalador resultante.
 
-El extractor escribe `output/tactics.json` y conserva el detalle bruto para diagnóstico. Si ese bloque no es compatible, se conserva la extracción de jugadores y se permite cargar la táctica manualmente. Las importaciones anteriores necesitan volver a sincronizarse para obtener el archivo nuevo; los datos de jugadores siguen siendo compatibles.
+El lector recupera los primeros once selectores de la selección guardada del equipo y los resuelve contra el índice de jugadores de esa misma partida. Conserva los huecos y los costados de los puestos centrales. Vincula las fases por `out_of_possession_position_index`, comprobando que sea una permutación completa. Ni el nombre del club ni el nombre de la táctica determinan el esquema o los jugadores. El archivo de Brighton del 31/05/2026 devuelve 11 seleccionados, 4-2-3-1 con balón y 4-1-4-1 sin balón.
+
+Las traducciones de rol se aplican solamente si el código existe y el rol es compatible con el puesto. Los códigos incompatibles quedan pendientes; no se sustituyen por roles recomendados. Las instrucciones individuales y colectivas continúan sin descifrar y requieren carga manual. Si hay varias copias del primer equipo, el lector no puede distinguir cuál está activa: se ofrece elegirla explícitamente. Una sola copia se selecciona automáticamente. La vinculación y los códigos recuperados deben cotejarse en FM antes de confirmar el análisis.
+
+El extractor escribe `output/tactics.json` con `schema_version: 2` y conserva el detalle bruto para diagnóstico. Si un bloque no es compatible, se conserva la extracción de jugadores y se permite cargar la táctica manualmente. «Cargar táctica de la partida» actualiza las importaciones anteriores a partir de su copia local `.fm`, en segundo plano y sin depender de la carpeta monitoreada ni de otro guardado en FM. Se conserva el último análisis si la actualización falla.
 
 En «Mi táctica» se eligen los jugadores y las posiciones y roles de ambas fases. El análisis mantiene exactamente ese once. Los roles alternativos y los posibles suplentes se presentan como cambios separados, con la misma fórmula de atributos y familiaridad que se usa en las propuestas. El puntaje del once pondera 80% con balón y 20% sin balón; no es una medición de resultados, de calidad colectiva ni una probabilidad de ganar.
 

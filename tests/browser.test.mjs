@@ -60,6 +60,7 @@ try {
   async function wait(expression,label,timeout=30000){const started=Date.now();while(Date.now()-started<timeout){if(await evaluate(expression))return;await sleep(150);}throw new Error('Timeout: '+label);}
   async function check(name,fn){await fn();results.push(name);console.log('PASS '+name);}
   async function navigate(hash){await evaluate(`location.hash=${JSON.stringify(hash)}`);await sleep(100);}
+  async function reload(){await evaluate(`document.documentElement.dataset.reloadPending='1'`);await send('Page.reload');await wait(`document.querySelector('#content') && !document.documentElement.dataset.reloadPending`,'fresh page document');}
   async function set(selector,value,event='change'){await evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});el.value=${JSON.stringify(value)};el.dispatchEvent(new Event(${JSON.stringify(event)},{bubbles:true}));})()`);}
   async function ready(){await wait(`document.querySelector('#content')?.getAttribute('aria-busy')==='false' && document.querySelector('.pitch-player')`,'tactical result');}
   async function change(value){await fetch(url+'/__test/change',{method:'POST',headers:{'Content-Type':'application/json','X-FM-App':'1'},body:JSON.stringify(value)});}
@@ -154,7 +155,7 @@ try {
     const legacy={...saved,overrides:{...saved.overrides,tempo:'Much Lower',overlap_ip:'Overlap - Left',underlap_ip:'Underlap - Left'}};
     expectingLegacyConflict=true;
     await fetch(url+'/__test/legacy-preferences',{method:'POST',headers:{'Content-Type':'application/json','X-FM-App':'1'},body:JSON.stringify(legacy)});
-    await send('Page.reload');
+    await reload();
     await wait(`document.querySelector('[data-support-recovery]')`,'legacy recovery controls');
     assert.equal(await evaluate(`document.querySelector('#override-overlap_ip').value`),'Overlap - Left');
     assert.equal(await evaluate(`document.querySelector('#override-underlap_ip').value`),'Underlap - Left');
@@ -167,10 +168,10 @@ try {
     assert.equal(repaired.overrides.tempo,'Much Lower');
     assert.equal(repaired.overrides.overlap_ip,'Overlap - Left');
     assert.deepEqual(repaired.labels,saved.labels);
-    await send('Page.reload');await ready();
+    await reload();await ready();
     assert.equal(await evaluate(`document.querySelector('#override-underlap_ip').value`),'Underlap - Right');
     await fetch(url+'/api/preferences',{method:'POST',headers:{'Content-Type':'application/json','X-FM-App':'1'},body:JSON.stringify(saved)});
-    await send('Page.reload');await ready();
+    await reload();await ready();
   });
   await check('player plan dialog',async()=>{await evaluate(`document.querySelector('.pitch-player').click()`);assert.ok(await evaluate(`document.querySelector('#dialog').open`));assert.equal(await evaluate(`document.querySelectorAll('.role-plan').length`),2);await evaluate(`document.querySelector('#dialog-close').click()`);});
   await check('loan search and sort',async()=>{await navigate('loans');await wait(`document.querySelector('#search')`,'loans');await set('#search','200','input');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);await set('#sort-order','age');assert.equal(await evaluate(`document.querySelectorAll('#results tbody tr').length`),1);});
@@ -206,6 +207,33 @@ try {
   await check('preferences survive a new save',async()=>{await change({id:'save-next'});await wait(`document.querySelector('#source-label') && !document.querySelector('#activity').hidden`,'dataset refresh');await wait(`document.querySelector('#activity').hidden`,'refresh finished');await navigate('tactics');await ready();assert.equal(await evaluate(`document.querySelector('#formation-select').value`),'352');assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');});
   await check('desktop layout',async()=>{await evaluate(`document.querySelectorAll('details').forEach(d=>d.open=false);window.scrollTo(0,0)`);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-desktop.png'),Buffer.from(shot.data,'base64'));});
   await check('responsive layout and keyboard focus',async()=>{await send('Emulation.setDeviceMetricsOverride',{width:760,height:1000,deviceScaleFactor:1,mobile:false});await sleep(200);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));await evaluate(`document.querySelector('#formation-select').focus()`);assert.equal(await evaluate(`document.activeElement.id`),'formation-select');const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-responsive.png'),Buffer.from(shot.data,'base64'));});
+  await check('stored tactic shows an editable scheme before players or roles are confirmed',async()=>{
+    await navigate('current');await wait(`document.querySelector('#current-preview')`,'draft pitch');
+    const before=await (await fetch(url+'/__test/counts')).json();
+    await evaluate(`document.querySelector('[data-action="load-stored-current"]').click()`);
+    assert.equal(await evaluate(`document.querySelector('#current-formation').value`),'stored');
+    assert.ok(await evaluate(`document.querySelector('#current-preview h2').textContent.includes('4-2-3-1')`));
+    assert.equal(await evaluate(`document.querySelector('#current-stored').value`),'first-copy');
+    assert.equal(await evaluate(`document.querySelectorAll('#current-preview .pitch-player').length`),11);
+    assert.equal(await evaluate(`document.querySelector('#current-player-0').value`),'1');
+    assert.ok(await evaluate(`document.querySelector('#current-preview h2').textContent.includes('11/11')`));
+    assert.equal(await evaluate(`document.querySelector('#current-confirm').checked`),false);
+    assert.equal(await evaluate(`document.querySelector('[data-action="reference-current"]')`),null);
+    await evaluate(`document.querySelector('[data-phase="oop"]').click()`);
+    assert.ok(await evaluate(`document.querySelector('#current-preview .pitch').getAttribute('aria-label').includes('sin posesión')`));
+    await evaluate(`document.querySelector('[data-current-slot="7"]').click()`);
+    assert.equal(await evaluate(`document.activeElement.id`),'current-player-7');
+    await set('#current-player-7',15);
+    assert.ok(await evaluate(`document.querySelector('[data-current-slot="7"]').textContent.includes('15')`));
+    await set('#current-stored','reserve-copy');
+    assert.ok(await evaluate(`document.querySelector('#current-formation').selectedOptions[0].textContent.includes('4-3-3')`));
+    assert.equal(await evaluate(`document.querySelector('#current-player-0').value`),'');
+    await set('#current-stored','first-copy');
+    const after=await (await fetch(url+'/__test/counts')).json();
+    assert.equal(after['/api/current-tactic']||0,before['/api/current-tactic']||0);
+    await evaluate(`document.querySelector('[data-phase="ip"]').click()`);
+    const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'stored-tactic-preview.png'),Buffer.from(shot.data,'base64'));
+  });
   await check('current tactic keeps chosen lineup and evaluates both phases',async()=>{
     await navigate('current');await wait(`document.querySelector('#current-player-0')`,'current editor');
     const data=await (await fetch(url+'/api/data')).json();
@@ -238,7 +266,7 @@ try {
     assert.equal(await evaluate(`document.querySelector('#current-result')===null`),true);
     assert.equal(await evaluate(`document.querySelector('#current-confirm').checked`),false);
     await evaluate(`document.querySelector('#current-player-0').dataset.reloading='yes'`);
-    await send('Page.reload');await wait(`document.querySelector('#current-player-0') && !document.querySelector('#current-player-0').dataset.reloading`,'restored draft');
+    await reload();await wait(`document.querySelector('#current-player-0') && !document.querySelector('#current-player-0').dataset.reloading`,'restored draft');
     assert.equal(await evaluate(`document.querySelector('#current-player-0').value`),String(uid));
     assert.equal(await evaluate(`document.querySelector('#current-confirm').checked`),false);
     await navigate('tactics');await ready();
@@ -254,7 +282,7 @@ try {
     assert.ok(await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').closest('label').textContent.includes('Disponibilidad no verificada')`));
     await set('#current-pi-4-hold_up_ball_ip','Yes');
     await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').dataset.awaitReload='yes'`);
-    await send('Page.reload');await wait(`document.querySelector('#current-pi-4-hold_up_ball_ip') && !document.querySelector('#current-pi-4-hold_up_ball_ip').dataset.awaitReload`,'personal instruction restored');
+    await reload();await wait(`document.querySelector('#current-pi-4-hold_up_ball_ip') && !document.querySelector('#current-pi-4-hold_up_ball_ip').dataset.awaitReload`,'personal instruction restored');
     assert.equal(await evaluate(`document.querySelector('#current-pi-4-hold_up_ball_ip').value`),'Yes');
     await set('#current-ip-position-4','WBL');await set('#current-ip-role-4','playmaking_wing_back_ip');
     await set('#current-scope-4','Posición');

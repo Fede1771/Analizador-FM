@@ -4,18 +4,22 @@ import {zoneMap} from './zones-view.js';
 import {matchesObservedContext} from './instruction-context.js';
 
 export function reconcileCurrentDraft(data,saved) {
-  if(!saved||!Array.isArray(saved.lineup)||saved.lineup.length!==11)return data.club==='Liverpool'?referenceDraft(data):freshDraft(data);
+  const imported=data.stored_tactics?.records?.some(r=>r.positions_available);
+  if(!saved||!Array.isArray(saved.lineup)||saved.lineup.length!==11||(imported&&saved.reader_version!==2)||(saved.source==='save'&&saved.source_dataset_id!==data.id))return storedDraft(data);
   const base=freshDraft(data,saved.formation),editor=data.tactic_editor;
   const ids=new Set(data.players.map(p=>p.uid));
   base.name=typeof saved.name==='string'?saved.name.slice(0,100):base.name;
   base.style=data.styles[saved.style]?saved.style:'possession';
   base.stored_id=data.stored_tactics.records.some(r=>r.id===saved.stored_id)?saved.stored_id:'';
-  const savedTeam = saved.team && Object.keys(saved.team).length ? saved.team : (data.liverpool_reference?.team || {});
+  for(const key of ['source','source_dataset_id','reader_version','formation_ip','formation_oop'])base[key]=saved[key];
+  if(saved.formation==='stored')base.formation='stored';
+  const savedTeam = saved.team || {};
   base.team=Object.fromEntries(Object.entries(savedTeam).filter(([id,v])=>data.instruction_options[id]?.some(o=>o.value===v)));
   base.lineup=base.lineup.map((row,index)=>{
     const old=saved.lineup[index]||{};row.uid=ids.has(old.uid)?old.uid:'';
     for(const phase of ['ip','oop']) {
       if(editor.positions.includes(old[phase+'_position']))row[phase+'_position']=old[phase+'_position'];
+      row[phase+'_side']=['left','right','centre'].includes(old[phase+'_side'])?old[phase+'_side']:null;
       const role=editor.roles[old[phase+'_role']];
       if(role?.phase===(phase==='ip'?'in_possession':'out_of_possession')&&role.positions.includes(row[phase+'_position']))row[phase+'_role']=old[phase+'_role'];
     }
@@ -34,38 +38,16 @@ export function freshDraft(data,formation='433') {
     lineup:form.slots.map(slot=>({uid:'',ip_position:slot.ip_position,oop_position:slot.oop_position,ip_role:'',oop_role:'',instruction_scope:'Posición',marking_target_player:'',marking_target_position:'',instructions:{}}))};
 }
 
-const standard={attacking_width_ip:'Standard',dribbling_direction_ip:'Standard',dribbling_frequency_ip:'Standard',forward_runs_ip:'Standard',freedom_of_movement_ip:'Follow Tactical Position',hold_up_ball_ip:'No',shoot_ip:'Standard',passing_risk_ip:'Standard',passing_directness_ip:'Standard',cross_from_ip:'Standard',crossing_strategy_ip:'Standard',pressing_oop:'Standard',marking_oop:'Standard',tackling_oop:'Standard',marking_target_oop:'Standard'};
-const references=[
-  {match:'verbruggen',ip:'ball_playing_goalkeeper_ip',oop:'sweeper_keeper_oop',ip_position:'GK',oop_position:'GK',instructions:{passing_risk_ip:'Take More Risks'}},
-  {match:'cubarsi',ip:'ball_playing_centre_back_ip',oop:'centre_back_oop',ip_position:'DC',oop_position:'DC',instructions:{forward_runs_ip:'Make Fewer Runs',passing_risk_ip:'Take More Risks',passing_directness_ip:'Shorter',pressing_oop:'More Often',marking_oop:'Mark Tighter',tackling_oop:'Tackle Harder'}},
-  {match:'spence',ip:'wing_back_ip',oop:'full_back_oop',ip_position:'DR',oop_position:'DR',instructions:{forward_runs_ip:'Make More Runs',passing_directness_ip:'Shorter'}},
-  {match:'wharton',ip:'midfield_playmaker_ip',oop:'attacking_midfielder_oop',ip_position:'MC',oop_position:'AMC',instructions:{freedom_of_movement_ip:'Roam From Position',passing_risk_ip:'Take More Risks',passing_directness_ip:'Shorter'}},
-  {match:'szoboszlai',ip:'inside_winger_ip',oop:'wide_midfielder_oop',ip_position:'AMR',oop_position:'MR',instructions:{attacking_width_ip:'Sit Narrower',dribbling_direction_ip:'Cut Inside With Ball',dribbling_frequency_ip:'Dribble More',forward_runs_ip:'Make More Runs',freedom_of_movement_ip:'Roam From Position'}},
-  {match:'kerkez',ip:'wing_back_ip',oop:'full_back_oop',ip_position:'DL',oop_position:'DL',instructions:{forward_runs_ip:'Make More Runs',passing_directness_ip:'Shorter',pressing_oop:'More Often',marking_oop:'Mark Tighter'}},
-  {match:'vuskovic',ip:'centre_back_ip',oop:'centre_back_oop',ip_position:'DC',oop_position:'DC',instructions:{forward_runs_ip:'Make Fewer Runs',passing_directness_ip:'Shorter',pressing_oop:'More Often',marking_oop:'Mark Tighter',tackling_oop:'Tackle Harder'}},
-  {match:'pavlovic',ip:'deep_lying_playmaker_ip',oop:'defensive_midfielder_oop',ip_position:'DM',oop_position:'DM',instructions:{forward_runs_ip:'Make Fewer Runs',passing_risk_ip:'Take More Risks',passing_directness_ip:'Shorter'}},
-  {match:'ayari',ip:'advanced_playmaker_ip',oop:'defensive_midfielder_oop',ip_position:'MC',oop_position:'DM',instructions:{forward_runs_ip:'Make Fewer Runs',freedom_of_movement_ip:'Roam From Position',passing_risk_ip:'Take More Risks',passing_directness_ip:'Shorter',marking_oop:'Mark Tighter',tackling_oop:'Tackle Harder'}},
-  {match:'wirtz',ip:'inside_winger_ip',oop:'wide_midfielder_oop',ip_position:'AML',oop_position:'ML',instructions:{attacking_width_ip:'Sit Narrower',dribbling_direction_ip:'Cut Inside With Ball',freedom_of_movement_ip:'Roam From Position',shoot_ip:'Shoot More Often'}},
-  {match:'ekitike',ip:'deep_lying_forward_ip',oop:'centre_forward_oop',ip_position:'STC',oop_position:'STC',instructions:{freedom_of_movement_ip:'Roam From Position',hold_up_ball_ip:'Yes',shoot_ip:'Shoot More Often',pressing_oop:'More Often',tackling_oop:'Tackle Harder'}}
-];
-function normalized(value){return value.normalize('NFD').replace(/\p{M}/gu,'').toLowerCase();}
-function find(data,part){return data.players.find(p=>normalized(p.name).includes(part));}
-
-export function referenceDraft(data) {
+export function storedDraft(data,storedId='') {
+  const records=data.stored_tactics?.records||[];
+  const selected=records.find(t=>t.id===storedId)||records.find(t=>t.id===data.stored_tactics.active_id)||records.find(t=>t.team_slot===data.default_primary_slot);
   const draft=freshDraft(data);
-  const refList=(data.liverpool_reference?.lineup)||references;
-  const names=['verbruggen','kerkez','cubarsi','vuskovic','spence','pavlovic','ayari','wharton','wirtz','ekitike','szoboszlai'];
-  draft.lineup.forEach((row,index)=>{
-    const ref=refList.find(r=>r.match===names[index])||refList[index];
-    if(!ref)return;
-    const player=find(data,ref.match);row.uid=player?.uid||'';
-    if(player)Object.assign(row,{ip_position:ref.ip_position,oop_position:ref.oop_position,ip_role:ref.ip_role||ref.ip,oop_role:ref.oop_role||ref.oop,instruction_scope:ref.instruction_scope||'Posición',marking_target_player:ref.marking_target_player||'',marking_target_position:ref.marking_target_position||'',instructions:{...standard,...(ref.instructions||{})}});
-  });
-  if(data.liverpool_reference?.team) {
-    draft.team = {...data.liverpool_reference.team};
+  if(selected){draft.stored_id=selected.id;draft.name=selected.name;}
+  if(selected?.positions_available&&selected.lineup?.length===11) {
+    const ids=new Set(data.players.map(p=>p.uid));
+    draft.lineup=selected.lineup.map(row=>({...row,uid:ids.has(row.uid)?row.uid:'',instructions:{},marking_target_player:'',marking_target_position:''}));
+    Object.assign(draft,{formation:'stored',source:'save',source_dataset_id:data.id,reader_version:2,formation_ip:selected.formation_ip,formation_oop:selected.formation_oop});
   }
-  const saved=data.stored_tactics?.records?.find(t=>t.team_slot===data.default_primary_slot);
-  if(saved){draft.stored_id=saved.id;draft.name=saved.name;}
   return draft;
 }
 
@@ -75,11 +57,26 @@ function captureReview(data) {
       <div>
         <span class="eyebrow">Diagnóstico táctico de tu equipo</span>
         <h2>Revisá tu once y detectá mejoras inmediatas</h2>
-        <p class="muted">Confirmá o ajustá tus 11 titulares para evaluar la estructura con posesión y sin posesión con el motor de análisis de Touchline.</p>
+        <p class="muted">Cargá las posiciones, los roles de ambas fases y los titulares seleccionados en tu partida. Después podés confirmar el once para revisar su encaje.</p>
       </div>
-      <button class="button primary" data-action="reference-current">⚡ Cargar y revisar táctica activa</button>
+      <button class="button primary" data-action="load-stored-current">Cargar táctica de la partida</button>
     </div>
   </section>`;
+}
+
+const draftPositions={GK:[50,91],DL:[13,70],DR:[87,70],DC:[50,76],WBL:[12,58],WBR:[88,58],DM:[50,58],MC:[50,44],ML:[14,45],MR:[86,45],AMC:[50,33],AML:[15,25],AMR:[85,25],STC:[50,19]};
+
+export function draftPitch(draft,phase,byId,editor) {
+  const key=phase+'_position';
+  return `<div class="pitch" role="group" aria-label="Esquema en edición ${phase==='ip'?'con':'sin'} posesión"><div class="pitch-line"></div><div class="pitch-center"></div><div class="pitch-area top"></div><div class="pitch-area bottom"></div><span class="pitch-direction">↑ Dirección de ataque</span>
+    ${draft.lineup.map((row,index)=>{
+      const position=row[key],player=byId.get(row.uid),role=editor.roles[row[phase+'_role']];
+      const same=draft.lineup.map((r,i)=>r[key]===position?i:-1).filter(i=>i>=0);
+      const [baseX,y]=draftPositions[position]||[50,50];
+      let x=Math.max(5,Math.min(95,baseX+(same.indexOf(index)-(same.length-1)/2)*(position==='DC'?24:25)));
+      if(['DC','DM','MC','AMC','STC'].includes(position)&&['left','right','centre'].includes(row[phase+'_side']))x={left:38,right:62,centre:50}[row[phase+'_side']];
+      return `<button class="pitch-player ${position==='GK'?'keeper':''}" data-current-slot="${index}" style="left:${x}%;top:${y}%" aria-label="Editar puesto ${index+1}: ${esc(player?.name||'Sin jugador')}, ${esc(pos(position))}"><span class="shirt" aria-hidden="true">${index+1}</span><span class="player-plate"><strong>${esc(player?.name.split(' ').slice(-1)[0]||'Elegí jugador')}</strong><small>${esc(pos(position))} · ${esc(role?.abbreviation||'Sin rol')}</small></span></button>`;
+    }).join('')}</div>`;
 }
 
 function renderAdviceCard(a) {
@@ -296,12 +293,25 @@ export function currentView(state) {
       <p>Evaluación de encaje y ajustes prioritarios para tu once titular actual.</p>
     </div>
     <div class="actions">
-      <button class="button" data-action="reference-current">Cargar táctica guardada</button>
+      <button class="button" data-action="load-stored-current" ${state.uploadBusy?'disabled':''}>${state.uploadBusy?'Leyendo partida…':'Cargar táctica de la partida'}</button>
       ${result?'<button class="button" data-action="export-current">Exportar revisión</button>':''}
     </div>
   </div>
 
-  ${!result ? captureReview(data) : ''}
+  ${!result&&d.source!=='save' ? captureReview(data) : ''}
+
+  ${state.currentError?`<p class="notice warning" role="alert">${esc(state.currentError)}</p>`:''}
+  ${!result?`<section class="panel current-pitch-panel" id="current-preview">
+    <div class="split"><h2>${d.source==='save'?`Esquema de la partida · ${esc(state.phase==='ip'?d.formation_ip:d.formation_oop)}`:'Esquema en edición'} · ${d.lineup.filter(r=>r.uid).length}/11 titulares</h2>
+      <div class="segmented" role="group" aria-label="Fase táctica">
+        <button data-phase="ip" aria-pressed="${state.phase==='ip'}">Con posesión (CP)</button>
+        <button data-phase="oop" aria-pressed="${state.phase==='oop'}">Sin posesión (SP)</button>
+      </div>
+    </div>
+    <p class="notice">${d.source==='save'?'Posiciones y roles recuperados del guardado; los jugadores son la selección guardada de este equipo. Revisá las instrucciones pendientes antes de confirmar el análisis.':'Completá tu táctica manualmente o cargala desde la partida. Las importaciones antiguas se vuelven a leer al pulsar el botón de carga.'} Tocá un puesto para editarlo.</p>
+    ${(stored.records.find(r=>r.id===d.stored_id)?.decode_warnings||[]).length?`<details class="notice warning"><summary>Hay roles o puestos pendientes de confirmar</summary><ul>${stored.records.find(r=>r.id===d.stored_id).decode_warnings.map(w=>`<li>${esc(w)}</li>`).join('')}</ul></details>`:''}
+    ${draftPitch(d,state.phase,state.byId,editor)}
+  </section>`:''}
 
   ${result ? `
     <section class="panel current-summary-panel" id="current-result">
@@ -362,10 +372,10 @@ export function currentView(state) {
     <div class="control-grid">
       <label>Copia guardada<select id="current-stored" data-current="stored_id">${options(stored.records.map(t=>({value:t.id,label:`${t.name} · ${data.slot_labels[t.team_slot]||'Grupo '+t.team_slot} · ${t.mentality}`})),d.stored_id,'Carga manual')}</select></label>
       <label>Nombre<input id="current-name" data-current="name" value="${esc(d.name)}" maxlength="100"></label>
-      <label>Plantilla inicial de posiciones <small>Aplicarla reemplaza posiciones, roles e instrucciones; conserva los jugadores por fila.</small><select id="current-formation" data-current="formation">${data.formations_catalog.map(f=>`<option value="${f.id}" ${d.formation===f.id?'selected':''}>${esc(f.name)} → ${esc(f.defensive)}</option>`).join('')}</select></label>
+      <label>Esquema / plantilla de posiciones <small>Aplicar una plantilla reemplaza posiciones, roles e instrucciones; conserva los jugadores por fila.</small><select id="current-formation" data-current="formation">${d.formation==='stored'?`<option value="stored" selected>Partida: ${esc(d.formation_ip)} → ${esc(d.formation_oop)}</option>`:''}${data.formations_catalog.map(f=>`<option value="${f.id}" ${d.formation===f.id?'selected':''}>${esc(f.name)} → ${esc(f.defensive)}</option>`).join('')}</select></label>
       <label>Objetivo para comparar el encaje<select id="current-style" data-current="style">${Object.entries(data.styles).map(([id,s])=>`<option value="${id}" ${d.style===id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>
     </div>
-    <p class="muted">La plantilla facilita cargar las posiciones: no demuestra la formación del guardado. Las filas mantienen la identidad del jugador entre fases. Wharton queda como mediapunta sin balón en tu referencia confirmada. Completá los roles faltantes según tu juego; no se reemplazan por los de mayor puntaje.</p>
+    <p class="muted">La plantilla facilita cargar las posiciones: no demuestra la formación del guardado. Las filas mantienen la identidad del jugador entre fases. Completá los roles faltantes según tu juego; no se reemplazan por los de mayor puntaje.</p>
     <div class="current-lineup">${d.lineup.map((row,index)=>{
       const ipRoleObj = editor.roles[row.ip_role];
       const oopRoleObj = editor.roles[row.oop_role];
@@ -558,12 +568,11 @@ export function currentView(state) {
             : id === 'gk_distribution_ip'
             ? ' <small style="color:var(--text-muted);">(Destino colectivo único)</small>'
             : '';
-          return `<label>${esc(editor.team_properties[id])}${note}<select id="current-team-${id}" data-current="team" data-team="${id}">${filteredOpts.map(o => `<option value="${esc(o.value)}" ${d.team[id] === o.value ? 'selected' : ''} ${o.disabled ? 'disabled' : ''}>${esc(o.label)}${o.reasonMsg || ''}</option>`).join('')}</select></label>`;
+          return `<label>${esc(editor.team_properties[id])}${note}<select id="current-team-${id}" data-current="team" data-team="${id}"><option value="">Sin confirmar</option>${filteredOpts.map(o => `<option value="${esc(o.value)}" ${d.team[id] === o.value ? 'selected' : ''} ${o.disabled ? 'disabled' : ''}>${esc(o.label)}${o.reasonMsg || ''}</option>`).join('')}</select></label>`;
         }).join('')}
       </div>
     </details>
     <label class="current-confirm"><input type="checkbox" id="current-confirm" data-current="confirmed" ${d.confirmed?'checked':''}> Confirmo que este once, sus posiciones y roles coinciden con la táctica que estoy usando en FM.</label>
     <button class="button primary" data-action="audit-current" ${state.currentBusy?'disabled':''}>${state.currentBusy?'Revisando…':'Revisar mi táctica'}</button>
-    ${state.currentError?`<p class="notice warning" role="alert">${esc(state.currentError)}</p>`:''}
   </details>`;
 }

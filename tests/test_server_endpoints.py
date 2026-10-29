@@ -62,6 +62,16 @@ class ServerEndpointsTest(unittest.TestCase):
         self.assertEqual(self.request('/api/current-tactic',{'dataset_id':'old'})[0],409)
         self.assertEqual(self.request('/api/current-tactic',self.payload())[0],400)
 
+    def test_tactic_refresh_is_bound_to_current_snapshot_and_reports_busy(self):
+        self.assertEqual(self.request('/api/tactics/refresh',{'dataset_id':'old'})[0],409)
+        with patch.object(self.server.state,'reimport_current',return_value='tactic-job') as refresh:
+            status,body,_=self.request('/api/tactics/refresh',self.payload())
+            self.assertEqual(status,202)
+            self.assertEqual(json.loads(body)['job_id'],'tactic-job')
+            refresh.assert_called_once_with(self.data['id'])
+        with patch.object(self.server.state,'reimport_current',return_value=None):
+            self.assertEqual(self.request('/api/tactics/refresh',self.payload())[0],409)
+
     def test_analysis_uses_precomputed_cache(self):
         marker={'style':'possession','cached':True}
         self.server.state.cache[cache_key(self.data['id'],'possession',0)]=marker

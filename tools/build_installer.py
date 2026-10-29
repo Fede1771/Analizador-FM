@@ -14,6 +14,12 @@ NAMESPACE = uuid.UUID('4e565251-5443-4c4e-8765-202610260001')
 
 
 def find_wix():
+    configured = os.environ.get('WIX_EXE')
+    if configured and Path(configured).is_file():
+        return configured
+    local = ROOT / '.tmp/wix4/wix.exe'
+    if local.exists():
+        return str(local)
     wix_exe = Path(os.environ.get('USERPROFILE', '')) / '.dotnet/tools/wix.exe'
     if wix_exe.exists():
         return str(wix_exe)
@@ -51,7 +57,7 @@ def build_pyinstaller():
     print("Compilación de PyInstaller completada con éxito.")
 
 
-def generate_wix_source(dist_dir: Path, out_wxs: Path, icon_path: Path, license_path: Path):
+def generate_wix_source(dist_dir: Path, out_wxs: Path, icon_path: Path, license_path: Path, version='1.0.1'):
     print("=== PASO 2: Generando archivo fuente de WiX (.wxs) ===")
     dist_dir = dist_dir.resolve()
     
@@ -121,7 +127,7 @@ def generate_wix_source(dist_dir: Path, out_wxs: Path, icon_path: Path, license_
     wxs_content = f"""<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
   <Package Name="Touchline · Analizador FM26"
            Manufacturer="Touchline"
-           Version="1.0.0"
+           Version="{version}"
            UpgradeCode="4E565251-5443-4C4E-8765-202610260001"
            Scope="perUser">
     <MajorUpgrade DowngradeErrorMessage="Ya hay una versión más reciente de Touchline instalada." />
@@ -130,7 +136,7 @@ def generate_wix_source(dist_dir: Path, out_wxs: Path, icon_path: Path, license_
 
     <Icon Id="AppIcon" SourceFile="{posix_icon}" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon" />
-    <Property Id="ARPHELPLINK" Value="https://github.com/fedeburgos1/analizador-fm" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/Fede1771/Analizador-FM" />
 
     <StandardDirectory Id="LocalAppDataFolder">
       <Directory Id="ProgramsFolder" Name="Programs">
@@ -179,7 +185,7 @@ def generate_wix_source(dist_dir: Path, out_wxs: Path, icon_path: Path, license_
 
 
 def build_msi(wxs_file: Path, msi_output: Path):
-    print("=== PASO 3: Compilando instalador .MSI con WiX 7 ===")
+    print("=== PASO 3: Compilando instalador .MSI con WiX ===")
     wix_cmd = find_wix()
     cmd = [
         wix_cmd, 'build',
@@ -195,7 +201,10 @@ def build_msi(wxs_file: Path, msi_output: Path):
 def main():
     parser = argparse.ArgumentParser(description="Touchline Standalone Packaging & MSI Builder")
     parser.add_argument('--skip-pyinstaller', action='store_true', help="Omitir el paso de PyInstaller si dist/Touchline ya existe")
+    parser.add_argument('--version', default='1.0.1', help='Versión MSI (mayor.menor.revisión)')
     args = parser.parse_args()
+    if len(args.version.split('.')) != 3 or not all(p.isdigit() and 0 <= int(p) <= 65535 for p in args.version.split('.')):
+        parser.error('La versión debe tener tres números entre 0 y 65535.')
 
     dist_dir = ROOT / 'dist' / 'Touchline'
     if not args.skip_pyinstaller or not (dist_dir / 'Touchline.exe').exists():
@@ -208,7 +217,7 @@ def main():
     license_path = ROOT / 'tools' / 'license.rtf'
     msi_path = ROOT / 'dist' / 'Touchline-Analizador-FM26.msi'
 
-    generate_wix_source(dist_dir, wxs_path, icon_path, license_path)
+    generate_wix_source(dist_dir, wxs_path, icon_path, license_path, args.version)
     build_msi(wxs_path, msi_path)
 
 

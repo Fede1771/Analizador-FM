@@ -16,6 +16,7 @@ __pycache__/
 # Packaging & distribution
 build/
 dist/
+.wix/
 *.spec
 
 # Large game saves and extracted user data (FM saves are up to 400 MB)

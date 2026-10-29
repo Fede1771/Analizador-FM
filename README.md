@@ -57,6 +57,10 @@ Si guardás tus partidas en otra ubicación (como un disco secundario `D:\`, car
 ---
 
 ### Paso 2: Auditá tu once y la cobertura en dos fases
+En **Mi táctica → Cargar táctica de la partida**, Touchline recupera el esquema y la selección guardada del equipo desde el archivo `.fm`, para cualquier club compatible con el lector FM26. Si hay varias copias tácticas, elegí la correspondiente. Las importaciones antiguas se actualizan desde su copia local al pulsar el botón.
+
+La cancha se muestra aunque haya datos pendientes. Los roles que el lector no logra identificar y las instrucciones individuales y colectivas deben completarse manualmente antes de confirmar la revisión.
+
 En **Mi táctica** podés ver a tus once titulares con sus dorsales, nombre, rol y encaje porcentual (0 a 100).
 - **Fase con posesión (Ataque)** y **Fase sin posesión (Defensa)**: alterná entre ambas con un solo clic para observar cómo se reorganiza tu equipo según los roles asignados en FM26.
 - **Mapa de calor y cobertura por zonas**: descubrí qué pasillos del campo están protegidos y qué áreas quedan descubiertas para corregir instrucciones antes del próximo partido.

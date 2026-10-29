@@ -1,5 +1,5 @@
 import {api, upload, RequestGate} from './api.js';
-import {currentView, freshDraft, referenceDraft, reconcileCurrentDraft} from './current-view.js';
+import {currentView, freshDraft, storedDraft, reconcileCurrentDraft} from './current-view.js';
 import {reconcile, preferenceKey, contextKey} from './session.js';
 import {esc, date} from './format.js';
 import {navigation, welcome, overview, tactics, contractsView, scoutingView, companionView, roster, methodology, playerRows, playerDialog, groupDialog, syncDialog} from './views.js';
@@ -237,7 +237,14 @@ async function action(name, button) {
   }
   if(name==='close-dialog') { $('#dialog').close(); return; }
   if(name==='audit-current')return auditCurrent();
-  if(name==='reference-current') {state.currentDraft=referenceDraft(state.data);saveCurrentDraft();state.currentDraft.confirmed=true;await auditCurrent();return;}
+  if(name==='load-stored-current') {
+    if(state.data.stored_tactics?.schema_version!==2) {
+      if(state.uploadBusy)return;
+      const result=await api('/api/tactics/refresh',{method:'POST',body:{dataset_id:state.data.id}});
+      trackedJob=result.job_id;state.uploadBusy=true;state.currentError='';render();await poll();return;
+    }
+    state.currentDraft=storedDraft(state.data,state.currentDraft?.stored_id);saveCurrentDraft();render();$('#current-preview')?.scrollIntoView({block:'start'});return;
+  }
   if(name==='export-current') {if(state.currentResult)download('touchline-mi-tactica.json',{draft:state.currentDraft,result:state.currentResult});return;}
   if(name==='shutdown') { await api('/api/shutdown',{method:'POST',body:{}}); stopped=true;gate.invalidate();$('#content').innerHTML='<h1>Touchline se cerró</h1><p>Podés cerrar esta pestaña.</p>';return; }
   if(name==='import')return $('#save-file').click();
@@ -269,7 +276,7 @@ async function action(name, button) {
 }
 
 document.addEventListener('click',event=>{
-  const button=event.target.closest('[data-action],[data-view],[data-player],[data-formation],[data-phase],[data-download-player],[data-contract-filter],[data-scout-position],[data-scout-pos]');
+  const button=event.target.closest('[data-action],[data-view],[data-player],[data-current-slot],[data-formation],[data-phase],[data-download-player],[data-contract-filter],[data-scout-position],[data-scout-pos]');
   if(!button)return;
   Promise.resolve().then(async()=>{
     if(button.dataset.contractFilter) {state.contractsFilter.urgency=button.dataset.contractFilter;render();return;}
@@ -278,6 +285,11 @@ document.addEventListener('click',event=>{
     if(button.dataset.action)return action(button.dataset.action,button);
     if(button.dataset.view) {location.hash=button.dataset.view;if(state.view===button.dataset.view)navigate(button.dataset.view);return;}
     if(button.dataset.player)return showDialog(playerDialog(state,button.dataset.player));
+    if(button.dataset.currentSlot!==undefined) {
+      $('#current-editor-accordion').open=true;
+      const input=$('#current-player-'+button.dataset.currentSlot);
+      input?.scrollIntoView({block:'center'});input?.focus({preventScroll:true});return;
+    }
     if(button.dataset.phase) {state.phase=button.dataset.phase;render();return;}
     if(button.dataset.formation) {state.prefs.formation=button.dataset.formation;if(state.view!=='tactics'){state.view='tactics';location.hash='tactics';}return refresh();}
     if(button.dataset.downloadPlayer) {
@@ -308,13 +320,12 @@ document.addEventListener('change',event=>{
         const before=draft.lineup;const fresh=freshDraft(state.data,input.value);
         fresh.lineup.forEach((row,i)=>row.uid=before[i]?.uid||'');state.currentDraft={...fresh,name:draft.name,stored_id:draft.stored_id};
       } else if(field==='stored_id') {
-        draft.stored_id=input.value;
-        const selected=state.data.stored_tactics.records.find(t=>t.id===input.value);if(selected)draft.name=selected.name;
+        state.currentDraft=input.value?storedDraft(state.data,input.value):freshDraft(state.data);
       } else if(input.dataset.row!==undefined) {
         const row=draft.lineup[Number(input.dataset.row)];
         if(input.dataset.pi){if(input.value)row.instructions[input.dataset.pi]=input.value;else delete row.instructions[input.dataset.pi];}
         else {row[field]=field==='uid'?Number(input.value)||'':input.value;
-          if(field.endsWith('_position'))row[field.replace('_position','_role')]='';
+          if(field.endsWith('_position')){row[field.replace('_position','_role')]='';row[field.replace('_position','_side')]=null;}
           if(field.endsWith('_role')) {
             const phase=field==='ip_role'?'in_possession':'out_of_possession';
             for(const key of Object.keys(row.instructions))if(state.data.tactic_editor.player_options[key]?.phase===phase)delete row.instructions[key];

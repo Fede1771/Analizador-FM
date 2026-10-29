@@ -49,6 +49,38 @@ class ImportTests(unittest.TestCase):
             self.assertIs(state.dataset,previous);self.assertEqual(state.jobs['c'*32]['status'],'error')
             self.assertFalse((state.storage/'current.json').exists())
 
+    def test_tactic_upgrade_reuses_current_snapshot_and_preserves_original_import(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)/'imports';old=root/('f'*32)
+            write_snapshot(old/'output');fake_save(old/'save.fm')
+            (old/'import.json').write_text(json.dumps({'filename':'Mi club.fm','source_path':'original/Mi club.fm'}))
+            (root/'current.json').write_text(json.dumps({'folder':'f'*32}))
+            original=(old/'save.fm').read_bytes()
+            state=self.state(tmp)
+            def extract(source, folder):
+                self.assertNotEqual(source, old/'save.fm')
+                write_snapshot(folder/'output')
+                (folder/'output/tactics.json').write_text(json.dumps({'schema_version':2,'available':True,'records':[]}))
+            with patch.object(state,'_extract',side_effect=extract):
+                job=state.reimport_current(state.dataset['id'])
+                state.executor.submit(lambda:None).result(timeout=30)
+            self.assertEqual(state.jobs[job]['status'],'done')
+            self.assertEqual(state.dataset['stored_tactics']['schema_version'],2)
+            self.assertEqual(state.dataset['source']['filename'],'Mi club.fm')
+            self.assertEqual((old/'save.fm').read_bytes(),original)
+            self.assertEqual(state.store.current(),state.store.folder(job))
+
+    def test_tactic_upgrade_submission_failure_does_not_leave_app_busy(self):
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)/'imports';old=root/('f'*32)
+            write_snapshot(old/'output');fake_save(old/'save.fm')
+            (root/'current.json').write_text(json.dumps({'folder':'f'*32}))
+            state=self.state(tmp)
+            with patch.object(state.executor,'submit',side_effect=RuntimeError('closed')):
+                with self.assertRaisesRegex(RuntimeError,'closed'):
+                    state.reimport_current(state.dataset['id'])
+            self.assertFalse(state.busy())
+
     def test_engine_update_replaces_outdated_explanations(self):
         with TemporaryDirectory() as tmp:
             root=Path(tmp)/'imports';output=root/('d'*32)/'output';write_snapshot(output)

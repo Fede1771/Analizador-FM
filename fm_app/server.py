@@ -141,6 +141,13 @@ class Handler(BaseHTTPRequestHandler):
                 data = state.dataset
             if data is None:
                 return self.reply(409, {'error': 'Cargá una partida .fm para continuar.'})
+            if self.path == '/api/tactics/refresh':
+                if params.get('dataset_id') != data['id']:
+                    return self.reply(409, {'error':'La partida cambió. Volvé a cargar la táctica.'})
+                job_id = state.reimport_current(data['id'])
+                if job_id is None:
+                    return self.reply(409, {'error':'Ya hay una importación en curso.'})
+                return self.reply(202, {'job_id':job_id})
             if self.path == '/api/preferences':
                 if params.get('career_id') != data['career_id']:
                     return self.reply(409, {'error': 'La carrera cambió.'})

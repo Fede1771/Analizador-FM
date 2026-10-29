@@ -8,7 +8,7 @@ export function matchesObservedContext(observation, rows, index, phase) {
     : !row.instruction_scope || row.instruction_scope === 'Posición' ? 'position' : null;
   const peers = rows.map((r,i) => r[phase + '_position'] === position ? i : -1).filter(i => i >= 0);
   const rank = peers.indexOf(index);
-  const side = peers.length === 1 ? null : rank === 0 ? 'left' : rank === peers.length - 1 ? 'right' : 'centre';
+  const side = peers.length === 1 ? null : row[phase+'_side'] || (rank === 0 ? 'left' : rank === peers.length - 1 ? 'right' : 'centre');
   return required.position === position && required.scope === scope
     && (required.side == null || required.side === side)
     && (required.count == null || required.count === peers.length);

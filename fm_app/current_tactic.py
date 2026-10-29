@@ -12,15 +12,26 @@ POSITIONS={'GK':(50,91),'DL':(13,70),'DR':(87,70),'DC':(50,76),'WBL':(12,58),'WB
 
 
 def extract_stored_tactics(career, club_uid):
+    from fm_app.tactic_reader import decode_record, read_team_selections, TACTIC_SCHEMA_VERSION
+    tactics = [t for t in career.tactics() if t.club_uid == club_uid]
+    selection_error = None
+    try:
+        selections = read_team_selections(career, tactics)
+    except Exception as error:
+        selections = {}
+        selection_error = str(error)
     records=[]
-    for tactic in career.tactics():
-        if tactic.club_uid!=club_uid:continue
-        records.append({'id':f'{tactic.team_id}:{tactic.index}','team_slot':tactic.team_slot,
+    for tactic in tactics:
+        records.append(decode_record({'id':f'{tactic.team_id}:{tactic.index}','team_slot':tactic.team_slot,
             'name':tactic.name or f'Táctica {tactic.index+1}', 'style_name':tactic.style_name,
             'mentality':MENTALITIES.get(tactic.mentality.raw,'Sin identificar'),
-            'raw':asdict(tactic)})
-    return {'available':True,'records':records,'active_identified':False,
-        'limitations':'El lector recupera las copias guardadas y la mentalidad; no identifica la activa, el once, ni traduce posiciones, roles o instrucciones. Nombre y estilo requieren cotejo con el juego.'}
+            'raw':asdict(tactic)}, selections.get(tactic.team_id)))
+    primary = min((t.team_slot for t in tactics if t.team_slot is not None), default=0)
+    first_team = [r for r in records if r['team_slot'] == primary]
+    return {'available':True,'schema_version':TACTIC_SCHEMA_VERSION,'records':records,
+        'active_identified':len(first_team)==1,'active_id':first_team[0]['id'] if len(first_team)==1 else None,
+        'selection_error':selection_error,
+        'limitations':'Posiciones y roles leídos de la partida. El once es la selección guardada del equipo. Si hay varias copias, elegí la que usás en FM. Las instrucciones individuales y colectivas aún requieren confirmación manual.'}
 
 
 def coordinates(rows, key):
@@ -31,6 +42,9 @@ def coordinates(rows, key):
         index=same.index(len(values))
         if len(same)>1:
             x+= (index-(len(same)-1)/2)*(24 if position=='DC' else 25)
+        side = row.get(key.replace('_position','_side'))
+        if position in ('DC','DM','MC','AMC','STC') and side in ('left','right','centre'):
+            x = {'left':38,'right':62,'centre':50}[side]
         values.append([max(5,min(95,x)),y])
     return values
 
@@ -100,7 +114,7 @@ def audit_tactic(dataset, params):
             phase_label = 'Con posesión (CP)' if phase == 'ip' else 'Sin posesión (SP)'
             value=role_score(p,role_id,style,position);values.append(value)
             alternatives=sorted([(rid,role_score(p,rid,style,position)) for rid,ref in ROLES.items() if ref['phase']==r['phase'] and position in ref['positions'] and rid!=role_id],key=lambda v:(-v[1],v[0]))[:2]
-            context = position_context([r[phase+'_position'] for r in rows], index, row.get('instruction_scope','Posición'))
+            context = position_context([r[phase+'_position'] for r in rows], index, row.get('instruction_scope','Posición'), [p[0] for p in points[phase]])
             plan=explanation(p,{'id':role_id,'score':value,'position':position,'alternatives':[]},style,context)
             plan['comparison']='Rol confirmado por vos. Las alternativas siguientes comparan atributos; revisá su función antes de cambiarlas.'
             plan['alternatives']=[{'id':rid,'name':ROLES[rid]['name'],'score':s} for rid,s in alternatives]

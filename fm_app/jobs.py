@@ -93,6 +93,37 @@ class AppState:
                 raise
         return job_id
 
+    def reimport_current(self, dataset_id):
+        """Upgrade the current snapshot without depending on the watch folder or FM saving again."""
+        with self.lock:
+            if not self.dataset or self.dataset['id'] != dataset_id:
+                raise ValueError('La partida cambió. Volvé a cargar la táctica.')
+            current = self.store.current()
+            if current is None or not (current/'save.fm').is_file():
+                raise ValueError('Esta importación no conserva la copia .fm. Volvé a importar tu partida.')
+            metadata = read_json(current/'import.json', {})
+            job_id = self.reserve('copying', 'Actualizando la lectura táctica de tu partida…')
+            if job_id:
+                try:
+                    self.executor.submit(self._reimport_snapshot, job_id, current/'save.fm', metadata)
+                except Exception as error:
+                    self.progress(job_id, 'error', str(error))
+                    raise
+            return job_id
+
+    def _reimport_snapshot(self, job_id, source, metadata):
+        try:
+            folder = self.store.folder(job_id)
+            folder.mkdir(parents=True)
+            target = folder/'save.fm'
+            shutil.copy2(source, target)
+            self._validate_save(target)
+            atomic_json(folder/'import.json', {**metadata, 'imported_at':datetime.now(timezone.utc).isoformat()})
+            self.import_save(job_id, target, folder)
+        except Exception as error:
+            self.progress(job_id, 'error', str(error))
+            logger.exception('Falló la actualización de lectura táctica')
+
     @staticmethod
     def signature(path):
         st = path.stat()
