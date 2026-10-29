@@ -55,7 +55,7 @@ def _extract_slot_role_and_mask(source, phase):
     unknown = source.get('unknown') or {}
     settings = source.get(prefix + '_settings')
     trail = unknown.get(prefix + '_trail_bits')
-    if isinstance(settings, list) and len(settings) > 0 and type(trail) is int:
+    if isinstance(settings, (list, tuple)) and len(settings) > 0 and type(trail) is int:
         active_word = (int(settings[-1].get('second_bits_high', 0)) & 0xFFFFFFFF) | ((int(trail) & 0xFFFFFFFF) << 32)
         active_role_bit = active_word & ~DUTY_MASK
         entry_roles = [int(unknown.get(prefix + '_role_bits', 0))]

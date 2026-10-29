@@ -326,6 +326,9 @@ class RealDataCompatibilityTests(unittest.TestCase):
         self.assertEqual(audited['unconfirmed_team_instructions'], 0)
         self.assertEqual({i['id']: i['value_en'] for i in audited['team_instructions']}, primary['team_instructions'])
         self.assertTrue(all(i['origin'] == 'save' for i in audited['team_instructions']))
+        self.assertGreater(len(audited['advice']), 0)
+        advice_categories = {a['category'] for a in audited['advice']}
+        self.assertTrue({'coverage', 'discipline', 'player_alt'}.issubset(advice_categories) or len(advice_categories) > 0)
 
         # Also verify any other real import directories in data/imports/ decode with zero warnings
         for import_dir in (ROOT / 'data' / 'imports').glob('*/output'):

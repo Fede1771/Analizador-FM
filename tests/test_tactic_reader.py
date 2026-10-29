@@ -108,6 +108,16 @@ class TacticReaderTests(unittest.TestCase):
         self.assertEqual(stc_row['instructions']['shoot_ip'], 'Standard')
         self.assertEqual(stc_row['instruction_sources']['shoot_ip'], 'role')
 
+        # Test tuple compatibility (fmsave dataclasses return tuple of settings)
+        slots[9]['in_possession_settings'] = tuple(slots[9]['in_possession_settings'])
+        slots[9]['out_of_possession_settings'] = tuple(slots[9]['out_of_possession_settings'])
+        decoded_tuple = decode_record(record, list(range(1, 12)))
+        stc_tuple = decoded_tuple['lineup'][9]
+        self.assertEqual(stc_tuple['ip_role'], 'deep_lying_forward_ip')
+        self.assertEqual(stc_tuple['oop_role'], 'centre_forward_oop')
+        self.assertEqual(stc_tuple['instructions']['passing_directness_ip'], 'Shorter')
+        self.assertEqual(stc_tuple['instruction_sources']['passing_directness_ip'], 'save')
+
     def test_oop_3_cycle_permutation_follows_target_slot_index(self):
         record = raw_record()
         slots = record['raw']['slots']
