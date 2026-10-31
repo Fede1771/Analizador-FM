@@ -106,6 +106,76 @@ class CurrentTacticTests(unittest.TestCase):
         result = audit_tactic(self.data, plan)
         self.assertEqual(result['unconfirmed_team_instructions'], 0)
 
+    def test_shooting_advice_respects_collective_patience_predicate(self):
+        plan = self.plan()
+        row = next(r for r in plan['lineup'] if r['ip_position'] == 'STC')
+        row['instructions'] = {'shoot_ip': 'Shoot More Often'}
+
+        plan['team'] = {'patience_ip': 'Work Ball Into Box'}
+        res1 = audit_tactic(self.data, plan)
+        adv1 = next(a for a in res1['advice'] if a['category'] == 'shooting' and a['player_uid'] == row['uid'])
+        self.assertIn('Llevar el balón al área', adv1['detail'])
+
+        plan['team'] = {}
+        res2 = audit_tactic(self.data, plan)
+        adv2 = next(a for a in res2['advice'] if a['category'] == 'shooting' and a['player_uid'] == row['uid'])
+        self.assertNotIn('Llevar el balón al área', adv2['detail'])
+
+    def test_tackling_advice_respects_collective_get_stuck_in_predicate(self):
+        plan = self.plan()
+        test_data = deepcopy(self.data)
+        p_uid = plan['lineup'][1]['uid']
+        p_match = next(p for p in test_data['players'] if p['uid'] == p_uid)
+        p_match['attributes']['tackling'] = 8
+        row = plan['lineup'][1]
+        row['instructions'] = {'tackling_oop': 'Tackle Harder'}
+
+        plan['team'] = {'tackling_oop': 'Get Stuck In'}
+        res1 = audit_tactic(test_data, plan)
+        adv1 = next(a for a in res1['advice'] if a['category'] == 'discipline' and a['player_uid'] == row['uid'])
+        self.assertIn('orden colectiva de ser más agresivos', adv1['detail'])
+
+        plan['team'] = {}
+        res2 = audit_tactic(test_data, plan)
+        adv2 = next(a for a in res2['advice'] if a['category'] == 'discipline' and a['player_uid'] == row['uid'])
+        self.assertNotIn('orden colectiva', adv2['detail'])
+
+    def test_familiarity_advice_phrasing_and_phases(self):
+        plan = self.plan()
+        test_data = deepcopy(self.data)
+        p_uid = plan['lineup'][1]['uid']
+        p = next(p for p in test_data['players'] if p['uid'] == p_uid)
+        p['positions'][plan['lineup'][1]['ip_position'].lower()] = 10
+        p['positions'][plan['lineup'][1]['oop_position'].lower()] = 10
+        res = audit_tactic(test_data, plan)
+        fam_advices = [a for a in res['advice'] if a['category'] == 'familiarity' and a['player_uid'] == p_uid]
+        self.assertTrue(len(fam_advices) >= 1)
+        for a in fam_advices:
+            self.assertNotIn('sin penalización de rendimiento', a['detail'])
+            if a['phase'] == 'ip':
+                self.assertIn('ofensiva (con posesión)', a['detail'])
+                self.assertNotIn('posición defensiva', a['detail'])
+            elif a['phase'] == 'oop':
+                self.assertIn('defensiva (sin posesión)', a['detail'])
+
+    def test_audit_tactic_mentality_resolution(self):
+        plan = self.plan()
+        res1 = audit_tactic(self.data, plan)
+        self.assertIsNone(res1.get('mentality'))
+
+        plan['mentality'] = 'Cauta'
+        res2 = audit_tactic(self.data, plan)
+        self.assertEqual(res2.get('mentality'), 'Cauta')
+
+        test_data = deepcopy(self.data)
+        test_data['stored_tactics'] = {
+            'records': [{'id': 'rec1', 'mentality': 'Ofensivo'}]
+        }
+        del plan['mentality']
+        plan['stored_id'] = 'rec1'
+        res3 = audit_tactic(test_data, plan)
+        self.assertEqual(res3.get('mentality'), 'Ofensivo')
+
 
 class DesktopTests(unittest.TestCase):
     def test_second_launch_activates_without_opening_browser(self):

@@ -43,16 +43,25 @@ class AppState:
             styles = bundle.get('styles', {}) if bundle.get('engine_version') == ENGINE_VERSION and bundle.get('dataset_id') == data['id'] else {}
             if not isinstance(styles, dict):
                 styles = {}
+            rebuilt = False
+            styles_to_save = {}
             for style in STYLES:
                 result = styles.get(style)
                 if not isinstance(result, dict) or not all(k in result for k in ('profiles','tactics','evaluated_formations')) or not isinstance(result.get('profiles'), dict) or not isinstance(result.get('tactics'), list) or result.get('style') != style:
                     result = analyze(data, style, data['default_primary_slot'])
+                    rebuilt = True
+                styles_to_save[style] = result
                 result['profiles'] = {int(uid): p for uid, p in result['profiles'].items()}
                 # JSON object keys become strings, including maps nested in proposals.
                 for entry in [result, *result.get('tactics', []), result.get('requested_tactic')]:
                     if isinstance(entry, dict) and isinstance(entry.get('surplus_players'), dict):
                         entry['surplus_players'] = {int(uid): p for uid, p in entry['surplus_players'].items()}
                 self.cache[cache_key(data['id'], style, data['default_primary_slot'])] = result
+            if rebuilt or bundle.get('engine_version') != ENGINE_VERSION or bundle.get('dataset_id') != data['id']:
+                try:
+                    atomic_json(folder/'output/analysis_bundle.json', {'engine_version': ENGINE_VERSION, 'dataset_id': data['id'], 'styles': styles_to_save})
+                except Exception:
+                    logger.warning('No se pudo persistir el bundle reconstruido en _restore()', exc_info=True)
             self.dataset = data
         except (ValueError, KeyError, TypeError, OSError) as error:
             self.cache.clear()

@@ -40,6 +40,23 @@ class ImportTests(unittest.TestCase):
             restored=AppState(state.storage);self.addCleanup(restored.close)
             self.assertEqual(restored.cache,state.cache)
 
+    def test_restore_persists_rebuilt_bundle_when_bundle_missing(self):
+        with TemporaryDirectory() as tmp:
+            state=self.state(tmp);job='b'*32;folder=state.store.folder(job)
+            write_snapshot(folder/'output')
+            with patch.object(state,'_extract'):
+                state.import_save(job,folder/'save.fm',folder)
+            bundle_path = folder/'output/analysis_bundle.json'
+            self.assertTrue(bundle_path.exists())
+            bundle_path.unlink()
+            self.assertFalse(bundle_path.exists())
+            restored = AppState(state.storage)
+            self.addCleanup(restored.close)
+            self.assertTrue(bundle_path.exists())
+            persisted = json.loads(bundle_path.read_text(encoding='utf-8'))
+            self.assertEqual(persisted.get('dataset_id'), state.dataset['id'])
+            self.assertEqual(len(persisted.get('styles', {})), len(STYLES))
+
     def test_failed_import_preserves_current_data(self):
         with TemporaryDirectory() as tmp:
             state=self.state(tmp);previous={'id':'previous','club':'Anterior'};state.dataset=previous

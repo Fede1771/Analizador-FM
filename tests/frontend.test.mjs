@@ -5,7 +5,8 @@ import {RequestGate} from '../web/api.js';
 import {date,esc} from '../web/format.js';
 import {matchesObservedContext} from '../web/instruction-context.js';
 import {supportRunsRecovery,rolePlan} from '../web/tactics-view.js';
-import {storedDraft,reconcileCurrentDraft,draftPitch,currentView,CURRENT_READER_VERSION} from '../web/current-view.js';
+import {storedDraft,reconcileCurrentDraft,draftPitch,currentView,CURRENT_READER_VERSION,actionKey,isActionChecked} from '../web/current-view.js';
+import {companionView} from '../web/views.js';
 
 const data={id:'save1',career_id:'career',default_primary_slot:0,slots:[0,1],styles:{possession:{},press:{}},players:[{uid:1,name:'Álvarez',team_slot:0,natural_positions:['STC'],age:23},{uid:2,name:'Gómez',team_slot:1,natural_positions:['MC'],age:18}],formations_catalog:[{id:'352'}],instruction_options:{tempo:[{value:'Lower'}]}};
 
@@ -186,4 +187,150 @@ test('currentView and rolePlan separate value provenance badges from control ava
   assert.ok(planHtml.includes('❓ Disponibilidad no verificada'));
   assert.ok(planHtml.includes('💡 Recomendación'));
   assert.ok(planHtml.includes('⚙️ Editable comprobado'));
+});
+
+
+test('reconcileCurrentDraft preserves personal scope and marking targets bound to UID, not slot index, and resets empty slots', () => {
+  const club = brightonData();
+  club.tactic_editor.roles = {
+    goalkeeper_ip: {phase: 'in_possession', positions: ['GK'], name: 'Portero'},
+    centre_back_ip: {phase: 'in_possession', positions: ['DC'], name: 'Defensa Central'},
+  };
+  club.tactic_editor.player_options = {
+    passing_directness_ip: {phase: 'in_possession', label: 'Pases', options: [{value: 'Shorter', label: 'Más cortos'}, {value: 'Standard', label: 'Estándar'}]},
+  };
+
+  const initial = storedDraft(club);
+  const saved = {
+    ...initial,
+    lineup: initial.lineup.map((r, i) => {
+      if (i === 0) {
+        return {
+          ...r,
+          instruction_scope: 'Personalizada',
+          marking_target_player: 'Rival Star',
+          instructions: {passing_directness_ip: 'Shorter'},
+          instruction_sources: {passing_directness_ip: 'manual'},
+        };
+      }
+      return r;
+    }),
+  };
+
+  const refreshedClub = brightonData();
+  refreshedClub.id = 'save2';
+  refreshedClub.tactic_editor = club.tactic_editor;
+  const p1 = refreshedClub.stored_tactics.records[1].lineup[0];
+  const p2 = refreshedClub.stored_tactics.records[1].lineup[1];
+  refreshedClub.stored_tactics.records[1].lineup[0] = {...p2, uid: 2};
+  refreshedClub.stored_tactics.records[1].lineup[1] = {...p1, uid: 1};
+
+  const reconciled = reconcileCurrentDraft(refreshedClub, saved);
+
+  const slotForP1 = reconciled.lineup.find(r => r.uid === 1);
+  assert.equal(slotForP1.instruction_scope, 'Personalizada');
+  assert.equal(slotForP1.marking_target_player, 'Rival Star');
+  assert.equal(slotForP1.instructions.passing_directness_ip, 'Shorter');
+  assert.equal(slotForP1.instruction_sources.passing_directness_ip, 'manual');
+
+  const slotForP2 = reconciled.lineup.find(r => r.uid === 2);
+  assert.equal(slotForP2.instruction_scope, 'Posición');
+  assert.equal(slotForP2.marking_target_player, '');
+  assert.equal(slotForP2.instructions.passing_directness_ip, undefined);
+
+  const manualDraft = {
+    ...initial,
+    source: 'manual',
+    lineup: initial.lineup.map((r, i) => i === 0 ? {...r, uid: 99999, instruction_scope: 'Personalizada', marking_target_player: 'Rival'} : r),
+  };
+  const reconciledManual = reconcileCurrentDraft(club, manualDraft);
+  assert.equal(reconciledManual.lineup[0].uid, '');
+  assert.equal(reconciledManual.lineup[0].instruction_scope, 'Posición');
+  assert.equal(reconciledManual.lineup[0].marking_target_player, '');
+});
+
+test('companionView resolves mentality correctly without hardcoded Positiva fallback', () => {
+  const club = brightonData();
+
+  const stateProposal = {
+    data: club,
+    view: 'tactics',
+    prefs: {formation: 'auto', style: 'counter'},
+    analysis: {
+      tactics: [{
+        name: '4-3-3 Contrataque',
+        fm26_mentality: 'Cauta',
+        tactical_recommendations: [{action: 'Probar rol alternativo', category: 'role_alt', title: 'Rol alternativo'}],
+      }],
+    },
+    simulation: null,
+    currentResult: null,
+  };
+  const htmlProp = companionView(stateProposal);
+  assert.ok(htmlProp.includes('Mentalidad Cauta'));
+  assert.ok(!htmlProp.includes('Mentalidad Positiva'));
+
+  const stateUnknown = {
+    data: club,
+    view: 'tactics',
+    prefs: {formation: 'auto', style: 'possession'},
+    analysis: {
+      tactics: [{
+        name: '4-3-3 Posesión',
+        fm26_mentality: null,
+        tactical_recommendations: [],
+      }],
+    },
+    simulation: null,
+    currentResult: null,
+  };
+  const htmlUnknown = companionView(stateUnknown);
+  assert.ok(htmlUnknown.includes('Mentalidad desconocida'));
+  assert.ok(!htmlUnknown.includes('Mentalidad Positiva'));
+
+  const stateCurrent = {
+    data: club,
+    view: 'current',
+    prefs: {formation: '433', style: 'press'},
+    currentResult: {
+      name: 'Mi Once Titular',
+      style: 'press',
+      mentality: 'Ofensivo',
+      advice: [{action: 'Presionar salida', category: 'press', title: 'Presión'}],
+    },
+  };
+  const htmlCurr = companionView(stateCurrent);
+  assert.ok(htmlCurr.includes('Mentalidad Ofensivo'));
+});
+
+test('checklist identity isolates phases and careers and migrates legacy marks', () => {
+  const store = new Map();
+  globalThis.localStorage = {
+    getItem: (k) => store.get(k) || null,
+    setItem: (k, v) => store.set(k, String(v)),
+    removeItem: (k) => store.delete(k),
+    clear: () => store.clear(),
+  };
+
+  const cpItem = {player_uid: 1, phase: 'ip', category: 'role_alt', action: 'Probar Interior'};
+  const spItem = {player_uid: 1, phase: 'oop', category: 'role_alt', action: 'Probar Pivote'};
+
+  const keyCp = actionKey(cpItem, 'career1');
+  const keySp = actionKey(spItem, 'career1');
+  const keyOtherCareer = actionKey(cpItem, 'career2');
+
+  assert.notEqual(keyCp, keySp);
+  assert.ok(keyCp.includes('_ip_'));
+  assert.ok(keySp.includes('_oop_'));
+
+  assert.notEqual(keyCp, keyOtherCareer);
+  assert.ok(keyCp.startsWith('career1:'));
+  assert.ok(keyOtherCareer.startsWith('career2:'));
+
+  const legacyKey = '1_role_alt';
+  localStorage.setItem('touchline:chk:' + legacyKey, '1');
+  assert.equal(isActionChecked(keyCp, legacyKey), true);
+  assert.equal(localStorage.getItem('touchline:chk:' + keyCp), '1');
+
+  assert.equal(isActionChecked('non_existent_key', 'legacy_none'), false);
 });

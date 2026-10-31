@@ -5,6 +5,37 @@ import {matchesObservedContext} from './instruction-context.js';
 
 export const CURRENT_READER_VERSION = 3;
 
+export function actionKey(item, careerId = '') {
+  const cPrefix = careerId ? `${careerId}:` : '';
+  const target = item.player_uid != null ? String(item.player_uid) : 'team';
+  const phase = item.phase || 'all';
+  const category = item.category || 'act';
+  const actSlug = (item.action || item.title || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 32);
+  return `${cPrefix}${target}_${phase}_${category}_${actSlug}`;
+}
+
+export function isActionChecked(key, legacyKey) {
+  try {
+    const val = localStorage.getItem('touchline:chk:' + key);
+    if (val === '1') return true;
+    if (val === '0') return false;
+    if (legacyKey) {
+      const legVal = localStorage.getItem('touchline:chk:' + legacyKey);
+      if (legVal === '1') {
+        localStorage.setItem('touchline:chk:' + key, '1');
+        return true;
+      }
+    }
+  } catch {}
+  return false;
+}
+
 export function isDraftComplete(draft) {
   if(!draft||!Array.isArray(draft.lineup)||draft.lineup.length!==11)return false;
   const uids=new Set();
@@ -42,20 +73,36 @@ export function reconcileCurrentDraft(data,saved) {
         refreshed.team_sources[id]='manual';
       }
     }
+    const savedByUid = new Map((saved.lineup || []).filter(r => r && r.uid).map(r => [r.uid, r]));
     refreshed.lineup=refreshed.lineup.map((row,index)=>{
-      const old=saved.lineup[index]||{};
-      if(old.instruction_scope==='Personalizada')row.instruction_scope='Personalizada';
-      if(old.marking_target_player&&!row.marking_target_player)row.marking_target_player=old.marking_target_player;
-      if(old.marking_target_position&&!row.marking_target_position)row.marking_target_position=old.marking_target_position;
-      const oldInst=old.instructions||{}, oldSrc=old.instruction_sources||{};
-      for(const [id,v] of Object.entries(oldInst)) {
-        const opt=playerOpts[id];
-        if(!opt?.options?.some(o=>o.value===v))continue;
-        const phase=opt.phase==='in_possession'?'ip':'oop';
-        const sameRole=!old[phase+'_role']||!row[phase+'_role']||old[phase+'_role']===row[phase+'_role'];
-        if(sameRole&&(saved.reader_version<CURRENT_READER_VERSION||oldSrc[id]==='manual')) {
-          row.instructions[id]=v;
-          row.instruction_sources[id]='manual';
+      const slotOld = saved.lineup?.[index] || {};
+      const playerOld = row.uid ? savedByUid.get(row.uid) : null;
+      if (playerOld?.instruction_scope === 'Personalizada') {
+        row.instruction_scope = 'Personalizada';
+        if (playerOld.marking_target_player && !row.marking_target_player) row.marking_target_player = playerOld.marking_target_player;
+        if (playerOld.marking_target_position && !row.marking_target_position) row.marking_target_position = playerOld.marking_target_position;
+        const oldInst = playerOld.instructions || {}, oldSrc = playerOld.instruction_sources || {};
+        for (const [id, v] of Object.entries(oldInst)) {
+          const opt = playerOpts[id];
+          if (!opt?.options?.some(o => o.value === v)) continue;
+          const phase = opt.phase === 'in_possession' ? 'ip' : 'oop';
+          const sameRole = !playerOld[phase + '_role'] || !row[phase + '_role'] || playerOld[phase + '_role'] === row[phase + '_role'];
+          if (sameRole && (saved.reader_version < CURRENT_READER_VERSION || oldSrc[id] === 'manual')) {
+            row.instructions[id] = v;
+            row.instruction_sources[id] = 'manual';
+          }
+        }
+      } else if (slotOld.instruction_scope !== 'Personalizada') {
+        const oldInst = slotOld.instructions || {}, oldSrc = slotOld.instruction_sources || {};
+        for (const [id, v] of Object.entries(oldInst)) {
+          const opt = playerOpts[id];
+          if (!opt?.options?.some(o => o.value === v)) continue;
+          const phase = opt.phase === 'in_possession' ? 'ip' : 'oop';
+          const sameRole = !slotOld[phase + '_role'] || !row[phase + '_role'] || slotOld[phase + '_role'] === row[phase + '_role'];
+          if (sameRole && (saved.reader_version < CURRENT_READER_VERSION || oldSrc[id] === 'manual')) {
+            row.instructions[id] = v;
+            row.instruction_sources[id] = 'manual';
+          }
         }
       }
       return row;
@@ -81,12 +128,20 @@ export function reconcileCurrentDraft(data,saved) {
       const role=editor.roles?.[old[phase+'_role']];
       if(role?.phase===(phase==='ip'?'in_possession':'out_of_possession')&&role.positions.includes(row[phase+'_position']))row[phase+'_role']=old[phase+'_role'];
     }
-    row.instruction_scope = old.instruction_scope || 'Posición';
-    row.marking_target_player = old.marking_target_player || '';
-    row.marking_target_position = old.marking_target_position || '';
-    const oldSrc=old.instruction_sources||{};
-    row.instructions=Object.fromEntries(Object.entries(old.instructions||{}).filter(([id,v])=>playerOpts[id]?.options?.some(o=>o.value===v)));
-    row.instruction_sources=Object.fromEntries(Object.keys(row.instructions).map(id=>[id,oldSrc[id]||'manual']));
+    if(!row.uid) {
+      row.instruction_scope = 'Posición';
+      row.marking_target_player = '';
+      row.marking_target_position = '';
+      row.instructions = {};
+      row.instruction_sources = {};
+    } else {
+      row.instruction_scope = old.instruction_scope || 'Posición';
+      row.marking_target_player = old.marking_target_player || '';
+      row.marking_target_position = old.marking_target_position || '';
+      const oldSrc=old.instruction_sources||{};
+      row.instructions=Object.fromEntries(Object.entries(old.instructions||{}).filter(([id,v])=>playerOpts[id]?.options?.some(o=>o.value===v)));
+      row.instruction_sources=Object.fromEntries(Object.keys(row.instructions).map(id=>[id,oldSrc[id]||'manual']));
+    }
     return row;
   });
   return base;
@@ -164,6 +219,7 @@ function renderAdviceCard(a) {
 
 export function renderDynamicChecklist(result, state) {
   const actionItems = (result.advice || []).filter(a => a.action);
+  const careerId = state?.data?.career_id || state?.draft?.career_id || '';
   if (!actionItems.length) {
     return `
       <div class="match-checklist-card">
@@ -185,15 +241,14 @@ export function renderDynamicChecklist(result, state) {
     `;
   }
 
-  const savedKeys = [];
+  const checkedKeys = [];
   actionItems.forEach((item, idx) => {
-    const key = (item.player_uid || 'team') + '_' + (item.category || item.title || idx);
-    try {
-      if (localStorage.getItem('touchline:chk:' + key) === '1') savedKeys.push(key);
-    } catch {}
+    const key = actionKey(item, careerId);
+    const legacyKey = (item.player_uid || 'team') + '_' + (item.category || item.title || idx);
+    if (isActionChecked(key, legacyKey)) checkedKeys.push(key);
   });
 
-  const allChecked = (savedKeys.length === actionItems.length);
+  const allChecked = (checkedKeys.length === actionItems.length);
 
   return `
     <div class="match-checklist-card">
@@ -206,14 +261,14 @@ export function renderDynamicChecklist(result, state) {
           </div>
         </div>
         <div class="checklist-status-pill ${allChecked ? 'status-ready' : 'status-pending'}">
-          <span id="checklist-counter">${savedKeys.length} de ${actionItems.length} aplicados por vos</span>
+          <span id="checklist-counter">${checkedKeys.length} de ${actionItems.length} aplicados por vos</span>
         </div>
       </div>
 
       <div class="checklist-items">
         ${actionItems.map((item, idx) => {
-          const key = (item.player_uid || 'team') + '_' + (item.category || item.title || idx);
-          const isDone = savedKeys.includes(key);
+          const key = actionKey(item, careerId);
+          const isDone = checkedKeys.includes(key);
           const phaseBadge = item.phase === 'ip' ? '<span class="phase-badge phase-cp">CP · Con posesión</span>' : item.phase === 'oop' ? '<span class="phase-badge phase-sp">SP · Sin posesión</span>' : '<span class="phase-badge">Equipo</span>';
           return `
             <label class="checklist-item ${isDone ? 'checked' : ''}" data-audit-item="${esc(key)}">

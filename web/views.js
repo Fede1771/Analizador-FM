@@ -1,6 +1,7 @@
 import {esc, date, number, score, playerButton, groupName, pos} from './format.js';
 import {filteredPlayers} from './session.js';
 import {formationCards, tacticResult, rolePlan, supportRunsRecovery} from './tactics-view.js';
+import {actionKey, isActionChecked} from './current-view.js';
 
 export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',contracts:'Contratos',scouting:'Ojeo',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
 
@@ -660,13 +661,23 @@ export function companionView(state) {
   const styleName = isCurrent ? (data?.styles?.[currentResult.style]?.name || currentResult.style) : (data?.styles?.[state.prefs?.style]?.name || 'Posesión');
   const contextTag = isCurrent ? 'MINI-HUD · MI TÁCTICA' : 'MINI-HUD · PROPUESTAS';
 
+  const rawMentality = isCurrent
+    ? (currentResult?.mentality || currentResult?.fm26_mentality || null)
+    : (tactic?.fm26_mentality || tactic?.mentality || null);
+  const mentalityText = (rawMentality && rawMentality !== 'Sin identificar')
+    ? `Mentalidad ${esc(rawMentality)}`
+    : 'Mentalidad desconocida';
+
+  const careerId = data?.career_id || state?.draft?.career_id || '';
   const actions = [];
   if (isCurrent && currentResult?.advice) {
     for (const a of currentResult.advice) {
       if (a.action) {
-        const itemId = (a.player_uid || 'team') + '_' + (a.category || a.title);
+        const itemId = actionKey(a, careerId);
+        const legacyId = (a.player_uid || 'team') + '_' + (a.category || a.title);
         actions.push({
           id: itemId,
+          legacyId: legacyId,
           title: a.title,
           text: a.action,
           phase: a.phase_label || (a.phase==='ip'?'Con posesión':a.phase==='oop'?'Sin posesión':'Equipo')
@@ -676,9 +687,11 @@ export function companionView(state) {
   } else if (tactic?.tactical_recommendations) {
     for (const a of tactic.tactical_recommendations) {
       if (a.action) {
-        const itemId = 'prop_' + (a.category || a.title);
+        const itemId = actionKey(a, careerId);
+        const legacyId = 'prop_' + (a.category || a.title);
         actions.push({
           id: itemId,
+          legacyId: legacyId,
           title: a.title,
           text: a.action,
           phase: 'Propuesta'
@@ -687,8 +700,8 @@ export function companionView(state) {
     }
   }
   if (!actions.length) {
-    actions.push({id: 'once', title: 'Confirmar once', text: 'Verificá el once titular en FM antes de iniciar.', phase: 'Pre-partido'});
-    actions.push({id: 'roles', title: 'Verificar roles', text: 'Revisá que los roles asignados coincidan con el plan táctico.', phase: 'Pre-partido'});
+    actions.push({id: 'once', legacyId: '', title: 'Confirmar once', text: 'Verificá el once titular en FM antes de iniciar.', phase: 'Pre-partido'});
+    actions.push({id: 'roles', legacyId: '', title: 'Verificar roles', text: 'Revisá que los roles asignados coincidan con el plan táctico.', phase: 'Pre-partido'});
   }
 
   return `
@@ -702,7 +715,7 @@ export function companionView(state) {
         <div class="companion-meta">
           <span class="meta-pill">${esc(formationName)}</span>
           <span class="meta-pill">${esc(styleName)}</span>
-          <span class="meta-pill">Mentalidad ${esc(tactic?.mentality || 'Positiva')}</span>
+          <span class="meta-pill">${mentalityText}</span>
         </div>
       </div>
 
@@ -714,7 +727,7 @@ export function companionView(state) {
           </div>
           <div class="companion-checklist">
             ${actions.map((act) => {
-              const isChecked = localStorage.getItem('touchline:chk:' + act.id) === '1';
+              const isChecked = isActionChecked(act.id, act.legacyId);
               return `
               <label class="companion-check-item ${isChecked ? 'checked' : ''}">
                 <input type="checkbox" data-companion-check="${esc(act.id)}" ${isChecked ? 'checked' : ''}>

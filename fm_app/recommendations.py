@@ -684,35 +684,82 @@ def slot_choices(player,spec,style):
 
 
 
-def assignment(players,slots,style,evaluate=None):
+_MASK_TRANSITIONS = {}
 
-    n=len(slots)
-
-    if len(players)<n:return None
-
-    dp={0:(0.0,())}
-
-    for p in players:
-
-        scores=[(evaluate(p,s) if evaluate else slot_choices(p,s,style))[2] for s in slots]
-
-        updates={}
-
-        for mask,(value,chosen) in dp.items():
-
+def _get_transitions(n):
+    if n not in _MASK_TRANSITIONS:
+        num_masks = 1 << n
+        table = []
+        for mask in range(num_masks):
+            trans = []
             for i in range(n):
+                if not (mask & (1 << i)):
+                    trans.append((i, mask | (1 << i)))
+            table.append(tuple(trans))
+        _MASK_TRANSITIONS[n] = tuple(table)
+    return _MASK_TRANSITIONS[n]
 
-                if mask&(1<<i):continue
 
-                newmask=mask|(1<<i); candidate=value+scores[i]
+def assignment(players, slots, style, evaluate=None):
+    n = len(slots)
+    m = len(players)
+    if m < n:
+        return None
+    if n == 0:
+        return (0.0, ())
 
-                if candidate>max(dp.get(newmask,(-1,()))[0],updates.get(newmask,(-1,()))[0]):
+    all_scores = [[(evaluate(p, s) if evaluate else slot_choices(p, s, style))[2] for s in slots] for p in players]
 
-                    updates[newmask]=(candidate,chosen+((i,p['uid'],round(scores[i],1)),))
+    num_masks = 1 << n
+    dp_val = [-1.0] * num_masks
+    dp_val[0] = 0.0
+    active_masks = [0]
 
-        dp.update(updates)
+    step_val = [-1.0] * num_masks
+    step_prev = [-1] * num_masks
+    step_slot = [-1] * num_masks
 
-    return dp[(1<<n)-1]
+    transitions = _get_transitions(n)
+    history = []
+
+    for p_idx in range(m):
+        scores = all_scores[p_idx]
+        touched = []
+        for mask in active_masks:
+            val = dp_val[mask]
+            for slot_i, newmask in transitions[mask]:
+                cand = val + scores[slot_i]
+                if cand > dp_val[newmask] and cand > step_val[newmask]:
+                    if step_val[newmask] < 0:
+                        touched.append(newmask)
+                    step_val[newmask] = cand
+                    step_prev[newmask] = mask
+                    step_slot[newmask] = slot_i
+
+        hist_entry = {}
+        for newmask in touched:
+            cand = step_val[newmask]
+            prev_m = step_prev[newmask]
+            slot_i = step_slot[newmask]
+            if dp_val[newmask] < 0:
+                active_masks.append(newmask)
+            dp_val[newmask] = cand
+            hist_entry[newmask] = (prev_m, slot_i, scores[slot_i])
+            step_val[newmask] = -1.0
+        history.append(hist_entry)
+
+    curr = (1 << n) - 1
+    picked = []
+    for p_idx in range(m - 1, -1, -1):
+        step = history[p_idx]
+        if curr in step:
+            prev_m, slot_i, sc = step[curr]
+            picked.append((slot_i, players[p_idx]['uid'], round(sc, 1)))
+            curr = prev_m
+            if curr == 0:
+                break
+    picked.reverse()
+    return dp_val[(1 << n) - 1], tuple(picked)
 
 
 
@@ -1139,6 +1186,7 @@ class AnalysisContext:
             'formation': {k: form[k] for k in ('id','name','defensive','category','idea')},
             'style': self.style, 'fm26_style': STYLES[self.style]['fm26_style'],
             'fm26_style_alt': STYLES[self.style]['fm26_style_alt'],
+            'mentality': self.parsed['recommended_mentality'] if self.parsed else STYLES[self.style]['mentality'],
             'fm26_mentality': self.parsed['recommended_mentality'] if self.parsed else STYLES[self.style]['mentality'],
             'score': round(total / 11, 1), 'lineup': lineup, 'bench': [p['uid'] for p in bench],
             'bench_replacements': replacements, 'risks': risks + [STYLES[self.style]['risk']],

@@ -119,6 +119,22 @@ def audit_tactic(dataset, params):
                     if dms < sub_rule['min_defensive_midfielders']:
                         raise ValueError(f'{by_id[row["uid"]]["name"]}: {ROLES[role]["name"]} ({sub_rule["description"]})')
         if sum(r[phase+'_position']=='GK' for r in rows)!=1:raise ValueError('El once necesita un arquero en cada fase.')
+    team=params.get('team',{})
+    if not isinstance(team,dict):raise ValueError('Instrucciones de equipo no válidas.')
+    for key,value in team.items():
+        if key not in TI or value not in TI[key]['options']:raise ValueError('Instrucción de equipo no válida.')
+    ok, err = check_support_runs_compatibility(team.get('overlap_ip'), team.get('underlap_ip'))
+    if not ok:
+        raise ValueError(err)
+    stored_rec = None
+    if stored_id:
+        stored_rec = next((r for r in dataset.get('stored_tactics', {}).get('records', []) if r.get('id') == stored_id), None)
+    mentality = params.get('mentality') or params.get('fm26_mentality')
+    if not mentality and stored_rec:
+        rec_mentality = stored_rec.get('mentality')
+        if rec_mentality and rec_mentality != 'Sin identificar':
+            mentality = rec_mentality
+
     points={phase:coordinates(rows,phase+'_position') for phase in ('ip','oop')}
     lineup=[];advice=[]
     for index,row in enumerate(rows):
@@ -205,6 +221,7 @@ def audit_tactic(dataset, params):
                 target_fam = p['positions'].get(best_target.lower(), 20)
                 target_roles = [(rid, role_score(p, rid, style, best_target)) for rid, ref in ROLES.items() if ref['phase'] == r['phase'] and best_target in ref['positions']]
                 best_target_role_name = ROLES[max(target_roles, key=lambda x: x[1])[0]]['name'] if target_roles else r['name']
+                pos_phase_desc = 'ofensiva (con posesión)' if phase == 'ip' else 'defensiva (sin posesión)'
                 advice.append({
                     'title': f'Puesto de {p["name"]}',
                     'player_uid': p['uid'],
@@ -214,7 +231,7 @@ def audit_tactic(dataset, params):
                     'current_position': pos_label,
                     'suggested_position': best_target_label,
                     'suggested_role': best_target_role_name,
-                    'detail': f'En {phase_label}, juega en {pos_label} ({pos_full}) donde tiene familiaridad regular de {fam}/20. Recomendado cambiar su posición defensiva a {best_target_label} ({best_target_full}, {target_fam}/20 Natural) con el rol de {best_target_role_name} para jugar en su puesto natural sin penalización de rendimiento.',
+                    'detail': f'En {phase_label}, juega en {pos_label} ({pos_full}) donde tiene familiaridad regular de {fam}/20. Recomendado cambiar su posición {pos_phase_desc} a {best_target_label} ({best_target_full}, {target_fam}/20 Natural) con el rol de {best_target_role_name} para jugar en su puesto natural y optimizar su rendimiento.',
                     'category': 'familiarity',
                     'severity': 'purple',
                     'badge': '🟣 Posición no natural',
@@ -259,14 +276,19 @@ def audit_tactic(dataset, params):
                 'chips':['Fase: Sin posesión (SP)', 'Presión: Más a menudo', 'Marca: De cerca', f'Puesto: {pos_label}']
             })
         if supplied.get('tackling_oop')=='Tackle Harder':
+            has_collective_tackle = (team.get('tackling_oop') == 'Get Stuck In')
             if p['attributes']['tackling']<10:
+                if has_collective_tackle:
+                    detail_text = f'En Sin posesión (SP), tiene Entradas {p["attributes"]["tackling"]}/20 y agresividad {p["attributes"]["aggression"]}/20. Con la orden de «Entrar más fuerte» y la orden colectiva de ser más agresivos, arriesga tarjetas amarillas y expulsiones tempranas.'
+                else:
+                    detail_text = f'En Sin posesión (SP), tiene Entradas {p["attributes"]["tackling"]}/20 y agresividad {p["attributes"]["aggression"]}/20. Con la orden de «Entrar más fuerte», arriesga tarjetas amarillas y expulsiones tempranas ante duelos comprometidos.'
                 advice.append({
                     'title':f'Entradas de {p["name"]}',
                     'player_uid': p['uid'],
                     'player_name': p['name'],
                     'phase': 'oop',
                     'phase_label': 'Sin posesión (SP)',
-                    'detail':f'En Sin posesión (SP), tiene Entradas {p["attributes"]["tackling"]}/20 y agresividad {p["attributes"]["aggression"]}/20. Con la orden de «Entrar más fuerte» y la orden colectiva de ser agresivos, arriesga tarjetas amarillas y expulsiones tempranas.',
+                    'detail':detail_text,
                     'category':'discipline',
                     'severity':'danger',
                     'badge':'🔴 Alto riesgo de tarjetas',
@@ -288,26 +310,24 @@ def audit_tactic(dataset, params):
                     'chips':['Fase: Sin posesión (SP)', f'Entradas: {p["attributes"]["tackling"]}/20', f'Agresividad: {p["attributes"]["aggression"]}/20', 'Orden: Entrar más fuerte']
                 })
         if supplied.get('shoot_ip')=='Shoot More Often':
+            has_collective_patience = (team.get('patience_ip') == 'Work Ball Into Box')
+            if has_collective_patience:
+                shoot_detail = f'En Con posesión (CP), tiene Remate {p["attributes"]["finishing"]}/20 y tiros lejanos {p["attributes"]["long_shots"]}/20. Como el equipo juega con «Llevar el balón al área», evaluar cambiar a Normal para no apresurar remates desde lejos ante bloques cerrados.'
+            else:
+                shoot_detail = f'En Con posesión (CP), tiene Remate {p["attributes"]["finishing"]}/20 y tiros lejanos {p["attributes"]["long_shots"]}/20. Evaluar cambiar a Normal para no apresurar remates desde lejos ante bloques cerrados.'
             advice.append({
                 'title':f'Remates de {p["name"]}',
                 'player_uid': p['uid'],
                 'player_name': p['name'],
                 'phase': 'ip',
                 'phase_label': 'Con posesión (CP)',
-                'detail':f'En Con posesión (CP), tiene Remate {p["attributes"]["finishing"]}/20 y tiros lejanos {p["attributes"]["long_shots"]}/20. Como el equipo juega con «Llevar el balón al área», evaluar cambiar a Normal para no apresurar remates desde lejos ante bloques cerrados.',
+                'detail':shoot_detail,
                 'category':'shooting',
                 'severity':'info',
                 'badge':'🎯 Selección de tiro',
                 'action':f'Comparar con «Disparos en Normal» (remate {p["attributes"]["finishing"]}/20, lejanos {p["attributes"]["long_shots"]}/20)',
                 'chips':['Fase: Con posesión (CP)', f'Remate: {p["attributes"]["finishing"]}/20', f'Tiros lejanos: {p["attributes"]["long_shots"]}/20', 'Orden: Disparar más']
             })
-    team=params.get('team',{})
-    if not isinstance(team,dict):raise ValueError('Instrucciones de equipo no válidas.')
-    for key,value in team.items():
-        if key not in TI or value not in TI[key]['options']:raise ValueError('Instrucción de equipo no válida.')
-    ok, err = check_support_runs_compatibility(team.get('overlap_ip'), team.get('underlap_ip'))
-    if not ok:
-        raise ValueError(err)
     if team.get('short_goalkeeper_distribution_oop') == 'Yes':
         advice.append({
             'title': 'Impedir salida en corto del portero rival',
@@ -354,7 +374,7 @@ def audit_tactic(dataset, params):
     team_sources = params.get('team_sources') if isinstance(params.get('team_sources'), dict) else {}
     team_items = [instruction('team', k, v, 'Valor colectivo leído de la partida guardada.' if team_sources.get(k) == 'save' else 'Valor colectivo confirmado por vos.', 'save' if team_sources.get(k) == 'save' else 'confirmed') for k, v in team.items()]
     count=sum(x[k]['unconfirmed_instructions'] for x in lineup for k in ('in_possession','out_of_possession'))
-    return {'dataset_id':dataset['id'],'name':str(params.get('name','Mi táctica'))[:100], 'style':style,
+    return {'dataset_id':dataset['id'],'name':str(params.get('name','Mi táctica'))[:100], 'style':style, 'mentality':mentality,
         'score':round(sum(x['score'] for x in lineup)/11,1),'lineup':lineup,'team_instructions':team_items,'advice':advice,
         'coverage':coverage(lineup,by_id,team),'unconfirmed_player_instructions':count,
         'unconfirmed_team_instructions':len(TI)-len(team),
