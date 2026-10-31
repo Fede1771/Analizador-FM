@@ -202,6 +202,8 @@ def decode_record(record, selection=None):
 
 
 def read_team_selections(career, tactics):
+    from fm_app.fmsave_patch import apply_fmsave_patches
+    apply_fmsave_patches()
     """Small adapter to fmsave 0.5.11's checked section layout and selector index.
 
     Keep empty slots in place. fmsave's public table filters them out, which would

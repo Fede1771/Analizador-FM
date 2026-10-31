@@ -205,6 +205,20 @@ try {
     await evaluate(`document.querySelector('#dialog-close').click()`);
   });
   await check('preferences survive a new save',async()=>{await change({id:'save-next'});await wait(`document.querySelector('#source-label') && !document.querySelector('#activity').hidden`,'dataset refresh');await wait(`document.querySelector('#activity').hidden`,'refresh finished');await navigate('tactics');await ready();assert.equal(await evaluate(`document.querySelector('#formation-select').value`),'352');assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');});
+  await check('sidebar icons and collapsible menu toggle', async () => {
+    const navSvgCount = await evaluate(`document.querySelectorAll('#nav a .nav-icon svg').length`);
+    assert.equal(navSvgCount, 9);
+    const toggle = await evaluate(`document.querySelector('#sidebar-toggle') !== null`);
+    assert.ok(toggle);
+    await evaluate(`document.querySelector('#sidebar-toggle').click()`);
+    assert.ok(await evaluate(`document.body.classList.contains('sidebar-collapsed')`));
+    assert.equal(await evaluate(`localStorage.getItem('touchline:sidebar_collapsed')`), '1');
+    const shot = await send('Page.captureScreenshot', { format: 'png' });
+    fs.writeFileSync(path.join(folder, 'touchline-sidebar-collapsed.png'), Buffer.from(shot.data, 'base64'));
+    await evaluate(`document.querySelector('#sidebar-toggle').click()`);
+    assert.equal(await evaluate(`document.body.classList.contains('sidebar-collapsed')`), false);
+    assert.equal(await evaluate(`localStorage.getItem('touchline:sidebar_collapsed')`), '0');
+  });
   await check('desktop layout',async()=>{await evaluate(`document.querySelectorAll('details').forEach(d=>d.open=false);window.scrollTo(0,0)`);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-desktop.png'),Buffer.from(shot.data,'base64'));});
   await check('responsive layout and keyboard focus',async()=>{await send('Emulation.setDeviceMetricsOverride',{width:760,height:1000,deviceScaleFactor:1,mobile:false});await sleep(200);assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));await evaluate(`document.querySelector('#formation-select').focus()`);assert.equal(await evaluate(`document.activeElement.id`),'formation-select');const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'touchline-responsive.png'),Buffer.from(shot.data,'base64'));});
   await check('stored tactic loads and evaluates both phases and tactical advice',async()=>{

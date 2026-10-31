@@ -24,10 +24,19 @@ from fm_app.fm26 import TI, ROLES
 class RealDataCompatibilityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        current_meta = ROOT / 'data' / 'imports' / 'current.json'
+        if current_meta.exists():
+            try:
+                curr_folder = json.loads(current_meta.read_text(encoding='utf-8')).get('folder')
+                candidate = ROOT / 'data' / 'imports' / curr_folder
+                if (candidate / 'output' / 'validation.json').exists():
+                    cls.real_import_dir = candidate
+                    return
+            except Exception:
+                pass
         cls.real_import_dir = ROOT / 'data' / 'imports' / 'f3e1b2a01d114dec8357197394a9810f'
         if not cls.real_import_dir.exists():
-            # Fallback to any directory in data/imports/ with output/validation.json
-            candidates = list((ROOT / 'data' / 'imports').glob('*/output/validation.json'))
+            candidates = sorted((ROOT / 'data' / 'imports').glob('*/output/validation.json'), key=lambda p: p.stat().st_mtime, reverse=True)
             if candidates:
                 cls.real_import_dir = candidates[0].parent.parent
             else:

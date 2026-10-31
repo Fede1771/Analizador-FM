@@ -1,8 +1,25 @@
+const SIDEBAR_COLLAPSED_KEY = 'touchline:sidebar_collapsed';
+
+function applySidebarCollapsed(collapsed) {
+  document.body.classList.toggle('sidebar-collapsed', collapsed);
+  const btn = $('#sidebar-toggle');
+  if (btn) {
+    btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    btn.setAttribute('title', collapsed ? 'Expandir menú' : 'Colapsar menú (ganar espacio)');
+  }
+}
+
+try {
+  if (localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === '1') {
+    document.body.classList.add('sidebar-collapsed');
+  }
+} catch (_) {}
+
 import {api, upload, RequestGate} from './api.js';
 import {currentView, freshDraft, storedDraft, reconcileCurrentDraft, isDraftComplete} from './current-view.js';
 import {reconcile, preferenceKey, contextKey} from './session.js';
 import {esc, date} from './format.js';
-import {navigation, welcome, overview, tactics, contractsView, scoutingView, companionView, roster, methodology, playerRows, playerDialog, groupDialog, syncDialog} from './views.js';
+import {navigation, navIcons, welcome, overview, tactics, contractsView, scoutingView, companionView, roster, methodology, playerRows, playerDialog, groupDialog, syncDialog} from './views.js';
 
 const $ = selector => document.querySelector(selector);
 const gate = new RequestGate();
@@ -49,7 +66,11 @@ function render({focusHeading=false}={}) {
   }
   $('#sidebar').hidden=!state.data;
   document.body.classList.toggle('has-dataset',!!state.data);
-  $('#nav').innerHTML=Object.entries(navigation).map(([key,label])=>`<a href="#${key}" ${key===state.view?'aria-current="page"':''}>${label}</a>`).join('');
+  $('#nav').innerHTML=Object.entries(navigation).map(([key,label])=>{
+    const icon = navIcons[key] || '';
+    const active = key===state.view ? 'aria-current="page"' : '';
+    return `<a href="#${key}" ${active} title="${label}"><span class="nav-icon" aria-hidden="true">${icon}</span><span class="nav-label">${label}</span></a>`;
+  }).join('');
   $('#source-label').textContent=state.data?`${state.data.source.filename} · ${date(state.data.date)}`:'Análisis local · Football Manager 26';
   $('#groups-button').hidden=!state.data;
   const compBtn=$('#companion-button'); if(compBtn) compBtn.hidden=!state.data;
@@ -77,6 +98,12 @@ function render({focusHeading=false}={}) {
   }
   if(focusHeading) {const h=content.querySelector('h1');h?.setAttribute('tabindex','-1');h?.focus({preventScroll:true});window.scrollTo(0,0);}
   progress();
+  const toggleBtn = $('#sidebar-toggle');
+  if (toggleBtn) {
+    const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+    toggleBtn.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+    toggleBtn.setAttribute('title', isCollapsed ? 'Expandir menú' : 'Colapsar menú (ganar espacio)');
+  }
 }
 
 async function persist() {
@@ -306,6 +333,15 @@ async function action(name, button) {
 }
 
 document.addEventListener('click',event=>{
+  const toggle = event.target.closest('#sidebar-toggle');
+  if (toggle) {
+    const isCollapsed = !document.body.classList.contains('sidebar-collapsed');
+    applySidebarCollapsed(isCollapsed);
+    try {
+      localStorage.setItem(SIDEBAR_COLLAPSED_KEY, isCollapsed ? '1' : '0');
+    } catch (_) {}
+    return;
+  }
   const button=event.target.closest('[data-action],[data-view],[data-player],[data-current-slot],[data-formation],[data-phase],[data-download-player],[data-contract-filter],[data-scout-position],[data-scout-pos]');
   if(!button)return;
   Promise.resolve().then(async()=>{
@@ -444,7 +480,15 @@ document.addEventListener('submit',event=>{
   }).catch(error=>toast(error.message,true));
 });
 
-document.addEventListener('keydown',event=>{if((event.target.id==='prompt-input'||event.target.id==='quick-prompt-input')&&event.key==='Enter'&&(event.ctrlKey||event.metaKey||event.target.id==='quick-prompt-input')){event.preventDefault();action('apply-prompt').catch(error=>toast(error.message,true));}});
+document.addEventListener('keydown',event=>{
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'b') {
+    event.preventDefault();
+    const isCollapsed = !document.body.classList.contains('sidebar-collapsed');
+    applySidebarCollapsed(isCollapsed);
+    try { localStorage.setItem(SIDEBAR_COLLAPSED_KEY, isCollapsed ? '1' : '0'); } catch (_) {}
+    return;
+  }
+if((event.target.id==='prompt-input'||event.target.id==='quick-prompt-input')&&event.key==='Enter'&&(event.ctrlKey||event.metaKey||event.target.id==='quick-prompt-input')){event.preventDefault();action('apply-prompt').catch(error=>toast(error.message,true));}});
 document.addEventListener('dragover',event=>{if(event.target.closest('.upload-drop')){event.preventDefault();event.target.closest('.upload-drop').classList.add('dragover');}});
 document.addEventListener('dragleave',event=>event.target.closest('.upload-drop')?.classList.remove('dragover'));
 document.addEventListener('drop',event=>{const drop=event.target.closest('.upload-drop');if(drop){event.preventDefault();drop.classList.remove('dragover');startImport(event.dataTransfer.files[0]);}});

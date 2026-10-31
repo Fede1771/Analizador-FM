@@ -38,6 +38,8 @@ def refresh_stored_tactics(stored_tactics):
 
 
 def extract_stored_tactics(career, club_uid):
+    from fm_app.fmsave_patch import apply_fmsave_patches
+    apply_fmsave_patches()
     from fm_app.tactic_reader import decode_record, read_team_selections, TACTIC_SCHEMA_VERSION
     tactics = [t for t in career.tactics() if t.club_uid == club_uid]
     selection_error = None

@@ -16,18 +16,17 @@ Leé tu partida, revisá tu esquema con y sin pelota y compará alternativas par
 4. **Cargá tu partida.** Usá **Importar partida**, arrastrá un archivo `.fm` o configurá la sincronización automática.
 5. **Entrá en Mi táctica** y pulsá **Cargar táctica de la partida**. Revisá el once y los datos cargados antes de confirmar el análisis.
 
-### Qué cambió en la versión 1.0.4
+### Qué cambió en la versión 1.0.5
 
-Touchline 1.0.4 optimiza el rendimiento del motor analítico y robustece la consistencia del diagnóstico y las instrucciones individuales:
+Touchline 1.0.5 incorpora un menú lateral colapsable con iconos para maximizar el área de trabajo táctico y refuerza la lectura en partidas avanzadas o con bloques múltiples de FM26:
 
-- **Propuestas ~3,7x más rápidas:** asignación del once optimizada mediante programación dinámica por máscaras de bits con transiciones precalculadas, manteniendo el 100% de equivalencia en selecciones y desempates.
-- **Inicios subsecuentes instantáneos (~29x más rápidos):** persistencia atómica de la caché de análisis reconstruida (`analysis_bundle.json`), evitando recálculos repetidos al reabrir la app.
-- **Instrucciones personalizadas y marcas ligadas al jugador (UID):** el ámbito `Personalizada`, las marcas individuales y las órdenes manuales siguen fielmente al futbolista al cambiar de puesto o renovar el guardado, sin trasladarse erróneamente al jugador que ocupe el índice numérico de la fila.
-- **Mentalidad táctica auténtica en la mini-guía:** resolución precisa de la mentalidad real (`fm26_mentality` o `mentality`) tanto en propuestas como en táctica actual, eliminando el valor artificial «Positiva» por defecto.
-- **Diagnósticos tácticos con contexto real:** advertencias de remates y disciplina condicionadas estrictamente a las órdenes colectivas reales (`Llevar el balón al área` y `Ser más agresivos`), y sugerencias de familiaridad diferenciadas por fase ofensiva/defensiva.
-- **Aislamiento de la lista de comprobación:** prevención de colisiones entre fases (CP vs SP), soporte multi-carrera y migración transparente de marcas previas sin pérdida de tildes.
+- **Menú lateral colapsable con iconos vectoriales:** cada una de las 9 secciones cuenta con un icono SVG representativo. El nuevo botón de alternancia en la cabecera (y el atajo `Ctrl+B` / `Cmd+B`) permite colapsar el menú lateral de 224 px a 66 px, liberando **158 px** de ancho útil en pantalla para analizar el campo, las tarjetas y las tablas con máxima holgura.
+- **Persistencia de preferencia de menú:** el estado expandido o colapsado se guarda automáticamente en `localStorage` y se recuerda entre sesiones. En modo compacto, cada icono muestra el nombre de la sección en tooltip al pasar el cursor.
+- **Resolución de partidas con bloques tácticos múltiples:** en partidas de FM26 donde coinciden copias internas de la táctica (como ocurre en clubes como Chelsea o guardados con instantáneas del motor de partidos), el lector ahora acota la búsqueda estructural a los bloques activos de cabecera y recupera los identificadores de equipo sin descartarlos, eliminando la advertencia `tactics_team_blocks_match_club=0` y cargando el esquema y los 11 titulares al 100%.
+- **Filtrado de avisos de depuración ajenos:** se omiten los mensajes técnicos que remitían a URLs de issues externas cuando los datos del guardado ya se descifraron de forma limpia y transparente.
+- **Rendimiento y exactitud matemática preservados:** se mantienen las mejoras de velocidad de la 1.0.4 (asignación por programación dinámica con máscaras de bits ~3,7x más rápida, inicios instantáneos con caché atómica `analysis_bundle.json`) con estricta paridad numérica.
 
-Consultá las [notas de la versión 1.0.4](docs/releases/1.0.4.md) y [1.0.3](docs/releases/1.0.3.md) para más detalles.
+Consultá las [notas de la versión 1.0.5](docs/releases/1.0.5.md) y [1.0.4](docs/releases/1.0.4.md) para más detalles.
 
 ## Qué podés hacer
 
@@ -122,7 +121,7 @@ Las capturas son ejemplos de la interfaz. Los jugadores, las alertas y las opcio
 
 - **Plataforma:** aplicación de escritorio para Windows.
 - **Partidas:** archivos `.fm` de hasta 400 MB, compatibles con el lector de FM26. La importación actual requiere un único club gestionado.
-- **Lectura táctica 1.0.4:** verificada con FM26 26.3.2 y copias de partidas reales de Liverpool, Brighton y Manchester United. La compatibilidad con otros formatos o actualizaciones del juego depende del lector.
+- **Lectura táctica 1.0.5:** verificada con FM26 26.3.2 y copias de partidas reales de Chelsea, Liverpool, Brighton y Manchester United. La compatibilidad con otros formatos o actualizaciones del juego depende del lector.
 - **Procesamiento local:** las partidas se leen y analizan en tu PC; no se suben a servidores externos para realizar el análisis.
 - **Archivos originales:** Touchline trabaja sobre copias locales y conserva importaciones para poder restaurar el análisis. No escribe cambios en tu partida original.
 
@@ -134,7 +133,7 @@ En la versión instalada, los datos y registros se guardan en `%LOCALAPPDATA%\To
 | --- | --- |
 | No aparece mi partida | Comprobá la carpeta configurada o usá **Importar partida** para elegir el `.fm` directamente. |
 | Se carga otra carrera | Fijá el archivo que querés monitorear en la configuración de sincronización. |
-| Una importación anterior no muestra el esquema | Actualizá a 1.0.4 y pulsá **Cargar táctica de la partida**. Si ya no existe su copia local `.fm`, importá nuevamente el archivo. |
+| Una importación anterior no muestra el esquema | Actualizá a 1.0.5 y pulsá **Cargar táctica de la partida**. Si ya no existe su copia local `.fm`, importá nuevamente el archivo. |
 | Faltan titulares | Revisá si había puestos vacíos en la selección guardada de FM y guardá de nuevo después de completar el once. |
 | Marcaje a jugador o puesto específico | Cuando el guardado activa `Mark Specific` o `Mark Position`, indicá el nombre del jugador o el puesto rival en el subcontrol del editor. |
 | La partida resulta incompatible | Consultá el mensaje de error y el registro de extracción; el último análisis válido se conserva. |
@@ -165,10 +164,10 @@ Las pruebas del frontend requieren Node.js; las pruebas de navegador también re
 
 ### Generar el instalador
 
-La compilación requiere PyInstaller, WiX y la extensión `WixToolset.UI.wixext`. El MSI 1.0.4 se verificó con WiX 4.0.6 y su extensión 4.0.6.
+La compilación requiere PyInstaller, WiX y la extensión `WixToolset.UI.wixext`. El MSI 1.0.5 se verificó con WiX 4.0.6 y su extensión 4.0.6.
 
 ```powershell
-.\.venv\Scripts\python.exe -B tools/build_installer.py --version 1.0.4
+.\.venv\Scripts\python.exe -B tools/build_installer.py --version 1.0.5
 ```
 
 El resultado se guarda en `dist/Touchline-Analizador-FM26.msi`. Consultá las [herramientas de compilación y verificación](tools/README.md) para configurar `WIX_EXE` e inspeccionar el instalador.
@@ -178,6 +177,6 @@ El resultado se guarda en `dist/Touchline-Analizador-FM26.msi`. Consultá las [h
 - [Arquitectura](docs/arquitectura.md).
 - [Lectura táctica, instrucciones y cobertura por zonas](docs/tactica-actual-y-zonas.md).
 - [Referencia de FM26](docs/fm26-reference.md).
-- [Notas de la versión 1.0.4](docs/releases/1.0.4.md), [1.0.3](docs/releases/1.0.3.md), [1.0.2](docs/releases/1.0.2.md) y [1.0.1](docs/releases/1.0.1.md).
+- [Notas de la versión 1.0.5](docs/releases/1.0.5.md), [1.0.4](docs/releases/1.0.4.md), [1.0.3](docs/releases/1.0.3.md), [1.0.2](docs/releases/1.0.2.md) y [1.0.1](docs/releases/1.0.1.md).
 - [Scripts disponibles](scripts/README.md) y [herramientas auxiliares](tools/README.md).
 - [Índice completo de documentación](docs/README.md).

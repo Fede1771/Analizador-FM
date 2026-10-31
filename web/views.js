@@ -5,6 +5,18 @@ import {actionKey, isActionChecked} from './current-view.js';
 
 export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',contracts:'Contratos',scouting:'Ojeo',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
 
+export const navIcons = {
+  overview: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>',
+  current: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line><circle cx="12" cy="12" r="3.5"></circle><line x1="12" y1="3" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="21"></line></svg>',
+  tactics: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg>',
+  contracts: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>',
+  scouting: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+  squad: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>',
+  academy: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 10a6 6 0 0 0-6-6H3v2a6 6 0 0 0 6 6h3"></path><path d="M12 14a6 6 0 0 1 6-6h3v2a6 6 0 0 1-6 6h-3"></path><line x1="12" y1="22" x2="12" y2="10"></line></svg>',
+  loans: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>',
+  method: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+};
+
 export function welcome(state) {
   return `<section class="welcome"><span class="eyebrow">Tu partida, en tu equipo</span><h1>Conocé tu plantel.<br><em>Encontrá tu plan de juego.</em></h1><p>Analizá tu club de Football Manager 26, compará diez esquemas y decidí con explicaciones para cada jugador.</p><button class="upload-drop" data-action="import"><span aria-hidden="true">↥</span><strong>Elegí o arrastrá tu partida .fm</strong><small>Hasta 400 MB · Procesamiento local</small></button><div class="welcome-steps"><p><b>01</b> Cargá tu partida</p><p><b>02</b> Confirmá los grupos del club</p><p><b>03</b> Compará tu once y sus alternativas</p></div><p class="muted">La partida original se conserva. Touchline calcula un índice propio de encaje y no predice resultados de partidos.</p>${state.error?`<p class="notice warning">${esc(state.error)}</p><button class="button" data-action="reload">Reintentar conexión</button>`:''}<button class="text-button" data-action="sync">Configurar sincronización automática</button></section>`;
 }

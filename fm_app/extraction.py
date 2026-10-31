@@ -12,6 +12,9 @@ from pathlib import Path
 import warnings
 
 import fmsave
+from fm_app.fmsave_patch import apply_fmsave_patches
+
+apply_fmsave_patches()
 
 
 def serial(value):
@@ -172,7 +175,7 @@ def main():
                 "slot_labels": slot_labels,
                 "attributes_per_player": len(fields(fmsave.Attributes)),
                 "missing_required_fields": dict(missing), "sanity_errors": errors,
-                "reader_warnings": [str(w.message) for w in captured],
+                "reader_warnings": [str(w.message) for w in captured if "rhiever/fmsave" not in str(w.message)],
                 "field_status": statuses(),
                 "limitations": ["Sanity checks do not establish agreement with the game UI.",
                                 "Team slots are inferred from senior setup and age distributions; custom category names can be confirmed in settings.",
