@@ -52,12 +52,13 @@ try {
       const entry=value.params.entry;
       const expectedValidation = entry.text.includes('400') &&
         (entry.url?.includes('/api/simulate') || (expectingLegacyConflict && entry.url?.includes('/api/analyze')));
-      if(!expectedValidation)errors.push(entry.text);
+      const expectedStaleLab = entry.text.includes('409') && /\/api\/(insights|history\/player|players\/compare)$/.test(entry.url||'');
+      if(!expectedValidation&&!expectedStaleLab)errors.push(entry.text+' '+(entry.url||''));
     }
   });
   function send(method,params={}){return new Promise((resolve,reject)=>{const id=++sequence;pending.set(id,{resolve,reject});socket.send(JSON.stringify({id,method,params}));});}
   async function evaluate(expression){const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(result.exceptionDetails)throw new Error(result.exceptionDetails.exception?.description||result.exceptionDetails.text);return result.result.value;}
-  async function wait(expression,label,timeout=30000){const started=Date.now();while(Date.now()-started<timeout){if(await evaluate(expression))return;await sleep(150);}throw new Error('Timeout: '+label);}
+  async function wait(expression,label,timeout=30000){const started=Date.now();while(Date.now()-started<timeout){try{if(await evaluate(expression))return;}catch(error){if(!/Inspected target navigated|Execution context was destroyed|Cannot find context/.test(error.message))throw error;}await sleep(150);}throw new Error('Timeout: '+label);}
   async function check(name,fn){await fn();results.push(name);console.log('PASS '+name);}
   async function navigate(hash){await evaluate(`location.hash=${JSON.stringify(hash)}`);await sleep(100);}
   async function reload(){await evaluate(`document.documentElement.dataset.reloadPending='1'`);await send('Page.reload');await wait(`document.querySelector('#content') && !document.documentElement.dataset.reloadPending`,'fresh page document');}
@@ -207,7 +208,7 @@ try {
   await check('preferences survive a new save',async()=>{await change({id:'save-next'});await wait(`document.querySelector('#source-label') && !document.querySelector('#activity').hidden`,'dataset refresh');await wait(`document.querySelector('#activity').hidden`,'refresh finished');await navigate('tactics');await ready();assert.equal(await evaluate(`document.querySelector('#formation-select').value`),'352');assert.equal(await evaluate(`document.querySelector('#style-select').value`),'press');});
   await check('sidebar icons and collapsible menu toggle', async () => {
     const navSvgCount = await evaluate(`document.querySelectorAll('#nav a .nav-icon svg').length`);
-    assert.equal(navSvgCount, 9);
+    assert.equal(navSvgCount, 10);
     const toggle = await evaluate(`document.querySelector('#sidebar-toggle') !== null`);
     assert.ok(toggle);
     await evaluate(`document.querySelector('#sidebar-toggle').click()`);
@@ -305,6 +306,61 @@ try {
     await evaluate(`document.querySelector('#phase-oop').click()`);
     assert.equal(await evaluate(`document.querySelectorAll('.zone-cell').length`),25);
     assert.notEqual(await evaluate(`document.querySelector('.zone-grid').textContent`),before);
+  });
+  await check('player history survives reload and compares actual dated observations',async()=>{
+    await navigate('insights');await wait(`document.querySelector('.lab-timeline')`,'history chart');
+    assert.ok(await evaluate(`document.querySelector('#content').textContent.includes('Pases')`));
+    assert.ok(await evaluate(`document.querySelectorAll('.lab-timeline circle').length>=2`));
+    const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'lab-history.png'),Buffer.from(shot.data,'base64'));
+    await reload();await wait(`document.querySelector('.lab-timeline')`,'history after reload');
+  });
+  await check('comparison uses common role and remains usable at 420 pixels',async()=>{
+    await evaluate(`document.querySelector('[data-lab-tab="compare"]').click()`);
+    await wait(`document.querySelectorAll('.lab-comparison article').length===2`,'comparison');
+    await set('#lab-role','central_midfielder_ip');
+    await wait(`document.querySelector('.lab-comparison')`,'comparison after role change');
+    assert.ok(await evaluate(`document.querySelector('#content').textContent.includes('Mismo rol, puesto y estilo')`));
+    await send('Emulation.setDeviceMetricsOverride',{width:1360,height:920,deviceScaleFactor:1,mobile:false});
+    const desktop=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'lab-comparison-desktop.png'),Buffer.from(desktop.data,'base64'));
+    await send('Emulation.setDeviceMetricsOverride',{width:420,height:920,deviceScaleFactor:1,mobile:false});
+    assert.ok(await evaluate(`document.documentElement.scrollWidth<=window.innerWidth`));
+    await evaluate(`document.querySelector('.lab-comparison').scrollIntoView({block:'start'})`);
+    const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'lab-comparison-420.png'),Buffer.from(shot.data,'base64'));
+    await send('Emulation.setDeviceMetricsOverride',{width:1360,height:920,deviceScaleFactor:1,mobile:false});
+  });
+  await check('squad depth and comparable minutes display real denominators',async()=>{
+    await evaluate(`document.querySelector('[data-lab-tab="depth"]').click()`);await wait(`document.querySelector('.lab-axes')`,'depth');
+    assert.equal(await evaluate(`document.querySelectorAll('.lab-axis').length`),6);
+    let shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'lab-depth.png'),Buffer.from(shot.data,'base64'));
+    await evaluate(`document.querySelector('[data-lab-tab="minutes"]').click()`);
+    await wait(`document.querySelector('#content').textContent.includes('Goles + asistencias del Top 3')`,'minutes');
+    await wait(`document.querySelector('.lab-metrics strong')`,'minutes result');
+    assert.ok(await evaluate(`document.querySelector('#content').textContent.includes('no sobre todos los goles del club')`));
+    shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'lab-minutes.png'),Buffer.from(shot.data,'base64'));
+  });
+  await check('CSV preview commits only after confirmation and preserves linked preferences',async()=>{
+    const original=await (await fetch(url+'/api/data')).json();
+    const preferences=await (await fetch(url+'/api/preferences')).json();
+    const attrs=Object.keys(original.attributes);
+    const rows=[['uid','name','age','positions',...attrs,'minutes','goals','assists'],...original.players.map(p=>[p.uid,p.name,p.age,JSON.stringify(p.positions),...attrs.map(k=>p.attributes[k]),900,1,2])];
+    const csv=rows.map(row=>row.map(value=>'"'+String(value).replaceAll('"','""')+'"').join(',')).join('\r\n');
+    const tablePath=path.join(folder,'plantel-test.csv');fs.writeFileSync(tablePath,'\ufeff'+csv,'utf16le');
+    await evaluate(`document.querySelector('[data-action="import-table"]').click()`);
+    await wait(`document.querySelector('#table-import-form')`,'table form');
+    const doc=await send('DOM.getDocument');const node=await send('DOM.querySelector',{nodeId:doc.root.nodeId,selector:'input[name="table_file"]'});
+    await send('DOM.setFileInputFiles',{nodeId:node.nodeId,files:[tablePath]});
+    await set('input[name="date"]','2026-11-04');await set('input[name="stats_period"]','2026/27');
+    await evaluate(`document.querySelector('input[name="link_current"]').click();document.querySelector('#table-import-form').requestSubmit()`);
+    await wait(`document.querySelector('[data-action="commit-table"]')`,'table preview');
+    assert.equal((await (await fetch(url+'/api/data')).json()).id,original.id);
+    const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(path.join(folder,'lab-import-preview.png'),Buffer.from(shot.data,'base64'));
+    await evaluate(`document.querySelector('[data-action="commit-table"]').click()`);
+    await wait(`document.querySelector('#source-label').textContent.includes('plantel-test.csv')`,'published table',60000);
+    const imported=await (await fetch(url+'/api/data')).json();assert.equal(imported.career_id,original.career_id);assert.equal(imported.players.length,original.players.length);
+    const restored=await (await fetch(url+'/api/preferences')).json();assert.equal(restored.style,preferences.style);
+    await reload();await wait(`document.querySelector('.lab-tabs')`,'table after reload');
+    assert.equal((await (await fetch(url+'/api/data')).json()).id,imported.id);
+    await change({id:'after-table'});await navigate('tactics');await ready();
   });
   await check('insufficient squad stops without retry loop' ,async()=>{await change({id:'short-save',short:true});await wait(`document.querySelector('[role="alert"]')?.textContent.includes('suficientes')`,'insufficient squad');const before=await (await fetch(url+'/__test/counts')).json();await sleep(5500);const after=await (await fetch(url+'/__test/counts')).json();assert.equal(after['/api/simulate'],before['/api/simulate']);});
   await check('welcome and synchronization settings',async()=>{await change({empty:true});await send('Page.reload');await wait(`document.querySelector('.upload-drop')`,'welcome');await evaluate(`document.querySelector('#sync-button').click()`);await wait(`document.querySelector('#sync-form')`,'sync dialog');assert.ok(await evaluate(`document.querySelector('#retention-form')`));await evaluate(`document.querySelector('#dialog-close').click()`);});

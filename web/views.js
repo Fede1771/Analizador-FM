@@ -3,9 +3,10 @@ import {filteredPlayers} from './session.js';
 import {formationCards, tacticResult, rolePlan, supportRunsRecovery} from './tactics-view.js';
 import {actionKey, isActionChecked} from './current-view.js';
 
-export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',contracts:'Contratos',scouting:'Ojeo',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
+export const navigation = {overview:'Centro del club',current:'Mi táctica',tactics:'Propuestas',insights:'Análisis del plantel',contracts:'Contratos',scouting:'Ojeo',squad:'Plantilla',academy:'Inferiores',loans:'Cedidos',method:'Cómo se calcula'};
 
 export const navIcons = {
+  insights: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18M6 15l4-5 4 3 6-8"></path></svg>',
   overview: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg>',
   current: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="12" x2="21" y2="12"></line><circle cx="12" cy="12" r="3.5"></circle><line x1="12" y1="3" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="21"></line></svg>',
   tactics: '<svg class="nav-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg>',

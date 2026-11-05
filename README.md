@@ -16,7 +16,19 @@ Leé tu partida, revisá tu esquema con y sin pelota y compará alternativas par
 4. **Cargá tu partida.** Usá **Importar partida**, arrastrá un archivo `.fm` o configurá la sincronización automática.
 5. **Entrá en Mi táctica** y pulsá **Cargar táctica de la partida**. Revisá el once y los datos cargados antes de confirmar el análisis.
 
-### Qué cambió en la versión 1.0.5
+### Qué cambió en la versión 1.1.0
+
+La sección **Análisis del plantel** reúne cuatro vistas: **Evolución**, **Comparar**, **Profundidad** y **Minutos y aportes**. También permite importar un plantel desde una tabla CSV o HTML con vista previa. Las mejoras de lectura táctica, caché y menú colapsable de versiones anteriores se conservan.
+
+- **Historial local:** registra observaciones por carrera, ID de jugador y fecha del juego. Recupera las extracciones antiguas que todavía estén retenidas y mantiene el historial compacto aunque se eliminen copias `.fm` por retención.
+- **Comparación justa:** dos jugadores con el mismo rol, puesto y estilo, mostrando atributos, familiaridad, encaje y salario semanal cuando está disponible.
+- **Profundidad:** compara seis ejes de atributos entre el núcleo de hasta 16 jugadores de campo, la rotación y el grupo completo; muestra cobertura por puesto con familiaridad mínima de 15/20. Respeta el grupo y las exclusiones.
+- **Minutos y aportes:** reparto de minutos, concentración de goles y asistencias y participación por edades. Los porcentajes quedan pendientes si faltan jugadores, valores o períodos comparables.
+- **Importación alternativa:** CSV/TSV o HTML local, con validación de columnas, IDs únicos y familiaridades; primero se revisa y después se confirma. Los valores ocultos se rechazan.
+
+Consultá las [notas de la versión 1.1.0](docs/releases/1.1.0.md), la [guía de análisis e importación](docs/analisis-del-plantel.md) y las [capturas nuevas](docs/capturas-finales/README.md).
+
+### Mejoras anteriores de la versión 1.0.5
 
 Touchline 1.0.5 incorpora un menú lateral colapsable con iconos para maximizar el área de trabajo táctico y refuerza la lectura en partidas avanzadas o con bloques múltiples de FM26:
 
@@ -36,6 +48,7 @@ Consultá las [notas de la versión 1.0.5](docs/releases/1.0.5.md) y [1.0.4](doc
 | **Mi táctica** | Cargar el esquema, la selección guardada, los roles y las instrucciones de ambas fases, y revisar el once. |
 | **Propuestas** | Comparar las tres estructuras de mayor encaje entre diez formaciones y simular alternativas. |
 | **Plantilla e inferiores** | Revisar cobertura por puesto, sobrepoblación y posibles promociones de juveniles. |
+| **Análisis del plantel** | Seguir evolución, comparar jugadores y revisar profundidad, minutos y aportes ofensivos. |
 | **Cedidos** | Consultar jugadores a préstamo y comparar alternativas de regreso cuando hay datos disponibles. |
 | **Contratos** | Detectar vencimientos y priorizar decisiones de renovación o venta. |
 | **Ojeo** | Filtrar y comparar objetivos cuando la importación dispone de datos de ojeo. |
@@ -133,7 +146,9 @@ En la versión instalada, los datos y registros se guardan en `%LOCALAPPDATA%\To
 | --- | --- |
 | No aparece mi partida | Comprobá la carpeta configurada o usá **Importar partida** para elegir el `.fm` directamente. |
 | Se carga otra carrera | Fijá el archivo que querés monitorear en la configuración de sincronización. |
-| Una importación anterior no muestra el esquema | Actualizá a 1.0.5 y pulsá **Cargar táctica de la partida**. Si ya no existe su copia local `.fm`, importá nuevamente el archivo. |
+| Una importación anterior no muestra el esquema | Actualizá a 1.1.0 y pulsá **Cargar táctica de la partida**. Si ya no existe su copia local `.fm`, importá nuevamente el archivo. |
+| No aparecen porcentajes de minutos o aportes | Volvé a importar el `.fm` para extraer estadísticas de la temporada o importá una tabla completa con un mismo ámbito y período. Los datos ausentes se muestran como desconocidos. |
+| Solo hay un punto en Evolución | Cargá otro guardado de la misma carrera. No se reconstruyen observaciones que ya no existen. |
 | Faltan titulares | Revisá si había puestos vacíos en la selección guardada de FM y guardá de nuevo después de completar el once. |
 | Marcaje a jugador o puesto específico | Cuando el guardado activa `Mark Specific` o `Mark Position`, indicá el nombre del jugador o el puesto rival en el subcontrol del editor. |
 | La partida resulta incompatible | Consultá el mensaje de error y el registro de extracción; el último análisis válido se conserva. |
@@ -164,10 +179,10 @@ Las pruebas del frontend requieren Node.js; las pruebas de navegador también re
 
 ### Generar el instalador
 
-La compilación requiere PyInstaller, WiX y la extensión `WixToolset.UI.wixext`. El MSI 1.0.5 se verificó con WiX 4.0.6 y su extensión 4.0.6.
+La compilación requiere PyInstaller, WiX y la extensión `WixToolset.UI.wixext`. El MSI 1.1.0 se verificó con WiX 7.0.0 y su extensión 7.0.0.
 
 ```powershell
-.\.venv\Scripts\python.exe -B tools/build_installer.py --version 1.0.5
+.\.venv\Scripts\python.exe -B tools/build_installer.py --version 1.1.0
 ```
 
 El resultado se guarda en `dist/Touchline-Analizador-FM26.msi`. Consultá las [herramientas de compilación y verificación](tools/README.md) para configurar `WIX_EXE` e inspeccionar el instalador.
@@ -175,8 +190,10 @@ El resultado se guarda en `dist/Touchline-Analizador-FM26.msi`. Consultá las [h
 ## Documentación del proyecto
 
 - [Arquitectura](docs/arquitectura.md).
+- [Análisis del plantel e importación de tablas](docs/analisis-del-plantel.md).
+- [Criterios de diseño de la interfaz](docs/diseno-interfaz.md).
 - [Lectura táctica, instrucciones y cobertura por zonas](docs/tactica-actual-y-zonas.md).
 - [Referencia de FM26](docs/fm26-reference.md).
-- [Notas de la versión 1.0.5](docs/releases/1.0.5.md), [1.0.4](docs/releases/1.0.4.md), [1.0.3](docs/releases/1.0.3.md), [1.0.2](docs/releases/1.0.2.md) y [1.0.1](docs/releases/1.0.1.md).
+- [Notas de la versión 1.1.0](docs/releases/1.1.0.md), [1.0.5](docs/releases/1.0.5.md), [1.0.4](docs/releases/1.0.4.md), [1.0.3](docs/releases/1.0.3.md), [1.0.2](docs/releases/1.0.2.md) y [1.0.1](docs/releases/1.0.1.md).
 - [Scripts disponibles](scripts/README.md) y [herramientas auxiliares](tools/README.md).
 - [Índice completo de documentación](docs/README.md).

@@ -70,6 +70,7 @@ def main():
     parser = argparse.ArgumentParser(description='Touchline · Analizador FM26')
     parser.add_argument('--port', type=int, default=8765)
     parser.add_argument('--browser-only', action='store_true')
+    parser.add_argument('--server-only', action='store_true', help='Servidor local sin ventana, para verificación de la distribución.')
     parser.add_argument('--no-sync', action='store_true')
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
@@ -120,7 +121,9 @@ def main():
 
     server.request_shutdown = quit_requested.set
     try:
-        if args.browser_only:
+        if args.server_only:
+            quit_requested.wait()
+        elif args.browser_only:
             webbrowser.open(url)
             quit_requested.wait()
         else:
