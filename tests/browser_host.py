@@ -20,13 +20,6 @@ temp=TemporaryDirectory(prefix='touchline-ui-')
 server=create_app_server(port=0,storage=Path(temp.name)/'imports',config_file=Path(temp.name)/'sync.json',start_watcher=False)
 server.watcher.configure(folder=str(Path(temp.name)/'games'),enabled=False)
 original=dataset()
-for i, p in enumerate(original['players']):
-    p.update(season_stats={'available':True,'minutes':900+i*20,'goals':i%6,'assists':i%4,'appearances':12},
-             season_stats_scope='overall_club',season_stats_period='2026/27')
-older=deepcopy(original)
-older['date']='2026-09-24';older['id']='historical-test'
-for p in older['players']:p['attributes']['passing']=max(1,p['attributes']['passing']-1)
-server.state.history.record(older)
 from fm_app.tactics import FORMATION_CATALOG
 from fm_app.fm26 import ROLES
 stored_records=[]

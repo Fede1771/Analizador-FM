@@ -15,7 +15,6 @@ from fm_app.contracts import ACTIVE_STATES, MAX_SAVE, cache_key
 from fm_app.dataset import load_dataset
 from fm_app.fm26 import ENGINE_VERSION
 from fm_app.storage import ROOT, STORAGE, ImportStorage, atomic_json, read_json
-from fm_app.insights import HistoryStore
 
 logger = logging.getLogger(__name__)
 
@@ -27,9 +26,6 @@ class AppState:
         self.jobs, self.cache = OrderedDict(), OrderedDict()
         self.store = ImportStorage(storage)
         self.storage = self.store.root
-        self.history = HistoryStore(self.storage)
-        self.history_backfilled = False
-        self.table_previews = OrderedDict()
         self.dataset, self.restore_error = None, None
         self.closing = threading.Event()
         self.process = None
@@ -67,39 +63,9 @@ class AppState:
                 except Exception:
                     logger.warning('No se pudo persistir el bundle reconstruido en _restore()', exc_info=True)
             self.dataset = data
-            self._record_history(data)
         except (ValueError, KeyError, TypeError, OSError) as error:
             self.cache.clear()
             self.restore_error = f'No se pudo restaurar la última partida: {error}. Podés cargarla nuevamente.'
-
-    def _record_history(self, data):
-        try:
-            self.history.record(data)
-        except (OSError, ValueError, TypeError):
-            logger.exception('No se pudo registrar la observación histórica')
-
-    def ensure_history(self):
-        with self.lock:
-            if not self.history_backfilled:
-                self.history.backfill(self.store)
-                self.history_backfilled = True
-            if self.dataset:
-                self.history.record(self.dataset)
-
-    def import_table(self, value, job_id):
-        try:
-            folder = self.store.folder(job_id)
-            output = folder/'output'
-            atomic_json(output/'validation.json', value['report'])
-            atomic_json(output/'squad_full.json', value['players'])
-            atomic_json(output/'loaned_out.json', [])
-            atomic_json(output/'scouting.json', [])
-            atomic_json(folder/'import.json', {'filename':value['filename'], 'kind':'table',
-                'imported_at':datetime.now(timezone.utc).isoformat()})
-            self.import_save(job_id, None, folder, already_extracted=True)
-        except Exception as error:
-            self.progress(job_id, 'error', str(error))
-            logger.exception('Falló la importación de tabla')
 
     def busy(self):
         with self.lock:
@@ -226,11 +192,10 @@ class AppState:
                 with self.lock:
                     self.process = None
 
-    def import_save(self, job_id, source, folder, already_extracted=False):
+    def import_save(self, job_id, source, folder):
         try:
             self.progress(job_id, 'reading', 'Leyendo primer equipo, inferiores y cedidos…', 20)
-            if not already_extracted:
-                self._extract(source, folder)
+            self._extract(source, folder)
             if self.closing.is_set():
                 raise InterruptedError('Importación cancelada al cerrar.')
             data = load_dataset(folder/'output')
@@ -249,12 +214,10 @@ class AppState:
                     raise InterruptedError('Importación cancelada al cerrar.')
                 self.store.publish(job_id)
                 self.dataset, self.restore_error = data, None
-                self._record_history(data)
                 self.cache.clear()
                 self.cache.update({cache_key(data['id'], style, data['default_primary_slot']): result for style, result in styles.items()})
                 self.progress(job_id, 'done', f"Análisis listo: {data['club']}.", 100)
             try:
-                self.ensure_history()
                 self.store.prune(protected=[job_id])
             except Exception:
                 logger.exception('No se pudo completar la retención de copias')

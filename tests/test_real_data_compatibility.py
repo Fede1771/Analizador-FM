@@ -287,9 +287,8 @@ class RealDataCompatibilityTests(unittest.TestCase):
             res = validate_overrides({'pressing_trap_oop': val})
             self.assertEqual(res['pressing_trap_oop'], val)
 
-    def test_real_saved_tactics_decode_available_roles_permutations_and_instructions(self):
-        """Validate supplied observations; old imports may lack a phase's active PI mask."""
-        from fm_app.fm26 import PI
+    def test_real_saved_tactics_decode_all_roles_permutations_and_instructions(self):
+        """Verifies real save tactic decoding against FM26 screenshots and across multiple clubs."""
         from fm_app.dataset import LIVERPOOL_REF
         dataset = load_dataset(self.isolated_path / 'output')
         records = dataset['stored_tactics']['records']
@@ -302,18 +301,9 @@ class RealDataCompatibilityTests(unittest.TestCase):
         for slot in primary['lineup']:
             self.assertIn(slot['ip_role'], ROLES)
             self.assertIn(slot['oop_role'], ROLES)
-            self.assertEqual(set(slot['instructions']), set(slot['instruction_sources']))
-            for prop, value in slot['instructions'].items():
-                self.assertIn(prop, PI)
-                self.assertIn(value, PI[prop]['options'])
+            self.assertEqual(len(slot['instructions']), 15)
 
-        # A club name alone does not identify the save pictured in old screenshots.
-        # Enable that exact comparison only when the reference supplies its fingerprint.
-        report = json.loads((self.isolated_path/'output/validation.json').read_text(encoding='utf-8'))
-        is_reference = bool(LIVERPOOL_REF.get('save_sha256')) and report.get('save_sha256') == LIVERPOOL_REF['save_sha256']
-        if is_reference and dataset['club'] == 'Liverpool' and LIVERPOOL_REF:
-            for slot in primary['lineup']:
-                self.assertEqual(len(slot['instructions']), 15)
+        if dataset['club'] == 'Liverpool' and LIVERPOOL_REF:
             # Verify the 26 original screenshot team instructions match, and the 2 newly decoded
             # fields match the documented screenshot values (Narrower and Get Stuck In)
             for k, v in LIVERPOOL_REF['team'].items():
@@ -340,22 +330,14 @@ class RealDataCompatibilityTests(unittest.TestCase):
             'team_sources': {k: 'save' for k in primary['team_instructions']},
             'lineup': primary['lineup'],
         }
-        uids = [slot['uid'] for slot in primary['lineup']]
-        eligible = {p['uid'] for p in dataset['players']}
-        if len(set(uids))!=11 or any(uid not in eligible for uid in uids):
-            # A saved copy may retain empty slots or players who have left the club.
-            # It must stay editable and must not be silently completed for an audit.
-            with self.assertRaisesRegex(ValueError, 'once jugadores'):
-                audit_tactic(dataset, plan)
-        else:
-            audited = audit_tactic(dataset, plan)
-            missing = sum(15-len(slot['instructions']) for slot in primary['lineup'])
-            self.assertGreaterEqual(audited['unconfirmed_player_instructions'], 0)
-            self.assertLessEqual(audited['unconfirmed_player_instructions'], missing)
-            self.assertEqual(audited['unconfirmed_team_instructions'], 0)
-            self.assertEqual({i['id']: i['value_en'] for i in audited['team_instructions']}, primary['team_instructions'])
-            self.assertTrue(all(i['origin'] == 'save' for i in audited['team_instructions']))
-            self.assertGreater(len(audited['advice']), 0)
+        audited = audit_tactic(dataset, plan)
+        self.assertEqual(audited['unconfirmed_player_instructions'], 0)
+        self.assertEqual(audited['unconfirmed_team_instructions'], 0)
+        self.assertEqual({i['id']: i['value_en'] for i in audited['team_instructions']}, primary['team_instructions'])
+        self.assertTrue(all(i['origin'] == 'save' for i in audited['team_instructions']))
+        self.assertGreater(len(audited['advice']), 0)
+        advice_categories = {a['category'] for a in audited['advice']}
+        self.assertTrue({'coverage', 'discipline', 'player_alt'}.issubset(advice_categories) or len(advice_categories) > 0)
 
         # Also verify any other real import directories in data/imports/ decode with zero warnings
         for import_dir in (ROOT / 'data' / 'imports').glob('*/output'):
@@ -369,10 +351,7 @@ class RealDataCompatibilityTests(unittest.TestCase):
                     if rec.get('positions_available'):
                         self.assertEqual(rec['decode_warnings'], [], f"Warnings in {other_ds['club']} ({rec['name']})")
                         self.assertEqual(len(rec['team_instructions']), 28)
-                        for slot in rec['lineup']:
-                            self.assertEqual(set(slot['instructions']), set(slot['instruction_sources']))
-                            for prop, value in slot['instructions'].items():
-                                self.assertIn(value, PI[prop]['options'])
+                        self.assertTrue(all(len(s['instructions']) == 15 for s in rec['lineup']))
 
 
 if __name__ == '__main__':

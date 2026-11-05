@@ -1,5 +1,6 @@
-"""Exercise the compiled app using only a disposable synthetic career."""
+"""Check the packaged 1.0.5-based app using only an isolated synthetic career."""
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -10,8 +11,8 @@ from tempfile import TemporaryDirectory
 import time
 import urllib.request
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT/'tests')]
+ROOT=Path(__file__).resolve().parents[1]
+sys.path[:0]=[str(ROOT),str(ROOT/'tests')]
 from fixtures import write_snapshot
 from fm_app.storage import atomic_json
 
@@ -29,38 +30,37 @@ def main():
         atomic_json(imports/'current.json',{'folder':import_id})
         with socket.socket() as probe:
             probe.bind(('127.0.0.1',0));port=probe.getsockname()[1]
-        env={**os.environ,'TOUCHLINE_DATA_DIR':str(folder)}
-        process=subprocess.Popen([str(executable),'--server-only','--no-sync','--port',str(port)],cwd=ROOT,env=env,
+        process=subprocess.Popen([str(executable),'--no-sync','--port',str(port)],cwd=ROOT,
+            env={**os.environ,'TOUCHLINE_DATA_DIR':str(folder)},
             creationflags=subprocess.CREATE_NO_WINDOW if sys.platform=='win32' else 0)
         base=f'http://127.0.0.1:{port}'
-        def request(path,body=None):
+        def request(path,body=None,raw=False):
             req=urllib.request.Request(base+path,data=json.dumps(body).encode() if body is not None else None,
                 headers={'Content-Type':'application/json','X-FM-App':'1'})
-            with urllib.request.urlopen(req,timeout=30) as response:return json.load(response)
+            with urllib.request.urlopen(req,timeout=30) as response:return response.read() if raw else json.load(response)
         try:
-            deadline=time.monotonic()+45
+            deadline=time.monotonic()+60
             while True:
                 try:status=request('/api/status');break
                 except OSError:
                     if process.poll() is not None or time.monotonic()>deadline:raise
                     time.sleep(.2)
             assert status['dataset_id']==data['id']
-            body={'dataset_id':data['id']}
-            assert request('/api/insights',body)['player_count']==22
-            assert request('/api/players/compare',{**body,'left_uid':10,'right_uid':11})['left']['uid']==10
-            assert len(request('/api/history/player',{**body,'uid':10})['points'])==1
-            csv=request('/api/table/template')['csv']
-            preview=request('/api/table/preview',{'text':csv,'club':'Prueba empaquetada','manager':'Prueba',
-                'date':'2026-11-04','stats_scope':'overall_club','stats_period':'2026/27'})
-            assert preview['count']==1
+            body={'dataset_id':data['id'],'style':'possession','primary_slot':0}
+            assert len(request('/api/analyze',body)['tactics'])==3
+            assert len(request('/api/simulate',{**body,'formation':'433'})['lineup'])==11
+            for name in ('index.html','menu.css','app.js'):
+                raw=request('/'+name,raw=True)
+                assert hashlib.sha256(raw).digest()==hashlib.sha256((ROOT/'web'/name).read_bytes()).digest(),name
             assert request('/api/data')['id']==data['id']
+            # Wait for WebView to install its shutdown callback before closing the test window.
+            time.sleep(3)
             request('/api/shutdown',{})
-            process.wait(timeout=15)
+            process.wait(timeout=20)
             assert process.returncode==0
-            print('PACKAGED SMOKE OK: restore, insights, comparison, history, CSV preview, unchanged active data and clean shutdown.')
+            print('PACKAGED SMOKE OK: restore, analysis, eleven-player simulation, menu resources, unchanged active data, clean shutdown.')
         finally:
-            if process.poll() is None:
-                process.terminate();process.wait(timeout=10)
+            if process.poll() is None:process.terminate();process.wait(timeout=10)
 
 
 if __name__=='__main__':main()

@@ -117,28 +117,6 @@ def main():
                 loans_json_path.write_text(json.dumps(loans_data, ensure_ascii=False, indent=2), encoding="utf-8")
             except Exception as e:
                 print(f"Warning: could not extract season stats for loaned players: {e}", flush=True)
-            try:
-                # OVERALL is a team row. Multiple rows in the same club can include reserves;
-                # keep those unknown rather than adding ambiguous totals together.
-                from collections import defaultdict
-                by_player = defaultdict(list)
-                for row in career.player_season_stats():
-                    if row.club_uid == club.uid and row.kind.name == 'OVERALL':
-                        by_player[row.player_uid].append(row)
-                squad_path = args.output/'squad_full.json'
-                squad_rows = json.loads(squad_path.read_text(encoding='utf-8'))
-                for item in squad_rows:
-                    rows = by_player.get(item['uid'], [])
-                    if len(rows) == 1:
-                        st = rows[0]
-                        item['season_stats'] = {'available': True, 'starts': st.starts,
-                            'substitutes': st.substitute_appearances, 'minutes': st.minutes,
-                            'goals': st.goals, 'assists': st.assists, 'average_rating': st.average_rating}
-                        item['season_stats_scope'] = 'overall_club'
-                        item['season_stats_period'] = 'current_season'
-                squad_path.write_text(json.dumps(squad_rows, ensure_ascii=False, default=serial), encoding='utf-8')
-            except Exception as e:
-                print(f'Warning: squad season statistics unavailable: {e}', flush=True)
             errors = []
             missing = Counter()
             all_club_players = list(squad) + list(loaned_out)

@@ -207,22 +207,6 @@ try {
   assert.ok(await evaluate(`document.documentElement.scrollWidth <= window.innerWidth`), 'Mi táctica: no horizontal overflow at 420px');
   await snap('10-mi-tactica-420px.png');
 
-  await send('Emulation.setDeviceMetricsOverride', {width: 1360, height: 920, deviceScaleFactor: 1, mobile: false});
-  await evaluate(`location.hash='insights'`);
-  await wait(`document.querySelector('.lab-timeline')`, 'historical observations');
-  await snap('12-evolucion.png');
-  for (const [tab, selector, filename] of [
-    ['compare', '.lab-comparison', '13-comparar-jugadores.png'],
-    ['depth', '.lab-axes', '14-profundidad.png'],
-    ['minutes', '.lab-metrics', '15-minutos-y-aportes.png']
-  ]) {
-    await evaluate(`document.querySelector('[data-lab-tab="${tab}"]').click()`);
-    await wait(`document.querySelector('${selector}')`, tab);
-    await snap(filename);
-  }
-  await evaluate(`document.querySelector('[data-action="import-table"]').click()`);
-  await wait(`document.querySelector('#table-import-form')`, 'table import');
-  await snap('16-importar-tabla.png');
   console.log('ALL SCREENSHOTS CAPTURED SUCCESSFULLY');
 } finally {
   socket?.close();

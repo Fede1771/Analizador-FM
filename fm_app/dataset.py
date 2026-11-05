@@ -52,7 +52,7 @@ def load_dataset(folder):
             else:
                 slot_labels[s]=f'Grupo {s}'
     identity = f"{report['club']['uid']}:{manager.get('manager_staff_uid', manager.get('manager_name', ''))}"
-    career_id = report.get('external_career_id') or hashlib.sha256(identity.encode('utf-8')).hexdigest()[:24]
+    career_id = hashlib.sha256(identity.encode('utf-8')).hexdigest()[:24]
     if len({p['uid'] for p in players + loans}) != len(players + loans):
         raise ValueError('Identificadores de jugadores duplicados.')
 
@@ -131,7 +131,6 @@ def load_dataset(folder):
         ]
 
     return {'id':report['save_sha256'][:16], 'career_id':career_id, 'club':report['club']['name'],
-            'club_uid': report['club']['uid'], 'manager_uid': manager.get('manager_staff_uid'),
             'contract_alerts': contract_alerts, 'scouting': scouting,
             'manager':manager.get('manager_name'), 'source':source,'default_primary_slot':slots[0],
             'date':report['game_date'],'build':report['build'], 'players':players,'loans':loans,

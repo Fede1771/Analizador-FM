@@ -16,7 +16,6 @@ try {
 } catch (_) {}
 
 import {api, upload, RequestGate} from './api.js';
-import {insightsView, tableImportDialog, tablePreview} from './insights-view.js';
 import {currentView, freshDraft, storedDraft, reconcileCurrentDraft, isDraftComplete} from './current-view.js';
 import {reconcile, preferenceKey, contextKey} from './session.js';
 import {esc, date} from './format.js';
@@ -27,7 +26,7 @@ const gate = new RequestGate();
 const state = {data:null, analysis:null, simulation:null, byId:new Map(), prefs:null,
   view:'overview', phase:'ip', busy:false, uploadBusy:false, pendingUpload:false, error:'', connectionError:'',
   currentDraft:null, currentResult:null, currentBusy:false, currentError:'', currentVersion:0, promptDraft:'', overrideDraft:{}, contractsFilter:{urgency:'all',query:''}, scoutingFilter:{position:'all',query:'',sort:'score'}, filters:{query:'',group:'all',order:'score'}, job:null, sync:null};
-let trackedJob=null, loadVersion=0, labVersion=0, tableVersion=0, saveQueue=Promise.resolve(), stopped=false;
+let trackedJob=null, loadVersion=0, saveQueue=Promise.resolve(), stopped=false;
 const handledJobs=new Set();
 
 function toast(message, error=false) {
@@ -66,24 +65,28 @@ function render({focusHeading=false}={}) {
     return;
   }
   $('#sidebar').hidden=!state.data;
+  $('#menu-open-button').hidden=!state.data;
   document.body.classList.toggle('has-dataset',!!state.data);
-  $('#nav').innerHTML=Object.entries(navigation).map(([key,label])=>{
+  const navFocus=active.closest?.('#nav a')?.getAttribute('href');
+  const navLink=key=>{
+    const label=navigation[key];
     const icon = navIcons[key] || '';
     const active = key===state.view ? 'aria-current="page"' : '';
     return `<a href="#${key}" ${active} title="${label}"><span class="nav-icon" aria-hidden="true">${icon}</span><span class="nav-label">${label}</span></a>`;
-  }).join('');
+  };
+  $('#nav').innerHTML=[['Juego',['overview','current','tactics']],['Plantel',['squad','academy','loans']],['Gestión',['contracts','scouting']],['Ayuda',['method']]].map(([label,keys])=>`<div class="nav-group"><p class="workspace-label">${label}</p>${keys.map(navLink).join('')}</div>`).join('');
+  if(navFocus&&document.body.classList.contains('menu-open'))[...$('#nav').querySelectorAll('a')].find(a=>a.getAttribute('href')===navFocus)?.focus();
   $('#source-label').textContent=state.data?`${state.data.source.filename} · ${date(state.data.date)}`:'Análisis local · Football Manager 26';
   $('#groups-button').hidden=!state.data;
   const compBtn=$('#companion-button'); if(compBtn) compBtn.hidden=!state.data;
   let html;
-  if(!state.data) html=welcome(state)+'<div class="welcome lab-import-entry"><button class="button" data-action="import-table">Importar una tabla CSV o HTML</button></div>';
+  if(!state.data) html=welcome(state);
   else if(state.view==='overview') html=overview(state);
   else if(state.view==='current') html=currentView(state);
   else if(state.view==='tactics') html=tactics(state);
   else if(state.view==='contracts') html=contractsView(state);
   else if(state.view==='scouting') html=scoutingView(state);
   else if(state.view==='method') html=methodology(state);
-  else if(state.view==='insights') html=insightsView(state);
   else html=roster(state,state.view);
   content.innerHTML=html;
   content.setAttribute('aria-busy',String(state.busy));
@@ -158,14 +161,6 @@ async function loadDataset(provided) {
   state.currentDraft=reconcileCurrentDraft(data,state.currentDraft);
   state.data=data;state.byId=new Map([...data.players,...data.loans].map(p=>[p.uid,p]));
   state.prefs=reconcile(data,saved);state.promptDraft=state.prefs.prompt;
-  labVersion++;
-  const labPlayers=[...data.players,...data.loans];
-  const labDefault=labPlayers.find(p=>p.team_slot===state.prefs.primary_slot&&p.positions.mc>=15)||labPlayers[0];
-  const labPosition=labDefault?.natural_positions[0]||'MC';
-  const labRole=Object.entries(data.tactic_editor.roles).find(([,r])=>r.phase==='in_possession'&&r.positions.includes(labPosition));
-  state.lab={tab:state.lab?.tab||'evolution',uid:labDefault?.uid,right_uid:labPlayers.find(p=>p.uid!==labDefault?.uid)?.uid,
-    role_id:labRole?.[0]||'central_midfielder_ip',position:labRole?.[1].positions.includes(labPosition)?labPosition:'MC',
-    group:state.prefs.primary_slot,style:state.prefs.style,baseline_id:'',busy:false,error:''};
   state.analysis=null;state.simulation=null;state.overrideDraft={};state.filters.group='all';
   const dialog=$('#dialog');if(dialog.open)dialog.close();
   if(isDraftComplete(state.currentDraft)&&(!hadSavedDraft||savedConfirmed)) {
@@ -175,24 +170,6 @@ async function loadDataset(provided) {
     state.currentDraft.confirmed=false;
   }
   await refresh();
-  if(state.view==='insights')await loadLab();
-}
-
-async function loadLab() {
-  if(!state.data||!state.lab)return;
-  const version=++labVersion, id=state.data.id, l=state.lab;
-  const body={dataset_id:id,primary_slot:l.group,style:l.style,excluded:state.prefs.excluded,
-    uid:l.uid,left_uid:l.uid,right_uid:l.right_uid,role_id:l.role_id,position:l.position,baseline_id:l.baseline_id};
-  l.busy=true;l.error='';l.evolution=null;l.comparison=null;l.summary=null;render();
-  try {
-    const [summary,detail]=await Promise.all([api('/api/insights',{method:'POST',body}),
-      l.tab==='evolution'?api('/api/history/player',{method:'POST',body}):l.tab==='compare'?api('/api/players/compare',{method:'POST',body}):Promise.resolve(null)]);
-    if(version!==labVersion||id!==state.data?.id)return;
-    l.summary=summary;
-    if(l.tab==='evolution')l.evolution=detail;
-    if(l.tab==='compare')l.comparison=detail;
-  } catch(error) {if(version===labVersion)l.error=error.message;}
-  finally {if(version===labVersion){l.busy=false;if(state.view==='insights')render();}}
 }
 
 async function poll() {
@@ -246,14 +223,24 @@ function download(name, value, type='application/json') {
 }
 
 function navigate(view) {
+  closeMenu();
   state.view=navigation[view]?view:'overview';state.filters={query:'',group:'all',order:'score'};state.error='';
   if(state.view==='current'&&!state.currentResult&&!state.currentBusy&&isDraftComplete(state.currentDraft)) {
     state.currentDraft.confirmed=true;
     auditCurrent();
   }
   render({focusHeading:true});
-  if(state.view==='insights')loadLab();
 }
+
+function closeMenu({focusButton=false}={}) {
+  const wasOpen=document.body.classList.contains('menu-open');
+  document.body.classList.remove('menu-open');
+  $('#menu-open-button').setAttribute('aria-expanded','false');
+  $('.menu-backdrop').hidden=true;
+  $('.main-shell').inert=false;
+  if(wasOpen&&focusButton)$('#menu-open-button').focus();
+}
+window.addEventListener('resize',()=>{if(!matchMedia('(max-width:800px)').matches)closeMenu();});
 
 function saveCurrentDraft({clearResult=true}={}) {
   if(clearResult) {
@@ -277,18 +264,6 @@ async function auditCurrent() {
 }
 
 async function action(name, button) {
-  if(name==='import-table'){tableVersion++;state.tableToken=null;return showDialog(tableImportDialog(state));}
-  if(name==='table-template'){const value=await api('/api/table/template');return download('touchline-plantel-ejemplo.csv','\ufeff'+value.csv,'text/csv;charset=utf-8');}
-  if(name==='commit-table'){
-    if(!state.tableToken||state.uploadBusy)return;
-    button.disabled=true;
-    try {
-      const result=await api('/api/table/commit',{method:'POST',body:{token:state.tableToken}});
-      trackedJob=result.job_id;state.tableToken=null;state.uploadBusy=true;state.job={message:'Analizando tabla…'};
-      $('#dialog').close();progress();
-    } catch(error){button.disabled=false;throw error;}
-    return;
-  }
   if(name==='companion')return showDialog(companionView(state));
   if(name==='popout-companion') {
     window.open('/?companion=1#'+(state.view==='current'?'current':'tactics'),'TouchlineCompanion','width=460,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes');
@@ -374,8 +349,13 @@ async function action(name, button) {
 }
 
 document.addEventListener('click',event=>{
-  const labTab=event.target.closest('[data-lab-tab]');
-  if(labTab){state.lab.tab=labTab.dataset.labTab;loadLab();return;}
+  const menuAction=event.target.closest('[data-action="open-menu"],[data-action="close-menu"]');
+  if(menuAction) {
+    if(menuAction.dataset.action==='close-menu')closeMenu({focusButton:true});
+    else {document.body.classList.add('menu-open');$('.main-shell').inert=true;$('.menu-backdrop').hidden=false;$('#menu-open-button').setAttribute('aria-expanded','true');$('#nav a[aria-current]')?.focus();}
+    return;
+  }
+  if(event.target.closest('#nav a'))closeMenu({focusButton:true});
   const toggle = event.target.closest('#sidebar-toggle');
   if (toggle) {
     const isCollapsed = !document.body.classList.contains('sidebar-collapsed');
@@ -413,7 +393,6 @@ document.addEventListener('click',event=>{
 
 document.addEventListener('input',event=>{
   const input=event.target;
-  if(input.closest('#table-import-form')){tableVersion++;state.tableToken=null;$('#table-preview').innerHTML='';}
   if(input.id==='prompt-input'||input.id==='quick-prompt-input')state.promptDraft=input.value;
   if(input.id==='contracts-search') {state.contractsFilter.query=input.value;render();}
   if(input.id==='scouting-search') {state.scoutingFilter.query=input.value;render();}
@@ -422,19 +401,7 @@ document.addEventListener('input',event=>{
 
 document.addEventListener('change',event=>{
   const input=event.target;
-  if(input.closest('#table-import-form')){tableVersion++;state.tableToken=null;$('#table-preview').innerHTML='';}
   Promise.resolve().then(async()=>{
-    if(input.id.startsWith('lab-')) {
-      const fields={'lab-group':'group','lab-style':'style','lab-player':'uid','lab-right':'right_uid','lab-role':'role_id','lab-position':'position','lab-baseline':'baseline_id'};
-      const field=fields[input.id];if(!field)return;
-      state.lab[field]=['group','uid','right_uid'].includes(field)?Number(input.value):input.value;
-      if(field==='role_id')state.lab.position=state.data.tactic_editor.roles[input.value].positions[0];
-      if(field==='uid') {
-        state.lab.baseline_id='';
-        if(state.lab.uid===state.lab.right_uid)state.lab.right_uid=[...state.byId.keys()].find(id=>id!==state.lab.uid);
-      }
-      return loadLab();
-    }
     if(input.dataset.current) {
       const draft=state.currentDraft, field=input.dataset.current;
       if(field==='confirmed'){draft.confirmed=input.checked;return;}
@@ -521,25 +488,6 @@ document.addEventListener('change',event=>{
 });
 
 document.addEventListener('submit',event=>{
-  if(event.target.id==='table-import-form') {
-    event.preventDefault();const form=event.target, fd=new FormData(form), file=fd.get('table_file');
-    state.tableToken=null;const version=++tableVersion;
-    const submit=form.querySelector('[type="submit"]');submit.disabled=true;
-    Promise.resolve().then(async()=>{
-      if(!file||file.size>6*1024**2||!file.size)throw new Error('Elegí un CSV o HTML de hasta 6 MB.');
-      const buffer=await file.arrayBuffer();const bytes=new Uint8Array(buffer);let text;
-      if(bytes[0]===255&&bytes[1]===254)text=new TextDecoder('utf-16le').decode(buffer);
-      else if(bytes[0]===254&&bytes[1]===255)text=new TextDecoder('utf-16be').decode(buffer);
-      else {try{text=new TextDecoder('utf-8',{fatal:true}).decode(buffer);}catch{text=new TextDecoder('windows-1252').decode(buffer);}}
-      const value=await api('/api/table/preview',{method:'POST',body:{text,filename:file.name,
-        club:fd.get('club'),manager:fd.get('manager'),date:fd.get('date'),stats_scope:fd.get('stats_scope'),stats_period:fd.get('stats_period'),
-        confirm_natural:fd.get('confirm_natural')==='on',link_current:fd.get('link_current')==='on',dataset_id:state.data?.id}});
-      if(version!==tableVersion||!form.isConnected)return;
-      state.tableToken=value.token;$('#table-preview').innerHTML=tablePreview(value);
-    }).catch(error=>{if(version===tableVersion&&form.isConnected)$('#table-preview').innerHTML=`<p class="notice warning" role="alert">${esc(error.message)}</p>`;})
-      .finally(()=>{submit.disabled=false;});
-    return;
-  }
   if(!['groups-form','sync-form','retention-form'].includes(event.target.id))return;
   event.preventDefault();const form=event.target,fd=new FormData(form);
   Promise.resolve().then(async()=>{
@@ -556,6 +504,14 @@ document.addEventListener('submit',event=>{
 });
 
 document.addEventListener('keydown',event=>{
+  if(document.body.classList.contains('menu-open')) {
+    if(event.key==='Escape'){closeMenu({focusButton:true});return;}
+    if(event.key==='Tab') {
+      const items=[...$('#sidebar').querySelectorAll('a,button')].filter(e=>e.getClientRects().length),first=items[0],last=items.at(-1);
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    }
+  }
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'b') {
     event.preventDefault();
     const isCollapsed = !document.body.classList.contains('sidebar-collapsed');

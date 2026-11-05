@@ -7,20 +7,8 @@ import {matchesObservedContext} from '../web/instruction-context.js';
 import {supportRunsRecovery,rolePlan} from '../web/tactics-view.js';
 import {storedDraft,reconcileCurrentDraft,draftPitch,currentView,CURRENT_READER_VERSION,actionKey,isActionChecked} from '../web/current-view.js';
 import {companionView} from '../web/views.js';
-import {tableImportDialog,tablePreview} from '../web/insights-view.js';
 
 const data={id:'save1',career_id:'career',default_primary_slot:0,slots:[0,1],styles:{possession:{},press:{}},players:[{uid:1,name:'Álvarez',team_slot:0,natural_positions:['STC'],age:23},{uid:2,name:'Gómez',team_slot:1,natural_positions:['MC'],age:18}],formations_catalog:[{id:'352'}],instruction_options:{tempo:[{value:'Lower'}]}};
-
-test('table import preview escapes external names and headers before confirmation',()=>{
-  const unsafe='<img src=x onerror=alert(1)>';
-  const preview=tablePreview({count:1,club:unsafe,date:'2026-11-04',linked:false,stats_count:0,
-    recognized_columns:[],ignored_columns:[unsafe],sample:[{name:unsafe,uid:1}]});
-  assert.ok(!preview.includes('<img'));
-  assert.ok(preview.includes('&lt;img'));
-  const dialog=tableImportDialog({data:{club:'" autofocus onfocus="alert(1)',manager:unsafe}});
-  assert.ok(!dialog.includes('value="" autofocus'));
-  assert.ok(!dialog.includes('<img'));
-});
 
 test('preferences survive a new save, prune removed players and keep stable career key',()=>{
   const saved={primary_slot:0,labels:{0:'Titulares',99:'Old'},style:'press',excluded:[1,999],prompt:'Presión alta',formation:'352',overrides:{tempo:'Lower',bad:'bad'}};

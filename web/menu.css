@@ -1,0 +1,38 @@
+/* Menu only: Touchline 1.0.5 retains its content, toolbar and tactical views. */
+#sidebar { background:#111a20; padding:18px 12px; overflow-y:auto; }
+#sidebar .sidebar-header { flex-shrink:0; margin-bottom:18px; }
+#sidebar .brand-mark { border-radius:6px; }
+#nav { display:block; margin:0; }
+#nav .nav-group { margin-bottom:16px; }
+#nav .workspace-label { display:block; margin:0 10px 6px; font-size:.64rem; letter-spacing:.13em; color:var(--muted); }
+#nav a { min-height:38px; gap:10px; padding:8px 10px; border-radius:5px; margin:2px 0; font-size:.81rem; }
+#nav a[aria-current=page] { background:#203b31; }
+#sidebar .sidebar-footer { padding-top:14px; }
+body.has-dataset.sidebar-collapsed .main-shell { margin-left:66px; }
+body.sidebar-collapsed #nav .workspace-label { display:none; }
+body.sidebar-collapsed #nav .nav-group { display:grid; justify-items:center; margin-bottom:12px; }
+body.sidebar-collapsed #nav a { margin:2px 0; }
+.menu-close,.menu-open-button,.menu-backdrop { display:none; }
+@media(max-width:800px) {
+  body.has-dataset .main-shell,body.has-dataset.sidebar-collapsed .main-shell { margin-left:0 !important; }
+  #sidebar,body.sidebar-collapsed #sidebar { position:fixed; inset:0 auto 0 0; width:240px !important; height:100dvh; padding:18px 12px !important; z-index:32; display:none; border-right:1px solid var(--line); }
+  body.menu-open #sidebar { display:flex; }
+  body.menu-open { overflow:hidden; }
+  .menu-open .menu-backdrop { display:block; position:fixed; inset:0; border:0; background:#0009; z-index:31; }
+  #sidebar .sidebar-header { display:flex; width:100%; flex-direction:row !important; }
+  #sidebar .brand,#sidebar .brand-text { display:flex !important; }
+  #sidebar .brand { font-size:1.6rem; }
+  #sidebar .menu-close { display:inline-flex; order:2; margin-left:auto; padding:0; min-height:36px; width:36px; font-size:1.2rem; }
+  #nav { display:block !important; width:100%; }
+  #nav .nav-group,body.sidebar-collapsed #nav .nav-group { display:block; margin-bottom:16px; }
+  #nav .workspace-label,body.sidebar-collapsed #nav .workspace-label { display:block !important; }
+  #nav a,body.sidebar-collapsed #nav a { display:flex; justify-content:flex-start; width:auto !important; height:auto !important; margin:2px 0; padding:8px 10px; }
+  #nav a .nav-label { display:inline !important; }
+  #sidebar .sidebar-footer { display:flex; align-items:stretch; margin-top:auto; }
+  #sidebar .local-badge { display:none; }
+  #sidebar .shutdown-btn,body.sidebar-collapsed #sidebar .shutdown-btn { justify-content:flex-start; width:auto !important; height:auto !important; }
+  #sidebar .shutdown-text { display:inline !important; }
+  .menu-open-button { display:inline-flex; min-width:38px; padding:6px; }
+}
+@media(prefers-reduced-motion:reduce) { #sidebar,.main-shell { transition:none; } }
+@media print { .menu-open-button,.menu-backdrop { display:none !important; } }

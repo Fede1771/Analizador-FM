@@ -1,6 +1,6 @@
 # Capturas finales de la interfaz
 
-Estas imágenes documentan la interfaz actual:
+Estas once imágenes documentan la interfaz de 1.1.1: base 1.0.5 con menú agrupado. Actualizadas el 5 de noviembre de 2026.
 
 | Vista | Capturas |
 |---|---|
@@ -9,8 +9,6 @@ Estas imágenes documentan la interfaz actual:
 | Propuestas | [Escritorio](03-propuestas-desktop.png) · [760 px](06-propuestas-ventana-angosta-760px.png) · [420 px](09-propuestas-420px.png) |
 | Guía para FM | [Ventana flotante](04-guia-fm-mini-hud.png) |
 | Ojeo y Plantilla | [Ojeo](07-ojeo-masculino.png) · [Sobrepoblación](08-plantilla-sobrepoblacion.png) |
-| Análisis del plantel | [Evolución](12-evolucion.png) · [Comparar](13-comparar-jugadores.png) · [Profundidad](14-profundidad.png) · [Minutos y aportes](15-minutos-y-aportes.png) |
-| Importación alternativa | [Formulario CSV/HTML](16-importar-tabla.png) |
 
 Se generaron con datos de prueba. Sirven para revisar presentación y navegación; no acreditan la alineación real del usuario ni las reglas del motor de FM.
 

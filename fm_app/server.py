@@ -6,8 +6,6 @@ import logging
 import mimetypes
 from pathlib import Path
 import threading
-import time
-import uuid
 from urllib.parse import unquote
 import webbrowser
 
@@ -19,8 +17,6 @@ from fm_app.dataset import load_dataset
 from fm_app.jobs import AppState
 from fm_app.storage import ROOT, STORAGE, atomic_json, read_json
 from fm_app.watcher import SaveWatcher
-from fm_app.insights import squad_insights, compare_players
-from fm_app.table_import import preview as preview_table, template as table_template
 
 STATIC = ROOT/'web'
 logger = logging.getLogger(__name__)
@@ -46,9 +42,9 @@ class Handler(BaseHTTPRequestHandler):
         allowed = {f'127.0.0.1:{self.server.server_port}', f'localhost:{self.server.server_port}'}
         return self.headers.get('Host', '') in allowed and self.headers.get('Origin') in ({None} | {f'http://{h}' for h in allowed})
 
-    def body(self, limit=65536):
+    def body(self):
         size = int(self.headers.get('Content-Length', '0'))
-        if not 2 <= size <= limit:
+        if not 2 <= size <= 65536:
             raise ValueError('Solicitud inválida o demasiado grande.')
         self.connection.settimeout(10)
         value = json.loads(self.rfile.read(size))
@@ -68,8 +64,6 @@ class Handler(BaseHTTPRequestHandler):
             with state.lock:
                 data = state.dataset
             return self.reply(200, data)
-        if path == '/api/table/template':
-            return self.reply(200, {'csv':table_template()})
         if path == '/api/status':
             with state.lock:
                 data = state.dataset
@@ -122,29 +116,7 @@ class Handler(BaseHTTPRequestHandler):
         if not self.trusted() or self.headers.get('X-FM-App') != '1':
             return self.reply(403, {'error': 'Origen no permitido.'})
         try:
-            params, state = self.body(8*1024*1024 if self.path=='/api/table/preview' else 65536), self.server.state
-            if self.path == '/api/table/preview':
-                with state.lock:
-                    value = preview_table(params, state.dataset)
-                    token = uuid.uuid4().hex
-                    state.table_previews[token] = (time.monotonic(), value)
-                    while len(state.table_previews)>4:
-                        state.table_previews.popitem(last=False)
-                return self.reply(200, {'token':token, **value['summary']})
-            if self.path == '/api/table/commit':
-                with state.lock:
-                    saved = state.table_previews.get(params.get('token'))
-                    if not saved or time.monotonic()-saved[0]>900:
-                        raise ValueError('La vista previa venció. Volvé a revisar la tabla.')
-                    value = saved[1]
-                    if value['base_dataset_id'] != (state.dataset['id'] if state.dataset else None):
-                        return self.reply(409, {'error':'La partida cambió. Generá otra vista previa.'})
-                    job_id = state.reserve('reading', 'Preparando el plantel exportado…')
-                    if job_id is None:
-                        return self.reply(409, {'error':'Ya hay una importación en curso.'})
-                    del state.table_previews[params['token']]
-                    state.executor.submit(state.import_table, value, job_id)
-                return self.reply(202, {'job_id':job_id})
+            params, state = self.body(), self.server.state
             if self.path == '/api/activate':
                 activated = self.server.request_activate is not None
                 if activated:
@@ -169,16 +141,6 @@ class Handler(BaseHTTPRequestHandler):
                 data = state.dataset
             if data is None:
                 return self.reply(409, {'error': 'Cargá una partida .fm para continuar.'})
-            if self.path in ('/api/insights','/api/history/player','/api/players/compare'):
-                if params.get('dataset_id') != data['id']:
-                    return self.reply(409, {'error':'La partida cambió. Actualizá el análisis.'})
-                if self.path == '/api/players/compare':
-                    return self.reply(200, compare_players(data, params))
-                state.ensure_history()
-                if self.path == '/api/history/player':
-                    return self.reply(200, state.history.evolution(data, params))
-                return self.reply(200, {**squad_insights(data, params), 'snapshots':[
-                    {k:row[k] for k in ('id','date','recorded_at','source_kind')} for row in state.history.observations(data)]})
             if self.path == '/api/tactics/refresh':
                 if params.get('dataset_id') != data['id']:
                     return self.reply(409, {'error':'La partida cambió. Volvé a cargar la táctica.'})

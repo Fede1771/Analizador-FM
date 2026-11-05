@@ -1,7 +1,5 @@
 /* Touchline: shared tokens and components, with one responsive cascade. */
 :root {
-  --lab-positive: #aef0d1;
-  --lab-negative: #ffb5ba;
   color-scheme: dark;
   font-family: "Segoe UI", Inter, Arial, sans-serif;
   font-size: 16px;
@@ -2799,57 +2797,5 @@ body.companion-standalone #content {
   .player-plate { padding: 5px 3px 3px; }
   .pitch-player strong { font-size: .65rem; }
   .pitch-player small { gap: 3px; font-size: .57rem; }
-}
-
-/* Player analysis uses comparative sheets and a timeline instead of repeated dashboards. */
-.lab-controls { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 0 0 20px; align-items: end; }
-.lab-controls-wide { grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); }
-.lab-tabs { display: flex; gap: 6px; flex-wrap: wrap; padding-bottom: 16px; margin-bottom: 22px; border-bottom: 1px solid var(--line); }
-.lab-tabs .button { background: transparent; border-color: transparent; }
-.lab-tabs .button[aria-pressed=true] { color: var(--accent-ink); background: var(--accent); }
-.lab-metrics { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 16px; margin: 24px 0; }
-.lab-metric { padding: 6px 0 6px 14px; border-left: 2px solid #5a8b7d; }
-.lab-metric span { display: block; color: var(--muted); font-size: .8rem; }
-.lab-metric strong { display: block; font-size: 1.5rem; line-height: 1.4; font-variant-numeric: tabular-nums; }
-.lab-comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 28px 0; }
-.lab-comparison article { min-width: 0; border-top: 2px solid #82cbb0; padding: 20px 0; }
-.lab-comparison article:last-child { border-top-color: #98b8e7; }
-.lab-comparison h2 { font-size: 1.7rem; overflow-wrap: anywhere; }
-.lab-kicker { display: block; margin-bottom: 8px; color: var(--muted); font-size: .8rem; }
-.lab-priority { display: inline-block; margin-left: 8px; color: var(--accent); font-size: .72rem; }
-.lab-positive { color: var(--lab-positive); font-weight: 700; }
-.lab-negative { color: var(--lab-negative); font-weight: 700; }
-.lab-timeline { margin: 28px 0; padding: 14px; background: #0d1c25; border-radius: 10px; }
-.lab-timeline svg { width: 100%; height: auto; display: block; overflow: visible; }
-.lab-timeline text { fill: #b6c8d2; font-size: 12px; }
-.lab-timeline .chart-grid { stroke: #344c59; fill: none; stroke-dasharray: 4 5; }
-.lab-timeline polyline { stroke: #aef0d1; stroke-width: 3; fill: none; }
-.lab-timeline circle { fill: #aef0d1; stroke: #0c2620; stroke-width: 2; }
-.lab-timeline figcaption { color: var(--muted); font-size: .78rem; margin-top: 8px; }
-.lab-empty { padding: 32px 18px; border-left: 3px solid var(--accent); background: #152f32; margin: 24px 0; }
-.lab-axis-legend { display: flex; flex-wrap: wrap; gap: 18px; margin: 20px 0; font-size: .82rem; }
-.lab-axes { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px 40px; }
-.lab-axis > strong { display: block; margin-bottom: 8px; font-size: .95rem; }
-.lab-bar-row { display: flex; align-items: center; gap: 12px; height: 22px; }
-.lab-bar-row b { min-width: 42px; text-align: right; font-size: .8rem; font-variant-numeric: tabular-nums; }
-.lab-series-label { min-width: 54px; font-size: .7rem; }
-.lab-bar { flex: 1; height: 7px; background: #233c48; border-radius: 2px; overflow: hidden; }
-.lab-bar span { display: block; height: 100%; background: currentColor; }
-.axis-group-0 { color: #aef0d1; }.axis-group-1 { color: #98b8e7; }.axis-group-2 { color: #d1c4a1; }
-.lab-coverage { display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 0 24px; }
-.lab-coverage article { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 18px 0; border-top: 1px solid var(--line); }
-.lab-coverage article > strong { color: var(--accent); font-size: 1.25rem; }
-.lab-coverage small { grid-column: 1/-1; }
-.lab-import-entry { margin-block: 0 32px; }
-#table-import-form { margin-top: 20px; }
-#table-preview { overflow-wrap: anywhere; }
-@media(max-width:800px) {
-  .lab-comparison { grid-template-columns: 1fr; gap: 8px; }
-  .lab-axes { grid-template-columns: 1fr; }
-  .lab-controls { gap: 10px; }
-}
-@media(max-width:520px) {
-  .lab-controls { grid-template-columns: 1fr; }
-  .lab-tabs .button { padding: 8px 10px; font-size: .8rem; }
 }
 

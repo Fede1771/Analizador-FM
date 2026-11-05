@@ -47,9 +47,7 @@ def clean_player(player):
               'positions','left_foot','right_foot','on_loan','loan_parent_club_name','club_name','loan_end','loan_start',
               'transfer_value')
     result = {key: player.get(key) for key in fields}
-    result.update(attributes={key: attributes[key] for key in ATTRS}, loan_stats=normalize_stats(player.get('loan_stats')),
-                  season_stats=normalize_stats(player.get('season_stats')),
-                  season_stats_scope=player.get('season_stats_scope'), season_stats_period=player.get('season_stats_period'))
+    result.update(attributes={key: attributes[key] for key in ATTRS}, loan_stats=normalize_stats(player.get('loan_stats')))
     result['natural_positions'] = result['natural_positions'] or []
     result['accomplished_positions'] = result['accomplished_positions'] or []
     raw_contract = player.get('contract') or {}
